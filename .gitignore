@@ -1,0 +1,14 @@
+bower_components/
+node_modules/
+uploads/
+nbproject/
+*.bat
+js/app.js
+js/saul_min.js
+js/sourcemap.map
+*.sublime-project
+*.sublime-workspace
+
+bundles/templates\.js
+js/saul\.min\.js
+js/constants\.js
