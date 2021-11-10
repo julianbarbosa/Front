@@ -1,0 +1,78 @@
+<div>
+<div id="modalIngresoDireccion" class="modal fade modal-change" role="dialog" aria-hidden="true" style="display: none;"></div>
+<div ng-show="validator.alert.content">
+    <div class="alert alert-{{validator.alert.type}} alert-dismissable">
+        <i class="fa fa-danger"></i>
+        <button type="button" class="close" aria-hidden="true" ng-click="hideAlert()">×</button>
+        <b>{{validator.alert.title}}</b> <span ng-bind-html="validator.alert.content"></span>
+    </div>
+</div>
+<div class="col-md-12">
+    <div class="panel panel-success">
+        <div class="panel-heading ">
+            <span class="panel-title">Validar Nomenclatura</span>
+            <div class="panel-heading-controls">
+            </div>
+        </div>
+        <div class="panel-body">
+            <form name="userForm">
+                <strong>ADVERTENCIA:</strong> El siguiente procedimiento es solo de uso de prueba para validar el funcionamiento del módulo de construcciones de inicio a fin. <br>
+                Este procedimiento debe disparar otro que indique al usuario que la dirección no es valida y por lo tanto su solicitud queda en estado cerrado.<br><br>
+                <div class="row">                              
+                    <div class="form-group has-feedback simple col-md-6"  ng-class="{'has-error': validator.usuario }">
+                        <label class="control-label" for="numidentificacion">Dirección a Validar: <i ng-show="loadingUsuario" class="fa fa-spinner fa-spin"></i></label><br/>
+                        Dirección: {{solicitud.nomenclatura.direccion}} {{solicitud.nomenclatura.informacionadicional}}<br/>                        
+                        Predial: {{nomenclatura.codigounico}}<br/>   
+                        Comuna: {{nomenclatura.comuna}}
+                        Barrio: {{nomenclatura.barrio}}
+                    </div>
+                </div>
+                <div class="row padding-sm">
+                    <div class="form-group has-feedback simple" ng-class="{'has-error': validator.validacion }">
+                        <label class="control-label" for="tipo_busqueda">Seleccione un Resultado de la Validación:  </label>
+                        <div>
+                            <label class="radio-inline"><input type="radio" value="verificada" ng-model="nomenclatura.validacion">Verificada</label>
+                        </div>
+                        <div>
+                            <label class="radio-inline"><input type="radio" value="erronea" ng-model="nomenclatura.validacion">Dirección No existe.</label>
+                        </div>
+                         <p class="help-block">{{validator.validacion}}</p>
+                    </div>
+                </div>          
+                <div class="row">
+                    <div class="form-group">
+                        <label class="control-label" for="comuna">Predial</label>
+                        <input type="text" 
+                               class="form-control" 
+                               ng-model="nomenclatura.predio.codigounico">
+                    </div>
+                </div>
+                 <div class="row">
+                    <div class="form-group">
+                        <label class="control-label" for="comuna">Comuna</label>
+                        <select class="form-control" 
+                                ng-model="nomenclatura.idcomuna" 
+                                ng-options="itemcomuna.codigo as itemcomuna.codigo for itemcomuna in comunas"
+                                ng-change="cargarBarrios()">
+                        </select>    
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <label class="control-label" for="barrio">Barrio</label>
+                        <select class="form-control" 
+                                ng-model="nomenclatura.idbarrio" 
+                                ng-options="itembarrio.idbarrio as itembarrio.nombre for itembarrio in barrios">
+                        </select>    
+                    </div>
+                </div>                 
+                <div class="row padding-sm text-right-sm">
+                    <input type="submit" class="btn btn-primary" ng-click="save()" value="Validar" />
+                    ó
+                    <a ui-sref="listar-peticion">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</div>

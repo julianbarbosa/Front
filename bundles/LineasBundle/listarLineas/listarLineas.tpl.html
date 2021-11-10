@@ -1,0 +1,106 @@
+<div class="panel">
+    <div class="panel-body">
+		<div class="page-header">
+            <h3 class="col-xs-12 col-sm-10 text-center text-left-sm"><i class="padding-sm-hr fa  page-header-icon fa-hospital-o"></i>&nbsp;&nbsp;Búsqueda Lineas de Demarcación Emitidas</h3>
+		</div>
+        <div class="table-primary">            
+			<form name="userForm">
+                    <div class="note note-info">                        
+                        Ingrese un criterio de búsqueda para líneas de demarcación emitidas. <br>
+                    </div>
+                    <div class="row">                                   
+                        <div class="form-group col-md-4">
+                            <label class="control-label" for="direccion">Dirección: </label>
+                            <input type="text"
+                                   id="direccion"
+                                   name="clave"
+                                   ng-model="info.direccion"
+                                   class="form-control input-xlarge"
+                                   autocomplete="off"
+                                   placeholder="Ingrese la dirección."/>
+                        </div>                        
+                        <div class="form-group col-md-4">
+                            <label class="control-label" for="ciudadano">Número Predial Nacional: </label>
+                            <input type="text"
+                                   id="ciudadano"
+                                   name="ciudadano"
+                                   ng-model="info.npn"
+                                   class="form-control input-xlarge"
+                                   autocomplete="off"
+                                   placeholder="Ingrese nombre o identificación del ciudadano."/>
+                        </div>                                          
+                        <div class="form-group col-md-4">
+                            <label class="control-label" for="ciudadano">Radicado: </label>
+                            <input type="text"
+                                   id="radicado"
+                                   name="radicado"
+                                   ng-model="info.radicado"
+                                   class="form-control input-xlarge"
+                                   autocomplete="off"
+                                   placeholder="Ingrese numero de comision."/>
+                        </div>                        
+                    </div>
+                    <div class="row padding-sm text-right-sm">
+                        <input type="submit" class="btn btn-primary" ng-click="consultar(info)" value="Consultar"/>                        
+                        ó
+                        <a ui-sref="listar-peticion">Cancelar</a>
+                    </div>
+                </form>
+            <table cellpadding="0" cellspacing="0" borderp="0" class="table-hover table table-bordered" id="listaSolicitudes" width="100%" role="grid" aria-describedby="solicitud_listar_tareas">
+                <thead>
+                    <tr>
+                        <th ng-repeat="header in headers track by $index" class="ui-state-default" style="width: {{header.width}}">
+                            <input type="text" ng-change="actualizarDatos()" ng-model="headers[$index].value" class="form-control input-sm" placeholder="{{header.title}}" style="width: 100%;"  ng-if="header.input !== false && !header.options" ng-model-options='{debounce: 2000}'>
+                            <select ng-change="actualizarDatos()" ng-model="headers[$index].value" class="form-control input-sm" ng-options="option.value as option.name for option in header.options" ng-if="header.input !== false && header.options">
+                                <option value=""></option>
+                            </select>
+                        </th>
+                    </tr>
+                    <tr role="row">
+                        <th ng-repeat="header in headers" class="ui-state-default {{header.sorting}} {{header.header_align}}" style="width: {{header.width}}" ng-click="ordenarPor(headers[$index].name)">
+                            {{header.title}}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr  class="odd" style="font-weight: bold;" ng-repeat="row in data" ng-class="{'danger': row[rowWarning] === false}">
+                        <td ng-repeat="header in headers" class="{{header.body_align}}">
+                            
+                            <!--Acciones-->
+                            <span ng-if="header.values" >
+                                <span ng-if="value['link']" ng-repeat="value in header.values" ng-bind-html="'<a href=\''+value['link']+row['id']+'\' >'+value['icon']+' </a>'"></span>
+                                <span ng-if="row['ruta'] && !value['link']" ng-repeat="value in header.values" ng-bind-html="'<a href=\'#!'+row['ruta']+row['id']+'\' >'+value['icon']+' </a>'"></span>
+                            </span>
+                            
+                            <!--Opciones dependientes de valores-->
+                            <span ng-if="header.options" >
+                                <span ng-repeat="option in header.options" ng-bind-html="option['link']" ng-if="option['value'] == row[option['nameValidate']]"></span>
+                            </span>
+                            
+                            <!-- Valor de Text-->
+                            <span ng-if="header.type === 'text'">
+                                {{row[header.name]}} {{row[header.name2]}}
+                            </span>
+                            
+                            <!-- Valor de Link-->
+                            <span ng-if="header.type === 'link'">
+                                <a href="{{header.link}}{{row[header.name]}}" target="_blank">{{row[header.name]}}</a>                                
+                            </span>
+                            
+                            <!-- Valor de Objeto Fecha-->
+                            <span ng-if="header.type === 'date'">
+                                {{row[header.name].timestamp * 1000| date:'yyyy-MM-dd HH:mm:ss'}}
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                <td colspan="10" class="currency">
+                    <uib-pagination ng-model="currentPage" total-items="totalItems" max-size="5" boundary-links="true" ng-click="actualizarDatos()"></uib-pagination>
+                </td>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="overlap_espera_2"><i class="fa fa-gear fa-spin fa-2x"></i></div>

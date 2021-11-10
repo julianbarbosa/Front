@@ -1,0 +1,405 @@
+<style type="text/css">
+  .css-form input.ng-invalid.ng-touched {
+    background-color: #FA787E;
+  }
+
+  .css-form input.ng-valid.ng-touched {
+    background-color: #78FA89;
+  }
+</style>
+<div id="modalIngresoDireccion" class="modal fade modal-change" role="dialog" aria-hidden="true" ></div>
+<div class="page-header">
+    <div class="row">
+        <!-- Page header, center on small screens -->
+        <h1 class="col-xs-12 col-sm-8 text-center text-left-sm">
+        	<i class="padding-sm-hr fa fa-plus" style="cursor: pointer"></i>Gestionar Asignación de Nomenclatura: Solicitud {{ solicitud.idSolicitud }}
+        </h1>
+        <div class="col-xs-12 col-sm-8">
+            <div class="row">
+                <hr class="visible-xs no-grid-gutter-h">
+                <div class="visible-xs clearfix form-group-margin"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row" ng-hide="finalizada==false">
+	<div class="col-md-12">
+		<div class="alert alert-info">
+			<button type="button" class="close" data-dismiss="alert">×</button>
+			<strong>Se ha emitido la solicitud {{ finalizada.idSolicitud }} con número de radicado <a href="{{finalizada.urlConsulta}}" target="blank">{{finalizada.radicadoOrfeo}}</a>. </strong><br>
+			<button class="btn btn-link" ng-click="goToMisTareas()">Ir a Mis Tareas</button>
+		</div>
+	</div>
+</div>
+<div class="row" ng-show="finalizada==false">
+	<div class="col-md-6">
+	    <div class="panel panel-success">
+	        <div class="panel-heading ">
+	            <span class="panel-title">Datos de solicitud</span>
+	            <div class="panel-heading-controls">
+	                <i class="fa fa-edit" title="Editar Datos de Solicitud" ng-click="editarSolicitud()" ng-if="modo=='consulta'" ></i>
+	            </div>
+	        </div>
+	        <!-- Body  Consulta -->
+	        <div class="panel-body" ng-if="modo=='consulta'">
+	            <strong>Tipo de entrada:</strong>
+	            	<span ng-class="{'label-danger': solicitud.solicitud.interna==1, 'label-success': solicitud.solicitud.interna!=1}" class="label">
+	            		{{ solicitud.solicitud.interna==1?'Interna':'Externa'}}
+	            	</span><br/>
+	            <strong>Fecha de radicado: </strong>{{ solicitud.solicitud.createdAt.timestamp*1000  | date:'yyyy-MM-dd HH:mm:ss' }}<br/>
+	            <strong>Registro de Radicaci&oacute;n (Orfeo): </strong><a target="blank" href="http://www.cali.gov.co/aplicaciones/orweb/orweb/principal.php?id={{ solicitud.solicitud.radicado }}">{{ solicitud.solicitud.radicado }}</a><br/>
+	            <strong>Licencia expedida por: </strong>{{ curadurias[solicitud.curaduria] }}<br/>
+	            <strong>Cantidad: </strong>{{ solicitud.cantidad }}<br/>
+	            <strong>Radicado curaduría/Licencia de construcción: </strong>{{ solicitud.radicadoCuraduria }}<br/>
+	            <strong>Tipo de línea: </strong>{{ solicitud.tipoLinea }}<br/>
+	            <strong>Número de línea de demarcación: </strong>{{ solicitud.numeroLineaDemarcacion }}<br/>
+	            <strong>Fecha línea de demarcación: </strong>{{ solicitud.fechaLineaDemarcacion.timestamp*1000  | date:'yyyy-MM-dd HH:mm:ss' }}<br/>
+	            <strong>Numero Predial Nacional: </strong>{{ solicitud.npn }}<br/>
+	            <strong>Numero Predial Local: </strong>{{ solicitud.npl?solicitud.npl:'-' }}<br/>
+	            <strong>Direcci&oacute;n en la solicitud: </strong>{{ solicitud.direccion }} {{ solicitud.informacionAdicional }}<br/>
+	            <strong>Comentario: </strong>{{ solicitud.solicitud.comentario?solicitud.solicitud.comentario:'-' }}<br/>
+	            <strong>Observaci&oacute;n: </strong>{{ solicitud.solicitud.observacion?solicitud.solicitud.observacion:'-' }}<br/>
+	        </div>
+	        <!-- Body Edicion -->
+	        <div class="panel-body" ng-if="modo=='edicion'">
+	            <div class="col-md-12">
+	                <div class="form-group">
+			            <strong>Tipo de entrada:</strong>
+			            	<span ng-class="{'label-danger': solicitud.solicitud.interna==1, 'label-success': solicitud.solicitud.interna!=1}" class="label">
+			            		{{ solicitud.solicitud.interna==1?'Interna':'Externa'}}
+			            	</span><br/>
+	                    <strong>Fecha de radicado: </strong>{{ solicitudEditada.solicitud.createdAt.timestamp*1000  | date:'yyyy-MM-dd' }} <br/>
+	                    <strong>Registro de Radicación (Orfeo): </strong>{{ solicitudEditada.solicitud.radicado }} <br/>
+	                </div>
+	            </div>
+	            <div class="col-xs-12 col-sm-9">
+	                <div class="form-group">
+	                     <label class="control-label" >Licencia expedida por</label>
+	                     <select class="form-control" ng-model="solicitudEditada.curaduria">
+	                        <option value="1" ng-selected="solicitudEditada.curaduria == 1"> {{ curadurias[1] }} </option>
+	                        <option value="2" ng-selected="solicitudEditada.curaduria == 2"> {{ curadurias[2] }} </option>
+	                        <option value="3" ng-selected="solicitudEditada.curaduria == 3"> {{ curadurias[3] }} </option>
+	                        <option value="4" ng-selected="solicitudEditada.curaduria == 4"> {{ curadurias[4] }} </option>
+	                     </select>
+	                </div>
+	                <div class="form-group">
+	                     <label class="control-label" >Cantidad</label>
+	                     <input required placeholder="Cantidad de asignaciones" class="form-control" type="number" ng-model="solicitudEditada.cantidad" />
+	                </div>
+	                <div class="form-group">
+	                     <label class="control-label" >Licencia de Construcción</label>
+	                     <input required placeholder="Radicado de la curaduría" class="form-control" type="text" ng-model="solicitudEditada.radicadoCuraduria" />
+	                </div>
+	                <div class="form-group">
+	                     <label class="control-label" >Tipo información básica</label>
+	                     <select required class="form-control" ng-model="solicitudEditada.tipoLinea" name="tipoLinea" ng-disabled="estado=='visualizacion'">
+	                        <option value="Esquema básico" ng-selected="solicitudEditada.tipoLinea == 'Esquema básico'"> Esquema básico </option>
+	                        <option value="Resolución" ng-selected="solicitudEditada.tipoLinea == 'Resolución'"> Resolución </option>
+	                        <option value="Línea de demarcación" ng-selected="solicitudEditada.tipoLinea == 'Línea de demarcación'"> Línea de demarcación </option>
+	                     </select>
+	                </div>
+	                <div class="form-group">
+	                     <label class="control-label" >Línea de demarcación/Esquema/Resolución</label>
+	                     <input required placeholder="Número de Línea de Demarcación" class="form-control" type="text" ng-model="solicitudEditada.numeroLineaDemarcacion" />
+	                </div>
+	                <div class="form-group">
+	                     <label class="control-label" >Fecha de línea de demarcación/Esquema/Resolución</label>
+	                     <input required placeholder="Fecha de Línea de Demarcación" class="form-control" type="text" ng-model="solicitudEditada.fechaLineaDemarcacion" />
+	                </div>
+	                <div class="form-group">
+	                     <label class="control-label" >Número Predial Nacional</label>
+	                     <input readonly required placeholder="Identificador de predio a nivel local" class="form-control" type="text" ng-model="solicitudEditada.npn" ng-click="lanzarDialogoDireccionEdicion()" />
+	                </div>
+	                <div class="form-group" >
+	                     <label class="control-label" >Dirección Existente del Predio</label>
+	                     <input required readonly="" placeholder="Dirección del predio existente" class="form-control" type="text" ng-model="solicitudEditada.direccion" ng-click="lanzarDialogoDireccionEdicion()" />
+	                </div>
+	            </div>
+
+	            <div class="col-xs-12" ng-if='modo=="edicion"' >
+	                    <button class="btn-link" ng-click="cancelarSolicitud()" >Cancelar</button>
+	                    ó 
+	                    <button class="btn btn-primary" ng-click="guardarSolicitud()" >Guardar</button>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+
+	<div class="col-md-6">
+		<!--Panel de Datos de cliente-->
+	    <div class="panel panel-success" >
+	        <div class="panel-heading ">
+	            <span class="panel-title">Datos de solicitante</span>
+	            <div class="panel-heading-controls"></div>
+	        </div>
+	        <div class="panel-body">
+	        	<div class="col-md-9">
+	        		<strong>Nombre: </strong> {{ cliente.firstName }} {{cliente.lastName}}<br>
+	        		<strong>Identificacion: </strong> {{ cliente.numidentificacion }} <br>
+	        		<strong>Direcci&oacute;n: </strong> {{ cliente.direccion }} <br>
+	        		<strong>Teléfono: </strong> {{ cliente.telefono }} <br>
+	        		<strong>Raz&oacute;n Social: </strong> {{ cliente.razonsocial }} <br>
+	        	</div>
+	        </div>  
+	    </div>
+	</div><!--Cierre Col-->
+</div>
+<div class="row" ng-show="finalizada==false">
+	<div class="col-md-12">
+	    <!--Panel de Datos de cliente-->
+	    <div class="panel panel-success" >
+	        <div class="panel-heading ">
+	            <span class="panel-title">Archivos</span>
+	            <div class="panel-heading-controls"></div>
+	        </div>
+	        <div class="panel-body">
+	            <div ng-hide="documentos == null">
+	                <label class="control-label" ng-show="documentos.length>0" >Archivos cargados({{ documentos.length }}):</label>
+	                <label class="control-label" ng-show="documentos.length==0" >No hay documentos guardados.</label>
+	                <a ng-repeat="documento in documentos" ng-href="{{documento.url}}" target="_blank">Archivo{{ $index + 1 }}{{ $last?'.':', ' }}</a>
+	            </div>
+	            <div ng-show="documentos == null" >
+	                <label class="control-label" >Cargando archivos...</label>
+	                <span ><i class="fa fa-spinner fa-spin fa-2x fa-fw"></i></span>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+</div>
+
+<div class="row" ng-show="finalizada==false">
+	<div class="col-md-12">
+		<div class="panel panel-success" ng-show="cargandoPredioGestion" >
+	        <div class="panel-heading ">
+	            <span class="panel-title">Datos del predio de Gestión {{validacion.npnGestion}}</span>
+	            <div class="panel-heading-controls"></div>
+	        </div>
+	        <div class="panel-body">
+	        	Cargando datos del predio {{ validacion.npnGestion }}....<i class="fa fa-spinner fa-spin" aria-hidden="true" ></i>
+	        </div>
+		</div>
+	    <!--Panel de Datos de cliente-->
+	    <div class="panel panel-success" ng-hide="cargandoPredioGestion" >
+	        <div class="panel-heading ">
+	            <span class="panel-title">Datos del predio de Gestión {{validacion.npnGestion}}</span>
+	            <div class="panel-heading-controls"><i class="fa fa-edit" title="Editar predio de trabajo" ng-click="toEditandoPredioGestion(true)" style="cursor: pointer;" ></i><i class="fa fa-plus" title="Adicionar nomenclatura" ng-click="crearNomenclatura()" style="cursor: pointer;" ></i>
+	            	<i class="fa fa-{{ dataGui.verTodasNomenclatura?'check-':'' }}square-o" title="Ver todas" ng-click="toogleVerTodas()" style="cursor: pointer;" ></i>
+	            </div>
+	        </div>
+			<div class="panel-body" ng-if="!editandoPredioGestion && predioConsultado">
+					<div class="row" ng-if="validacion.npnGestion!=solicitud.npn">
+						<div class="col-sm-12">
+							<div uib-alert class="alert-warning" >El predio solicitado ({{ solicitud.npn }}) y el gestionado ({{ validacion.npnGestion }}) son diferentes.</div>
+						</div>
+					</div>
+					<span><strong>NPN: </strong> {{ predioConsultado.codigounico }}<br></span>
+					<span><strong>Código alfanumérico: </strong> {{ predioConsultado.numero }}<br></span>
+					<span><strong>Propiedad Horizontal: </strong> {{ predioConsultado.ph?'Sí':'No' }}<br></span>
+					<span ng-if="predioConsultado.idbarrio!=null"><strong>Barrio: </strong> {{ predioConsultado.barrio.nombre }}<br></span>
+					<span ng-if="predioConsultado.idVereda!=null"><strong>Vereda: </strong> {{ predioConsultado.vereda.nombre }}<br></span>
+					<span><strong>Tipo: </strong> {{ predioConsultado.tipo }}<br></span>
+					<span><strong>Latitud: </strong> {{ validacion.x?validacion.x:'0.000' }}<br></span>
+					<span><strong>Longitud: </strong> {{ validacion.y?validacion.y:'0.000' }}<br></span>
+					<br>
+	                <div class="form-group">
+	                    <label class="control-label" >Coordenadas</label>
+	                    <input required placeholder="Coordenada " class="form-control" type="text" ng-model="validacion.coordenada" ng-change="cambioCoordenadas()"/>
+	                </div>
+					<br>
+					<strong ng-hide="nomenclaturasConsultado.length">No hay nomenclaturas asociadas.</strong>
+                    <table class="table-hover table table-bordered table-responsive" ng-show="nomenclaturasConsultado.length" >
+                        <thead>
+                            <tr>
+                                <!--th>Id</th-->
+                                <th>Acción</th>
+                                <th>Dirección Principal</th>
+                                <th>Complemento</th>
+                                <th>Dirección Anterior</th>
+                                <th>Dirección Visual</th>
+                                <th>Principal</th>
+                                <th>Estado</th>
+                                <th>Última Actualización</th>
+                                <th ng-if="permisoVerHistoricoConsultado">Histórico</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="nomenclatura in nomenclaturasConsultado | filter:filterNomenclaturas" >
+                                <!--td>
+                                	<span class="btn-link" title="{{nomenclatura.observacion?nomenclatura.observacion:'No hay información'}}">{{ nomenclatura.idnomenclatura }}</span>
+                                </td-->
+                                <td>
+                                	<i class="fa fa-arrow-down" aria-hidden="true" style="cursor: pointer;" ng-click="trasladar2Certificadas(nomenclatura.idnomenclatura)" title="Enviar esta nomenclatura al listado de direcciones." ng-if="nomenclatura.estado.codigo=='certificada'"></i>
+                                	<i class="fa fa-edit" aria-hidden="true" style="cursor: pointer;" ng-click="lanzarEdicionNomenclatura(nomenclatura.idnomenclatura)" title="Editar"></i>
+                                	<i class="fa fa-check" aria-hidden="true" style="cursor: pointer;" ng-click="certificarNomenclatura(nomenclatura.idnomenclatura)" title="Certificar" ng-if="nomenclatura.estado.codigo!='certificada'"></i>
+                                	<i class="fa fa-trash" aria-hidden="true" style="cursor: pointer;" ng-click="inactivarNomenclatura(nomenclatura.idnomenclatura)" title="Inactivar"></i>
+                                	<i class="fa fa-eraser" aria-hidden="true" style="cursor: pointer;" ng-click="anularNomenclatura(nomenclatura.idnomenclatura)" title="Anular" ng-if="nomenclatura.estado.codigo=='certificada'"></i>
+                                </td>
+                                <td>{{ nomenclatura.direccion }}</td>
+                                <td>{{ nomenclatura.informacionadicional?nomenclatura.informacionadicional:'' }}</td>
+                                <td>{{ nomenclatura.direccionAnterior }}</td>
+                                <td>{{ nomenclatura.direccionVisual }}</td>
+                                <td>
+                                	<label class="radio-inline">
+                                		<input type="radio" ng-value="nomenclatura.idnomenclatura" ng-model="principal.id" ng-click="actualizarPrincipal(nomenclatura.idnomenclatura)" >
+                                	</label>
+                                </td>
+                                <td><span class="badge" ng-class="nomenclatura.estado.codigo=='certificada'?'badge-success':'badge-warning'" >{{ nomenclatura.estado.codigo }}</span></td>
+                                <td>{{ nomenclatura.updatedAt.timestamp*1000 | date:'yyyy-MM-dd' }}</td>
+                                <td ng-if="permisoVerHistoricoConsultado" >
+                                    <button ng-hide="nomenclatura.historico || nomenclatura.loading" class="btn-link" ng-click="consultarHistorico(nomenclatura)" >
+                                        <i class="fa fa-level-down" aria-hidden="true"></i>
+                                    </button>
+                                    <i class="fa fa-spinner fa-spin" aria-hidden="true" ng-show="nomenclatura.loading"></i>
+                                    <span ng-if="nomenclatura.historico && nomenclatura.historico.length>0">
+                                        <table class="table-hover table table-bordered table-responsive">
+                                            <thead>
+                                                <tr>
+                                                    <th>Estado Anterior</th>
+                                                    <th>Estado Actual</th>
+                                                    <th>Comentario</th>
+                                                    <th>Usuario</th>
+                                                    <th>Fecha</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat='historia in nomenclatura.historico'>
+                                                    <td>{{historia.estadoAnterior}}</td>
+                                                    <td>{{historia.estadoActual}}</td>
+                                                    <td>{{historia.comentario}}</td>
+                                                    <td>{{historia.nombreUsuario}} {{historia.apellidoUsuario}}</td>
+                                                    <td>{{historia.fechaCreacion}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </span>
+                                    <span ng-if="nomenclatura.historico && nomenclatura.historico.length==0">
+                                        No se tiene histórico de esta nomenclatura
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div uib-alert dismiss-on-timeout="5000" ng-repeat="alert in alerts" class="alert-{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</div>
+			</div>
+			<div class="panel-body" ng-if="editandoPredioGestion">
+				<div class="form-group" >
+					<label class="control-label" >NPN:</label>
+					<input placeholder="Número Predial Nacional de Gestión" class="form-control" name="npnGestion" ng-model="npnGestionEditado" ng-keydown="($event.keyCode==13) && cambiarNpnGestion(npnGestionEditado)" />
+				</div>
+				<button class="btn btn-primary" ng-click="cambiarNpnGestion(npnGestionEditado)" >Ok</button>
+				<button class="btn btn-primary" ng-click="toEditandoPredioGestion(false)">Cancelar</button>
+			</div>
+	        <div class="panel-body" ng-if="predioConsultado==null">
+	        	<strong>No hay datos para mostrar del predio.</strong>
+	        </div>
+	    </div>
+	</div>
+	<div class="col-md-12">
+	    <div class="panel panel-success" >
+	        <div class="panel-heading ">
+	            <span class="panel-title">Datos de la asignación</span>
+	            <div class="panel-heading-controls">
+	                    <!--i class="fa fa-plus" style="cursor: pointer" title="Adicionar Direcci&oacute;n" ng-click="lanzarDialogoDireccion()" ></i-->
+	            </div>
+	        </div>
+	        <div class="panel-body">
+	            <div class="col-sm-12">
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" ng-model="validacion.anular" ng-change="cambioAnular()" > Repuesta por oficio
+						</label>
+					</div>
+				</div>
+	            <div class="col-sm-12">
+	            	<p ng-if="!validacion.anular">
+	            		Para adicionar presione el botón "<i class="fa fa-arrow-down" aria-hidden="true"></i>" del listado de direcciones del panel "Datos del predio de Gestión".
+	            	</p>
+	                <div class="table-primary" ng-if="!validacion.anular">
+	                	<table class="table-hover table table-bordered table-responsive" >
+	                		<thead>
+	                			<tr>
+	                				<td>Acci&oacute;n</td>
+	                				<td>Número del predio</td>
+	                                <td>Direcci&oacute;n Visual</td>
+	                                <td>Direcci&oacute;n Principal</td>
+	                                <td>Complemento</td>
+	                                <!--td>Principal</td-->
+	                                <!--td>Hist&oacute;rico</td-->
+	                			</tr>
+	                		</thead>
+	                		<tbody>
+	                			<tr ng-if="validacion.direcciones.length==0">
+	                				<td colspan="6">No hay direcciones para mostrar</td>
+	                			</tr>
+	                			<tr ng-if="validacion.direcciones.length>0" ng-repeat="nomenclatura in validacion.direcciones track by $index">
+	                                <td>
+	                                    <i class="fa fa-trash-o" title="Eliminar" ng-click="eliminarDireccion($index)"></i>
+	                                    <!--i class="fa fa-edit" title="Editar" ng-click="editarDireccion($index)" ></i--> 
+	                                </td>
+	                                <td>{{ nomenclatura.npn }} <i class="fa fa-exclamation-triangle" ng-if="nomenclatura.npn!=validacion.npnGestion" style="cursor: pointer;color: red" title="Este NPN no corresponde al NPN de gestión."></i></td>
+	                                <td>{{ nomenclatura.direccionVisual }} </td>
+	                                <td>{{ nomenclatura.direccion }} </td>
+	                                <td>{{ nomenclatura.infoAdicional }} </td>
+	                                <!--td>{{ nomenclatura.principal?'Sí':'No' }} </td-->
+	                                <!--td >
+	                                    <button ng-if="nomenclatura.idnomenclatura" ng-hide="nomenclatura.historico || nomenclatura.loading" class="btn-link" ng-click="consultarHistorico(nomenclatura)" >
+	                                        <i class="fa fa-level-down" aria-hidden="true"></i>
+	                                    </button>
+	                                    <i class="fa fa-spinner fa-spin" aria-hidden="true" ng-show="nomenclatura.loading"></i>
+	                                    <span ng-if="nomenclatura.historico && nomenclatura.historico.length>0">
+	                                        <table class="table-hover table table-bordered table-responsive">
+	                                            <thead>
+	                                                <tr>
+	                                                    <th>Estado Anterior</th>
+	                                                    <th>Estado Actual</th>
+	                                                    <th>Usuario</th>
+	                                                    <th>Fecha</th>
+	                                                </tr>
+	                                            </thead>
+	                                            <tbody>
+	                                                <tr ng-repeat='historia in nomenclatura.historico'>
+	                                                    <td>{{historia.estadoAnterior}}</td>
+	                                                    <td>{{historia.estadoActual}}</td>
+	                                                    <td>{{historia.nombreUsuario}} {{historia.apellidoUsuario}}</td>
+	                                                    <td>{{historia.fechaCreacion}}</td>
+	                                                </tr>
+	                                            </tbody>
+	                                        </table>
+	                                    </span>
+	                                    <span ng-if="nomenclatura.historico && nomenclatura.historico.length==0">
+	                                        No se tiene histórico de esta nomenclatura
+	                                    </span>
+	                                </td-->
+	                			</tr>
+	                		</tbody>
+	                	</table>
+	                </div>
+	            </div>
+	            <div class="col-sm-12">
+	                <div class="form-group" ng-if="validacion.anular">
+	                    <label class="control-label" for="causa_negacion">Causa de negaci&oacute;n</label>
+	                    <select class="form-control"
+	                    	ng-change="cambioCausaNegacion()"
+	                        ng-model="validacion.causaNegacion"
+	                        >
+	                        <option value="">Personalizada</option>
+	                        <option ng-repeat="causaNegacion in causasNegacion" ng-value="causaNegacion.descripcion">{{causaNegacion.nombre}}</option>
+	                    </select>
+	                </div>
+	                <div class="form-group" >
+	                     <label class="control-label" >Observaciones: <span ng-hide="validacion.anular" class="btn-link" ng-click="limpiarObservaciones()">Limpiar</span></label>
+	                     <textarea ng-disabled="validacion.anular && validacion.causaNegacion!=''" required placeholder="Observaciones" class="form-control" rows="5" ng-model="validacion.comentario" ng-change="dataGui.existenCambios=true" name="observaciones"></textarea>
+	                </div>
+	            </div>
+	            <div class="col-sm-12" ng-show="dataGui.existenCambios">
+	            	<span class="label label-success">Hay cambios para guardar</span>
+	            </div>
+	            <div class="col-sm-12">
+	                <button class="btn btn-primary" ng-click="guardarValidacion()" ng-disabled="!dataGui.existenCambios" >Guardar Cambios</button>
+	                <button class="btn btn-primary" ng-click="finalizarValidacion()" >Finalizar</button>
+	                <button class="btn btn-primary" ng-click="previsualizar()" >Previsualizar</button>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+</div>

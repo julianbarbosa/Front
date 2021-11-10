@@ -1,0 +1,739 @@
+<style>
+    .theme-cali .nav-tabs > li.active > a {
+        background: #006c99 !important;
+    }
+    .div-text h4 {
+        font-size: 11px;
+        color: gray;
+    }
+    .div-text p {
+        font-size: 14px;
+        color: #000000 !important;
+    }
+    .panel-heading {
+        font-size: 14px;
+    }
+    icon {
+        display: none;
+    }
+    tab-label {
+        font-size: 18px;
+        font-weight: 700;
+    }
+    subheader {
+        font-size: 16px;
+    }
+</style>
+
+<div class="panel">
+    <div class="panel-body">
+        <div class="page-header">
+            <h1 class="col-xs-12 col-sm-10 text-center text-left-sm"><i class="padding-sm-hr page-header-icon fa fa-tasks"></i>&nbsp;&nbsp;Detalle de Registro Mercantil</h1>
+        </div>
+        <uib-tabset active="activeJustified" justified="true">
+            <uib-tab index="0" heading="Contribuyente">
+                <tab-label>Información del Contribuyente</tab-label>
+                <div class="row">
+                    <div class="col-md-6"  ng-show="data.fechaMatricula.timestamp>-3786744482">
+                        <div class="div-text">
+                            <h4>Fecha de Matricula</h4>
+                            <p> {{data.fechaMatricula.timestamp*1000 | date : 'yyyy-MM-dd' }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6"  ng-show="data.fechaRenovacion.timestamp>-3786744482">
+                        <div class="div-text">
+                            <h4>Fecha de Renovación</h4>
+                            <p> {{data.fechaRenovacion.timestamp*1000 | date : 'yyyy-MM-dd' }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6"  ng-show="data.fechaCancelacion.timestamp>-3786744482">
+                        <div class="div-text">
+                            <h4>Fecha de Cancelación</h4>
+                            <p> {{data.fechaCancelacion.timestamp*1000 | date : 'yyyy-MM-dd' }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="div-text">
+                            <h4>Estado Matricula</h4>
+                            <p class="text-success"> <strong>{{data.estado.nombre }}</strong></p>
+                        </div>
+                    </div>
+                    <div class="col-md-6" ng-if="data.motivoCancelacion">
+                        <div class="div-text">
+                            <h4>Motivo Cancelación</h4>
+                            <p class="text-success"> <strong>{{data.motivoCancelacion.nombre }}</strong></p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="div-text">
+                            <h4>Matricula Mercantil</h4>
+                            <p class="text-success"> <strong>{{data.numeroInscrito }}</strong></p>
+                        </div>
+                    </div>
+                </div>
+                <!-- titulo tercero-->
+                <div class="row">
+                    <div class="col-md-6" ng-if="data.tercero.identificacion">
+                        <div class="div-text">
+                            <h4>Identificación</h4>
+                            <p> {{data.tercero.identificacion}}<span ng-show="data.tercero.digitoVerificacion"> - {{data.tercero.digitoVerificacion}}</span></p>
+
+                        </div>
+                    </div>
+                    <div class="col-md-6"  ng-if="data.tercero.tipoIdentificacion.nombre">
+                            <div class="div-text">
+                            <h4>Tipo Identificación</h4>
+                            <p> {{data.tercero.tipoIdentificacion.nombre}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" ng-if="data.tercero.tipoIdentificacion.nombre!=='NIT'">
+                    <div class="col-md-6" >
+                        <div class="div-text">
+                            <h4>Nombre</h4>
+                            <p> {{data.tercero.nombre}}</p>
+
+                        </div>
+                    </div>
+                    <div class="col-md-6"  ng-if="data.tercero.apellido">
+                            <div class="div-text">
+                            <h4>Apellido</h4>
+                            <p> {{data.tercero.apellido}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row"  ng-if="data.tercero.tipoIdentificacion.nombre=='NIT'">
+                    <div class="col-md-6" >
+                            <div class="div-text">
+                            <h4>Razón Social</h4>
+                            <p> {{data.tercero.razonSocial}}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6"  ng-if="data.tercero.numeroTrabajadoresVinculados">
+                        <div class="div-text">
+                            <h4>Número de trabajadores vinculados</h4>
+                            <p> {{data.tercero.numeroTrabajadoresVinculados}}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6"  ng-if="data.tercero.valorCapital">
+                        <div class="div-text">
+                            <h4>Valor Capital</h4>
+                            <p> {{data.tercero.valorCapital}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6"  ng-if="data.tarjetaProfesional">
+                        <div class="div-text">
+                            <h4>Tarjeta Profesional</h4>
+                            <p> {{data.tarjetaProfesional}}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6"  ng-if="data.tercero.tipoTercero.nombre">
+                        <div class="div-text">
+                            <h4>Tipo Persona</h4>
+                            <p> {{data.tercero.tipoTercero.nombre}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6"  ng-if="data.tercero.naturaleza.nombre">
+                            <div class="div-text">
+                            <h4>Naturaleza</h4>
+                            <p> {{data.tercero.naturaleza.nombre}}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6"  ng-if="data.tercero.regimenDian.nombre">
+                        <div class="div-text">
+                            <h4>Regimen DIAN</h4>
+                            <p> {{data.tercero.regimenDian.nombre}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6"  ng-if="data.tercero.entidadControl.nombre">
+                        <div class="div-text">
+                            <h4>Entidad de Control</h4>
+                            <p> {{data.tercero.entidadControl.nombre}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6"  ng-if="data.actoRegistro[0].nombre">
+                        <div class="div-text">
+                            <h4>Acto Registro</h4>
+                            <p> {{data.actoRegistro[0].nombre}}</p>
+                        </div>
+                    </div>
+                </div>
+                <br><br>
+                <tab-label>Actividades Económicas</tab-label>
+                <section>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Nombre Actividad</th>
+                                <th>Fecha Inicio Actividad</th>
+                                <th>Sector</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="actividad in data.actividadesEconomicas">
+                                <td>{{actividad.ciiu.codigo | date : 'y'}}</td>
+                                <td>{{actividad.ciiu.nombre}}</td>
+                                <td><span ng-show="actividad.fechaInicioActividad.timestamp">{{actividad.fechaInicioActividad.timestamp*1000 | date : 'yyyy-MM-dd' }}</span></td>
+                                <td>{{actividad.sector}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+               
+                <!-- <div layout="row" layout-sm="column" layout-align="end center" layout-wrap>
+                    <button class="primary" ng-click="validarForm(formulario1, 1)">Siguiente</button>
+                </div> -->
+        </tab-body>
+    </tab>
+            </uib-tab>
+            <uib-tab index="1" heading="Establecimientos">
+                <tab id="tab2" ng-disabled="formulario1.$valid">
+                    <tab-label>Establecimientos</tab-label>
+                    <div ng-show="data.vinculos.length==0">
+                        <div class="alert alert-warning alert-dismissable">
+                            <i class="fa fa-danger"></i>
+                            <b>Atención:</b> <span >No se encontraron establecimientos vinculados.</span>
+                        </div>
+                    </div>
+                    <div class="panel panel-default" ng-show="data.vinculos.length>0">
+                    
+                    <tab-body>
+                        <section ng-repeat="vinculo in data.vinculos" ng-if="vinculo.cargo.nombre=='Establecimiento'">
+
+                            <div class="panel-heading">Información del Establecimiento {{vinculo.terceroHijo.nombre}}</div>
+                            <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-6" >
+
+                                    <div class="div-text">
+                                        <h4>Nombre</h4>
+                                        <p> {{vinculo.terceroHijo.nombre}}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6"  ng-if="vinculo.terceroHijo.apellido">
+
+                                    <div class="div-text">
+                                        <h4>Apellido</h4>
+                                        <p> {{vinculo.terceroHijo.apellido}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6"  ng-if="vinculo.terceroHijo.identificacion">
+
+                                    <div class="div-text">
+                                        <h4>Identificación</h4>
+                                        <p> {{vinculo.terceroHijo.identificacion}}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6"  ng-if="vinculo.terceroHijo.tipoIdentificacion.nombre">
+
+                                    <div class="div-text">
+                                        <h4>Tipo Identificación</h4>
+                                        <p> {{vinculo.terceroHijo.tipoIdentificacion.nombre}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6"  ng-if="vinculo.cargo.nombre">
+
+                                    <div class="div-text">
+                                        <h4>Cargo</h4>
+                                        <p> {{vinculo.cargo.nombre}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6"  ng-if="vinculo.terceroHijo.tarjetaProfesional">
+
+                                    <div class="div-text">
+                                        <h4>Tarjeta Profesional</h4>
+                                        <p> {{vinculo.terceroHijo.tarjetaProfesional}}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6"  ng-if="vinculo.terceroHijo.valorCapital">
+
+                                    <div class="div-text">
+                                        <h4>Valor Capital</h4>
+                                        <p> {{vinculo.terceroHijo.valorCapital}}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="div-text">
+                                        <h4>Estado Matricula</h4>
+                                        <p class="text-success"> <strong>{{vinculo.nombre }}</strong></p>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <div class="div-text">
+                                        <h4>Matricula Mercantil</h4>
+                                        <p class="text-success"> <strong>{{vinculo.numeroInscrito }}</strong></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <br><br>
+                            <tab-label>Información de Contacto del Establecimiento</tab-label>
+                            <section ng-repeat="contacto in vinculo.terceroHijo.terceroContactos">
+                                <hr>
+                                <div class="row">
+                                    <div class="col-md-6"  ng-if="contacto.direccion">
+
+                                        <div class="div-text">
+                                            <h4>Dirección</h4>
+                                            <p> {{contacto.direccion}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6"  ng-if="contacto.telefono">
+
+                                        <div class="div-text">
+                                            <h4>Telefono</h4>
+                                            <p> {{contacto.telefono}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6"  ng-if="contacto.telefonoAdicional">
+
+                                        <div class="div-text">
+                                            <h4>Celular</h4>
+                                            <p> {{contacto.telefonoAdicional}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6"  ng-if="contacto.email">
+
+                                        <div class="div-text">
+                                            <h4>Email</h4>
+                                            <p> {{contacto.email}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6"  ng-if="contacto.terceroTipoContacto.nombre">
+
+                                        <div class="div-text">
+                                            <h4>Tipo Contacto</h4>
+                                            <p> {{contacto.terceroTipoContacto.nombre}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6"  ng-if="contacto.pais.nombre">
+
+                                        <div class="div-text">
+                                            <h4>Pais</h4>
+                                            <p> {{contacto.pais.nombre}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6"  ng-if="contacto.departamento.nombre">
+
+                                        <div class="div-text">
+                                            <h4>Departamento</h4>
+                                            <p> {{contacto.departamento.nombre}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6"  ng-if="contacto.municipio.nombre">
+
+                                        <div class="div-text">
+                                            <h4>Municipio</h4>
+                                            <p> {{contacto.municipio.nombre}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6"  ng-if="contacto.comuna.codigo">
+
+                                        <div class="div-text">
+                                            <h4>Comuna</h4>
+                                            <p> {{contacto.comuna.codigo}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6"  ng-if="contacto.barrio.nombre">
+
+                                        <div class="div-text">
+                                            <h4>Barrio</h4>
+                                            <p> {{contacto.barrio.nombre}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                        </section>
+
+                    </tab-body>
+                </tab>
+            </uib-tab>
+            <uib-tab index="2" heading="Contactos">
+                <tab id="tab3" ng-disabled="formulario1.$valid">
+                    <tab-label>
+                        <icon class="material-icons">check_box</icon>
+                        Contactos
+                    </tab-label>
+                    <tab-body>
+                        <section ng-repeat="contacto in data.tercero.terceroContactos">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">Información de Contacto {{contacto.terceroTipoContacto.nombre}}</div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-6" >
+
+                                            <div class="div-text">
+                                                <h4>Dirección</h4>
+                                                <p> {{contacto.direccion}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6" >
+
+                                            <div class="div-text">
+                                                <h4>Telefono</h4>
+                                                <p> {{contacto.telefono}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6" >
+
+                                            <div class="div-text">
+                                                <h4>Telefono Adicional</h4>
+                                                <p> {{contacto.telefonoAdicional}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6" >
+
+                                            <div class="div-text">
+                                                <h4>Email</h4>
+                                                <p> {{contacto.email}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6" >
+
+                                            <div class="div-text">
+                                                <h4>Tipo Contacto</h4>
+                                                <p> {{contacto.terceroTipoContacto.nombre}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6" >
+
+                                            <div class="div-text">
+                                                <h4>Pais</h4>
+                                                <p> {{contacto.pais.nombre}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6" >
+
+                                            <div class="div-text">
+                                                <h4>Departamento</h4>
+                                                <p> {{contacto.departamento.nombre}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6" >
+
+                                            <div class="div-text">
+                                                <h4>Municipio</h4>
+                                                <p> {{contacto.municipio.nombre}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6" >
+
+                                            <div class="div-text">
+                                                <h4>Comuna</h4>
+                                                <p> {{contacto.comuna.codigo}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6" >
+
+                                            <div class="div-text">
+                                                <h4>Barrio</h4>
+                                                <p> {{contacto.barrio.nombre}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </tab-body>
+                </tab>
+            </uib-tab>
+            <uib-tab index="3" heading="Financiera">
+                <tab id="tab4">
+                    <tab-label>
+                        <icon class="material-icons">event</icon>
+                        Financiera
+                    </tab-label>
+                    <tab-body>
+                        <section ng-repeat="financiera in data.informacionFinanciera">
+                            <subheader class="primary">Información año {{financiera.anoFinanciera}} - Grupo Niff {{financiera.grupoNiif}}</subheader>
+                            <div class="row">
+                                <div class="col-md-6" >
+
+                                    <div class="div-text">
+                                        <h4>Activo Corriente</h4>
+                                        <p> {{financiera.activoCorriente | number : fractionSize}}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" >
+
+                                    <div class="div-text">
+                                        <h4>Activo No Corriente</h4>
+                                        <p> {{financiera.activoNoCorriente| number : fractionSize}}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" >
+
+                                    <div class="div-text">
+                                        <h4>Activo Total</h4>
+                                        <p> {{financiera.activoTotal| number : fractionSize}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6" >
+
+                                    <div class="div-text">
+                                        <h4>Pasivo Corriente</h4>
+                                        <p> {{financiera.pasivoCorriente| number : fractionSize}}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" >
+
+                                    <div class="div-text">
+                                        <h4>Pasivo No Corriente</h4>
+                                        <p> {{financiera.pasivoNoCorriente| number : fractionSize}}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" >
+
+                                    <div class="div-text">
+                                        <h4>Pasivo Total</h4>
+                                        <p> {{financiera.pasivoTotal| number : fractionSize}}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6" >
+
+                                    <div class="div-text">
+                                        <h4>Patrimonio</h4>
+                                        <p> {{financiera.patrimonio| number : fractionSize}}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" >
+
+                                    <div class="div-text">
+                                        <h4>Pasivo Patrimonio</h4>
+                                        <p> {{financiera.pasivoPatrimonio | number : fractionSize}}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6" ng-show="financiera.ingresosOrdinarios">
+
+                                    <div class="div-text">
+                                        <h4>Ingresos Ordinarios</h4>
+                                        <p> {{financiera.ingresosOrdinarios | number : fractionSize}}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" ng-show="financiera.otrosIngresos">
+
+                                    <div class="div-text">
+                                        <h4>Otros Ingresos</h4>
+                                        <p> {{financiera.otrosIngresos | number : fractionSize}}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" ng-show="financiera.costoVenta">
+
+                                    <div class="div-text">
+                                        <h4>Costo Venta</h4>
+                                        <p> {{financiera.costoVenta | number : fractionSize}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6" ng-show="financiera.gastosOperacionales">
+
+                                    <div class="div-text">
+                                        <h4>Gastos Operacionales</h4>
+                                        <p> {{financiera.gastosOperacionales | number : fractionSize}}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" ng-show="financiera.otrosGastos">
+
+                                    <div class="div-text" >
+                                        <h4>Otros Gastos</h4>
+                                        <p> {{financiera.otrosGastos | number : fractionSize}}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6"  ng-show="financiera.gastosPorImpuestos">
+
+                                    <div class="div-text">
+                                        <h4>Gastos Por Impuestos</h4>
+                                        <p> {{financiera.gastosPorImpuestos | number : fractionSize}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6" ng-show="financiera.utilidadOperacional">
+
+                                    <div class="div-text">
+                                        <h4>Utilidad Operacional</h4>
+                                        <p> {{financiera.utilidadOperacional | number : fractionSize}}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" ng-show="financiera.resultadoEjercicio">
+
+                                    <div class="div-text">
+                                        <h4>Resultado en el Ejercicio</h4>
+                                        <p> {{financiera.resultadoEjercicio | number : fractionSize}}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" ng-show="financiera.balanceSocial" >
+
+                                    <div class="div-text">
+                                        <h4>Balance Social</h4>
+                                        <p> {{financiera.balanceSocial | number : fractionSize}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6" ng-show="financiera.porcentajeNalPub">
+
+                                    <div class="div-text">
+                                        <h4>Porcentaje Nal Publico</h4>
+                                        <p> {{financiera.porcentajeNalPub}}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" ng-show="financiera.porcentajeNalPri">
+
+                                    <div class="div-text">
+                                        <h4>Porcentaje Nal Privado</h4>
+                                        <p> {{financiera.porcentajeNalPri}}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" ng-show="financiera.porcentajeExtPub">
+
+                                    <div class="div-text">
+                                        <h4>Porcentaje Ext Público</h4>
+                                        <p> {{financiera.porcentajeExtPub}}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" ng-show="financiera.porcentajeExtPri">
+
+                                    <div class="div-text">
+                                        <h4>Porcentaje Ext Privado</h4>
+                                        <p> {{financiera.porcentajeExtPri}}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </section>
+                    </tab-body>
+                </tab>
+            </uib-tab>
+            <uib-tab index="4" heading="Personas Vinculadas">
+                <tab id="tab4" ng-disabled="formulario1.$valid">
+                    <tab-label>
+                        <icon class="material-icons">check_box</icon>
+                        Personas Vinculadas
+                    </tab-label>
+                    <div ng-show="data.vinculos.length==0">
+                        <div class="alert alert-warning alert-dismissable">
+                            <i class="fa fa-danger"></i>
+                            <b>Atención:</b> <span >No se encontraron establecimientos vinculados.</span>
+                        </div>
+                    </div>
+                    <tab-body  ng-show="data.vinculos.length>0">
+                        <section ng-repeat="vinculo in data.vinculos" ng-if="vinculo.cargo.nombre!='Establecimiento'">
+
+						<div class="panel panel-default">
+							<div class="panel-heading">Información del Vínculo {{vinculo.cargo.nombre}}</div>
+                            <div class="row">
+                                <div class="col-md-6" >
+
+                                    <div class="div-text">
+                                        <h4>Nombre</h4>
+                                        <p> {{vinculo.terceroHijo.nombre}}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" >
+
+                                    <div class="div-text">
+                                        <h4>Apellido</h4>
+                                        <p> {{vinculo.terceroHijo.apellido}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6" >
+
+                                    <div class="div-text">
+                                        <h4>Identificación</h4>
+                                        <p> {{vinculo.terceroHijo.identificacion}}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" >
+
+                                    <div class="div-text">
+                                        <h4>Tipo Identificación</h4>
+                                        <p> {{vinculo.terceroHijo.tipoIdentificacion.nombre}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6" >
+
+                                    <div class="div-text">
+                                        <h4>Cargo</h4>
+                                        <p> {{vinculo.cargo.nombre}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6" >
+
+                                    <div class="div-text">
+                                        <h4>Tarjeta Profesional</h4>
+                                        <p> {{vinculo.terceroHijo.tarjetaProfesional}}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" >
+
+                                    <div class="div-text">
+                                        <h4>Valor Capital</h4>
+                                        <p> {{vinculo.terceroHijo.valorCapital}}</p>
+                                    </div>
+                                </div>
+                            </div>
+						</div>
+                        </section>
+                    </tab-body>
+                </tab>
+            </uib-tab>
+        </uib-tabset>
+  </div>
+</div>
+
+
+
+

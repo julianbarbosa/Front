@@ -1,0 +1,38 @@
+<div  class="form-group" ng-class="{ 'has-error': hasError}" ng-hide="validate==1">
+	<label class="control-label" >{{label}}</label>
+	<input type="file" name="archivosinput" class="input_file" file-upload multiple >
+	<p ng-show="hasError" class="help-block">Este campo es obligatorio.</p>
+</div>
+<div uib-alert ng-repeat="alert in alerts" dismiss-on-timeout="40000000000" close="closeAlert($index)">
+	{{alert.msg}}
+</div>
+<div ng-show="cargando" class="cargar_archivos col-md-12 col-xs-12">
+	<div class="panel panel-info panel-dark widget-profile" >
+			<div class="panel-heading">
+				<i class="fa fa-spinner fa-spin"></i> Cargando archivos....
+			</div> <!-- / .panel-heading -->
+	</div>		
+</div>	
+<div ng-hide="cargando" class="panel panel-dark panel-info table-responsive">
+	<div class="panel-heading">
+		<span class="panel-title">{{label}}</span>						
+	</div> <!-- cabecera-->	
+	<div ng-show="listFiles.length == 0">No hay archivos cargados</div>
+	<table class="table" ng-show="listFiles.length > 0">			
+		<thead>		
+			<tr>
+				<th ng-hide="disabledRemove">Eliminar</th>
+				<th ng-hide="disabledDownload">Descargar</th>
+				<th>Archivos</th>
+			</tr>		
+		</thead>
+		<tbody>
+			<tr ng-repeat="item in listFiles">
+				<td ng-hide="disabledRemove"><strong><i class="fa fa-trash-o" title="Eliminar" ng-click="eliminarArchivo($index)" style="cursor: pointer;"></i></strong></td>
+				<td ng-hide="disabledDownload"><strong><i class="fa fa-download" title="Descargar" ng-click="descargarArchivo($index)" style="cursor: pointer;"></i></strong></td>
+				<td><strong>{{item.nombre}}</strong></td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+

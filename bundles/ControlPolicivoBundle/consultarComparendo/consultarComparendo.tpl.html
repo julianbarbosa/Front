@@ -1,0 +1,59 @@
+<div>
+    <div class="col-sm-12 col-md-10 col-lg-8">
+        <div ng-if="validator.alert.content">
+            <div class="alert {{validator.alert.type}} alert-dismissable">
+                <i class="fa fa-danger"></i>
+                <button type="button" class="close" aria-hidden="true" ng-click="hideAlert()">×</button>
+                <b>{{validator.alert.title}}</b> <span ng-bind-html="validator.alert.content"></span>
+                <br><strong><a ui-sref="controlpolicivo-verdocumentosaudiencia({'idcomparendo':230})">{{validator.alert.linkText}}</a></strong>
+            </div>
+        </div>
+        <div ng-include="'../bundles/ControlPolicivoBundle/comun/comparendo.tpl.html'" ng-init="idcomparendo=idcomparendo"></div>    
+        
+        <div class="panel panel-success">
+            <div class="panel-heading ">
+                <span class="panel-title">Historico</span>
+                <div class="panel-heading-controls">                    
+                </div>
+            </div>
+            
+            <div class="panel-body">               
+                <table class="table">
+                    <thead>
+                        <th>
+                            id
+                        </th>
+                        <th>
+                            Estado Anterior
+                        </th>
+                        <th>
+                            Estado Actual
+                        </th>
+                        <th>
+                            Comentario
+                        </th>
+                        <th>
+                            Fecha Creación
+                        </th>
+                    </thead>
+                    <tr ng-repeat="movimientoComparendo in arrayMovimientoComparendo">
+                        <td>
+                            {{movimientoComparendo.id}}
+                        </td>
+                        <td>
+                            {{movimientoComparendo.estadoAnterior.nombre}}
+                        </td>
+                        <td>
+                            {{movimientoComparendo.estadoActual.nombre}}
+                        </td>
+                        <td ng-bind-html="movimientoComparendo.comentario">
+                        </td>
+                        <td>
+                            {{movimientoComparendo.createdAt.timestamp * 1000| date:'yyyy-MM-dd HH:mm:ss'}}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

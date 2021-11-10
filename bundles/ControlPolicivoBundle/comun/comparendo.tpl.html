@@ -1,0 +1,35 @@
+<div class="panel panel-success">
+    <div class="panel-heading ">
+        <span class="panel-title">Datos Comparendo</span>
+        <div class="panel-heading-controls">
+        </div>
+    </div>
+    <dl class="dl-horizontal">            
+        <dt>Comparendo No.</dt>
+        <dd>{{comparendo.numeroFormato}}  </dd>
+        <dt>Expediente</dt>
+        <dd>{{comparendo.expediente}}  </dd>
+        <dt>Infractor</dt>
+        <dd>{{comparendo.infractor.identificacion}} - {{comparendo.infractor.nombre}} {{comparendo.infractor.apellido}}</dd>
+        <dt>Fecha</dt>
+        <dd>{{comparendo.fechaComparendo.timestamp * 1000| date:'yyyy-MM-dd HH:mm:ss'}}</dd>
+        <dt>Inspección</dt>
+        <dd>{{comparendo.objInspeccion.nombre}} - {{comparendo.objInspeccion.nombreRnmc}}</dd>
+		<dt>Dirección Infractor</dt>
+        <dd>{{comparendo.infractor.direccion}}  </dd>
+		<dt>Dirección Comparendo</dt>
+        <dd>{{comparendo.direccion}} - {{comparendo.barrio}}</dd>
+        <dt>Hechos</dt>
+        <dd>{{comparendo.hechos}}</dd>
+        <dt>Observaciones Ponal</dt>
+        <dd>{{comparendo.observacionesPonal}}</dd>
+        <dt>Descargos</dt>
+        <dd>{{comparendo.descargos}}</dd>
+        <dt>Comportamiento Contrario</dt>
+        <dd>{{comparendo.comportamientoContrario.descripcion}}</dd>
+        <dt>Apela M.C. Ponal?</dt>
+        <dd>{{comparendo.apelacion}}</dd>
+        <dt>Medidas Correctivas</dt>
+        <dd><span ng-repeat="medidaCorrectiva in comparendo.medidasCorrectivas">{{medidaCorrectiva.medidaCorrectiva.nombre}}<br></span></dd>
+    </dl>
+</div>

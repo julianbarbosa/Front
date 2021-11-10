@@ -1,0 +1,49 @@
+<div class="panel">    
+    <div class="panel-body">
+        <div class="page-header">
+            <h1 class="col-xs-12 col-sm-10 text-center text-left-sm"><i class="padding-sm-hr page-header-icon fa fa-refresh"></i>&nbsp;&nbsp;Consulta Predios Sincronizados</h1>
+        </div>
+    </div>
+    <div>
+
+        <div class="row">
+            <form class="form-inline">
+                <div class="col-md-10">
+                    <div class="form-group">
+                        <label for="filtro">Filtro</label>
+                        <input type="text" id="filtro" class="form-control" ng-model="filtro">
+                    </div>
+                </div>
+            </form>
+        </div>
+        <table cellpadding="0" cellspacing="0" class="table-hover table table-bordered" id="listaSolicitudes" width="100%" role="grid" aria-describedby="solicitud_listar_tareas">
+            <thead>
+                <tr>
+                    <th>Id SAUL</th>
+                    <th>Id Catastro</th>
+                    <th>NPN</th>
+                    <th>Estado</th>
+                    <th>Descripcion</th>
+                    <th>Fecha Creación</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="predio in dataPredio | filter:filtro  | startFrom:(currentPage-1)*numPerPage | limitTo:numPerPage">
+                    <td>{{predio.ID_SAUL}}</td>
+                    <td>{{predio.ID_CATASTRO}}</td>
+                    <td>{{predio.NPN}}</td>
+                    <td>{{predio.ESTADO}}</td>
+                    <td>{{predio.DESCRIPCION}}</td>
+                    <td>{{predio.FECHA_CREACION}}</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <td colspan="11" class="currency">
+                    Total Predios: <strong>{{(dataPredio|filter:filtro).length}}</strong><br>
+                    <uib-pagination ng-model="currentPage" total-items="(dataPredio|filter:filtro).length" max-size="8" items-per-page="numPerPage" boundary-links="true" first-text="Primera" last-text="Última" next-text="Siguiente" previous-text="Anterior" boundary-link-numbers="true" rotate="true"></uib-pagination>
+                </td>
+            </tfoot>
+        </table>
+    </div>
+
+</div>

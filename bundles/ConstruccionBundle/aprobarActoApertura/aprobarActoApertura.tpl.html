@@ -1,0 +1,33 @@
+<div ng-controller="AprobarActoAperturaCtrl">
+<div id="modalIngresoDireccion" class="modal fade modal-change" role="dialog" aria-hidden="true" style="display: none;"></div>
+<div ng-show="validator.alert.content">
+    <div class="alert alert-{{validator.alert.type}} alert-dismissable">
+        <i class="fa fa-danger"></i>
+        <button type="button" class="close" aria-hidden="true" ng-click="hideAlert()">×</button>
+        <b>{{validator.alert.title}}</b> <span ng-bind-html="validator.alert.content"></span>
+    </div>
+</div>
+<div  ng-include="'../bundles/ConstruccionBundle/solicitud/solicitud.tpl.html'" ng-init="idsolicitud=proceso.idsolicitud"></div>                
+<div  ng-include="'../bundles/ConstruccionBundle/visita/visita.tpl.html'" ng-init="idsolicitud=proceso.idsolicitud"></div>                
+<div class="col-md-12">
+    <div class="panel panel-success">
+        <div class="panel-heading ">
+            <span class="panel-title">Aprobar Acto de Apertura</span>
+            <div class="panel-heading-controls">
+            </div>
+        </div>
+        <div class="panel-body">
+            <form name="userForm">                                            
+                Esta seguro que desea aprobar el Acto de Apertura?
+                <br><br><a ng-href="actoapertura/mostrar/{{proceso.idsolicitud}}" target="_blank">Vista Previa Acto de Apertura</a>
+                <br><a ng-href="actoapertura/mostrar_citacion/{{proceso.idsolicitud}}" target="_blank">Vista Previa Citación Acto de Apertura</a>
+                <div class="row padding-sm text-right-sm">
+                    <input type="submit" class="btn btn-primary" ng-click="save()" value="Aprobar" />                    
+                    ó
+                    <a ui-sref="listar-peticion">Cancelar</a>
+                </div>               
+            </form>
+        </div>
+    </div>
+</div>
+</div>

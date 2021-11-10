@@ -1,0 +1,5 @@
+//Aquí van las constantes que dependen del entorno
+saul
+.constant("root", location.protocol+"//"+location.host+"/saul2/app_dev.php/")
+.constant("rootSaul1", location.protocol+"//"+location.host+"/saul/")
+.constant("urlPlugInNomenclatura", location.protocol+"//"+location.host+"/saul/dapm.php/nomenclatura");

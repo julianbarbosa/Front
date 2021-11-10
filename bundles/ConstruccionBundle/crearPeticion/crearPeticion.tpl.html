@@ -1,0 +1,184 @@
+<script>
+    function cerrarModal() {
+        $('#modalIngresoDireccion').modal('toggle');
+    }
+</script>
+<div ng-controller="CrearPeticionCtrl">
+    <div id="modalIngresoDireccion" class="modal fade modal-change" role="dialog" aria-hidden="true" ></div>
+    
+    <div class="col-md-8">
+        <div ng-show="validator.alert.content">
+            <div class="alert alert-success alert-dismissable">
+                <i class="fa fa-danger"></i>
+                <button type="button" class="close" aria-hidden="true" ng-click="hideAlert()">×</button>
+                <b>{{validator.alert.title}}</b> <span ng-bind-html="validator.alert.content"></span>
+            </div>
+        </div>
+        <div class="panel panel-success">
+            <div class="panel-heading ">
+                <span class="panel-title">Solicitud de petición o queja</span>
+                <div class="panel-heading-controls">
+                </div>
+            </div>
+            <div class="panel-body">
+                <form name="userForm">
+                    <div class="row">
+                        <div class="form-group has-feedback simple"  ng-class="{'has-error': validator.usuario }">
+                            <input type="checkbox" ng-model="peticion.usuarioanonimo" value="1"/>
+                            <label class="control-label" for="anonimo">Crear Solicitud como Usuario Anónimo.</label>
+                        </div>
+                    </div>
+                    <div class="row" ng-if="!peticion.usuarioanonimo == 1">
+                        <div class="form-group">
+                            <label class="control-label" for="numidentificacion">
+                                Número de Identificación del Solicitante:
+                                <i ng-show="loadingUsuario" class="fa fa-spinner fa-spin"></i>
+                            </label>
+                            <input type="text"
+                                   id="BusquedaUsuario"
+                                   class="form-control input-xlarge"
+                                   ng-class="{'has-error': validator.usuario}"
+                                   ng-model="peticion.usuario"
+                                   ng-blur="setNomenclatura('nomenclatura')"
+                                   uib-typeahead="usuario as usuario.numidentificacion+' - '+usuario.firstName+' '+usuario.lastName for usuario in getUsuarios($viewValue)"
+                                   typeahead-wait-ms="1000"
+                                   uib-typeahead-on-select="onSelect($usuario, 'nombre', $label)"
+                                   uib-typeahead-loading="loadingUsuario"
+                                   uib-typeahead-min-length="3"
+                                   bs-typeahead placeholder="Ingrese su identificación"
+                                   autocomplete="off"
+                                   tooltip="{{validator.usuario}}"
+                                   />
+                            <p class="help-block">{{validator.usuario}}</p>
+                        </div>
+                    </div>
+                    <br><br><br><br>
+                    <div class="row col-md-12" id="zona">
+                        <div class="form-group">
+                            <p class="help-block">{{validator.predio}}</p>
+                            <label class="control-label" for="tipo_busqueda">Seleccione la Zona del Predio: </label>
+                            <div>
+                                <label class="radio-inline"><input type="radio" value="1" ng-model="peticion.zona_predio">Urbana</label>
+                            </div>
+                            <div>
+                                <label class="radio-inline"><input type="radio" value="2" ng-model="peticion.zona_predio">Rural</label>
+                            </div>
+                            <p class="help-block">{{validator.tipo_busqueda}}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group ng-hide has-feedback simple"
+                             ng-show=" peticion.zona_predio == 1"
+                             ng-class="{'has-error': validator.predio}">
+                            <label class="control-label" for="direccion">Dirección: <i ng-show="loadingNomenclatura" class="fa fa-spinner fa-spin"></i></label>
+                            <input type="text"
+                                id="BusquedaDireccion"
+                                class="form-control input-xlarge"
+                                ng-model="peticion.direccion"
+                                ng-blur="setNomenclatura('nomenclatura')"
+                                uib-typeahead="nomenclatura as nomenclatura.direccion for nomenclatura in getNomenclaturas($viewValue)"
+                                uib-typeahead-wait-ms="1000"
+                                uib-typeahead-on-select="onSelect($nomenclatura, 'direccion', $label)"
+                                uib-typeahead-loading="loadingNomenclatura"
+                                uib-typeahead-min-length="3"
+                                bs-typeahead placeholder="Ingrese la dirección del Predio"
+                                autocomplete="off"/>
+                            <p class="help-block">{{validator.predio}}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group ng-hide"
+                             ng-show=" peticion.zona_predio == 1"
+                             ng-class="{'has-error': validator.predio}">
+                            <label class="control-label" for="informacion_adicional">Información Adicional: </label>
+                            <input type="text"
+                                id="BusquedaInformacionAdicional"
+                                name="informacion_adicional"
+                                ng-model="peticion.informacion_adicional"
+                                class="form-control input-xlarge"
+                                placeholder="Ingrese la información adicional del Predio"
+                                readonly="readonly"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group ng-hide"
+                             ng-show=" peticion.zona_predio == 2"
+                             ng-class="{'has-error': validator.predio}">
+                            <label class="control-label" for="informacion_adicional">Localización del Predio: </label>
+                            <input type="text"
+                                id="BusquedaInformacionAdicional"
+                                name="informacion_adicional"
+                                ng-model="peticion.informacion_adicional"
+                                class="form-control input-xlarge"
+                                placeholder="Ingrese la información adicional del Predio"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group ng-hide"                
+                             ng-show=" peticion.zona_predio == 2"
+                             ng-class="{'has-error': validator.numero_predial}">
+                            <label class="control-label" for="observaciones_ubicacion">Información adicional para ubicación: </label>
+                            <input type="text"
+                                ng-model="peticion.observaciones_localizacion"
+                                class="form-control input-xlarge"
+                                placeholder="Ingrese información adicional que ayude a la ubicación del predio. (Opcional)"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group has-feedback simple" ng-class="{'has-error': validator.comentario }" >
+                            <label class="control-label" for="comentario">Comentario:</label>
+                            <textarea rows="4" cols="30" placeholder="Escriba un comentario sobre la petición" ng-model="peticion.comentario" class="form-control" name="comentario" id="comentario"></textarea>
+                            <p class="help-block">{{validator.comentario}}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group checkbox">
+                            <label class="checkbox-inline">
+                                <input type="checkbox" ng-model="peticion.realizada_ciudadano" value="true" class="px" checked/>
+                                <span class="lbl">Solicitud realizada por ciudadano.</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group checkbox">
+                            <label class="checkbox-inline">
+                                <input type="checkbox" ng-model="peticion.tiene_radicado" value="true" class="px">
+                                <span class="lbl">La solicitud tiene Radicado en Orfeo. (No se realizará radicado en orfeo.)</span>
+                            </label>
+                        </div>
+                        <div class="form-group has-feedback simple" ng-hide ng-if="peticion.tiene_radicado === true"
+                             ng-class="{'has-error': validator.radicado}">
+                            <label class="control-label" for="radicado">Radicado: </label>
+                            <input type="text"
+                                class="form-control input-xlarge"
+                                ng-model="peticion.radicado"
+                                placeholder="Ingrese el número del radicado."
+                                autocomplete="off"/>
+                            <p class="help-block">{{validator.radicado}}</p>
+                        </div>
+                    </div>
+                    <div class="row" ng-if="peticion.tiene_radicado === false">
+                        <input type="file" class="form-control" ng-model="peticion.uploadedfile" name="uploadedfile" file-upload multiple>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th width="50%">Nombre2</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="item in files">
+                                    <td><strong>{{ item.name}}</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row padding-sm text-right-sm">
+                        <input type="submit" class="btn btn-primary" ng-click="save()" value="Crear Petición" />
+                        ó
+                        <a ui-sref="listar-peticion">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

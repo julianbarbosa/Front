@@ -1,0 +1,71 @@
+   
+<div ng-show="validator.alert.content">
+    <div class="alert alert-{{validator.alert.type}} alert-dismissable">
+        <i class="fa fa-danger"></i>
+        <button type="button" class="close" aria-hidden="true" ng-click="hideAlert()">×</button>
+        <b>{{validator.alert.title}}</b> <span ng-bind-html="validator.alert.content"></span>
+    </div>
+</div>
+<div class="col-md-12">
+    <div class="panel panel-success">
+        <div class="panel-heading ">
+            <span class="panel-title">Informe Diario por Tipo Solicitud</span>
+            <div class="panel-heading-controls">
+            </div>
+        </div>
+        <div class="panel-body">
+            <form name="userForm">
+                <div class="row">
+                    Ingrese un criterio de búsqueda para generar el informe diario.<br><br>
+                </div>                    
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label class="control-label" for="tipoSolicitud">Tipo Solicitud: </label>
+                        <select class="form-control"                                    
+                               ng-model="codigotiposolicitud"
+                               ng-options="tipoSolicitud.codigo as tipoSolicitud.nombre for tipoSolicitud in tiposSolicitud">
+                               <option value="">Seleccione</option>
+                            </select>    
+                    </div>                                          
+                    <div class="form-group col-md-6">
+                        <label class="control-label" for="tipoSolicitud">Fecha del Informe: </label>
+                        <div class="input-group">
+                            <input type="text" ng-model="fecha_informe" class="form-control" uib-datepicker-popup="yyyy-MM-dd" ng-model="dt" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
+                            <span class="input-group-addon">
+                                <i class="glyphicon glyphicon-calendar" ng-click="open1()"></i>
+                            </span>                        
+                        </div>                 
+                    </div>                        
+                </div>
+                <div class="row padding-sm text-right-sm">
+                    <a ng-href="tipo_solicitud/infome_diario/{{codigotiposolicitud}}/{{fecha_informe}}" target="blank" class="btn btn-warning">Consultar</a>
+                    ó
+                    <a ui-sref="listar-peticion">Cancelar</a>
+                </div>
+            </form>
+            <div class="panel panel-success" ng-repeat="item in result">   
+                <strong>Comisión:</strong>
+                <span ng-if="item.comision">                   
+                    {{item.comision}}-{{item.anio_comision}}<br>
+                </span>
+                <span ng-if="!item.comision">                   
+                    No tiene comisión<br>
+                </span>
+                <strong>Tipo Solicitud:</strong> {{item.tiposolicitud}}<br>
+                <strong>Razón Social:</strong> {{item.RazonSocial}}<br>
+                <strong>RegRadicacion:</strong> {{item.RegRadicacion}}<br>
+                <strong>Dirección:</strong> {{item.Direccion}}<br>
+                <strong>Estado:</strong> {{item.Estado}}<br>
+                <strong>Comuna:</strong> {{item.Comuna}}<br>
+                <strong>Barrio:</strong> {{item.Barrio}}<br>
+                <strong>Queja:</strong> {{item.DescripQueja}}<br> 
+                <strong>Abogado:</strong> {{item.nombreAbogado}}<br><br>
+                <strong>INFORMACIÓN VISITA</strong><br>
+                <strong>IdVisita</strong> {{item.IdVisita}}<br>
+                <strong>Observaciones:</strong> {{item.ObservaVisita}}<br>
+                <strong>Fecha Visita:</strong>{{item.FechaVisita}}<br>
+                <strong>Infracción:</strong>{{item.nombreInfraccion}}<br>                    
+            </div>
+        </div>
+    </div>
+</div>

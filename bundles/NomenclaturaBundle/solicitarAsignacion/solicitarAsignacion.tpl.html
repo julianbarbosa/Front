@@ -1,0 +1,217 @@
+<style>
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+</style>
+<script type="text/ng-template" id="alert.html">
+    <div ng-transclude></div>
+</script>
+<div id="modalIngresoDireccion" class="modal fade modal-change" role="dialog" aria-hidden="true" ></div>
+<div class="page-header">
+    <div class="row">
+        <!-- Page header, center on small screens -->
+        <h1 class="col-xs-12 col-sm-8 text-center text-left-sm">
+        	<i class="padding-sm-hr fa fa-plus"></i>Solicitar Asignación de Nomenclatura <span ng-if="solicitud.idSolicitud">Solicitud {{ solicitud.idSolicitud }}</span>
+        </h1>
+        <div class="col-xs-12 col-sm-8">
+            <div class="row">
+                <hr class="visible-xs no-grid-gutter-h">
+                <div class="visible-xs clearfix form-group-margin"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-12">
+    <div class="alert alert-info">
+        <span>Recibirá por correo electrónico la respuesta a su solicitud en <strong>15 días hábiles</strong>.</span>
+    </div>
+</div>
+<div class="col-md-12">
+    <div class="alert alert-info">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <span>Para verificar el estado de tus solicitudes ingresa a </span><strong><a href="/saul/solicitud">Mis solicitudes</a></strong>
+    </div>
+</div>
+<div class="col-md-12">
+	<!--Panel de búsqueda de cliente-->
+    <div ng-show='funcionario' class="panel panel-success">
+        <div class="panel-heading ">
+            <span class="panel-title">Búsqueda de Solicitante</span>
+            <div ng-show="cliente.firstName != null" class="panel-heading-controls">
+                <i class="fa fa-edit" title="Editar solicitante" ng-click="actualizarCliente()" ></i>
+            </div>
+        </div>
+        <div class="panel-body">
+        	<div class="col-md-12">                    
+                <div class="form-group {{ messageErrorCliente!=''?'has-error':'' }} }}">
+					 <label class="control-label" >Número de Identificación del Solicitante (NIT o CC)</label>
+					 <input required placeholder="Ingrese el número de identificación del solicitante" class="form-control" type="text" ng-model="cliente.numidentificacion" ng-disabled='mostrarFormSolicitud' ng-keydown="($event.keyCode==13) && buscarCliente()" />
+					 <span ng-if="messageErrorCliente != ''">{{ messageErrorCliente }}</span>
+				</div>
+        	</div>
+            <div class="col-md-12" ng-hide="mostrarFormSolicitud">
+                <div class="col-md-12">
+                    <button class="btn-link" ng-click="limpiarCliente()" >Limpiar</button>
+                    ó 
+                    <button class="btn btn-primary" ng-click="buscarCliente()" >Buscar</button>
+                </div>
+            </div>
+            <!--Panel que muestra la información de el cliente -->
+            <div ng-show="cliente.firstName != null" class="col-md-9">
+                <strong>Solicitante: </strong> {{ cliente.firstName +' '+ cliente.lastName }} <br>
+                <strong>Email: </strong> {{ cliente.emailAddress }} <br>
+                <strong>Teléfono: </strong> {{ cliente.telefono }} <br>
+                <strong>Dirección: </strong> {{ cliente.direccion }} <br>
+            </div>
+        </div>  
+    </div>
+    <div class="panel panel-success" ng-show='mostrarFormSolicitud'>
+        <div class="panel-heading ">
+            <span class="panel-title">Datos del Predio</span>
+            <div class="panel-heading-controls"></div>
+        </div>
+        <div class="panel-body">
+            <div class="col-md-12">
+                <form class="form-group" name="formPredio" class="form-group {{ (solicitud.npn == '' || solicitud.npn == null)?'has-error':'' }}" >
+                    <div class="form-group {{ (solicitud.npn == '' || solicitud.npn == null)?'has-error':'' }}">
+                         <label class="control-label" >Dirección existente del predio</label> <i class="plg-npn-info fa fa-question-circle" data-toggle="tooltip" data-placement="right" title="Dirección que requiere asignar" data-original-title="Dirección que requiere asignar"></i>
+                         <input required placeholder="Clic aquí para seleccionar la dirección del predio existente." class="form-control" type="text" ng-click="obtenerModalIngresoDireccion()" style="cursor: pointer;" readonly="readonly"  ng-model="solicitud.direccion" ng-disabled="estado=='visualizacion'" ng-min="20" />
+                        <span ng-show="solicitud.npn == '' || solicitud.npn == null" class="help-block" >
+                            Este campo es obligatorio.
+                        </span>
+                    </div>
+                </form>
+                <input id="npn" type="hidden" />
+                <input id="direccion" type="hidden">
+                <input id="direccionVisual" type="hidden">
+                <input id="infoAdicional" type="hidden" />
+                <input id="predioId" type="hidden" />
+                <input id="nomenclaturaId" type="hidden" />
+                <div ng-if="solicitud.npn != '' && solicitud.npn != null">
+                     NPN:<strong>{{ solicitud.npn }}</strong><br>
+                     Dirección:<strong>{{ solicitud.direccion }} {{ solicitud.infoAdicional }}</strong>
+                </div>  
+            </div>
+        </div>  
+    </div>
+
+	<!--Panel de Datos de Solicitud-->
+    <div class="panel panel-success" ng-show='mostrarFormSolicitud' >
+        <div class="panel-heading ">
+            <span class="panel-title">Datos de solicitud</span>
+            <div class="panel-heading-controls"></div>
+        </div>
+        <form class="panel-body" name="formDatosSolicitud" >
+            <div class="col-md-12">
+                <div class="form-group {{ haveError('cantidad', formDatosSolicitud )?'has-error':'' }}">
+                     <label class="control-label" >¿Cuántas asignaciones requiere?</label>
+                     <input required placeholder="Cantidad de asignaciones" class="form-control" type="number" ng-model="solicitud.cantidad" name="cantidad" min="1" ng-disabled="estado=='visualizacion'" />
+                    <span ng-show="haveError('cantidad', formDatosSolicitud)" class="help-block" >
+                        Este campo es obligatorio.
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group {{ haveError('curaduria', formDatosSolicitud )?'has-error':'' }} ">
+                     <label class="control-label" >Licencia expedida por:</label>
+                     <select required class="form-control" ng-model="solicitud.curaduria" name="curaduria" ng-disabled="estado=='visualizacion'">
+                        <option value="1" ng-selected="solicitud.curaduria == 1"> Curaduría 1 </option>
+                        <option value="2" ng-selected="solicitud.curaduria == 2"> Curaduría 2 </option>
+                        <option value="3" ng-selected="solicitud.curaduria == 3"> Curaduría 3 </option>
+                        <option value="4" ng-selected="solicitud.curaduria == 4"> Planeación </option>
+                     </select>
+                    <span ng-show="haveError('curaduria', formDatosSolicitud)" class="help-block" >
+                        Este campo es obligatorio.
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group  {{ haveError('radicadocuraduria', formDatosSolicitud )?'has-error':'' }} ">
+                     <label class="control-label" >Licencia de construcción</label>
+                     <input required placeholder="Radicado de la curaduría" class="form-control" type="text" ng-model="solicitud.radicadocuraduria" name="radicadocuraduria" ng-disabled="estado=='visualizacion'" />
+                    <span ng-show="haveError('radicadocuraduria', formDatosSolicitud)" class="help-block" >
+                        Este campo es obligatorio.
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group {{ haveError('tipolinea', formDatosSolicitud )?'has-error':'' }} ">
+                     <label class="control-label" >Tipo información básica (Opcional)</label>
+                     <select class="form-control" ng-model="solicitud.tipolinea" name="tipolinea" ng-disabled="estado=='visualizacion'">
+                        <option value="Esquema básico" ng-selected="solicitud.tipolinea == 'Esquema básico'"> Esquema básico </option>
+                        <option value="Resolución" ng-selected="solicitud.tipolinea == 'Resolución'"> Resolución </option>
+                        <option value="Línea de demarcación" ng-selected="solicitud.tipolinea == 'Línea de demarcación'"> Línea de demarcación </option>
+                     </select>
+                    <span ng-show="haveError('tipolinea', formDatosSolicitud)" class="help-block" >
+                        Este campo es obligatorio.
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group {{ haveError('numerolineademarcacion', formDatosSolicitud )?'has-error':'' }} ">
+                     <label class="control-label" >Línea de demarcación/Esquema/Resolución</label>
+                     <input placeholder="Línea de demarcación (Opcional)" class="form-control" type="text" ng-model="solicitud.numerolineademarcacion" name="numerolineademarcacion" ng-disabled="estado=='visualizacion'" />
+                    <span ng-show="haveError('numerolineademarcacion', formDatosSolicitud)" class="help-block" >
+                        Este campo es obligatorio.
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="control-label" >Fecha de Línea de Demarcación/Esquema/Resolución</label>
+                    <div class="input-group date" id="bs-datepicker-component">
+                        <input type="text" class="form-control" uib-datepicker-popup="yyyy-MM-dd" ng-model="solicitud.fechalineademarcacion" is-open="popup1.opened" datepicker-options="dateOptions" close-text="Cerrar" current-text="Hoy" clear-text="Limpiar" placeholder="Fecha de línea de demarcación (Opcional) yyyy-MM-dd" name="fechalineademarcacion" ng-disabled="estado=='visualizacion'" />
+                        <span class="input-group-addon" ng-click="open1()" >
+                            <i class="fa fa-calendar"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div ng-hide="solicitud.documentos == null">
+                    <label class="control-label" >Archivos cargados({{ solicitud.documentos.length }}):</label>
+                    <a ng-if="solicitud.documentos.length>0" ng-repeat="documento in solicitud.documentos" ng-href="{{documento.url}}" target="_blank">Archivo{{ $index + 1 }}{{ $last?'.':', ' }}</a>
+                    <span ng-if="solicitud.documentos.length==0">No hay archivos cargados</span>
+                </div>
+                <div ng-show="solicitud.documentos == null" >
+                    <label class="control-label" >Cargando archivos...</label>
+                    <span ><i class="fa fa-spinner fa-spin fa-2x fa-fw"></i></span>
+                </div>
+            </div>
+
+            <div class="col-md-12" >
+                <input-file label="Licencia de construcción" description="Documento denominado licencia expedido por una curaduría urbana." model="inputFiles.licencia" required="{{requiredLicencia}}">
+                </input-file>
+                <input-file label="Planos arquitectónicos" description="Plantas de la distribución de la construcción en la que se puedan ver los accesos desde la calle y la unidades privadas. El plano debe incluir sello de la curaduría. " model="inputFiles.planos" required="{{requiredLicencia}}">
+                </input-file>
+            </div>
+
+            <div class="col-md-12">
+                <div class="col-sm-12" ng-show="estado=='creacion'">
+                    <button class="btn-link" ng-click="cancelarSolicitud()" >Cancelar</button>
+                    ó 
+                    <button ng-disabled="!(formDatosSolicitud.$valid && inputFiles.licencia.$valid && inputFiles.planos.$valid) || !formPredio.$valid" class="btn btn-primary" ng-click="guardarSolicitud()" >Crear Solicitud</button>
+                </div>
+                <div class="col-sm-12" ng-show="estado=='confirmacion'">
+                    <!--button class="btn-link" ng-click="anular()" title="Se presiona cuando el solicitante desiste de hacer la solicitud." >Anular</button>
+                    ó -->
+                    <button ng-disabled="!formDatosSolicitud.$valid && inputFiles.licencia.$valid && inputFiles.planos.$valid" class="btn btn-primary" ng-click="guardarCambios()" title="Se presiona cuando haya hecho cambios en el formulario por petición del solicitante." >Guardar Cambios</button>
+                    <button ng-disabled="!formDatosSolicitud.$valid && inputFiles.licencia.$valid && inputFiles.planos.$valid" class="btn btn-primary" ng-click="imprimir()" title="Úselo para imprimir el documento que va a firmar el solicitante." >Imprimir</button>
+                    <button ng-disabled="!(formDatosSolicitud.$valid && inputFiles.licencia.$valid && inputFiles.planos.$valid) || !impreso" class="btn btn-primary" ng-click="confirmar()" title="Se presiona cuando el solicitante haya firmado el documento y aceptado los términos. No tiene vuelta atrás." >Confirmar Solicitud</button>
+                </div>
+                <div class="col-sm-12" ng-show="estado=='visualizacion'">
+                    <button ng-disabled="!(formDatosSolicitud.$valid && inputFiles.licencia.$valid && inputFiles.planos.$valid)" class="btn btn-primary" ng-click="imprimir()" title="Úselo para imprimir el documento que va a firmar el solicitante." >Visualizar</button>
+                </div>
+            </div>
+        </form>  
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>

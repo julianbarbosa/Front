@@ -1,0 +1,774 @@
+<script>
+    function cerrarModal() {
+        $('#modalIngresoDireccion').modal('toggle');        
+    }
+</script>
+<div>
+    <div id="modalIngresoDireccion" class="modal fade modal-change" role="dialog" aria-hidden="true" ></div>
+    
+    <div class="col-md-12 col-lg-10">
+        <div ng-show="validator.alert.content">
+            <div class="alert {{validator.alert.type}} alert-dismissable">
+                <i class="fa fa-danger"></i>
+                <button type="button" class="close" aria-hidden="true" ng-click="hideAlert()">×</button>
+                <b>{{validator.alert.title}}</b> <span ng-bind-html="validator.alert.content"></span>
+            </div>
+        </div>
+        <div class="panel panel-success">
+            <div class="panel-heading ">
+                <span class="panel-title">Creación de Querella</span>
+                <div class="panel-heading-controls"></div>
+            </div>
+            <div class="panel-body">
+               
+                <form name="userForm" class="" autocomplete="off"> 
+                    <h4 class="padding-sm no-padding-t padding-xs-hr">
+                        <i class="fa fa-clock-o text-primary"></i>
+                        &nbsp;&nbsp;Hora Inicio: {{querella.hora}}
+                    </h4>
+                    <!-- INFORMACION DEL SOLICITANTE-->
+                    <h4 class="padding-sm no-padding-t padding-xs-hr">
+                        <i class="fa fa-id-card text-primary"></i>
+                        &nbsp;&nbsp;Información del Solicitante
+                    </h4>
+                    <div class="row">
+                        <input type="hidden" ng-model="querella.hora">
+                        <div class="form-group col-md-2">
+                            <label class="control-label" for="solicitante_identificacion">
+                                Número Identificación
+                                <i ng-hide="loadingTercero" class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                                <i ng-show="loadingTercero" class="fa fa-spinner fa-spin"></i>
+                            </label>
+                            <input type="text"
+                                    id="BusquedaUsuario"
+                                    class="form-control input-xlarge"
+                                    ng-class="{'has-error': validator.usuario}"
+                                    ng-model="querella.solicitante.identificacion"
+                                    uib-typeahead="solicitante.identificacion as solicitante.identificacion for solicitante in getSolicitante($viewValue)"
+                                    typeahead-wait-ms="1000"
+                                    typeahead-on-select="onSelect($item, $model, $label)"
+                                    typeahead-no-results="noResults"
+                                    typeahead-loading="loadingTercero"
+                                    typeahead-min-length="3"
+                                    bs-typeahead placeholder="Ingrese su identificación"
+                                    tooltip="{{validator.usuario}}"
+                                    required/>
+                            <span ng-if="noResults" uib-dropdown uib-dropdown-toggle auto-close="disabled" is-open="true">
+                                <ul class="uib-dropdown-menu" >
+                                  <li>No hay Resultados</li>
+                                </ul>
+                            </span>                            
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label class="control-label" for="solicitante_tipoidentificacion">
+                                Tipo de Identificación
+                                <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                            </label>                            
+                            <select class="form-control"
+                                    ng-init="querella.solicitante.tipoIdentificacion = arrayTipoDocIdentificacion[0]" 
+                                    ng-model="querella.solicitante.tipoIdentificacion"
+                                    ng-options="tipoIdentificacion.nombre for tipoIdentificacion in arrayTipoDocIdentificacion"
+                                    required>
+                            </select>                            
+                        </div>
+                        <div class="form-group col-sm-3" ng-if="!(querella.solicitante.tipoIdentificacion.idTipoDocIdentificacion==2)">
+                            <label>
+                                Nombre
+                                <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                            </label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   ng-model="querella.solicitante.nombre"                                    
+                                   placeholder="Ingrese el nombre"
+                                   required/>                            
+                        </div>
+                        <div class="form-group col-sm-3" ng-if="!(querella.solicitante.tipoIdentificacion.idTipoDocIdentificacion==2)" >
+                            <label>
+                                Apellido
+                                <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                            </label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   ng-model="querella.solicitante.apellido" 
+                                   placeholder="Ingrese el apellido"
+                                   required />
+                            <p class="help-block">{{validator.apellido}}</p>
+                        </div>
+                        <div class="form-group col-sm-2" ng-if="!(querella.solicitante.tipoIdentificacion.idTipoDocIdentificacion==2)" >
+                            <label>
+                                Ciudad Nacimiento
+                                <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                            </label>
+                            <input type="text" 
+                                    class="form-control" 
+                                    ng-model="querella.solicitante.ciudadNacimiento" 
+                                    uib-typeahead="itemciudad as itemciudad.nombre+' - '+itemciudad.pais.nombre for itemciudad in getCiudades($viewValue)"
+                                    typeahead-wait-ms="1000"  
+                                    typeahead-min-length="3"
+                                    uib-typeahead-loading="loadingCiudad"
+                                    typeahead-on-select="onSelect($item, 'nombre', $label)"
+                                    uib-typeahead-min-length="3"
+                                    bs-typeahead placeholder="Ingrese la ciudad"
+                                    required/>
+                            <p class="help-block">{{validator.apellido}}</p>
+                        </div>
+                        <div class="form-group col-sm-6" ng-if="querella.solicitante.tipoIdentificacion.idTipoDocIdentificacion==2">
+                            <label>
+                                Razón Social
+                                <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                            </label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   ng-model="querella.solicitante.razonSocial"                                    
+                                   placeholder="Ingrese el nombre"
+                                   required/>                            
+                        </div>                        
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <label>
+                                Dirección
+                                <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                            </label>
+                            <input type="text" 
+                                   class="form-control"
+                                   ng-model="querella.solicitante.direccion" 
+                                   placeholder="Ingrese la dirección."
+                                   required/>
+                            <p class="help-block">{{validator.direccion}}</p>
+                        </div>
+                        <div class="form-group col-sm-2">
+                            <label>
+                                Ciudad Residencia
+                                <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                                <i ng-show="loadingCiudad" class="fa fa-spinner fa-spin"></i>
+                            </label>
+                            <input type="text" 
+                                    class="form-control" 
+                                    ng-model="querella.solicitante.ciudadResidencia" 
+                                    uib-typeahead="itemciudad as itemciudad.nombre+' - '+itemciudad.pais.nombre for itemciudad in getCiudades($viewValue)"
+                                    typeahead-wait-ms="1000"  
+                                    typeahead-min-length="3"
+                                    typeahead-loading="loadingCiudad"
+                                    typeahead-on-select="onSelect($item, 'nombre', $label)"
+                                    uib-typeahead-min-length="3"
+                                    bs-typeahead placeholder="Ingrese la ciudad"
+                                    required/>
+                            <p class="help-block">{{validator.apellido}}</p>
+                        </div>
+                        <div class="form-group has-feedback simple col-sm-2" ng-class="{'has-error': validator.telefono}">
+                            <label>
+                                Teléfono
+                                <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                            </label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   ng-model="querella.solicitante.telefono" 
+                                   ng-class="{'has-error': validator.telefono}" 
+                                   placeholder="Ingrese el teléfono"/>
+                            <p class="help-block">{{validator.telefono}}</p>
+                        </div>
+                        <div class="form-group has-feedback simple col-sm-3" ng-class="{'has-error': validator.email}">
+                            <label>
+                                Correo electrónico                               
+                            </label>
+                            <input 
+                                type="text" 
+                                class="form-control" 
+                                ng-model="querella.solicitante.email"  placeholder="Ingrese el correo electrónico (Opcional)"/>
+                            <p class="help-block">{{validator.email}}</p>
+                        </div>                                               
+                    </div>
+                    
+                    <!-- INFORMACIÓN DEL REPRESENTANTE LEGAL DEL SOLICITANTE -->
+                    <div ng-if="querella.solicitante.tipoIdentificacion.idTipoDocIdentificacion==2 && querella.solicitante.razonSocial">
+                        <h4 class="padding-sm no-padding-t padding-xs-hr">
+                            <i class="fa fa-id-card text-primary"></i>
+                            &nbsp;&nbsp;Datos del Representante legal del Solicitante: {{querella.solicitante.razonSocial}}
+                        </h4>
+                        <div class="row">
+                        <div class="form-group col-md-2">
+                            <label class="control-label" for="solicitante.representante_identificacion">
+                                Número Identificación
+                                <i ng-hide="loadingSolicitanteRepresentante" class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                                <i ng-show="loadingSolicitanteRepresentante" class="fa fa-spinner fa-spin"></i>
+                            </label>
+                            <input type="text"
+                                    id="BusquedaUsuario"
+                                    class="form-control input-xlarge"
+                                    ng-class="{'has-error': validator.usuario}"
+                                    ng-model="querella.solicitante.representante.identificacion"
+                                    uib-typeahead="solicitante_representante.identificacion as representante_identificacion.identificacion for solicitante_representante in getSolicitanteRepresentante($viewValue)"
+                                    typeahead-wait-ms="1000"
+                                    typeahead-on-select="onSelect($item, $model, $label)"
+                                    typeahead-no-results="noResults"
+                                    typeahead-loading="loadingSolicitanteRepresentante"
+                                    typeahead-min-length="3"
+                                    bs-typeahead placeholder="Ingrese su identificación"
+                                    tooltip="{{validator.usuario}}"
+                                    required/>                                                       
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label class="control-label" for="solicitante.representante_tipoidentificacion">
+                                Tipo de Identificación
+                                <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                            </label>                            
+                            <select class="form-control"
+                                    ng-model="querella.solicitante.representante.tipoIdentificacion"
+                                    ng-options="tipoIdentificacion.nombre for tipoIdentificacion in arrayTipoDocIdentificacion"
+                                    required>
+                            </select>                            
+                        </div>
+                        <div class="form-group col-sm-3" ng-if="!(querella.solicitante.representante.tipoIdentificacion.idTipoDocIdentificacion==2)">
+                            <label>
+                                Nombre
+                                <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                            </label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   ng-model="querella.solicitante.representante.nombre"                                    
+                                   placeholder="Ingrese el nombre"
+                                   required/>                            
+                        </div>
+                        <div class="form-group col-sm-3" ng-if="!(querella.solicitante.representante.tipoIdentificacion.idTipoDocIdentificacion==2)" >
+                            <label>
+                                Apellido
+                                <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                            </label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   ng-model="querella.solicitante.representante.apellido" 
+                                   placeholder="Ingrese el apellido"
+                                   required/>
+                            <p class="help-block">{{validator.apellido}}</p>
+                        </div>
+                        <div class="form-group col-sm-2" ng-if="!(querella.solicitante.representante.tipoIdentificacion.idTipoDocIdentificacion==2)" >
+                            <label>
+                                Ciudad Nacimiento
+                                <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                            </label>
+                            <input type="text" 
+                                    class="form-control" 
+                                    ng-model="querella.solicitante.representante.ciudadNacimiento" 
+                                    uib-typeahead="itemciudad as itemciudad.nombre+' - '+itemciudad.pais.nombre for itemciudad in getCiudades($viewValue)"
+                                    typeahead-wait-ms="1000"  
+                                    typeahead-min-length="3"
+                                    uib-typeahead-loading="loadingCiudad"
+                                    typeahead-on-select="onSelect($item, 'nombre', $label)"
+                                    uib-typeahead-min-length="3"
+                                    bs-typeahead placeholder="Ingrese la ciudad"
+                                    required/>
+                            <p class="help-block">{{validator.apellido}}</p>
+                        </div>
+                        <div class="form-group col-sm-6" ng-if="querella.solicitante.representante.tipoIdentificacion.idTipoDocIdentificacion==2">
+                            <label>
+                                Razón Social
+                                <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                            </label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   ng-model="querella.solicitante.representante.razonSocial"                                    
+                                   placeholder="Ingrese el nombre"
+                                   required/>                            
+                        </div>                        
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-5">                            
+                            <label>
+                                Dirección
+                                <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                            </label>
+                            <input type="text" 
+                                   class="form-control"
+                                   ng-model="querella.solicitante.representante.direccion" 
+                                   placeholder="Ingrese la dirección."
+                                   required/>
+                            <p class="help-block">{{validator.direccion}}</p>
+                        </div>
+                        <div class="form-group col-sm-2" ng-if="!(querella.solicitante.representante.tipoIdentificacion.idTipoDocIdentificacion==2)" >
+                            <label>
+                                {{loadingCiudad}}
+                                Ciudad Residencia
+                                <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                                <i ng-show="loadingCiudad" class="fa fa-spinner fa-spin"></i>
+                            </label>
+                            <input type="text" 
+                                    class="form-control" 
+                                    ng-model="querella.solicitante.representante.ciudadResidencia" 
+                                    uib-typeahead="itemciudad as itemciudad.nombre+' - '+itemciudad.pais.nombre for itemciudad in getCiudades($viewValue)"
+                                    typeahead-wait-ms="1000"  
+                                    typeahead-min-length="3"
+                                    typeahead-loading="loadingCiudad"
+                                    typeahead-on-select="onSelect($item, 'nombre', $label)"
+                                    uib-typeahead-min-length="3"
+                                    bs-typeahead placeholder="Ingrese la ciudad"
+                                    required/>
+                            <p class="help-block">{{validator.apellido}}</p>
+                        </div>
+                        <div class="form-group has-feedback simple col-sm-2" ng-class="{'has-error': validator.telefono}">
+                            <label>
+                                Teléfono
+                                <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                            </label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   ng-model="querella.solicitante.representante.telefono" 
+                                   ng-class="{'has-error': validator.telefono}" 
+                                   placeholder="Ingrese el teléfono"
+                                   required/>
+                            <p class="help-block">{{validator.telefono}}</p>
+                        </div>
+                        <div class="form-group has-feedback simple col-sm-3" ng-class="{'has-error': validator.email}">
+                            <label>
+                                Correo electrónico                               
+                            </label>
+                            <input 
+                                type="text" 
+                                class="form-control" 
+                                ng-model="querella.solicitante.representante.email"  placeholder="Ingrese el correo electrónico (Opcional)"
+                                />
+                            <p class="help-block">{{validator.email}}</p>
+                        </div>                                               
+                    </div>
+                </div>
+                    
+                    
+                <!-- INFORMACION DEL PRESUNTO INFRACTOR-->
+                <h4 class="padding-sm no-padding-t padding-xs-hr">
+                        <i class="fa fa-id-card text-primary"></i>
+                        &nbsp;&nbsp;Información del Presunto Infractor
+                    </h4>
+                    
+                    <div class="row">
+                        <div class="form-group col-md-2">
+                            <label class="control-label" for="infractor_identificacion">
+                                Número Identificación
+                                <i ng-hide="loadingInfractor" class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                                <i ng-show="loadingInfractor" class="fa fa-spinner fa-spin"></i>
+                            </label>
+                            <input type="text"
+                                    id="BusquedaUsuario"
+                                    class="form-control input-xlarge"
+                                    ng-class="{'has-error': validator.usuario}"
+                                    ng-model="querella.infractor.identificacion"
+                                    uib-typeahead="infractor.identificacion as infractor.identificacion for infractor in getInfractor($viewValue)"
+                                    typeahead-wait-ms="1000"
+                                    typeahead-on-select="onSelect($item, $model, $label)"
+                                    typeahead-no-results="noResults"
+                                    typeahead-loading="loadingInfractor"
+                                    typeahead-min-length="3"
+                                    bs-typeahead placeholder="Ingrese su identificación"
+                                    tooltip="{{validator.usuario}}"
+                                    required/>
+                            <span ng-if="noResults" uib-dropdown uib-dropdown-toggle auto-close="disabled" is-open="true">
+                                <ul class="uib-dropdown-menu" >
+                                  <li>No hay Resultados</li>
+                                </ul>
+                            </span>                            
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label class="control-label" for="infractor_tipoidentificacion">
+                                Tipo de Identificación
+                                <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                            </label>                            
+                            <select class="form-control"
+                                    ng-model="querella.infractor.tipoIdentificacion"
+                                    ng-options="tipoIdentificacion.nombre for tipoIdentificacion in arrayTipoDocIdentificacion"
+                                    required>
+                            </select>                            
+                        </div>
+                        <div class="form-group col-sm-3" ng-if="!(querella.infractor.tipoIdentificacion.idTipoDocIdentificacion==2)">
+                            <label>
+                                Nombre
+                                <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                            </label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   ng-model="querella.infractor.nombre"                                    
+                                   placeholder="Ingrese el nombre"
+                                   required/>                            
+                        </div>
+                        <div class="form-group col-sm-3" ng-if="!(querella.infractor.tipoIdentificacion.idTipoDocIdentificacion==2)" >
+                            <label>
+                                Apellido
+                                <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                            </label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   ng-model="querella.infractor.apellido" 
+                                   placeholder="Ingrese el apellido"
+                                   required />
+                            <p class="help-block">{{validator.apellido}}</p>
+                        </div>
+                        <div class="form-group col-sm-2" ng-if="!(querella.infractor.tipoIdentificacion.idTipoDocIdentificacion==2)" >
+                            <label>
+                                Ciudad Nacimiento
+                                <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                            </label>
+                            <input type="text" 
+                                    class="form-control" 
+                                    ng-model="querella.infractor.ciudadNacimiento" 
+                                    uib-typeahead="itemciudad as itemciudad.nombre+' - '+itemciudad.pais.nombre for itemciudad in getCiudades($viewValue)"
+                                    typeahead-wait-ms="1000"  
+                                    typeahead-min-length="3"
+                                    uib-typeahead-loading="loadingCiudad"
+                                    typeahead-on-select="onSelect($item, 'nombre', $label)"
+                                    uib-typeahead-min-length="3"
+                                    bs-typeahead placeholder="Ingrese la ciudad"
+                                    required/>
+                            <p class="help-block">{{validator.apellido}}</p>
+                        </div>
+                        <div class="form-group col-sm-6" ng-if="querella.infractor.tipoIdentificacion.idTipoDocIdentificacion==2">
+                            <label>
+                                Razón Social
+                                <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                            </label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   ng-model="querella.infractor.razonSocial"                                    
+                                   placeholder="Ingrese el nombre"
+                                   required/>                            
+                        </div>                        
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <label>
+                                Dirección
+                                <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                            </label>
+                            <input type="text" 
+                                   class="form-control"
+                                   ng-model="querella.infractor.direccion" 
+                                   placeholder="Ingrese la dirección."
+                                   required/>
+                            <p class="help-block">{{validator.direccion}}</p>
+                        </div>
+                        <div class="form-group col-sm-2">
+                            <label>
+                                Ciudad Residencia
+                                <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                                <i ng-show="loadingCiudad" class="fa fa-spinner fa-spin"></i>
+                            </label>
+                            <input type="text" 
+                                    class="form-control" 
+                                    ng-model="querella.infractor.ciudadResidencia" 
+                                    uib-typeahead="itemciudad as itemciudad.nombre+' - '+itemciudad.pais.nombre for itemciudad in getCiudades($viewValue)"
+                                    typeahead-wait-ms="1000"  
+                                    typeahead-min-length="3"
+                                    typeahead-loading="loadingCiudad"
+                                    typeahead-on-select="onSelect($item, 'nombre', $label)"
+                                    uib-typeahead-min-length="3"
+                                    bs-typeahead placeholder="Ingrese la ciudad"
+                                    required/>
+                            <p class="help-block">{{validator.apellido}}</p>
+                        </div>
+                        <div class="form-group has-feedback simple col-sm-2" ng-class="{'has-error': validator.telefono}">
+                            <label>
+                                Teléfono
+                                <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                            </label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   ng-model="querella.infractor.telefono" 
+                                   ng-class="{'has-error': validator.telefono}" 
+                                   placeholder="Ingrese el teléfono"/>
+                            <p class="help-block">{{validator.telefono}}</p>
+                        </div>
+                        <div class="form-group has-feedback simple col-sm-3" ng-class="{'has-error': validator.email}">
+                            <label>
+                                Correo electrónico                               
+                            </label>
+                            <input 
+                                type="text" 
+                                class="form-control" 
+                                ng-model="querella.infractor.email"  placeholder="Ingrese el correo electrónico (Opcional)"/>
+                            <p class="help-block">{{validator.email}}</p>
+                        </div>                                               
+                    </div>
+                    
+                    <!-- INFORMACIÓN DEL REPRESENTANTE LEGAL DEL INFRACTOR -->
+                    <div ng-if="querella.infractor.tipoIdentificacion.idTipoDocIdentificacion==2 && querella.infractor.razonSocial">
+                        <h4 class="padding-sm no-padding-t padding-xs-hr">
+                            <i class="fa fa-id-card text-primary"></i>
+                            &nbsp;&nbsp;Datos del Representante legal del Infractor: {{querella.infractor.razonSocial}}
+                        </h4>
+                        <div class="row">
+                        <div class="form-group col-md-2">
+                            <label class="control-label" for="infractor.representante_identificacion">
+                                Número Identificación
+                                <i ng-hide="loadingInfractorRepresentante" class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                                <i ng-show="loadingInfractorRepresentante" class="fa fa-spinner fa-spin"></i>
+                            </label>
+                            <input type="text"
+                                    id="BusquedaUsuario"
+                                    class="form-control input-xlarge"
+                                    ng-class="{'has-error': validator.usuario}"
+                                    ng-model="querella.infractor.representante.identificacion"
+                                    uib-typeahead="infractor_representante.identificacion as representante_identificacion.identificacion for infractor_representante in getInfractorRepresentante($viewValue)"
+                                    typeahead-wait-ms="1000"
+                                    typeahead-on-select="onSelect($item, $model, $label)"
+                                    typeahead-no-results="noResults"
+                                    typeahead-loading="loadingInfractorRepresentante"
+                                    typeahead-min-length="3"
+                                    bs-typeahead placeholder="Ingrese su identificación"
+                                    tooltip="{{validator.usuario}}"
+                                    required/>                                                       
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label class="control-label" for="infractor.representante_tipoidentificacion">
+                                Tipo de Identificación
+                                <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                            </label>                            
+                            <select class="form-control"
+                                    ng-model="querella.infractor.representante.tipoIdentificacion"
+                                    ng-options="tipoIdentificacion.nombre for tipoIdentificacion in arrayTipoDocIdentificacion"
+                                    required>
+                            </select>                            
+                        </div>
+                        <div class="form-group col-sm-3" ng-if="!(querella.infractor.representante.tipoIdentificacion.idTipoDocIdentificacion==2)">
+                            <label>
+                                Nombre
+                                <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                            </label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   ng-model="querella.infractor.representante.nombre"                                    
+                                   placeholder="Ingrese el nombre"
+                                   required/>                            
+                        </div>
+                        <div class="form-group col-sm-3" ng-if="!(querella.infractor.representante.tipoIdentificacion.idTipoDocIdentificacion==2)" >
+                            <label>
+                                Apellido
+                                <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                            </label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   ng-model="querella.infractor.representante.apellido" 
+                                   placeholder="Ingrese el apellido"
+                                   required/>
+                            <p class="help-block">{{validator.apellido}}</p>
+                        </div>
+                        <div class="form-group col-sm-2" ng-if="!(querella.infractor.representante.tipoIdentificacion.idTipoDocIdentificacion==2)" >
+                            <label>
+                                Ciudad Nacimiento
+                                <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                            </label>
+                            <input type="text" 
+                                    class="form-control" 
+                                    ng-model="querella.infractor.representante.ciudadNacimiento" 
+                                    uib-typeahead="itemciudad as itemciudad.nombre+' - '+itemciudad.pais.nombre for itemciudad in getCiudades($viewValue)"
+                                    typeahead-wait-ms="1000"  
+                                    typeahead-min-length="3"
+                                    uib-typeahead-loading="loadingCiudad"
+                                    typeahead-on-select="onSelect($item, 'nombre', $label)"
+                                    uib-typeahead-min-length="3"
+                                    bs-typeahead placeholder="Ingrese la ciudad"
+                                    required/>
+                            <p class="help-block">{{validator.apellido}}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <label>
+                                Dirección
+                                <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                            </label>
+                            <input type="text" 
+                                   class="form-control"
+                                   ng-model="querella.infractor.representante.direccion" 
+                                   placeholder="Ingrese la dirección."
+                                   autocomplete="off"
+                                   required/>
+                            <p class="help-block">{{validator.direccion}}</p>
+                        </div>
+                        <div class="form-group col-sm-2" ng-if="!(querella.infractor.representante.tipoIdentificacion.idTipoDocIdentificacion==2)" >
+                            <label>
+                                {{loadingCiudad}}
+                                Ciudad Residencia
+                                <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                                <i ng-show="loadingCiudad" class="fa fa-spinner fa-spin"></i>
+                            </label>
+                            <input type="text" 
+                                    class="form-control" 
+                                    ng-model="querella.infractor.representante.ciudadResidencia" 
+                                    uib-typeahead="itemciudad as itemciudad.nombre+' - '+itemciudad.pais.nombre for itemciudad in getCiudades($viewValue)"
+                                    typeahead-wait-ms="1000"  
+                                    typeahead-min-length="3"
+                                    typeahead-loading="loadingCiudad"
+                                    typeahead-on-select="onSelect($item, 'nombre', $label)"
+                                    uib-typeahead-min-length="3"
+                                    bs-typeahead placeholder="Ingrese la ciudad"
+                                    required/>
+                            <p class="help-block">{{validator.apellido}}</p>
+                        </div>
+                        <div class="form-group has-feedback simple col-sm-2" ng-class="{'has-error': validator.telefono}">
+                            <label>
+                                Teléfono
+                                <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                            </label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   ng-model="querella.infractor.representante.telefono" 
+                                   ng-class="{'has-error': validator.telefono}" 
+                                   placeholder="Ingrese el teléfono"
+                                   required/>
+                            <p class="help-block">{{validator.telefono}}</p>
+                        </div>
+                        <div class="form-group has-feedback simple col-sm-3" ng-class="{'has-error': validator.email}">
+                            <label>
+                                Correo electrónico                               
+                            </label>
+                            <input 
+                                type="text" 
+                                class="form-control" 
+                                ng-model="querella.infractor.representante.email"  placeholder="Ingrese el correo electrónico (Opcional)"
+                                />
+                            <p class="help-block">{{validator.email}}</p>
+                        </div>                                               
+                    </div>
+                </div>
+
+                <!-- PRUEBAS -->
+                <h4 class="padding-sm no-padding-t padding-xs-hr">
+                    <i class="fa fa-comments text-primary"></i>
+                    &nbsp;&nbsp;Descripción de los Hechos
+                </h4>   
+                <div class="row">                    
+                    <div class="col-sm-10">                        
+                        <div class="form-group col-md-1" style="width:30">
+                            <label class="checkbox-inline">
+                                <input type="checkbox" value="1" class="px" ng-model="lugar_es_rural">
+                                <span class="lbl">Rural</span>
+                            </label>
+                        </div>
+                        <div class="form-group col-md-6" ng-if="lugar_es_rural!=1">
+                            <label class="control-label">
+                                Lugar de los Hechos
+                                <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                            </label>
+                            <input type="text" 
+                                   id="direccionHechos"
+                                   class="form-control" 
+                                   ng-model="querella.direccion" 
+                                   ng-click="obtenerModalIngresoDireccionQuerella()"
+                                   placeholder="Ingrese la dirección."
+                                   readonly="readonly"/>
+                        </div>
+                        <div class="form-group col-sm-5" ng-if="lugar_es_rural!=1">
+                            <label>
+                                Adicional
+                                <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                            </label>
+                            <input type="text" 
+                                   id="informacionAdicionalHechos"
+                                   class="form-control" 
+                                   ng-model="querella.informacionAdicional" 
+                                   ng-click="obtenerModalIngresoDireccionQuerella()"
+                                   placeholder="Ingrese la dirección."
+                                   readonly="readonly" />
+                            <p class="help-block">{{validator.direccion}}</p>
+                        </div>
+                        <div class="form-group has-feedback simple col-sm-11" ng-class="{'has-error': validator.email_confirm}" ng-if="lugar_es_rural==1">
+                            <label>
+                                Dirección
+                                <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                            </label>
+                            <input type="text" 
+                                   class="form-control"
+                                   ng-model="querella.direccion" 
+                                   placeholder="Ingrese la dirección."
+                                   autocomplete="off"/>
+                            <p class="help-block">{{validator.direccion}}</p>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-2" ng-if="lugar_es_rural!=1">
+                        <label class="control-label">
+                            Comuna
+                            <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                        </label>
+                        <select class="form-control" 
+                                ng-model="querella.idcomuna" 
+                                ng-options="itemcomuna.idcomuna as itemcomuna.codigo for itemcomuna in comunas">
+                        </select>  
+                    </div>
+                    <div class="form-group col-md-2" ng-if="lugar_es_rural==1">
+                        <label class="control-label">
+                            Corregimiento
+                            <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                        </label>
+                        <select class="form-control" 
+                                ng-model="querella.idcorregimiento" 
+                                ng-options="itemcorregimiento.idcorregimiento as itemcorregimiento.nombre for itemcorregimiento in corregimientos">
+                        </select>  
+                    </div>
+                </div>
+                <div class="row col-sm-12">                                       
+                    <div class="form-group col-md-12" ng-class="{'has-error': validator.idbarrio}">
+                        <label class="control-label" for="barrio">
+                            Hechos
+                            <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                        </label>
+                        <textarea rows="4" 
+                                  cols="30" 
+                                  placeholder="Ingrese los Hechos informados por el solicitante." 
+                                  ng-model="querella.hechos" 
+                                  class="form-control"
+                                  autocomplete="off"
+                                  required></textarea>
+                    </div>                   
+                </div>
+                <div class="form-group col-sm-12">
+                    <label>
+                        Comportamiento Contrario a a Convivencia 
+                        <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                        <i ng-show="loadingComportamiento" class="fa fa-spinner fa-spin"></i>
+                        <i ng-show="querella.comportamientoContrario.id" class="fa fa-check text-success"></i>
+                    </label>
+                    <input type="hidden" ng-model="querella.comportamientoContrario.id" required>
+                    <textarea
+                            rows="4"
+                            class="form-control" 
+                            ng-model="querella.comportamientoContrario" 
+                            uib-typeahead="comportamientoContrario as comportamientoContrario.descripcion for comportamientoContrario in getComportamientosContrarios($viewValue)"
+                            typeahead-wait-ms="1000"  
+                            typeahead-min-length="3"
+                            typeahead-editable="false"
+                            typeahead-loading="loadingComportamiento"
+                            typeahead-on-select="onSelect($item, 'nombre', $label)"
+                            typeahead-min-length="3"
+                            bs-typeahead placeholder="Ingrese el comportamiento contrario"                            
+                            required/>
+                    </textarea>
+                    <script type="text/ng-template" id="customTemplate.html">    
+                        <div class="col-md-12">{{showLinks}}</div>
+                        <a>
+                          <span ng-bind-html="match.label | typeaheadHighlight:query"></span>
+                        </a>
+                    </script>                    
+                    <p class="help-block">{{validator.apellido}}</p>
+                </div>
+                <div class="row col-md-12">
+                    <input type="file" class="form-control" ng-model="peticion.uploadedfile" name="uploadedfile" file-upload multiple>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th width="50%">Nombre</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="item in files">
+                                <td><strong>{{ item.name}}</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row padding-sm text-right-sm">
+                    <input type="submit"  ng-disabled="userForm.$invalid" class="btn btn-primary" ng-click="save()" value="Crear Petición" />
+                    ó
+                    <a ui-sref="listar-peticion">Cancelar</a>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

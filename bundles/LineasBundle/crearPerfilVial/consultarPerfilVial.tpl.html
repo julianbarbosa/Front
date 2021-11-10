@@ -1,0 +1,516 @@
+<script>
+    function cerrarModal() {
+        $('#modalIngresoDireccion').modal('toggle');
+    }
+</script>
+<style>
+    .no-margin {
+        margin: 0;
+        border: 1px red !important;
+    }
+</style>
+<div>
+    <div id="modalIngresoDireccion" class="modal fade modal-change" role="dialog" aria-hidden="true"></div>
+    <div class="col-md-12 col-lg-11">
+        <div ng-show="validator.alert.content">
+            <div class="alert {{validator.alert.type}} alert-dismissable">
+                <i class="fa fa-danger"></i>
+                <button type="button" class="close" aria-hidden="true" ng-click="hideAlert()">×</button>
+                <b>{{validator.alert.title}}</b>
+                <span ng-bind-html="validator.alert.content"></span>
+            </div>
+        </div>
+        <div>
+            <form name="form">
+                <div class="panel">
+                    <div class="panel-body">
+                        <div class="page-header">
+                            <h1 class="col-xs-12 col-sm-10 text-center text-left-sm">
+                                <i class="padding-sm-hr fa fa-hand-paper-o"></i>&nbsp;&nbsp;{{accion}} Perfil Vial {{linea.id}}</h1>
+                        </div>
+                        <uib-accordion close-others="oneAtATime">
+                            <div uib-accordion-group class="panel-default" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
+                                <uib-accordion-heading>
+                                    <span class="panel-title">Perfil Vial</span>
+                                </uib-accordion-heading>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <center>
+                                            <div class="col-sm-1 text-center no-margin">
+                                                <img src="../images/perfil_antejardin_izquierdo.png" class="img-responsive">
+                                                <br> {{linea.izquierdo.antejardin}}
+                                                <span ng-if="linea.izquierdo.antejardinVariable">-<br>{{linea.izquierdo.antejardinVariable}}</span>
+                                            </div>
+                                            <div class="col-sm-1 text-center no-margin">
+                                                <img src="../images/perfil_anden_izquierdo.png" class="img-responsive">
+                                                <br> {{linea.izquierdo.anden}}
+                                                <span ng-if="linea.izquierdo.andenVariable">-<br>{{linea.izquierdo.andenVariable}}</span>
+                                            </div>
+                                            <div class="col-sm-1 text-center no-margin" ng-if="!linea.tieneSeparador">
+                                                <img src="../images/perfil_via.png" class="img-responsive">
+                                                <br> {{linea.calzada}}
+                                            </div>
+                                            <div class="col-sm-1 text-center no-margin" ng-if="linea.tieneSeparador">
+                                                <img src="../images/perfil_via.png" class="img-responsive">
+                                                <br> {{linea.izquierdo.calzada}}
+                                            </div>
+                                            <div class="col-sm-1 text-center no-margin" ng-if="linea.izquierdo.tieneSeparador">
+                                                <img src="../images/perfil_separador.png" class="img-responsive">
+                                                <br> {{linea.izquierdo.dimensionSeparador}}
+                                            </div>
+                                            <div class="col-sm-1 text-center no-margin" ng-if="linea.izquierdo.tieneSeparador">
+                                                <img src="../images/perfil_via.png" class="img-responsive">
+                                                <br> {{linea.izquierdo.calzadaSeparador}}
+                                            </div>
+                                            <div class="col-sm-1 text-center no-margin" ng-if="linea.tieneSeparador">
+                                                <img src="../images/perfil_separador.png" class="img-responsive">
+                                                <br> {{linea.dimensionSeparador}}
+                                            </div>
+                                            <div class="col-sm-1 text-center no-margin" ng-if="linea.derecho.tieneSeparador">
+                                                <img src="../images/perfil_via.png" class="img-responsive">
+                                                <br> {{linea.derecho.calzadaSeparador}}
+                                            </div>
+                                            <div class="col-sm-1 text-center no-margin" ng-if="linea.derecho.tieneSeparador">
+                                                <img src="../images/perfil_separador.png" class="img-responsive">
+                                                <br> {{linea.derecho.dimensionSeparador}}
+                                            </div>
+                                            <div class="col-sm-1 text-center no-margin" ng-if="linea.tieneSeparador">
+                                                <img src="../images/perfil_via.png" class="img-responsive">
+                                                <br> {{linea.derecho.calzada}}
+                                            </div>
+                                            <div class="col-sm-1 text-center no-margin">
+                                                <img src="../images/perfil_anden_derecho.png" class="img-responsive">
+                                                <br> {{linea.derecho.anden}}
+                                                <span ng-if="linea.derecho.andenVariable">-<br>{{linea.derecho.andenVariable}}</span>
+                                            </div>
+                                            <div class="col-sm-1 text-center no-margin">
+                                                <img src="../images/perfil_antejardin_derecho.png" class="img-responsive">
+                                                <br> {{linea.derecho.antejardin}}
+                                                <span ng-if="linea.derecho.antejardinVariable">-<br>{{linea.derecho.antejardinVariable}}</span>
+                                            </div>
+                                        </center>
+                                    </div>
+                                </div>
+                            </div>
+                            <div uib-accordion-group class="panel-default" is-open="status.isSecondOpen" is-disabled="status.isSecondDisabled">
+                                <uib-accordion-heading>
+                                    <span class="panel-title">Información de la vía</span>
+                                </uib-accordion-heading>
+                                <div>
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group required" ng-class="{'has-error': form.tipoViaPrincipalId.$touched && form.tipoViaPrincipalId.$invalid}">
+                                                <label class="control-label" for="tipoViaPrincipalId">Tipo Via: </label>
+                                                <select readonly="readonly" class="form-control" id="tipoViaPrincipalId" name="tipoViaPrincipalId" ng-model="linea.tipoViaPrincipalId" ng-blur="consultarExistencia()"
+                                                    required ng-disabled="accion == 'revisar' && (linea.observacionesDevolucion == '' || linea.observacionesDevolucion == null)">
+                                                    <option value="">Seleccione</option>
+                                                    <option ng-repeat="tipovia in tiposvia" value="{{tipovia.idItem}}">{{tipovia.texto}}</option>
+                                                </select>
+                                                <p class="help-block" ng-if="form.tipoViaPrincipalId.$touched && form.tipoViaPrincipalId.$invalid">Ingrese Tipo Vía</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group required" ng-class="{'has-error': form.nombreViaPrincipal.$touched && form.nombreViaPrincipal.$invalid}">
+                                                <label class="control-label" for="nombreViaPrincipal">Nombre Vía</label>
+                                                <input readonly="readonly" type="text" id="nombreViaPrincipal" name="nombreViaPrincipal" class="form-control input-xlarge" ng-model="linea.nombreViaPrincipal"
+                                                    ng-blur="consultarExistencia()" autocomplete="off" uppercase-only required
+                                                    ng-disabled="accion == 'revisar' && (linea.observacionesDevolucion == '' || linea.observacionesDevolucion == null)"
+                                                />
+                                                <p class="help-block" ng-if="form.nombreViaPrincipal.$touched && form.nombreViaPrincipal.$invalid">Ingrese Nombre vía</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group required" ng-class="{'has-error': (form.tipoViaSecundariaId.$touched && form.tipoViaSecundariaId.$invalid) }">
+                                                <label class="control-label" for="tipoViaSecundariaId">Tipo Intersección 1 </label>
+                                                <select readonly="readonly" class="form-control" id="tipoViaSecundariaId" name="tipoViaSecundariaId" ng-model="linea.tipoViaSecundariaId" ng-blur="consultarExistencia()"
+                                                    required ng-disabled="accion == 'revisar' && (linea.observacionesDevolucion == '' || linea.observacionesDevolucion == null)">
+                                                    <option value="">Seleccione</option>
+                                                    <option ng-repeat="tipovia in tiposvia" value="{{tipovia.idItem}}">{{tipovia.texto}}</option>
+                                                </select>
+                                                <p class="help-block" ng-if="form.tipoViaSecundariaId.$touched && form.tipoViaSecundariaId.$invalid">Ingrese Tipo Vía</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group required" ng-class="{'has-error': form.nombreViaSecundaria.$touched && form.nombreViaSecundaria.$invalid}">
+                                                <label class="control-label" for="nombreViaSecundaria">Nombre Intersección 1 </label>
+                                                <input readonly="readonly" type="text" id="nombreViaSecundaria" name="nombreViaSecundaria" class="form-control input-xlarge" ng-model="linea.nombreViaSecundaria"
+                                                    ng-blur="consultarExistencia()" autocomplete="off" required uppercase-only
+                                                    ng-disabled="accion == 'revisar' && (linea.observacionesDevolucion == '' || linea.observacionesDevolucion == null)"
+                                                />
+                                                <p class="help-block" ng-if="form.nombreViaSecundaria.$touched && form.nombreViaSecundaria.$invalid">Ingrese Nombre vía</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group required" ng-class="{'has-error': (form.tipoViaTerciariaId.$touched && form.tipoViaTerciariaId.$invalid) }">
+                                                <label class="control-label" for="tipoViaTerciariaId">Tipo Intersección 2: </label>
+                                                <select readonly="readonly" class="form-control" id="tipoViaTerciariaId" name="tipoViaTerciariaId" ng-model="linea.tipoViaTerciariaId" ng-blur="consultarExistencia()"
+                                                    required ng-disabled="accion == 'revisar' && (linea.observacionesDevolucion == '' || linea.observacionesDevolucion == null)">
+                                                    <option value="">Seleccione</option>
+                                                    <option ng-repeat="tipovia in tiposvia" value="{{tipovia.idItem}}">{{tipovia.texto}}</option>
+                                                </select>
+                                                <p class="help-block" ng-if="form.tipoViaTerciariaId.$touched && form.tipoViaTerciariaId.$invalid">Ingrese Tipo Vía</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group required" ng-class="{'has-error': form.nombreViaTerciaria.$touched && form.nombreViaTerciaria.$invalid}">
+                                                <label class="control-label" for="nombreViaTerciaria">Nombre Intersección 2:  </label>
+                                                <input readonly="readonly" type="text" id="nombreViaTerciaria" name="nombreViaTerciaria" class="form-control input-xlarge" ng-model="linea.nombreViaTerciaria"
+                                                    ng-blur="consultarExistencia()" autocomplete="off" required uppercase-only
+                                                    ng-disabled="accion == 'revisar' && (linea.observacionesDevolucion == '' || linea.observacionesDevolucion == null)"
+                                                />
+                                                <p class="help-block" ng-if="form.nombreViaTerciaria.$touched && form.nombreViaTerciaria.$invalid">Ingrese Nombre vía</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group required" ng-class="{'has-error': form.claseVia.$touched && form.claseVia.$invalid}">
+                                                <label class="control-label" for="nombreViaSecundaria">Clase Vía: </label>
+                                                <select readonly="readonly" class="form-control" name="claseVia" ng-model="linea.claseViaId" required>
+                                                    <option value="">Seleccione</option>
+                                                    <option ng-repeat="claseVia in clasesVias" value="{{claseVia.idItem}}">{{claseVia.texto}}</option>
+                                                </select>
+                                                <p class="help-block" ng-if="form.claseVia.$touched && form.claseVia.$invalid">Ingrese Clase vía</p>
+                                            </div>
+                                        </div>
+                                        <div class="form-group required col-md-3" ng-class="{'has-error': form.via.$touched && form.via.$invalid}">
+                                            <label class="control-label" for="via">Vía </label>
+                                            <input readonly="readonly" type="number" step="0.01" id="via" name="via" placeholder="Vía" class="form-control input-xlarge" ng-model="linea.via"
+                                                autocomplete="off" required ng-disabled="accion == 'revisar' && (linea.observacionesDevolucion == '' || linea.observacionesDevolucion == null)"
+                                            />
+                                            <p class="help-block" ng-if="form.via.$touched && form.via.$invalid">Ingrese Vía</p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group required" ng-class="{'has-error': form.fuente1.$touched && form.fuente1.$invalid}">
+                                                <label class="control-label" for="nombreViaSecundaria">Fuente 1 </label>
+                                                <input readonly="readonly" type="text" id="fuente1" name="fuente1" class="form-control input-xlarge" ng-model="linea.fuente1" autocomplete="off"
+                                                    required ng-disabled="accion == 'revisar' && (linea.observacionesDevolucion == '' || linea.observacionesDevolucion == null)"
+                                                />
+                                                <p class="help-block" ng-if="form.fuente1.$touched && form.fuente1.$invalid">Ingrese la fuente 1</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group" ng-class="{'has-error': form.fuente2.$touched && form.fuente2.$invalid}">
+                                                <label class="control-label" for="fuente2">Fuente 2 </label>
+                                                <input readonly="readonly" type="text" id="fuente2" name="fuente2" class="form-control input-xlarge" ng-model="linea.fuente2" autocomplete="off"
+                                                    ng-disabled="accion == 'revisar' && (linea.observacionesDevolucion == '' || linea.observacionesDevolucion == null)"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label class="control-label" for="localización">Observaciones:</label>
+                                                <textarea readonly="readonly" rows="4" class="form-control noresize" ng-model="linea.observaciones" ng-disabled="accion == 'revisar' && (linea.observacionesDevolucion == '' || linea.observacionesDevolucion == null)"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row" ng-if="linea.observacionesDevolucion">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label class="control-label text-danger" for="observacionesDevolucion">Observaciones corrección:</label>
+                                                <textarea readonly="readonly" rows="4" class="form-control noresize" ng-model="linea.observacionesDevolucion" ng-disabled="accion !== 'revisar'"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--Separador Vial-->
+                                    <div class="row">
+                                        <div class="col-md-6" style="padding-top:0px;padding-bottom: 0px;">
+                                            <div class="form-group">
+                                                <div class="checkbox">
+                                                    <label>
+                                                        <input readonly="readonly"  type="checkbox" disabled data-class="switcher-primary" ng-model="linea.tieneSeparador" ng-true-value="true" class="px" ng-change="linea.calzada=null">
+                                                        <span class="lbl">Tiene Separador Central</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div uib-accordion-group class="panel-default" is-open="status.isThirdOpen" is-disabled="status.isThirdDisabled">
+                                <uib-accordion-heading>
+                                    <span class="panel-title">Separador Central / Calzada</span>
+                                </uib-accordion-heading>
+                                <div>
+                                    <div class="row">
+                                        <div class="form-group required col-md-3" ng-class="{'has-error': form.calzada.$touched && form.calzada.$invalid}" ng-if="linea.tieneSeparador !== true">
+                                            <label class="control-label" for="calzada">Calzada </label>
+                                            <div class="input-group">
+                                                <input readonly="readonly" type="number" step="0.01" id="calzada" name="calzada" placeholder="Calzada" class="form-control input-xlarge" ng-model="linea.calzada"
+                                                autocomplete="off" required ng-disabled="accion == 'revisar' && (linea.observacionesDevolucion == '' || linea.observacionesDevolucion == null)"/>
+                                                <div class="input-group-addon btn-warning" title="Unidad de medida: metro">m</div>
+                                            </div>
+                                            <p class="help-block" ng-if="form.calzada.$touched && form.calzada.$invalid">Ingrese Calzada</p>
+                                        </div>
+                                        <div class="form-group col-md-6" ng-if="linea.tieneSeparador == true">
+                                            <label class="control-label">Ancho Separador</label>
+                                            <div class="input-group">
+                                                <input readonly="readonly" type="number" step="0.01" id="separadorDerecho" name="separadorCentral" class="form-control input-xlarge" ng-model="linea.dimensionSeparador"
+                                                placeholder="Dimensión Separador Central" autocomplete="off" required/>
+                                                <div class="input-group-addon btn-warning" title="Unidad de medida: metro">m</div>
+                                            </div>
+
+                                        </div>
+                                        <div class="form-group col-md-6" ng-if="linea.tieneSeparador == true">
+                                            <label class="control-label" for="barrio">Tipo Separador</label>
+                                            <select readonly="readonly" class="form-control  input-xlarge" ng-model="linea.tipoSeparadorId" ng-options="tiposeparador.idItem as tiposeparador.texto for tiposeparador in tiposeparadorArray">
+                                                <option value="">Seleccione</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div uib-accordion-group class="panel-default" is-open="status.isFourthOpen" is-disabled="status.isFourthDisabled">
+                                <uib-accordion-heading>
+                                    <span class="panel-title">Perfiles viales</span>
+                                </uib-accordion-heading>
+                                <div class="col-md-6">
+                                    <div class="panel">
+                                        <div class="panel-heading">
+                                            <span class="panel-title text-danger">Lado Izquierdo</span>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="row" ng-if="linea.lado == null || linea.lado == 'LadoIzquierdo'">
+                                                <div class="form-group required col-md-6" ng-class="{'has-error': form.manzanaPredial.$touched && form.manzanaPredial.$invalid}">
+                                                    <label class="control-label" for="manzanaPredial">Número Predial de Manzana</label>
+                                                    <input readonly="readonly" type="text" id="manzanaPredial" name="manzanaPredial" class="form-control input-xlarge" ng-model="linea.izquierdo.manzanaPredial"
+                                                    autocomplete="off" ui-mask="A999*" ui-mask-placeholder ui-mask-placeholder-char="_" ui-mask-use-viewvalue="true" uppercase-only required/>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group required col-md-2" ng-class="{'has-error': form.calzadaIzquierdo.$touched && form.calzadaIzquierdo.$invalid}"
+                                                    ng-if="linea.linea.izquierdo.tieneSeparador === true">
+                                                    <label class="control-label" for="calzadaIzquierdo">Calzada ****//</label>
+                                                    <div class="input-group">
+                                                        <input readonly="readonly" type="text" id="calzadaIzquierdo" step="0.01" min="0.01" name="calzadaIzquierdo" class="form-control input-xlarge" ng-model="linea.izquierdo.calzada"
+                                                            ng-blur="linea.derecho.calzada = linea.izquierdo.calzada" autocomplete="off" placeholder="Calzada" required/>
+                                                        <div class="input-group-addon btn-warning" title="Unidad de medida: metro">m</div>
+                                                        <p class="help-block" ng-if="form.calzadaIzquierdo.$touched && form.calzadaIzquierdo.$invalid">Ingrese calzada mayor a 0.</p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group" ng-class="{'has-error': (form.antejardinIzquierdo.$touched && form.antejardinIzquierdo.$invalid) || (form.antejardinVariableIzquierdo.$touched && form.antejardinVariableIzquierdo.$invalid)}">
+                                                        <label class="control-label" for="antejardin">Antejardín
+                                                            <span ng-if="linea.izquierdo.antejardinEsVariable">Variable</span>
+                                                        </label>
+                                                        <div class="input-group">
+                                                            <div class="input-group-addon">
+                                                                <input readonly="readonly"  type="checkbox" disabled ng-model="linea.izquierdo.antejardinEsVariable" ng-change="linea.izquierdo.antejardinVariable=null" title="Establece el antejardín variable">
+                                                            </div>
+                                                            <div class="input-group">
+                                                                <input readonly="readonly" type="number" step="0.01" id="antejardinIzquierdo" name="antejardinIzquierdo" class="form-control input-xlarge" ng-model="linea.izquierdo.antejardin" min="0.01" ng-blur="linea.derecho.antejardin = linea.izquierdo.antejardin" placeholder="Antejardín" autocomplete="off" required/>
+                                                                <div class="input-group-addon btn-warning" title="Unidad de medida: metro">m</div>
+                                                            </div>
+                                                            <div class="input-group" ng-if="linea.izquierdo.antejardinEsVariable">
+                                                                <input readonly="readonly" type="number" step="0.01" id="antejardinVariableIzquierdo" name="antejardinVariableIzquierdo" min="0.01"
+                                                                class="form-control input-xlarge" ng-model="linea.izquierdo.antejardinVariable"                     placeholder="Antejardín" autocomplete="off" required/>
+                                                                <div class="input-group-addon btn-warning" title="Unidad de medida: metro">m</div>
+                                                            </div>
+                                                            <p class="help-block" ng-if="form.antejardinIzquierdo.$touched && form.antejardinIzquierdo.$invalid">Ingrese Antejardín mayor a 0</p>
+                                                            <p class="help-block" ng-if="form.antejardinVariableIzquierdo.$touched && form.antejardinVariableIzquierdo.$invalid">Ingrese Antejardín Variable mayor a 0</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group required" ng-class="{'has-error': (form.andenIzquierdo.$touched && form.andenIzquierdo.$invalid)||(form.andenVariableIzquierdo.$touched && form.andenVariableIzquierdo.$invalid)}">
+                                                        <label class="control-label" for="anden">Andén
+                                                            <span ng-if="linea.izquierdo.andenEsVariable">Variable</span>
+                                                        </label>
+                                                        <div class="input-group">
+                                                            <div class="input-group-addon">
+                                                                <input readonly="readonly"  type="checkbox" disabled ng-model="linea.izquierdo.andenEsVariable" ng-change="linea.izquierdo.andenVariable=null" title="Establece el andén variable">
+                                                            </div>
+                                                            <div class="input-group">
+                                                                <input readonly="readonly" type="number" id="andenIzquierdo" step="0.01" name="andenIzquierdo" class="form-control input-xlarge" ng-model="linea.izquierdo.anden" min="0.01"
+                                                                ng-blur="linea.derecho.anden = linea.izquierdo.anden" placeholder="Andén" autocomplete="off" required/>
+                                                                <div class="input-group-addon btn-warning" title="Unidad de medida: metro">m</div>
+                                                            </div>
+                                                            <div class="input-group" ng-if="linea.izquierdo.andenEsVariable" >
+                                                                <input readonly="readonly" type="number" step="0.01" min="0.01" id="andenVariableIzquierdo" name="andenVariableIzquierdo" class="form-control input-xlarge" ng-model="linea.izquierdo.andenVariable"  placeholder="Andén" autocomplete="off" required/>
+                                                                <div class="input-group-addon btn-warning" title="Unidad de medida: metro">m</div>
+                                                            </div>
+                                                            <p class="help-block" ng-if="form.andenIzquierdo.$touched && form.andenIzquierdo.$invalid">Ingrese Anden mayor a 0</p>
+                                                            <p class="help-block" ng-if="form.andenVariableIzquierdo.$touched && form.andenVariableIzquierdo.$invalid">Ingrese Anden Variable mayor a 0</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="form-group" ng-if="linea.tieneSeparador == true" ng-class="{'has-error': (form.separadorIzquierdo.$touched && form.separadorIzquierdo.$invalid) || (form.tipoSeparadorIzquierdo.$touched && form.tipoSeparadorIzquierdo.$invalid) }">
+                                                        <label class="control-label" for="antejardin">Separador</label>
+                                                        <div class="input-group">
+                                                            <div class="input-group-addon" style="width:38px;">
+                                                                <input readonly="readonly"  type="checkbox" disabled ng-model="linea.izquierdo.tieneSeparador" title="Establece si el lado tiene separador" ng-change="linea.izquierdo.dimensionSeparador=null;linea.izquierdo.tipoSeparadorId=null;  linea.izquierdo.calzada=null;">
+                                                            </div>
+                                                            <input readonly="readonly" type="number" ng-if="linea.izquierdo.tieneSeparador" step="0.01" min="0.01" id="separadorIzquierdo" name="separadorIzquierdo" class="form-control col-md-5"    ng-model="linea.izquierdo.dimensionSeparador" placeholder="Separador" autocomplete="off" required/>
+                                                            <div class="input-group-addon btn-warning" title="Unidad de medida: metro"  ng-if="linea.izquierdo.tieneSeparador">m</div>
+                                                            <div class="input-group-addon" ng-if="linea.izquierdo.tieneSeparador">&nbsp;Tipo</div>
+                                                            <select readonly="readonly" class="form-control col-md-6" ng-if="linea.izquierdo.tieneSeparador" id="tipoSeparadorIzquierdo" name="tipoSeparadorIzquierdo" ng-model="linea.izquierdo.tipoSeparadorId" ng-options="tiposeparador.idItem as tiposeparador.texto for tiposeparador in tiposeparadorArray" required>
+                                                                <option value="">Seleccione</option>
+                                                            </select>
+                                                        </div>
+                                                        <p class="help-block" ng-if="form.separadorIzquierdo.$touched && form.separadorIzquierdo.$invalid">Ingrese Separador mayor a 0.</p>
+                                                        <p class="help-block" ng-if="form.tipoSeparadorIzquierdo.$touched && form.tipoSeparadorIzquierdo.$invalid">Seleccione el tipo de separador.</p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6" ng-if="linea.izquierdo.tieneSeparador==true">
+                                                    <div class="form-group" ng-class="{'has-error': (form.calzadaSeparadorIzquierdo.$touched && form.calzadaSeparadorIzquierdo.$invalid) }">
+                                                        <label class="control-label" for="calzadaSeparadorIzquierdo">Calzada Separador</label>
+                                                        <div class="input-group">
+                                                            <input readonly="readonly" type="number" step="0.01" id="calzadaSeparadorIzquierdo" name="calzadaSeparadorIzquierdo" class="form-control col-md-5" ng-model="linea.izquierdo.calzadaSeparador"
+                                                                ng-blur="linea.derecho.calzadaSeparador = linea.izquierdo.calzadaSeparador" min="0.01"
+                                                                placeholder="Calzada" autocomplete="off" required/>
+                                                            <div class="input-group-addon btn-warning" title="Unidad de medida: metro">m</div>
+                                                        </div>
+                                                        <p class="help-block" ng-if="form.calzadaSeparadorIzquierdo.$touched && form.calzadaSeparadorIzquierdo.$invalid">Ingrese Calzada mayor a 0</p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6" ng-if="linea.tieneSeparador == true">
+                                                    <div class="form-group" ng-class="{'has-error': (form.calzadaIzquierdo.$touched && form.calzadaIzquierdo.$invalid) }">
+                                                        <label class="control-label" for="calzadaIzquierdo">Calzada Izquierda</label>
+                                                        <div class="input-group">
+                                                            <input readonly="readonly" type="number" step="0.01" min="0.01" id="calzadaIzquierdo" name="calzadaIzquierdo" class="form-control col-md-5" ng-model="linea.izquierdo.calzada" ng-blur="linea.derecho.calzada = linea.izquierdo.calzada" placeholder="Calzada" autocomplete="off" required/>
+                                                            <div class="input-group-addon btn-warning" title="Unidad de medida: metro">m</div>
+                                                        </div>
+                                                        <p class="help-block" ng-if="form.calzadaIzquierdo.$touched && form.calzadaIzquierdo.$invalid">Ingrese Calzada mayor a 0</p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label class="control-label" for="localización">Observaciones:</label>
+                                                        <textarea readonly="readonly" rows="4" class="form-control noresize" ng-model="linea.izquierdo.observacion"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="panel">
+                                        <div class="panel-heading">
+                                            <span class="panel-title text-success">Lado Derecho</span>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="row" ng-if="linea.lado == null || linea.lado == 'LadoDerecho'">
+                                                <div class="form-group required col-md-6" ng-class="{'has-error': form.manzanaPredialDerecho.$touched && form.manzanaPredialDerecho.$invalid}">
+                                                    <label class="control-label" for="manzanaPredial">Número Predial </label>
+                                                    <input readonly="readonly" type="text" id="manzanaPredialDerecho" name="manzanaPredialDerecho" class="form-control input-xlarge" ng-model="linea.derecho.manzanaPredial"
+                                                    autocomplete="off" ui-mask="A999*" ui-mask-placeholder ui-mask-placeholder-char="_" ui-mask-use-viewvalue="true" uppercase-only required/>
+                                                    <p class="help-block" ng-if="form.manzanaPredialDerecho.$touched && form.manzanaPredialDerecho.$invalid">Ingrese número predial.</p>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group required col-md-2" ng-class="{'has-error': form.calzadaDerecho.$touched && form.calzadaDerecho.$invalid}"
+                                                    ng-if="linea.linea.derecho.tieneSeparador === true">
+                                                    <label class="control-label" for="calzadaDerecho">Calzada *** </label>
+                                                    <div class="input-group">
+                                                        <input readonly="readonly" type="text" id="calzadaDerecho" name="calzadaDerecho" class="form-control input-xlarge" ng-model="linea.calzada" ng-blur="linea.calzadaDerecha = linea.calzada" autocomplete="off"  placeholder="Calzada" required/>
+                                                        <div class="input-group-addon btn-warning" title="Unidad de medida: metro">m</div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group"  ng-class="{'has-error': (form.antejardinDerecho.$touched && form.antejardinDerecho.$invalid) || (form.antejardinVariableDerecho.$touched && form.antejardinVariableDerecho.$invalid)}">
+                                                        <label class="control-label" for="antejardin">Antejardín
+                                                            <span ng-if="linea.derecho.antejardinEsVariable">Variable</span>
+                                                        </label>
+                                                        <div class="input-group">
+                                                            <div class="input-group-addon">
+                                                                <input readonly="readonly"  type="checkbox" disabled ng-model="linea.derecho.antejardinEsVariable" ng-change="linea.derecho.antejardinVariable=null" title="Establece el antejardín variable">
+                                                            </div>
+                                                            <div class="input-group">
+                                                                <input readonly="readonly" type="number" step="0.01" id="antejardinDerecho" name="antejardinDerecho" class="form-control input-xlarge" ng-model="linea.derecho.antejardin"  min="0.01" placeholder="Antejardín" autocomplete="off" required/>
+                                                                <div class="input-group-addon btn-warning" title="Unidad de medida: metro">m</div>
+                                                            </div>
+                                                            <div class="input-group" ng-if="linea.derecho.antejardinEsVariable">
+                                                                <input readonly="readonly" type="number" step="0.01" id="antejardinVariableDerecho" name="antejardinVariableDerecho" min="0.01" class="form-control input-xlarge" ng-model="linea.derecho.antejardinVariable" placeholder="Antejardín Variable" autocomplete="off" required/>
+                                                                <div class="input-group-addon btn-warning" title="Unidad de medida: metro">m</div>
+                                                            </div>
+                                                            <p class="help-block" ng-if="form.antejardinDerecho.$touched && form.antejardinDerecho.$invalid">Ingrese Antejardín mayor a 0</p>
+                                                            <p class="help-block" ng-if="form.antejardinVariableDerecho.$touched && form.antejardinVariableDerecho.$invalid">Ingrese Antejardín Variable mayor a 0</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group required" ng-class="{'has-error': (form.andenDerecho.$touched && form.andenDerecho.$invalid) || (form.andenVariableDerecho.$touched && form.andenVariableDerecho.$invalid)}">
+                                                        <label class="control-label" for="anden">Andén
+                                                            <span ng-if="linea.derecho.andenEsVariable">Variable</span>
+                                                        </label>
+                                                        <div class="input-group">
+                                                            <div class="input-group-addon">
+                                                                <input readonly="readonly"  type="checkbox" disabled ng-model="linea.derecho.andenEsVariable" ng-change="linea.derecho.andenVariable=null" title="Establece el andén variable">
+                                                            </div>
+                                                            <div class="input-group">
+                                                                <input readonly="readonly" type="number" step="0.01" id="andenDerecho" name="andenDerecho" class="form-control input-xlarge" ng-model="linea.derecho.anden" ng-blur="linea.andenDerecho = linea.andenDerecho" placeholder="Andén" min="0.01" autocomplete="off" required/>
+                                                                <div class="input-group-addon btn-warning" title="Unidad de medida: metro">m</div>
+                                                            </div>
+                                                            <div class="input-group" ng-if="linea.derecho.andenEsVariable">
+                                                                <input readonly="readonly" type="number" step="0.01" id="andenVariableDerecho" name="andenVariableDerecho" class="form-control input-xlarge" ng-model="linea.derecho.andenVariable" placeholder="Andén" min="0.01" autocomplete="off" required/>
+                                                                <div class="input-group-addon btn-warning" title="Unidad de medida: metro">m</div>
+                                                            </div>
+                                                            <p class="help-block" ng-if="form.andenDerecho.$touched && form.andenDerecho.$invalid">Ingrese Andén mayor a 0</p>
+                                                            <p class="help-block" ng-if="form.andenVariableDerecho.$touched && form.andenVariableDerecho.$invalid">Ingrese Andén Variable mayor a 0</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="form-group" ng-if="linea.tieneSeparador == true" ng-class="{'has-error': (form.separadorDerecho.$touched && form.separadorDerecho.$invalid) || (form.tipoSeparadorDerecho.$touched && form.tipoSeparadorDerecho.$invalid)}">
+                                                        <label class="control-label" for="antejardin">Separador</label>
+                                                        <div class="input-group">
+                                                            <div class="input-group-addon" style="width:38px;">
+                                                                <input readonly="readonly"  type="checkbox" disabled ng-model="linea.derecho.tieneSeparador" title="Establece si el lado tiene separador"
+                                                                ng-change="linea.derecho.dimensionSeparador=null;linea.derecho.tipoSeparadorId=null;linea.derecho.calzada=null;">
+                                                            </div>
+                                                            <input readonly="readonly" type="number" ng-if="linea.derecho.tieneSeparador" step="0.01" min="0.01" id="separadorDerecho" name="separadorDerecho" class="form-control col-md-5" ng-model="linea.derecho.dimensionSeparador"  placeholder="Separador" autocomplete="off" required/>
+                                                            <div class="input-group-addon" ng-if="linea.derecho.tieneSeparador">&nbsp;Tipo</div>
+                                                            <select readonly="readonly" class="form-control col-md-6" ng-if="linea.derecho.tieneSeparador" id="tipoSeparadorDerecho" name="tipoSeparadorDerecho" ng-model="linea.derecho.tipoSeparadorId" ng-options="tiposeparador.idItem as tiposeparador.texto for tiposeparador in tiposeparadorArray" required>
+                                                                <option value="">Seleccione</option>
+                                                            </select>
+                                                        </div>
+                                                        <p class="help-block" ng-if="form.separadorDerecho.$touched && form.separadorDerecho.$invalid">Ingrese Separador mayor a 0.</p>
+                                                        <p class="help-block" ng-if="form.tipoSeparadorDerecho.$touched && form.tipoSeparadorDerecho.$invalid">Seleccione el tipo de separador.</p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6" ng-if="linea.derecho.tieneSeparador==true">
+                                                    <div class="form-group" ng-class="{'has-error': (form.calzadaSeparadorDerecho.$touched && form.calzadaSeparadorDerecho.$invalid) }">
+                                                        <label class="control-label" for="antejardin">Calzada Separador</label>
+                                                        <div class="input-group">
+                                                            <input readonly="readonly" type="number" step="0.01" min="0.01" id="calzadaSeparadorDerecho" name="calzadaSeparadorDerecho" class="form-control col-md-5" ng-model="linea.derecho.calzadaSeparador"
+                                                                placeholder="Calzada" autocomplete="off" required/>
+                                                        </div>
+                                                        <p class="help-block" ng-if="form.calzadaSeparadorDerecho.$touched && form.calzadaSeparadorDerecho.$invalid">Ingrese Calzada mayor a 0</p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6" ng-if="linea.tieneSeparador == true">
+                                                    <div class="form-group"  ng-class="{'has-error': (form.calzadaDerecho.$touched && form.calzadaDerecho.$invalid) }">
+                                                        <label class="control-label" for="antejardin">Calzada Derecha</label>
+                                                        <div class="input-group">
+                                                            <input readonly="readonly" type="number" step="0.01" min="0.01" id="calzadaDerecho" name="calzadaDerecho" class="form-control col-md-5" ng-model="linea.derecho.calzada" placeholder="Calzada" autocomplete="off" required/>
+                                                            <p class="help-block" ng-if="form.calzadaDerecho.$touched && form.calzadaDerecho.$invalid">Ingrese Calzada mayor a 0</p>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label class="control-label" for="localización">Observaciones:</label>
+                                                        <textarea readonly="readonly" rows="4" class="form-control noresize" ng-model="linea.derecho.observacion"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </uib-accordion>
+                    </div>
+                </div>
+        </div>
+        </form>
+    </div>
+</div>

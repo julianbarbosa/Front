@@ -1,0 +1,67 @@
+<style>
+        .form-group.required .control-label:after {
+            content:"*";
+            color:red;
+        }
+</style>
+<div class="col-sm-12 col-md-10 col-lg-8" ng-show="validator.alert.content">
+    <div class="alert alert-{{validator.alert.type}} alert-dismissable">
+        <i class="fa fa-danger"></i>
+        <button	 type="button" class="close" aria-hidden="true" ng-click="hideAlert()">×</button>
+        <b>{{validator.alert.title}}</b> <span ng-bind-html="validator.alert.content"></span>
+    </div>
+</div>
+<div class="panel col-sm-12 col-md-10 col-lg-10">
+    <form name="form">
+        <div class="panel-body">
+            <div class="page-header">
+                <h1 class="col-xs-12 col-sm-10 text-center text-left-sm"><i class="padding-sm-hr fa fa-list-alt"></i>&nbsp;&nbsp;Modificar Comparendo</h1>
+            </div>
+            <div class="row" ng-show="!comparendo">            
+                <div class="form-group col-md-5" ng-show="!busqueda.idInterno">
+                    <label class="control-label" for="numerocomparendo">
+                        Número Comparendo
+                    </label>
+                    <input type="text" id="numerocomparendo" class="form-control input-xlarge"
+                        ng-model="busqueda.comparendo" placeholder="Ingrese número de comparendo" autocomplete="off" />
+                </div>
+                <div class="col-md-2 ">
+                    <br>
+                    <input type="button" class="btn btn-success" value="Buscar" ng-click="actualizarDatos()">
+                </div>
+            </div>
+            <div ng-show="comparendo">
+                <div ng-include="'../bundles/ControlPolicivoBundle/comun/comparendo.tpl.html'"
+                    ng-init="idcomparendo=comparendo"></div>
+                
+                <div class="panel panel-success">
+                    <div class="panel-heading ">
+                        <span class="panel-title">Datos a modificar</span>
+                        <div class="panel-heading-controls">
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">                            
+                            <div class="form-group required col-md-6" >
+                                <label class="control-label" >Días pronto pago</label>
+                                <input type="number" name="diasProntoPago" ng-model="data.diasprontopago" class="form-control" required>
+                            </div>
+                        </div>                        
+                    </form>        
+                    </div>
+                
+                </div>
+
+                
+                <div class="row text-right-sm">
+                           <input type="button" ng-disabled="form.$invalid" class="btn btn-primary"
+                                ng-click="modificarComparendo()" value="Modificar"/>                            
+                            <input type="button" class="btn btn-primary" ng-click="limpiar()" value="Limpiar"/>
+                                             
+                    </div>
+                   
+            </div>
+    </form>
+</div>
+</div>
+<div class="overlap_espera_2"><i class="fa fa-gear fa-spin fa-2x"></i></div>

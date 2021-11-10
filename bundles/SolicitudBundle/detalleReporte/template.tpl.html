@@ -1,0 +1,41 @@
+<style>
+    .page-body {
+        height: 100vh;
+    }
+</style>
+<div class="panel">    
+    <div class="panel-body col-md-12 col-lg-10">
+        <div class="page-header">
+            <h1 class="col-xs-12 col-sm-10 text-center text-left-sm">Generación de  
+                <strong class="subtitulo">{{reporte.estandar}}</strong>
+                <br>
+                <small>{{reporte.nombre}}</small>
+            </h1>
+        </div>
+        <div class="page-body">
+            <form>
+                <div class="row" ng-repeat="item in reporte.variables">
+                    <div class="form-group col-md-6 required" ng-show="item.nombre=='fechaInicial'">
+                        <label class="control-label">Fecha Inicial</label>
+                        <input type="date" ng-model="data.fechaInicial" class="form-control">
+                    </div>
+                    <div class="form-group col-md-6 required" ng-show="item.nombre=='fechaFinal'">
+                        <label class="control-label">Fecha Final</label>
+                        <input type="date" data-date-format="YYYY-MM-DD" ng-model="data.fechaFinal" class="form-control">
+                    </div>
+                    <div class="form-group col-md-6 required" ng-show="item.nombre=='idComportamientoContrario'">
+                        <label class="control-label">Comportamiento Contrario</label>
+                        <input type="text" ng-model="data.idComportamientoContrario" uib-typeahead="comportamientoContrario as comportamientoContrario.descripcion for comportamientoContrario in arrayComportamientoContrario | filter:$viewValue | limitTo:8" class="form-control">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-10">
+                        <button class="btn btn-primary" ng-click="generarReporte(data)">Generar Reporte</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+        
+    </div>
+</div>

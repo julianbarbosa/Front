@@ -1,0 +1,91 @@
+<script>
+    function cerrarModal() {
+        $('#modalIngresoDireccion').modal('toggle');
+    }
+</script>
+<style>
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+</style>
+<div>
+    <div id="modalIngresoDireccion" class="modal fade modal-change" role="dialog" aria-hidden="true" ></div>    
+    <div class="col-lg-8 col-sm-10 col-md-12">
+        <div ng-show="validator.alert.content">
+            <div class="alert {{validator.alert.type}} alert-dismissable">
+                <i class="fa fa-danger"></i>
+                <button type="button" class="close" aria-hidden="true" ng-click="hideAlert()">×</button>
+                <b>{{validator.alert.title}}</b> <span ng-bind-html="validator.alert.content"></span>
+            </div>
+        </div>
+        <div ng-if="item.comentarios2">
+            <div class="alert alert-danger alert-dismissable">
+                <i class="fa fa-danger"></i>
+                <b>Linea devuelta:</b> <span ng-bind-html="item.comentarios2"></span>
+            </div>
+        </div>
+        <div class="panel panel-success">
+            <div class="panel-heading ">
+                <span class="panel-title">Responder Solicitud Linea de Demarcación Por Oficio No. <strong>{{item.idSolicitud}}</strong></span>
+                <div class="panel-heading-controls">
+                </div>
+            </div>
+            <div class="panel-body">
+                <form name="userForm">                    
+                    <div class="row">
+                        <div class="form-group col-md-6" ng-class="{'has-error': validator.idbarrio}">
+                            <label class="control-label" for="barrio">Barrio: <i ng-show="loadingBarrio" class="fa fa-spinner fa-spin"></i></label>
+                            {{item.barrio.nombre}}
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="control-label" for="matricula">Dirección: </label>
+                            {{item.direccion}}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label class="control-label" for="numero_predial">Número Predial: </label>
+                            {{item.numero_predial}}
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="control-label" for="matricula">Código Único: </label>
+                            {{item.codigo_unico}}
+                        </div>
+                    </div>                    
+                    <div class="row" id="zona">
+                        <div class="form-group has-feedback simple col-md-12" ng-class="{'has-error': validator.observacion }">
+                            <label class="control-label" for="localización">Texto Oficio:</label>
+                            <br>
+                            <span ng-bind-html="item.textoRespuesta"></span>                            
+                        </div>
+                    </div>
+                    <div class="row text-danger" ng-if="item.comentarios_anteriores">
+                        <div class="form-group has-feedback simple col-md-12" ng-class="{'has-error': validator.observacion }">
+                            <label class="control-label" for="localización">Comentarios Previos de Devolución:</label>
+                            {{item.comentarios_anteriores}}
+                        </div>
+                    </div>
+                    <div class="row" id="zona">
+                        <div class="form-group has-feedback simple col-md-12" ng-class="{'has-error': validator.observacion }">
+                            <label class="control-label" for="localización">Comentarios de Devolución:</label>
+                            <textarea rows="4" class="form-control" ng-model="item.comentarios" ng-disabled="validator.alert.content==undefined?false:true"></textarea>                
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 text-left-sm">
+                            <a href="{{root}}linea/oficio/previsualizar/{{item.idSolicitud}}"  target="_blank"><i class="fa fa-file-text" aria-hidden="true"></i> Ver Oficio</a>&nbsp;&nbsp;&nbsp;                            
+                        </div>
+                        <div class="col-md-6 text-right-sm">
+                           <input type="submit" ng-if="item.comentarios==''" class="btn btn-primary" ng-click="firmarOficio(1)" value="Aprobar para Firmar" ng-disabled="validator.alert.content==undefined?false:true"/>
+                           <input type="submit" ng-if="item.comentarios!==''" class="btn btn-danger" ng-click="devolver()" value="Devolver" ng-disabled="validator.alert.content==undefined?false:true"/>
+                            ó
+                            <a ui-sref="listar-peticion">Cancelar</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

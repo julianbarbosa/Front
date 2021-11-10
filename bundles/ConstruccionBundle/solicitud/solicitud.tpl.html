@@ -1,0 +1,23 @@
+<div ng-controller="SolicitudCtrl" class="col-md-6">
+    <div class="panel panel-success">
+        <div class="panel-heading ">
+            <span class="panel-title">Solicitud</span>
+            <div class="panel-heading-controls">
+            </div>
+        </div>        
+        <div class="panel-body">
+            <div class="row">
+                <strong>Id Solicitud:</strong> {{solicitud.idsolicitud}}<br>
+                <strong>Nombre:</strong> {{solicitud.solicitante.firstName}} {{solicitud.solicitante.lastName}} <br/>
+                <strong>Identificación:</strong> {{solicitud.solicitante.numidentificacion}}<br/>
+                <strong>Dirección:</strong> {{solicitud.solicitante.direccion}}<br/>
+                <strong>Telefono:</strong> {{solicitud.solicitante.telefono}}<br/>
+                <strong>Correo:</strong> {{solicitud.solicitante.emailAddress}}<br/>
+                <strong>Radicado:</strong> <a title="Haga clic aquí para ver los documentos anexos a este número de Orfeo" target="blank" href="http://www.cali.gov.co/aplicaciones/orweb/orweb/principal.php?id={{solicitud.radicado}}">
+                    {{solicitud.radicado}}
+                </a><br>
+                <strong>Comentario:</strong> {{solicitud.comentario}}
+            </div>                                          
+        </div>
+    </div>
+</div>

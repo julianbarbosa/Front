@@ -1,0 +1,171 @@
+<div class="panel">
+    <div class="panel-body">
+        <div class="page-header">
+            <h1 class="col-xs-12 col-sm-10 text-center text-left-sm"><i class="padding-sm-hr fa fa-list-alt"></i>&nbsp;&nbsp;Búsqueda de Licencia</h1>
+        </div> 
+        <form name="userForm">             
+            <div class="row">
+                <div class="form-group col-md-3">
+                    <label class="control-label" for="numeroidentificacion">
+                        Identificación Propietario
+                    </label>
+                    <input type="text"
+                           id="numeroidentificacion"
+                           class="form-control input-xlarge"                            
+                           ng-model="busqueda.identificacionpropietario"
+                           placeholder="Ingrese la identificación"
+                           required/>                    
+                </div>
+                <div class="form-group col-md-3">
+                    <label class="control-label" for="numerocomparendo">
+                        Nombre Propietario                        
+                    </label>
+                    <input type="text"
+                           id="numerocomparendo"
+                           class="form-control input-xlarge"                            
+                           ng-model="busqueda.nombrepropietario"
+                           placeholder="Ingrese nombre propietario"
+                           required/>                    
+                </div>
+                <div class="form-group col-md-3">
+                    <label class="control-label" for="numerocomparendo">
+                        Curaduría
+                    </label>
+                    <select ng-model="busqueda.idusuario" ng-options="curaduria.id as curaduria.curaduria for curaduria in arrayCuradurias" class="form-control">
+                        <option value="">-- Seleccione --</option>
+                    </select>
+                </div>                
+            </div>
+            <div class="row">
+                <div class="form-group col-md-3">
+                    <label class="control-label" for="direccion">
+                        Dirección
+                    </label>
+                    <input type="text"
+                           id="direccion"
+                           class="form-control input-xlarge"                            
+                           ng-model="busqueda.direccion"
+                           placeholder="Ingrese la dirección"
+                           required/>                    
+                </div>
+                <div class="form-group col-md-3">
+                    <label class="control-label" for="npn">
+                        Numero Catastral                       
+                    </label>
+                    <input type="text"
+                           id="numerocomparendo"
+                           class="form-control input-xlarge"                            
+                           ng-model="busqueda.catastral"
+                           placeholder="Ingrese el npn"
+                           required/>                    
+                </div> 
+                <div class="form-group col-md-3">
+                    <label class="control-label" for="numerocomparendo">
+                        Matricula Inmobiliaria
+                    </label>
+                    <input type="text"
+                           id="numerocomparendo"
+                           class="form-control input-xlarge"                            
+                           ng-model="busqueda.matricula"
+                           placeholder="Ingrese la matricula"
+                           required/>                    
+                </div> 
+                <div class="col-md-2 ">   
+                    <br>
+                    <input type="button" class="btn btn-success" value="Buscar" ng-click="actualizarDatos()">
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="panel-body col-md-12" ng-if="data">       
+        <div class="table-primary">            
+            <table cellpadding="0" cellspacing="0" class="table-hover table table-bordered" id="listaSolicitudes" width="100%" role="grid" aria-describedby="solicitud_listar_tareas">
+                <thead>                  
+                    <tr role="row">
+                        <th ng-repeat="header in headers" class="ui-state-default {{header.sorting}} {{header.header_align}}" style="width: {{header.width}}" ng-click="ordenarPor(headers[$index].name)">
+                            {{header.title}}
+                        </th>                        
+                    </tr>
+                </thead>
+                <tbody ng-repeat="row in data">                   
+                    <tr  class="odd" style="font-weight: bold;"  ng-class="{'danger': row[rowWarning] === false}">
+                        <td ng-repeat="header in headers" class="{{header.body_align}}">
+
+                            <!--Acciones-->
+                            <span ng-if="header.type === 'action' && header.values" > 
+                                <span ng-repeat="action in header.values">
+                                    <i class="ver-detalle fa {{action.icon}} pull-left" ng-click="caller(action.action, row['id'])" title="{{action.title}}"></i>
+                                </span>
+                            </span>
+
+                            <!--Opciones dependientes de valores-->
+                            <span ng-if="header.options" >
+                                <span ng-repeat="option in header.options" ng-bind-html="option['link']" ng-if="option['value'] == row[option['nameValidate']]"></span>
+                            </span>
+
+                            <!-- Valor de Text-->
+                            <span ng-if="header.type === 'text' && header.subname==null">
+                                {{row[header.name]}} {{row[header.name2]}}
+                            </span>
+
+                            <!-- Valor de Text-->
+                            <span ng-if="header.type === 'text' && header.subname!==null">
+                                {{row[header.name][header.subname]}} 
+                            </span>
+
+                            <!-- Valor de Link-->
+                            <span ng-if="header.type === 'link'">
+                                <a href="{{header.link}}{{row[header.name]}}" target="_blank">{{row[header.name]}}</a>                                
+                            </span>
+
+                            <!-- Valor de Objeto Fecha-->
+                            <span ng-if="header.type === 'date'">
+                                {{row[header.name].timestamp * 1000| date:'yyyy-MM-dd HH:mm:ss'}}
+                            </span>
+
+                            <!-- Valor de Objeto Button-->
+                            <span ng-if="header.type === 'button'">
+                                <button class="btn {{header['style']}}" ng-bind-html="header['title']" ng-click="caller(header['action'], row)" ></button>                                  
+                            </span>
+                        </td>
+                    </tr>   
+
+                    <tr class="odd" ng-class="{'danger': row[rowWarning] === false}" ng-if="rowActive == row['id']">
+
+                            <td colspan="6"> 							
+                                    <dl class="dl-horizontal"> 
+                                        <span class="col-md-6">
+                                            <span>
+                                                <dt>Origen</dt>
+                                                <dd>{{row.usuario.descripcion}}</dd>
+                                            </span>
+                                        </span>
+                                        <span ng-repeat="(key, value) in row" class="col-md-6">
+                                            <span ng-if="esFecha(value)">
+                                                <dt>{{key}}</dt>
+                                                <dd class="ng-binding">{{value |  date:'yyyy'}}</dd>										
+                                            </span>
+                                            <span ng-if="esObjeto(value) && !esFecha(value)">
+                                                <dt>{{key}}</dt>
+                                                <dd class="ng-binding">{{value.timestamp * 1000| date:'yyyy-MM-dd HH:mm:ss'}}</dd>										
+                                            </span>
+                                            <span ng-if="!esObjeto(value) && (value*1)!==0 && value!=='null' && value!==null">
+                                                <dt>{{key}}</dt>
+                                                <dd>{{value}}</dd>
+                                            </span>
+                                        </span>
+                                    </span>
+                                </td>                        
+                    </tr>
+                </tbody>
+                <tfoot>
+                <td colspan="10" class="currency">
+                <uib-pagination ng-model="currentPage" total-items="totalItems" max-size="5" boundary-links="true" ng-click="actualizarDatos(currentPage)" first-text="Primera" last-text="Última" next-text="Siguiente" previous-text="Anterior" boundary-link-numbers="true" rotate="true"></uib-pagination>
+                </td>
+                </tfoot>
+            </table>
+
+        </div>
+    </div>
+</div>
+<div class="overlap_espera_2"><i class="fa fa-gear fa-spin fa-2x"></i></div>

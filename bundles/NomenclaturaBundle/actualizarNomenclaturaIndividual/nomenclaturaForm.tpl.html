@@ -1,0 +1,124 @@
+<div class="modal-header">
+    <button type="button" class="close" ng-click="cancelar()">&times;</button>
+    <h3 class="modal-title">Proceso de edición de nomenclaturas</h3>
+</div>
+<div class="modal-body">
+    <form class="panel-body" name="formDatosNomenclatura" ng-hide="pluginNomenclaturaAbierto" >
+        <div class="col-sm-12" ng-show="alert.msg" >
+            <div uib-alert class="alert-{{alert.type}}" >{{alert.msg}}</div>
+        </div>
+        <div class="col-sm-12" >
+            <div class="form-group">
+                <label class="control-label" >Dirección</label>
+                <div class="input-group">
+                  <input class="form-control" type="text" ng-model="entidad.direccion" ng-click="lanzarDialogoDireccion()" readonly="readonly" style="cursor: pointer;">
+                  <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" title="Copiar" ng-click="copiar('direccion')" ><i class="fa fa-copy"></i></button>
+                  </span>
+                </div><!-- /input-group -->
+            </div>
+            <div class="form-group">
+                <label class="control-label" >Información Adicional</label>
+                <div class="input-group">
+                  <input class="form-control" type="text" ng-model="entidad.informacionadicional" ng-click="lanzarDialogoDireccion()" readonly="readonly" style="cursor: pointer;">
+                  <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" title="Copiar" ng-click="copiar('informacionadicional')" ><i class="fa fa-copy"></i></button>
+                  </span>
+                </div><!-- /input-group -->
+            </div>
+            <div class="form-group">
+                <label class="control-label" >Dirección Visual</label>
+                <div class="input-group">
+                  <input class="form-control" type="text" ng-model="entidad.direccionvisual" ng-click="lanzarDialogoDireccion()" readonly="readonly" style="cursor: pointer;">
+                  <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" title="Copiar" ng-click="copiar('direccionvisual')" ><i class="fa fa-copy"></i></button>
+                  </span>
+                </div><!-- /input-group -->
+            </div>
+
+            <div class="form-group">
+                <label class="control-label" >NPN:</label>
+                <div class="input-group">
+                  <input class="form-control" type="text" ng-model="entidad.npn" ng-click="lanzarDialogoDireccion()" readonly="readonly" style="cursor: pointer;" >
+                  <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" title="Copiar" ng-click="copiar('npn')" ><i class="fa fa-copy"></i></button>
+                  </span>
+                </div><!-- /input-group -->
+            </div>
+            <div class="form-group">
+                <label class="control-label" >Número Predial Alfanumérico:</label>
+                <div class="input-group">
+                  <input class="form-control" type="text" ng-model="entidad.numero" disabled >
+                  <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" title="Copiar" ng-click="copiar('numero')" ><i class="fa fa-copy"></i></button>
+                  </span>
+                </div><!-- /input-group -->
+            </div>
+
+            <div class="form-group">
+                <label class="control-label" >Dirección Anterior</label>
+                <div class="input-group">
+                  <input class="form-control" type="text" ng-model="entidad.direccionAnterior" ng-disabled="true">
+                  <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" title="Copiar" ng-click="copiar('direccionAnterior')" ><i class="fa fa-copy"></i></button>
+                  </span>
+                </div><!-- /input-group -->
+            </div>
+
+            <div class="form-group">
+                 <label class="control-label" >Estado:</label>
+                 <select class="form-control" ng-model="entidad.codigo_estado" ng-disabled="true">
+                    <option value="{{ key }}" ng-selected="entidad.codigo_estado == key" ng-repeat="(key, estPos) in estadosPosibles">
+                        {{ estPos }}
+                    </option>
+                 </select>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label" >Observación:</label>
+                <textarea class="form-control" ng-model="entidad.observacion"></textarea>
+            </div>
+        </div>
+        <div class="col-sm-9" ng-if="entidad.idnomenclatura" >
+            <button ng-show="verHistorico && !loadingHistorico && !historico " class="btn-link" ng-click="consultarHistorico()" >
+                <i class="fa fa-level-down" aria-hidden="true"></i> Cargar Histórico
+            </button>
+            <i ng-show="verHistorico && loadingHistorico" class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+            <span ng-if="historico && historico.length>0">
+                <table class="table-hover table table-bordered table-responsive">
+                    <thead>
+                        <tr>
+                            <th>Estado Anterior</th>
+                            <th>Estado Actual</th>
+                            <th>Comentario</th>
+                            <th>Usuario</th>
+                            <th>Fecha</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat='historia in historico'>
+                            <td>{{historia.estadoAnterior}}</td>
+                            <td>{{historia.estadoActual}}</td>
+                            <td>{{historia.comentario}}</td>
+                            <td>{{historia.nombreUsuario}} {{historia.apellidoUsuario}}</td>
+                            <td>{{historia.fechaCreacion}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </span>
+            <span ng-if="historico && historico.length==0">
+                No se tiene histórico de esta nomenclatura
+            </span>
+        </div>
+
+        <div class="col-sm-12">
+                <button class="btn-link" ng-click="cancelar()" >Cancelar</button>
+                ó 
+                <button ng-hide="entidad.idnomenclatura" class="btn btn-primary" ng-click="crearEntidad()" >Crear nomenclatura</button>
+                <button ng-show="entidad.idnomenclatura" class="btn btn-primary" ng-click="actualizarEntidad()" >Guardar cambios</button>
+        </div>
+        <div class="col-sm-12">
+            * En el momento en que se guarde algún cambio la nomenclatura pasará automáticamente a estado '<strong>Certificada</strong>'.
+        </div>
+    </form>
+</div>

@@ -1,0 +1,1085 @@
+<!-- Styles -->
+<style type="text/css">
+	#wizard-credit-card .tooltip {
+	left: auto !important;
+	right: 36px !important;
+	width: 200px !important;
+}
+.error{
+
+	color: red;
+}
+
+.amplificacion{
+   
+    width: 206px;
+}
+.titulo_costos{
+	text-align: center;
+
+}
+
+[class*="malo"] {
+    width: 26%;
+    padding-top: 9px;
+	color:#e86464;
+ 
+}
+
+[class*="bueno"] {
+    width: 26%;
+    padding-top: 9px;
+	color:#5bb55b;
+ 
+}
+@media only screen and (min-width: 768px) {
+.inputs_lables{
+	 width: 70%;   
+}
+.malo{
+
+	width: 70%;
+    padding-top: 9px;
+     color:#e86464;
+}
+
+.bueno{
+
+	width: 70%;
+    padding-top: 9px;
+     color:#5bb55b;
+}
+
+.amplificacion{
+ 
+    width: 349px;
+}
+}
+
+/*
+Coloca el puntero en los números de los wizard
+*/
+.wizard-steps.wizard-go-to-number li span{
+	cursor: pointer;
+}
+
+</style>
+<!-- / Styles -->
+
+<!--Cabecera-->
+<div class="page-header">
+			<h1>
+				<i class="fa fa-th-large page-header-icon"></i>&nbsp;&nbsp;Bienvenido 
+			</h1>
+</div> 
+
+    
+<!-- Interfaz para digitar el evento-->
+<div class="col-md-7" ng-show="result['existe'] == true && result['correo_igual']==true" ng-hide="result['existe'] == false || result['correo_igual']==false ">
+    <div class="panel panel-success">
+        <div class="panel-heading">
+            <span class="panel-title"> Código del evento </span>
+            <div class="panel-heading-controls">
+                <div class="panel-heading-icon">
+                	<i class="fa fa-inbox"></i>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">
+            <form name="form_codevento" id="id_form_codevento">
+                <div class="panel-body text-justify">
+                    Señor ciudadano, para crear una solicitud en la ventanilla única de artes escénicas de Cali, por favor coloque el código del evento en la siguiente casilla.    
+                </div>
+                <div class="form-group" ng-class="{ 'has-error' : !form_codevento.codevento.$valid && (!form_codevento.codevento.$pristine ||  form_codevento.codevento.$touched)}">
+ 					<label class="control-label" for="cod_evento">Código del evento</label>
+ 					<input placeholder="Ejemplo:AC123FF" class="form-control" type="text" name="codevento" id="cod_evento" ng-model="codigoEvento" required> 	
+ 					<p ng-show="form_codevento.codevento.$error.required" class="help-block" style="color: #b94a48;">* Este campo es obligatorio.</p>
+
+ 				</div>
+           		<input type="button" class="btn btn-primary" value="Consultar Evento" ng-click="validarEvento(codigoEvento)" ng-disabled="!form_codevento.$valid || !mostrarDatosEvento">
+            </form>                        
+        </div>
+    </div>
+
+    <hr style="margin-top: 60px;">
+</div>
+
+<div class="col-md-5 col-xs-12" ng-show="mostrarDatosEvento && misVariables.result_evento['idsolicitud']">
+	<div class="stat-panel">
+		<div class="stat-row">
+			<!-- Info background, without padding, horizontally centered text, super large text -->
+			<div class="stat-cell bg-info no-padding text-center text-slg" ng-if="!solicitud_result.radicado">
+				<i class="fa fa-clock-o"></i>
+			</div>
+		</div> <!-- /.stat-row -->
+		<div class="stat-row" ng-if="!solicitud_result.radicado">
+			<!-- Bordered, without top border, horizontally centered text, large text -->
+			<div class="stat-cell bordered no-border-t text-center text-lg" ng-if="!cargandoDiasEvento">
+				<div ng-show="diasradicado>0" class="col-md-12">
+					<p style="font-size: 16px;">D&iacute;as restantes para subir documentos</p>
+					<p style="font-size: 70px;">{{diasradicado}}</p>
+				</div>
+				<p style="font-size: 16px;" ng-show="diasradicado<=0">
+					Lo sentimos, la fecha del evento que quiere radicar ya no se encuentra dentro de los 15 días hábiles, para continuar debe cambiar la fecha en el <a href="http://pulepapp.mincultura.gov.co/cuenta/iniciarsesion/">PULEP</a>
+				</p>
+			</div>
+			<div class="stat-cell bordered no-border-t text-center text-lg" ng-if="cargandoDiasEvento">
+				<p style="font-size: 16px;">Cargando...</p>
+			</div>
+		</div> <!-- /.stat-row -->
+	</div> <!-- /.stat-panel -->
+</div>
+
+						
+<!--Widgets del productor-->
+<div class="col-md-6 col-xs-12" ng-hide="mostrarDatosEvento">	
+	<div class="panel panel-info panel-dark widget-profile" >
+		<div class="panel-heading">
+			<i class="fa fa-spinner fa-spin"></i> Cargando datos del evento... 
+		</div> <!-- / .panel-heading -->
+	</div>	
+</div>
+<div ng-show="mostrarDatosEvento">
+<!--Widgets del productor-->
+
+<div class="col-md-6 col-xs-12" ng-show="misVariables.result_evento['idsolicitud']" style="margin-bottom: 50px;">	
+	<div class="panel panel-info panel-dark widget-profile" >
+		<div class="panel-heading">
+			<div class="widget-profile-bg-icon"><i class="fa fa-user"></i></div>
+			<img src="assets/demo/avatars/3.jpg" alt="" class="widget-profile-avatar">
+			<div class="widget-profile-header">
+				<span>{{result['datos_productor'].RazonSocial}}</span><br>
+				<a href="https://twitter.com/test">{{result['datos_productor'].PaginaWeb}}</a>
+			</div>
+		</div> <!-- / .panel-heading -->
+		<div class="widget-profile-counters">
+			<div class="col-xs-4">
+				<span>Telefono</span>
+				<br>{{result['datos_productor'].Telefono}}
+			</div>
+			<div class="col-xs-4">
+				<span># Pulep</span>
+				<br>{{result['datos_productor'].CodigoProductor}}
+			</div>
+			<div class="col-xs-4">
+				<span>ID</span>
+				<br>{{result['datos_productor'].NumeroIdentificacion}}
+			</div>
+		</div>
+		<hr style="margin-top: 60px;">
+		<div class="widget-profile-counters">
+			<div class="col-xs-4">
+				<span>Correo</span>
+				<br>{{result['datos_productor'].Correo}}
+			</div>
+			<div class="col-xs-4">
+				<span>Manager</span>
+				<br>{{result['datos_productor'].RepresentanteLegal}}
+			</div>
+			<div class="col-xs-4">
+				<span>ID Manager</span>
+				<br>{{result['datos_productor'].NumeroIdentificacionRepresentanteLegal}}
+			</div>
+		</div>
+		<div class="widget-profile-text">
+			Datos del productor
+		</div>
+	</div>
+</div>
+
+<!--Widgets del evento -->
+<div class="col-md-6 col-xs-12" ng-show="misVariables.result_evento['idsolicitud']" style="margin-bottom: 50px;">	
+	<div class="panel panel-info panel-dark widget-profile" style="border-color: #673AB7 !important;" >
+		<div class="panel-heading" style="background-color: #673AB7;border-color: #673AB7">
+			<div class="widget-profile-bg-icon"><i class="fa fa-calendar"></i></div>
+			<img src="assets/demo/avatars/3.jpg" alt="" class="widget-profile-avatar">
+			<div class="widget-profile-header">
+				<span>{{misVariables.result_evento.nombreEvento}}</span><br>
+				<a href="https://twitter.com/test">{{misVariables.result_evento.direccionWeb}}</a>
+			</div>
+		</div> <!-- / .panel-heading -->
+		<div class="widget-profile-counters">
+			<div class="col-xs-4">
+				<span>Código</span>
+				<br>{{misVariables.result_evento.codigoEvento}}
+			</div>
+			<div class="col-xs-4">
+				<span>Fecha inicio</span>
+				<br>{{ misVariables.result_evento.fechaInicio.timestamp * 1000 | date:'yyyy-MM-dd' }}
+			</div>
+			<div class="col-xs-4">
+				<span>Fecha Fin</span>
+				<br>{{ misVariables.result_evento.fechaFin.timestamp * 1000 | date:'yyyy-MM-dd' }}
+			</div>
+		</div>
+		<hr style="margin-top: 60px;">
+		<div class="widget-profile-counters">
+			<div class="col-xs-4">
+				<span>Municipio</span>
+				<br>{{misVariables.result_evento.municipio}}
+			</div>
+			<div class="col-xs-4">
+				<span>Espectáculo</span>
+				<br>{{misVariables.result_evento.tipoEspectaculo}}
+			</div>
+			<div class="col-xs-4">
+				<span>Teléfono</span>
+				<br>{{misVariables.result_evento.lineaServicioCliente}}
+			</div>
+		</div>
+		<div class="widget-profile-text">
+			Datos del evento
+		</div>
+	</div>
+</div>
+
+<!--Wizzard -->
+<div class="panel col-md-12 col-xs-12" id="ventana-wizard" ng-show="misVariables.result_evento['idsolicitud']">
+	<div class="panel-heading">
+		<span class="panel-title">Formulario</span>
+	</div>
+	<div class="panel-body">
+		<div class="wizard ui-wizard-example">		
+			<div class="wizard-wrapper">
+				<ul class="wizard-steps wizard-go-to-number">
+					<li data-target="#wizard-example-step1" >
+						<span class="wizard-step-number">1</span>
+						<span class="wizard-step-caption">Datos del evento							
+						</span>
+					</li>
+					<li data-target="#wizard-example-step2"> <!-- ! Remove space between elements by dropping close angle -->
+						<span class="wizard-step-number">2</span>
+						<span class="wizard-step-caption">Plan de emergencia y contingencia							
+						</span>
+					</li>
+					<li data-target="#wizard-example-step3"> <!-- ! Remove space between elements by dropping close angle -->
+						<span class="wizard-step-number">3</span>
+						<span class="wizard-step-caption">Condiciones Ambientales y Sanitarias							
+						</span>
+					</li>
+					<li data-target="#wizard-example-step4"> <!-- ! Remove space between elements by dropping close angle -->
+						<span class="wizard-step-number">4</span>
+						<span class="wizard-step-caption">Concepto técnico del comportamiento estructural y funcional del escenario							
+						</span>
+					</li>
+					<li data-target="#wizard-example-step5"> <!-- ! Remove space between elements by dropping close angle -->
+						<span class="wizard-step-number">5</span>
+						<span class="wizard-step-caption">Cumplimiento de las normas de intensidad auditiva							
+						</span>
+					</li>
+					<li data-target="#wizard-example-step6"> <!-- ! Remove space between elements by dropping close angle -->
+						<span class="wizard-step-number">6</span>
+						<span class="wizard-step-caption">Otros Documentos							
+						</span>
+					</li>
+					<li data-target="#wizard-example-step7"> <!-- ! Remove space between elements by dropping close angle -->
+						<span class="wizard-step-number">7</span>
+						<span class="wizard-step-caption">Compromiso del productor							
+						</span>
+					</li>					
+				</ul> <!-- Pasos del Wizard -->
+			</div> <!-- wizard-wrapper -->
+
+
+
+			<div class="wizard-content panel">
+
+				<!-- Primer paso =====================================================================-->
+
+				<div class="wizard-pane" id="wizard-example-step1">
+					<form name="form_datos_evento" id="id_form_datos_evento">
+						<div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-6" ng-class="{ 'has-error' : !form_datos_evento.hora_fin_even.$valid && (!form_datos_evento.hora_fin_even.$pristine ||  form_datos_evento.hora_fin_even.$touched)}">
+							<label for="inp_horafin">Hora fin del evento</label>
+							<p style="color: #b94a48;">* Este campo es obligatorio.</p>
+								<div class="has-feedback">
+									<input required type="text" id="inp_hora" name="hora_fin_even" placeholder="Ejemplo: 8:00 AM" class="form-control bs-timepicker-example" ng-model="misVariables.result_evento.horaFin" ng-disabled="solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador'" >
+									<i class="fa fa-user form-control-feedback"></i>
+								</div>
+								<p ng-show="!form_datos_evento.hora_fin_even.$valid && (!form_datos_evento.hora_fin_even.$pristine ||  form_datos_evento.hora_fin_even.$touched)" class="help-block" style="color: #b94a48;">Diligencie una hora válida</p>
+						</div>
+
+						<div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-6" ng-class="{ 'has-error' : 							!form_datos_evento.hora_ing_even.$valid && (!form_datos_evento.hora_ing_even.$pristine ||  form_datos_evento.hora_ing_even.$touched)}">
+							<label for="inp_horaing">Hora de ingreso</label>
+							<p style="color: #b94a48;">* Este campo es obligatorio.</p>
+								<div class="has-feedback">
+									<input required type="text" id="inp_horaing" name="hora_ing_even" placeholder="Ejemplo: 8:00 PM" class="form-control bs-timepicker-example" ng-model="misVariables.result_evento.horaIngreso" ng-disabled="solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador'">
+									<i class="fa fa-user form-control-feedback"></i>
+								</div>
+								<p ng-show="!form_datos_evento.hora_ing_even.$valid && (!form_datos_evento.hora_ing_even.$pristine ||  form_datos_evento.hora_ing_even.$touched)" class="help-block" style="color: #b94a48;">Diligencie una hora válida</p>
+						</div>
+
+						<div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-6" ng-class="{ 'has-error' : 							!form_datos_evento.diacontinuo.$valid && (!form_datos_evento.diacontinuo.$pristine ||  form_datos_evento.diacontinuo.$touched)}">
+							<label for="inp_diascon">Días continuos</label>
+							<p style="color: #b94a48;">* Este campo es obligatorio.</p>
+								<div class="has-feedback">									
+									<select required class="form-control" id="inp_diascon" name="diacontinuo" ng-model="misVariables.result_evento.sonDiasContinuos" ng-disabled="solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador'">
+										<option ng-repeat="item in select_sn" ng-value="item.value" ng-selected="misVariables.result_evento.sonDiasContinuos==item.value">{{item.label}}</option>
+									</select>															
+							</div>
+							<p ng-show="!form_datos_evento.diacontinuo.$valid && (!form_datos_evento.diacontinuo.$pristine ||  form_datos_evento.diacontinuo.$touched)" class="help-block" style="color: #b94a48;">Debes seleccionar una opción</p>
+						</div>
+
+						<div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-6" ng-class="{ 'has-error' : 							!form_datos_evento.capacidad_sitio.$valid && (!form_datos_evento.capacidad_sitio.$pristine ||  form_datos_evento.capacidad_sitio.$touched)}">
+							<label for="inp_capsitio">Capacidad sitio del evento</label>
+							<p style="color: #b94a48;">* Este campo es obligatorio.</p>
+								<div class="has-feedback">
+									<input required type="number" name="capacidad_sitio" id="inp_capsitio" placeholder="Ejemplo: 600" class="form-control" ng-model="misVariables.result_evento.aforo" ng-disabled="solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador'">
+									<i class="fa fa-user form-control-feedback"></i>
+								</div>
+								<p ng-show="!form_datos_evento.capacidad_sitio.$valid && (!form_datos_evento.capacidad_sitio.$pristine ||  form_datos_evento.capacidad_sitio.$touched)" class="help-block" style="color: #b94a48;">Solo se aceptan números</p>
+						</div>				
+
+						<div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-6" ng-class="{ 'has-error' : 							!form_datos_evento.actividadpr.$valid && (!form_datos_evento.actividadpr.$pristine ||  form_datos_evento.actividadpr.$touched)}">
+							<label for="inp_actividadpr">Actividad principal del evento</label>
+							<p style="color: #b94a48;">* Este campo es obligatorio.</p>
+								<div class="has-feedback">
+									<textarea required type="text" name="actividadpr" id="inp_actividadpr" placeholder="Ejemplo: Presentacion de Conjuntos Vallenatos de la ciudad de Santiago de Cali" class="form-control" ng-model="misVariables.result_evento.actividadPrincipal" ng-disabled="solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador'"></textarea> 			
+								</div>
+								<p ng-show="!form_datos_evento.actividadpr.$valid && (!form_datos_evento.actividadpr.$pristine ||  form_datos_evento.actividadpr.$touched)" class="help-block" style="color: #b94a48;">Diligenciar una actividad válida</p>
+						</div>
+
+						<div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-6" ng-class="{ 'has-error' : 							!form_datos_evento.actividadsec.$valid && (!form_datos_evento.actividadsec.$pristine ||  form_datos_evento.actividadsec.$touched)}">
+							<label for="inp_actividadsec">Actividad secundaria del evento</label>
+							    <div class="has-feedback">
+									<textarea type="text" id="inp_actividadsec" name="actividadsec" placeholder="Ejemplo: Recoger fondos para damnificados" ng-model="misVariables.result_evento.actividadSecundaria" class="form-control" ng-disabled="solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador'"></textarea> 		
+								</div>								
+						</div>
+
+						<div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-6" ng-class="{ 'has-error' : 							!form_datos_evento.poblac.$valid && (!form_datos_evento.poblac.$pristine ||  form_datos_evento.poblac.$touched)}">
+							<label for="inp_poblacion">Población</label>
+							<p style="color: #b94a48;">* Este campo es obligatorio.</p>
+								<div class="has-feedback">
+									<select required class="form-control" id="inp_poblacion" name="poblac" ng-model="misVariables.result_evento.tipoPoblacion" ng-options="item for item in selectpoblacion" ng-selected="misVariables.result_evento.tipoPoblacion==item.value" ng-disabled="solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador'">
+									</select>						
+								</div>
+								<p ng-show="!form_datos_evento.poblac.$valid && (!form_datos_evento.poblac.$pristine ||  form_datos_evento.poblac.$touched)" class="help-block" style="color: #b94a48;">Debes seleccionar una opción</p>
+						</div>
+
+						<div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-6" style="margin-bottom: 35px;" ng-class="{ 'has-error' :(misVariables.result_evento.ingresoBoleta!=1 && misVariables.result_evento.ingresoManilla!=1 && otro!=true)}">
+							<label for="inp_controlingr">Control de ingreso</label>
+							<p style="color: #b94a48;">* Este campo es obligatorio.</p>
+								<div class="has-feedback">
+									<label class="checkbox-inline" for="inp_ingboleta">
+										<input type="checkbox" name="boletacheck" id="inp_ingboleta" class="px" ng-true-value="1" ng-model="misVariables.result_evento.ingresoBoleta" ng-checked="misVariables.result_evento.ingresoBoleta==1" ng-disabled="solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador'">
+										<span class="lbl">Boleta</span>
+									</label>
+									<label class="checkbox-inline" for="inp_ingmanilla">
+										<input type="checkbox" name="manillacheck" class="px" ng-true-value="1" id="inp_ingmanilla" ng-model="misVariables.result_evento.ingresoManilla" ng-checked="misVariables.result_evento.ingresoManilla==1" ng-disabled="solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador'">
+										<span class="lbl">Manilla </span>
+									</label>
+									<label class="checkbox-inline" for="inp_ingotro">
+										<input type="checkbox" class="px" id="inp_ingotro" ng-model="otro" ng-click="misVariables.result_evento.ingresoOtro=''" ng-disabled="solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador'">
+										<span class="lbl">Otro</span>
+									</label>											
+								</div>
+							<p ng-show="misVariables.result_evento.ingresoBoleta!=1 && misVariables.result_evento.ingresoManilla!=1 && otro!=true" class="help-block" style="color: #b94a48;">Debe seleccionar por lo menos una</p>
+						</div>
+
+						<div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-6" ng-if="otro" ng-class="{ 'has-error' : 				!form_datos_evento.otro_control.$valid && (!form_datos_evento.otro_control.$pristine ||  form_datos_evento.otro_control.$touched)}">
+							<label for="inp_otrocont">Otro control de ingreso</label>
+							<p style="color: #b94a48;">* Este campo es obligatorio.</p>
+								<div class="has-feedback">
+									<input ng-required="otro" type="text" name="otro_control" id="inp_otrocont" placeholder="Ejemplo: código QR" class="form-control" ng-model="misVariables.result_evento.ingresoOtro" ng-disabled="solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador'">
+									<i class="fa fa-user form-control-feedback"></i>
+								</div>
+							<p ng-show="!form_datos_evento.otro_control.$valid && (!form_datos_evento.otro_control.$pristine ||  form_datos_evento.otro_control.$touched)" class="help-block" style="color: #b94a48;">Debes diligenciar un control válido</p>
+						</div>
+
+						<!-- Tabla Aforo ==========================================================================-->
+
+						<div class="col-md-12 col-xs-12">
+							<div class="panel panel-dark panel-info table-responsive">
+								<div class="panel-heading">
+									<span class="panel-title"><i class="panel-title-icon fa fa-users"></i>Aforo</span>						
+								</div> <!-- cabecera-->
+								<table class="table">
+									<thead>
+										<tr>
+											<th>Localidad</th>								
+											<th>Aforo localidad</th>
+											<th>Valor indv. boleta</th>
+											<th>valor total boleta</th>
+											<!--th># de cortesías</th-->
+										</tr>
+
+									</thead>
+									<tbody class="valign-middle">
+										<tr ng-repeat="dato in result_aforo['Boleteria']">
+											<td>{{dato.NombreLocalidad}}</td>
+											<td>{{dato.Aforo}}</td>
+											<td>{{dato.ValorIndividualBoleta}}</td>
+											<td>{{ dato.totalBoleta }}</td>
+											<!--td>{{dato.AccesosDisponibles}}</td-->
+										</tr>
+									</tbody>
+								</table>
+							</div> <!-- fin del panel -->
+						</div>
+
+						<!-- Fin tabla Aforo =====================================================================-->
+
+					</form>
+					<div class="col-md-12" style="width: 25px;">
+						<button class="btn btn-primary wizard-next-step-btn">Paso siguiente</button>
+					</div>
+				</div> 
+
+				<!-- Fin Primer paso =====================================================================-->
+
+				<!-- Segundo paso =====================================================================-->
+
+				<div class="wizard-pane" id="wizard-example-step2" >
+					<form name="form_inputs_pemergencia" id="id_form_inputs_pemergencia">						
+		               <div ng-repeat="input in inputs | limitTo:7:0">
+							<div class="col-md-6" >							
+    							<archivoserver required="{{true}}" disabled-remove="{{(solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador')}}" validate="{{(solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador')?1:0}}" label="{{input.nombre}}" id-solicitud="{{misVariables.result_evento.idsolicitud}}" id-tipo-documento="{{input.id}}" files="input.files" types="input.mimes[0].tipo"></archivoserver>
+  							</div>  							
+			            </div>
+			            <div ng-repeat="input in inputs | limitTo:1:10">
+							<div class="col-md-6" >					   
+    							<archivoserver label="{{input.nombre}}" required="{{true}}" disabled-remove="{{(solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador')}}" validate="{{(solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador')?1:0}}" id-solicitud="{{misVariables.result_evento.idsolicitud}}" id-tipo-documento="{{input.id}}" files="input.files" types="input.mimes[0].tipo"></archivoserver>
+  							</div>  							
+			            </div>	
+					</form>
+					<div class="col-md-12">					
+						<button class="btn wizard-prev-step-btn">Paso anterior</button>
+						<button class="btn btn-primary wizard-next-step-btn">Paso siguiente</button>
+					</div>
+				</div>
+
+				<!-- Fin Segundo paso =====================================================================-->
+
+				<!-- Tercer paso =====================================================================-->
+
+				<div class="wizard-pane" id="wizard-example-step3" style="display: none;">
+
+					<form name="form_input_ambientales1" id="id_form_input_ambientales1">
+						<div class="col-md-12" style="margin-top: 15px;margin-bottom: 20px;">
+							<h4>DESCRIPCIÓN DE SERVICIOS</h4>	
+							<div class="col-md-6">
+								<br>
+								Contratos Proveedores Baterías Sanitarias y Croquis del escenario con la ubicación de las mismas el cual debe ser aprobado por la Secretaría de Salud. 
+								NOTA: La cantidad de baterias sanitarias cambian de acuerdo a las siguientes variables: Cantidad de público, Genéro, Horario del Evento incluyendo hora de apertura de puertas al público, si hay expendio de bebidas y tipo de bebidas, si hay expendio de comidas, tipo de evento (religioso,deportivo, musical y tipo de música).
+							</div>
+							<div class="col-md-6">
+								<br>
+								El contrato de alimentos Debe incluir:
+								<br>
+								* Listado de manipuladores de alimentos y bebidas con certificado de capacitacion en manejo higiénico de alimentos y certificación médica no mayor de seis meses.
+								<br>
+								* Listado de vehículos de alimentos y bebidas con concepto sanitario de cada vehículo y los manipuladores con certificado de capacitación en manejo higiénico de alimentos y certificación médica no mayor de seis meses.
+								<br>
+								* Listado de establecimientos y/o personas que van a proveer los alimentos con el correspondiente CONCEPTO SANITARIO del establecimiento o lugar de preparación de los alimentos.
+							</div>
+						</div>						
+		               <div ng-repeat="input in inputs | limitTo:1:7">
+							<div class="col-md-12" >					   
+    							<archivoserver label="{{input.nombre}}" required="{{true}}" disabled-remove="{{(solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador')}}" validate="{{(solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador')?1:0}}" id-solicitud="{{misVariables.result_evento.idsolicitud}}" id-tipo-documento="{{input.id}}" files="input.files" types="input.mimes[0].tipo"></archivoserver>
+  							</div>  							
+			            </div>	
+					</form>
+
+					<div class="col-md-6">
+								<br>
+								Todas las bebidas alcohólicas que se vayan a expender o vender deben tener Registro Sanitario Colombiano y cumplir con la Rotulación Legal establecida en el Decreto 1686 de 2012.
+					</div>
+
+					<form name="form_condiciones_ambientales" id="id_form_condiciones_ambientales">
+						<div class="col-md-12" style="margin-top: 15px;margin-bottom: 20px;">
+							<h4 style="float: left;clear: left;">CONCEPTO SANITARIO EXPEDIDO POR SECREATARÍA DE SALUD</h4>	
+						</div>
+						<div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-6" ng-class="{ 'has-error' : 				!form_condiciones_ambientales.venta_licor.$valid && (!form_condiciones_ambientales.venta_licor.$pristine ||  form_condiciones_ambientales.venta_licor.$touched)}">
+							<label for="inp_ventali">¿Habrá venta de licor?</label>
+							<p style="color: #b94a48;">* Este campo es obligatorio.</p>
+								<div class="has-feedback">
+									<select required class="form-control" name="venta_licor" id="inp_ventali" ng-model="misVariables.result_evento.ventaLicor" ng-disabled="solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador'">
+										<option ng-repeat="item in select_sn" ng-value="item.value" ng-selected="misVariables.result_evento.ventaLicor==item.value">{{item.label}}</option>	 
+									</select>															
+								</div>
+								<p ng-show="!form_condiciones_ambientales.venta_licor.$valid && (!form_condiciones_ambientales.venta_licor.$pristine ||  form_condiciones_ambientales.venta_licor.$touched)" class="help-block" style="color: #b94a48;">Debes seleccionar una opción</p>
+						</div>
+
+						<div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-6" ng-class="{ 'has-error' : 				!form_condiciones_ambientales.suministro_alimentos.$valid && (!form_condiciones_ambientales.suministro_alimentos.$pristine ||  form_condiciones_ambientales.suministro_alimentos.$touched)}">
+							<label for="inp_sumali">¿Habrá suministro de alimentos? </label>
+							<p style="color: #b94a48;">* Este campo es obligatorio.</p>
+								<div class="has-feedback">
+									<select required class="form-control" id="inp_sumali" ng-click="validaralimentos()" name="suministro_alimentos" ng-model="suministro" ng-disabled="solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador'">
+										<option ng-repeat="item in select_sn" ng-value="item.value" ng-selected="suministro==item.value" >{{item.label}}</option>
+									</select>	
+								</div>
+							<p ng-show="!form_condiciones_ambientales.suministro_alimentos.$valid && (!form_condiciones_ambientales.suministro_alimentos.$pristine ||  form_condiciones_ambientales.suministro_alimentos.$touched)" class="help-block" style="color: #b94a48;">Debes seleccionar una opción</p>
+						</div>
+
+						<div ng-repeat="input in inputs | limitTo:2:8" ng-if="suministro=='1'">
+							<div class="col-md-6 col-xs-12" >			   
+    							<archivoserver label="{{input.nombre}}" required="{{suministro=='1'}}" disabled-remove="{{(solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador')}}" validate="{{(solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador')?1:0}}" id-solicitud="{{misVariables.result_evento.idsolicitud}}" id-tipo-documento="{{input.id}}" files="input.files" types="input.mimes[0].tipo"></archivoserver>
+  							</div>  							
+			            </div>			         
+
+						<div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-6" ng-if="suministro == 1" ng-class="{ 'has-error' : !form_condiciones_ambientales.tipo_suministro.$valid && (!form_condiciones_ambientales.tipo_suministro.$pristine ||  form_condiciones_ambientales.tipo_suministro.$touched)}">
+							<label for="inp_tiposum">Tipo de suministro</label>
+							<p style="color: #b94a48;">* Este campo es obligatorio.</p>
+								<div class="has-feedback">
+									<select ng-required="suministro == 1" class="form-control" id="inp_tiposum" name="tipo_suministro" ng-model="misVariables.result_evento.tipoSuministro" ng-options="item for item in selectsuministro" ng-selected="misVariables.result_evento.tipoSuministro==item.value" ng-disabled="solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador'">			
+									</select>						
+								</div>
+							<p ng-show="!form_condiciones_ambientales.tipo_suministro.$valid && (!form_condiciones_ambientales.tipo_suministro.$pristine ||  form_condiciones_ambientales.tipo_suministro.$touched)" class="help-block" style="color: #b94a48;">Debes seleccionar una opción</p>
+
+						</div>
+
+						<div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-6" ng-show="suministro == 1" ng-class="{ 'has-error' : !form_condiciones_ambientales.tipo_alimento.$valid && (!form_condiciones_ambientales.tipo_alimento.$pristine ||  form_condiciones_ambientales.tipo_alimento.$touched)}">
+							<label for="inp_tipoali">Tipo de alimento</label>
+							<p style="color: #b94a48;">* Este campo es obligatorio.</p>
+								<div class="has-feedback">
+									<select ng-required="suministro == 1" class="form-control" id="inp_tipoali" name="tipo_alimento" ng-model="misVariables.result_evento.tipoAlimento" ng-options="item for item in selectalimento" ng-selected="misVariables.result_evento.tipoAlimento==item.value" ng-disabled="solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador'">
+									</select>						
+								</div>
+							<p ng-show="!form_condiciones_ambientales.tipo_alimento.$valid && (!form_condiciones_ambientales.tipo_alimento.$pristine ||  form_condiciones_ambientales.tipo_alimento.$touched)" class="help-block" style="color: #b94a48;">Debes seleccionar una opción</p>
+						</div>			
+
+						<div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-6" ng-show="suministro == 1" ng-class="{ 'has-error' : !form_condiciones_ambientales.hora_in_alimentos.$valid && (!form_condiciones_ambientales.hora_in_alimentos.$pristine ||  form_condiciones_ambientales.hora_in_alimentos.$touched)}">
+							<label for="inp_horaingalimen">Hora de ingreso de alimentos</label>
+							<p style="color: #b94a48;">* Este campo es obligatorio.</p>
+								<div class="has-feedback">
+									<input ng-required="suministro == 1" type="text" id="inp_horaingalimen" name="hora_in_alimentos" ng-model="misVariables.result_evento.horaIngresoAlimento" placeholder="Ejemplo: 8:00 pm" class="form-control bs-timepicker-example" ng-disabled="solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador'">
+									<i class="fa fa-user form-control-feedback"></i>
+								</div>
+							<p ng-show="!form_condiciones_ambientales.hora_in_alimentos.$valid && (!form_condiciones_ambientales.hora_in_alimentos.$pristine ||  form_condiciones_ambientales.hora_in_alimentos.$touched)" class="help-block" style="color: #b94a48;">Debes ingresar una hora válida</p>
+						</div>					 
+
+					</form>
+
+					<form name="form_input_ambientales2" id="id_form_input_ambientales2">
+						<div class="col-md-12" style="margin-top: 15px;margin-bottom: 20px;">
+							<h4 style="float: left;clear: left;">PLAN DE GESTIÓN INTEGRAL DE RESIDUOS SÓLIDOS</h4>	
+						</div>						
+		               <div ng-repeat="input in inputs | limitTo:1:11">
+							<div class="col-md-6" style="display: inline;">					   
+    							<archivoserver required="{{true}}" disabled-remove="{{(solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador')}}" validate="{{(solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador')?1:0}}" label="{{input.nombre}}" id-solicitud="{{misVariables.result_evento.idsolicitud}}" id-tipo-documento="{{input.id}}" files="input.files" types="input.mimes[0].tipo"></archivoserver>
+  							</div>  							
+			            </div>	
+			             <div ng-repeat="input in inputs | limitTo:1:20">
+							<div class="col-md-6" style="display: inline;">					   
+    							<archivoserver required="{{true}}" disabled-remove="{{(solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador')}}" validate="{{(solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador')?1:0}}" label="{{input.nombre}}" id-solicitud="{{misVariables.result_evento.idsolicitud}}" id-tipo-documento="{{input.id}}" files="input.files" types="input.mimes[0].tipo"></archivoserver>
+  							</div>  							
+			            </div>
+					</form>
+
+					<div class="col-md-12">
+						<button class="btn wizard-prev-step-btn">Paso anterior</button>
+						<button class="btn btn-primary wizard-next-step-btn">Paso siguiente</button>
+					</div>	
+				</div> 
+				
+				<!-- Fin Tercer paso =====================================================================-->
+
+				<!-- Cuarto paso =====================================================================-->
+
+				<div class="wizard-pane" id="wizard-example-step4" style="display: none;">
+					<form name="form_concep_tecnico_estructural" id="id_form_concep_tecnico_estructural">
+						<div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-12" ng-class="{ 'has-error' : !form_concep_tecnico_estructural.aplicaconcep.$valid && (!form_concep_tecnico_estructural.aplicaconcep.$pristine ||  form_concep_tecnico_estructural.aplicaconcep.$touched)}">
+							<label for="id_amplificacion">¿Aplica el concepto técnico?</label>
+							<p style="color: #b94a48;">* Este campo es obligatorio.</p>
+								<div class="has-feedback">
+									<select required id="concp_tec_estruc" name="aplicaconcep" class="form-control amplificacion" ng-model="misVariables.result_evento.conceptoFuncionalEscenario" ng-disabled="solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador'" >
+										<option ng-repeat="item in select_sn" ng-value="item.value" ng-selected="misVariables.result_evento.conceptoFuncionalEscenario==item.value">{{item.label}}</option>	 
+									</select>	
+								</div>
+							<p ng-show="!form_concep_tecnico_estructural.aplicaconcep.$valid && (!form_concep_tecnico_estructural.aplicaconcep.$pristine ||  form_concep_tecnico_estructural.aplicaconcep.$touched)" class="help-block" style="color: #b94a48;">Debes seleccionar una opción</p>
+						</div>
+
+						<div ng-show="misVariables.result_evento.conceptoFuncionalEscenario=='1'">		
+							<form name="form_input_tecnico" id="id_form_input_tecnico">						
+				               <div ng-repeat="input in inputs | limitTo:1:12">
+									<div class="col-md-6" style="display: inline;">					   
+		    							<archivoserver required="{{misVariables.result_evento.conceptoFuncionalEscenario=='1'}}" disabled-remove="{{(solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador')}}" validate="{{(solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador')?1:0}}" label="{{input.nombre}}" id-solicitud="{{misVariables.result_evento.idsolicitud}}" id-tipo-documento="{{input.id}}" files="input.files" types="input.mimes[0].tipo"></archivoserver>
+		  							</div>  							
+					            </div>	
+							</form>	
+						</div>
+					</form>
+					<div class="col-md-12 col-xs-12	">
+						<button class="btn wizard-prev-step-btn">Paso anterior</button>
+						<button class="btn btn-primary wizard-next-step-btn">Paso siguiente</button>
+					</div>
+				</div> 
+
+				<!-- Fin Cuarto paso =====================================================================-->
+
+				<!-- Quinto paso =====================================================================-->		
+
+				<div class="wizard-pane" id="wizard-example-step5" style="display: none;">
+					<form name="form_auditivo1" id="id_form_auditivo1">
+						<div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-12" ng-class="{ 'has-error' : !form_auditivo1.amplificacioninstru.$valid && (!form_auditivo1.amplificacioninstru.$pristine ||  form_auditivo1.amplificacioninstru.$touched)}">
+							<label for="id_amplificacion">¿Se hará uso de amplificación o instrumentos musicales?</label>
+							<p style="color: #b94a48;">* Este campo es obligatorio.</p>
+								<div class="has-feedback">
+									<select required id="id_amplificacion" name="amplificacioninstru" class="form-control amplificacion" ng-model="misVariables.result_evento.usoAmplificacionSonora" ng-disabled="solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador'">
+										<option ng-repeat="item in select_sn" ng-value="item.value" ng-selected="misVariables.result_evento.usoAmplificacionSonora==item.value">{{item.label}}</option>	 
+									</select>	
+								</div>
+							<p ng-show="!form_auditivo1.amplificacioninstru.$valid && (!form_auditivo1.amplificacioninstru.$pristine ||  form_auditivo1.amplificacioninstru.$touched)" class="help-block" style="color: #b94a48;">Debes seleccionar una opción</p>
+						</div>
+					</form>
+					<form name="form_auditivo1_1" id="id_form_auditivo1">
+						<div >		
+							<div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-12 titulo_costos">								
+								<h2>Total Costos: ${{misVariables.result_evento.costoManoObra+misVariables.result_evento.costoMateria+misVariables.result_evento.costoArrendamientoServicios+misVariables.result_evento.costoMantenimiento+misVariables.result_evento.costoDesmantelamiento+misVariables.result_evento.costoOtros}} </h2>					
+							</div>									
+							<div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-6" ng-class="{ 'has-error' : !form_auditivo1_1.materias_primas.$valid && (!form_auditivo1_1.materias_primas.$pristine ||  form_auditivo1_1.materias_primas.$touched)}">
+								<label for="inp_materiaprima">Valor Materias Primas</label>
+								<p style="color: #b94a48;">* Este campo es obligatorio.</p>
+									<div class="has-feedback">
+										<input  required type="number" id="inp_materiaprima" name="materias_primas" placeholder="Ejemplo: 15000" class="form-control" number-mask="" ng-model="misVariables.result_evento.costoMateria" ng-disabled="solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador'">
+										<i class="fa fa-user form-control-feedback"></i>
+									</div>
+								<p ng-show="!form_auditivo1_1.materias_primas.$valid && (!form_auditivo1_1.materias_primas.$pristine ||  form_auditivo1_1.materias_primas.$touched)" class="help-block" style="color: #b94a48;">Solo se admiten números</p>
+							</div>
+
+							<div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-6" ng-class="{ 'has-error' : !form_auditivo1_1.mano_obra.$valid && (!form_auditivo1_1.mano_obra.$pristine ||  form_auditivo1_1.mano_obra.$touched)}">
+								<label for="inp_manoobra">Mano de obra utilizada para la administración, operación y mantenimiento</label>
+								<p style="color: #b94a48;">* Este campo es obligatorio.</p>
+									<div class="has-feedback">
+										<input required type="number" id="inp_manoobra" name="mano_obra" placeholder="Ejemplo: 100000" class="form-control" ng-model="misVariables.result_evento.costoManoObra" ng-disabled="solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador'">
+										<i class="fa fa-user form-control-feedback"></i>
+									</div>
+								<p ng-show="!form_auditivo1_1.mano_obra.$valid && (!form_auditivo1_1.mano_obra.$pristine ||  form_auditivo1_1.mano_obra.$touched)" class="help-block" style="color: #b94a48;">Solo se admiten números</p>
+							</div>
+
+							<div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-6" ng-class="{ 'has-error' : !form_auditivo1_1.arrendamientos.$valid && (!form_auditivo1_1.arrendamientos.$pristine ||  form_auditivo1_1.arrendamientos.$touched)}">
+								<label for="inp_arrendamiento">Arrendamientos, servicios públicos, seguros y otros gastos</label>
+								<p style="color: #b94a48;">* Este campo es obligatorio.</p>
+									<div class="has-feedback">
+										<input required type="number" id="inp_arrendamiento" name="arrendamientos" placeholder="Ejemplo: 950000" class="form-control" ng-model="misVariables.result_evento.costoArrendamientoServicios" ng-disabled="solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador'">
+										<i class="fa fa-user form-control-feedback"></i>
+									</div>
+								<p ng-show="!form_auditivo1_1.arrendamientos.$valid && (!form_auditivo1_1.arrendamientos.$pristine ||  form_auditivo1_1.arrendamientos.$touched)" class="help-block" style="color: #b94a48;">Solo se admiten números</p>
+							</div>				
+
+							<div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-6" ng-class="{ 'has-error' : !form_auditivo1_1.mantenimiento.$valid && (!form_auditivo1_1.mantenimiento.$pristine ||  form_auditivo1_1.mantenimiento.$touched)}">
+								<label for="inp_mantenimiento">Mantenimiento, reparación y/o reposición de equipos, instrumentos y/o elementos requeridos</label>
+								<p style="color: #b94a48;">* Este campo es obligatorio.</p>
+									<div class="has-feedback">
+										<input required type="number" id="inp_mantenimiento" name="mantenimiento" placeholder="Ejemplo: 605000" class="form-control" ng-model="misVariables.result_evento.costoMantenimiento" ng-disabled="solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador'">
+										<i class="fa fa-user form-control-feedback"></i>
+									</div>
+								<p ng-show="!form_auditivo1_1.mantenimiento.$valid && (!form_auditivo1_1.mantenimiento.$pristine ||  form_auditivo1_1.mantenimiento.$touched)" class="help-block" style="color: #b94a48;">Solo se admiten números</p>
+							</div>
+
+							<div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-6" ng-class="{ 'has-error' : !form_auditivo1_1.desmantelamiento.$valid && (!form_auditivo1_1.desmantelamiento.$pristine ||  form_auditivo1_1.desmantelamiento.$touched)}">
+								<label for="inp_desmantelamiento">Desmantelamiento</label>
+								<p style="color: #b94a48;">* Este campo es obligatorio.</p>
+									<div class="has-feedback">
+										<input required type="number" id="inp_desmantelamiento" name="desmantelamiento" placeholder="Ejemplo: 25000000" class="form-control" ng-model="misVariables.result_evento.costoDesmantelamiento" ng-disabled="solicitud_result.radicado && solicitud_result.	estado['codigo']!='borrador'">
+										<i class="fa fa-user form-control-feedback"></i>		
+									</div>
+								<p ng-show="!form_auditivo1_1.desmantelamiento.$valid && (!form_auditivo1_1.desmantelamiento.$pristine ||  form_auditivo1_1.desmantelamiento.$touched)" class="help-block" style="color: #b94a48;">Solo se admiten números</p>
+							</div>
+
+							<div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-6" ng-class="{ 'has-error' : !form_auditivo1_1.costosygastos.$valid && (!form_auditivo1_1.costosygastos.$pristine ||  form_auditivo1_1.costosygastos.$touched)}">
+								<label for="inp_costosotr">Demás costos y gastos de operación para obtención de beneficios económicos</label>
+								<p style="color: #b94a48;">* Este campo es obligatorio.</p>
+									<div class="has-feedback">
+										<input required type="number" id="inp_costosotr" name="costosygastos" placeholder="Ejemplo: 980000" class="form-control" ng-model="misVariables.result_evento.costoOtros" ng-disabled="solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador'">
+										<i class="fa fa-user form-control-feedback"></i>
+									</div>
+								<p ng-show="!form_auditivo1_1.costosygastos.$valid && (!form_auditivo1_1.costosygastos.$pristine ||  form_auditivo1_1.costosygastos.$touched)" class="help-block" style="color: #b94a48;">Solo se admiten números</p>
+							</div>			
+
+							<div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-6" ng-class="{ 'has-error' : !form_auditivo1_1.nomcontador.$valid && (!form_auditivo1_1.nomcontador.$pristine ||  form_auditivo1_1.nomcontador.$touched)}">
+								<label for="nombre_usuario">Nombre del contador</label>
+								<p style="color: #b94a48;">* Este campo es obligatorio.</p>
+									<div class="has-feedback">
+										<input type="text" name="nomcontador" placeholder="Ejemplo: Fernando" class="form-control" ng-model="varibalesform.nomcontador2" ng-disabled="solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador'">
+										<i class="fa fa-user form-control-feedback"></i>			
+									</div>
+								<p ng-show="!form_auditivo1_1.nomcontador.$valid && (!form_auditivo1_1.nomcontador.$pristine ||  form_auditivo1_1.nomcontador.$touched)" class="help-block" style="color: #b94a48;">Diligenciar el nombre de un contador válido</p>
+							</div>
+
+							<div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-6" ng-class="{ 'has-error' : !form_auditivo1_1.doccontador.$valid && (!form_auditivo1_1.doccontador.$pristine ||  form_auditivo1_1.doccontador.$touched)}">
+								<label for="nombre_usuario">Documento de identidad del contador</label>
+								<p style="color: #b94a48;">* Este campo es obligatorio.</p>
+									<div class="has-feedback">
+										<input type="number" name="doccontador" placeholder="Ejemplo: Fernando" class="form-control" ng-model="varibalesform.doccontador" ng-disabled="solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador'">
+										<i class="fa fa-user form-control-feedback"></i>			
+									</div>
+								<p ng-show="!form_auditivo1_1.doccontador.$valid && (!form_auditivo1_1.doccontador.$pristine ||  form_auditivo1_1.doccontador.$touched)" class="help-block" style="color: #b94a48;">Diligenciar un documento válido</p>
+							</div>
+
+							<div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-6" ng-class="{ 'has-error' : !form_auditivo1_1.tarjetacontador.$valid && (!form_auditivo1_1.tarjetacontador.$pristine ||  form_auditivo1_1.tarjetacontador.$touched)}">
+								<label for="nombre_usuario">Número tarjeta contador</label>
+								<p style="color: #b94a48;">* Este campo es obligatorio.</p>
+									<div class="has-feedback">
+										<input type="number" name="tarjetacontador" placeholder="Ejemplo: Fernando" class="form-control" ng-model="varibalesform.tarjetacontador" ng-disabled="solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador'">
+										<i class="fa fa-user form-control-feedback"></i>			
+									</div>
+								<p ng-show="!form_auditivo1_1.tarjetacontador.$valid && (!form_auditivo1_1.tarjetacontador.$pristine ||  form_auditivo1_1.tarjetacontador.$touched)" class="help-block" style="color: #b94a48;">Diligenciar un número de tarjeta valido</p>
+								
+							</div>
+
+							<div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-6" style="margin-top: 25px;">
+								<button class="btn btn-primary" ng-disabled="(!varibalesform.tarjetacontador || !varibalesform.doccontador || !varibalesform.nomcontador2) || !form_auditivo1_1.$valid" ng-click="pdfContador()">Generar documento de costos</button>
+							</div>
+							<div ng-show="!varibalesform.tarjetacontador || !varibalesform.doccontador || !varibalesform.nomcontador2" class="alert alert-primary col-md-12 col-xs-12" role="alert">
+							  <p >Para generar el PDF debe digitar:</p>
+							  <p ng-show="!varibalesform.nomcontador2" >- el nombre del contador</p>							    
+								<p ng-show="!varibalesform.doccontador" > - El documento de identidad del contador</p>
+								<p ng-show="!varibalesform.tarjetacontador" > - El numero de tarjeta del contador</p>
+							</div>
+						</div>
+					</form>
+
+					<!-- falta colocar los archivos adjuntos-->
+
+					<form name="form_input_auditivo" id="id_form_input_auditivo">	
+						<div >					
+			               <div ng-repeat="input in inputs | limitTo:3:13">
+								<div class="col-md-6" style="display: inline;" >					   									
+	    							<archivoserver required="{{true}}" disabled-remove="{{(solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador')}}" validate="{{(solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador')?1:0}}" label="{{input.nombre}}" id-solicitud="{{misVariables.result_evento.idsolicitud}}" id-tipo-documento="{{input.id}}" files="input.files" types="input.mimes[0].tipo"></archivoserver>
+	  							</div>  							
+				            </div>	
+			            </div>
+					</form>	
+
+					<hr class="col-md-12">			
+
+					<form name="form_auditivo2" id="id_form_auditivo2" >
+						<div >
+							<div class="col-md-12" style="margin-top: 15px;margin-bottom: 20px;">
+								<h4>DESCRIPCIÓN Y CARACTERÍSTICAS DEL SISTEMA DE SONIDO</h4>	
+							</div>
+							<div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-6" ng-class="{ 'has-error' : !form_auditivo2.descripcion.$valid && (!form_auditivo2.descripcion.$pristine ||  form_auditivo2.descripcion.$touched)}">
+								<label for="descripcion">Descripción</label>
+									<div class="has-feedback">
+										<textarea  type="text" name="descripcion" ng-model="misVariables.result_evento.descripcionSonora" placeholder="Ejemplo: Sistema de sonido AAA" class="form-control" ng-disabled="solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador'"></textarea>
+									</div>								
+							</div>	
+
+							<div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-6" ng-class="{ 'has-error' : !form_auditivo2.sonido_colgado.$valid && (!form_auditivo2.sonido_colgado.$pristine ||  form_auditivo2.sonido_colgado.$touched)}">
+								<label for="inp_sonidocolg">Sonido Colgado o en Stak - Nivel del Piso</label>
+									<div class="has-feedback">
+										<textarea  type="text" id="inp_sonidocolg" name="sonido_colgado" ng-model="misVariables.result_evento.sonidoColgado" placeholder="Ejemplo: Colgado en Stak a 3m del piso" class="form-control" ng-disabled="solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador'"></textarea>
+									</div>							
+							</div>
+
+							<div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-6" ng-class="{ 'has-error' : !form_auditivo2.altavoz.$valid && (!form_auditivo2.altavoz.$pristine ||  form_auditivo2.altavoz.$touched)}">
+									<label for="inp_cantidadalt">Cantidad de altavoces</label>
+										<div class="has-feedback">
+											<input type="number"  id="inp_cantidadalt" name="altavoz" placeholder="Ejemplo: 12" class="form-control" ng-model="misVariables.result_evento.cantidadAltavoces" ng-disabled="solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador'">
+											<i class="fa fa-user form-control-feedback"></i>
+										</div>
+									<p ng-show="!form_auditivo2.altavoz.$valid && (!form_auditivo2.altavoz.$pristine ||  form_auditivo2.altavoz.$touched)" class="help-block" style="color: #b94a48;">Solo se aceptan números</p>
+							</div>
+
+							<div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-6" ng-class="{ 'has-error' : !form_auditivo2.bajos.$valid && (!form_auditivo2.bajos.$pristine ||  form_auditivo2.bajos.$touched)}">
+									<label for="inp_cantidadbajo">Cantidad de bajos</label>
+										<div class="has-feedback">
+											<input type="number"  id="inp_cantidadbajo" name="bajos" placeholder="Ejemplo: 3" class="form-control" ng-model="misVariables.result_evento.cantidadBajos" ng-disabled="solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador'">
+											<i class="fa fa-user form-control-feedback"></i>
+										</div>
+									<p ng-show="!form_auditivo2.bajos.$valid && (!form_auditivo2.bajos.$pristine ||  form_auditivo2.bajos.$touched)" class="help-block" style="color: #b94a48;">Solo se aceptan números</p>
+							</div>
+
+							<!--div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-6" ng-class="{ 'has-error' :misVariables.result_evento.sonidoNorte!=1 && misVariables.result_evento.sonidoSur!=1 && misVariables.result_evento.sonidoOriente!=1 && misVariables.result_evento.sonidoOccidente!=1}"-->
+							<div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-6">
+								<p style="font-weight:  bold;">Dirección del sonido</p>
+									<div class="has-feedback">
+										<label for="inp_sonidonor" class="checkbox-inline">
+											<input  type="checkbox" name="direnor" ng-true-value="1" ng-checked="misVariables.result_evento.sonidoNorte==1" class="px" id="inp_sonidonor" ng-model="misVariables.result_evento.sonidoNorte" ng-disabled="solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador'">
+											<span class="lbl">Norte</span>
+										</label>
+										<label for="inp_sonidosur" class="checkbox-inline">
+											<input  type="checkbox" name="diresur" ng-true-value="1" ng-checked="misVariables.result_evento.sonidoSur==1" id="inp_sonidosur" class="px" ng-model="misVariables.result_evento.sonidoSur " ng-disabled="solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador'"> 
+											<span class="lbl">Sur</span>
+										</label>
+										<label for="inp_sonidoori" class="checkbox-inline">
+											<input  type="checkbox" name="direorien" ng-true-value="1" ng-checked="misVariables.result_evento.sonidoOriente==1" id="inp_sonidoori" class="px" ng-model="misVariables.result_evento.sonidoOriente " ng-disabled="solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador'">
+											<span class="lbl">Oriente</span>
+										</label>
+										<label for="inp_sonidoocci" class="checkbox-inline">
+											<input  type="checkbox" name="direoccid" ng-true-value="1" ng-checked="misVariables.result_evento.sonidoOccidente==1" id="inp_sonidoocci" class="px" ng-model="misVariables.result_evento.sonidoOccidente" ng-disabled="solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador'">
+											<span class="lbl">Occidente</span>
+										</label>
+									</div>
+								<!--p ng-show="misVariables.result_evento.sonidoNorte!=1 && misVariables.result_evento.sonidoSur!=1 && misVariables.result_evento.sonidoOriente!=1 && misVariables.result_evento.sonidoOccidente!=1" class="help-block" style="color: #b94a48;">* Este campo es obligatorio.</p-->
+							</div>
+
+							<!--div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-6" ng-class="{ 'has-error' : !form_auditivo2.presion_sonora.$valid && (!form_auditivo2.presion_sonora.$pristine ||  form_auditivo2.presion_sonora.$touched)}"-->
+							<div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-6">
+								<label for="inp_nivelpres">Nivel de presión sonora de consola (en dB) </label>
+									<div class="has-feedback">
+										<input  type="number" id="inp_nivelpres" ng-model="misVariables.result_evento.presionSonora" name="presion_sonora" placeholder="Ejemplo: 5000 " class="form-control" ng-disabled="solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador'">
+									</div>
+								<!--p ng-show="form_auditivo2.presion_sonora.$error.required" class="help-block" style="color: #b94a48;">* Este campo es obligatorio.</p-->
+							</div>
+						</div>
+					</form>
+
+					<form name="form_auditivo3" id="id_form_auditivo3">
+						<div >
+							<div class="col-md-12" style="margin-top: 15px;margin-bottom: 20px;">
+								<h4 style="float: left;clear: left;">TARIMA</h4>	
+							</div>
+							<div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-6" ng-class="{ 'has-error' : !form_auditivo3.largo.$valid && (!form_auditivo3.largo.$pristine ||  form_auditivo3.largo.$touched)}">
+							<!--div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-6"-->
+								<label for="inp_tarimalargo">Largo</label>
+									<div class="has-feedback">
+										<input type="number" id="inp_tarimalargo" name="largo" placeholder="Ejemplo: 600" class="form-control" ng-model="misVariables.result_evento.largoTarima" ng-disabled="solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador'">
+										<i class="fa fa-user form-control-feedback"></i>
+									</div>
+								<p ng-show="!form_auditivo3.largo.$valid && (!form_auditivo3.largo.$pristine ||  form_auditivo3.largo.$touched)" class="help-block" style="color: #b94a48;">Solo se admiten números</p>
+							</div>	
+
+							<div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-6" ng-class="{ 'has-error' : !form_auditivo3.ancho.$valid && (!form_auditivo3.ancho.$pristine ||  form_auditivo3.ancho.$touched)}">
+							<!--div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-6"-->
+								<label for="inp_tarimaancho">Ancho</label>
+									<div class="has-feedback">
+										<input type="number" id="inp_tarimaancho" name="ancho" placeholder="Ejemplo: 9000" class="form-control" ng-model="misVariables.result_evento.anchoTarima" ng-disabled="solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador'">
+										<i class="fa fa-user form-control-feedback"></i>
+									</div>
+								<p ng-show="!form_auditivo3.ancho.$valid && (!form_auditivo3.ancho.$pristine ||  form_auditivo3.ancho.$touched)" class="help-block" style="color: #b94a48;">Solo se admiten números</p>
+							</div>
+
+							<div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-6" ng-class="{ 'has-error' : !form_auditivo3.alto.$valid && (!form_auditivo3.alto.$pristine ||  form_auditivo3.alto.$touched)}">
+							<!--div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-6"-->
+									<label for="inp_tarimaalto">Alto</label>
+										<div class="has-feedback">
+											<input type="number" id="inp_tarimaalto" name="alto" placeholder="Ejemplo: 50000" class="form-control" ng-model="misVariables.result_evento.altoTarima " ng-disabled="solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador'">
+											<i class="fa fa-user form-control-feedback"></i>
+										</div>
+									<p ng-show="!form_auditivo3.alto.$valid && (!form_auditivo3.alto.$pristine ||  form_auditivo3.alto.$touched)" class="help-block" style="color: #b94a48;">Solo se admiten números</p>
+							</div>
+
+							<div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-6" ng-class="{ 'has-error' : !form_auditivo3.fechamon.$valid && (!form_auditivo3.fechamon.$pristine ||  form_auditivo3.fechamon.$touched)}">
+							<!--div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-6"-->
+									<label for="inp_fechamont">Fecha montaje</label>
+										<div class="has-feedback date input-group bs-datepicker-component" id="bs-datepicker-component">
+											<input name="fechamon" placeholder="aaaa-mm-dd" type="text" id="inp_fechamont" class="form-control datetimepicker" ng-model="misVariables.result_evento.fechaMontaje" ng-disabled="solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador'"><span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+										</div>
+									<p ng-show="!form_auditivo3.fechamon.$valid && (!form_auditivo3.fechamon.$pristine ||  form_auditivo3.fechamon.$touched)" class="help-block" style="color: #b94a48;">Diligencie una fecha válida</p>
+							</div>
+
+							<div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-6" ng-class="{ 'has-error' : !form_auditivo3.hora_montaje.$valid && (!form_auditivo3.hora_montaje.$pristine ||  form_auditivo3.hora_montaje.$touched)}">
+							<!--div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-6"-->
+								<label for="inp_horamonta">Hora montaje</label>
+									<div class="has-feedback">
+										<input type="text" id="inp_horamonta" name="hora_montaje" placeholder="Ejemplo: 8:00 AM" class="form-control bs-timepicker-example" ng-model="misVariables.result_evento.horaMontaje" ng-disabled="solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador'" >
+										<i class="fa fa-user form-control-feedback"></i>
+									</div>
+								<p ng-show="!form_auditivo3.hora_montaje.$valid && (!form_auditivo3.hora_montaje.$pristine ||  form_auditivo3.hora_montaje.$touched)" class="help-block" style="color: #b94a48;">Diligenciar una hora válida</p>
+							</div>
+							
+
+							<div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-6" ng-class="{ 'has-error' : !form_auditivo3.fechadesmon.$valid && (!form_auditivo3.fechadesmon.$pristine ||  form_auditivo3.fechadesmon.$touched)}">
+							<!--div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-6"-->
+									<label for="inp_fechadesmon">Fecha desmontaje</label>
+										<div class="has-feedback date input-group bs-datepicker-component" id="bs-datepicker-component2">
+											<input name="fechadesmon" placeholder="aaaa-mm-dd" type="text" id="inp_fechadesmon" class="form-control datetimepicker" ng-model="misVariables.result_evento.fechaDesmontaje" ng-disabled="solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador'"><span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+										</div>
+									<p ng-show="!form_auditivo3.fechadesmon.$valid && (!form_auditivo3.fechadesmon.$pristine ||  form_auditivo3.fechadesmon.$touched)" class="help-block" style="color: #b94a48;">Diligenciar fecha válida</p>
+							</div>
+
+							<div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-6" ng-class="{ 'has-error' : !form_auditivo3.hora_desmontaje.$valid && (!form_auditivo3.hora_desmontaje.$pristine ||  form_auditivo3.hora_desmontaje.$touched)}">
+							<!--div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-6"-->
+								<label for="inp_horadesmon">Hora desmontaje</label>
+									<div class="has-feedback">
+										<input type="text" id="inp_horadesmon" name="hora_desmontaje" placeholder="Ejemplo: 8:00 PM" class="form-control bs-timepicker-example" ng-model="misVariables.result_evento.horaDesmontaje" ng-disabled="solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador'">
+										<i class="fa fa-user form-control-feedback"></i>
+									</div>
+								<p ng-show="!form_auditivo3.hora_desmontaje.$valid && (!form_auditivo3.hora_desmontaje.$pristine ||  form_auditivo3.hora_desmontaje.$touched)" class="help-block" style="color: #b94a48;">Diligenciar hora válida</p>
+							</div>
+							
+							<!--div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-6" ng-class="{ 'has-error' :misVariables.result_evento.tarimaNorte!=1 && misVariables.result_evento.tarimaSur!=1 && misVariables.result_evento.tarimaOriente!=1 && misVariables.result_evento.tarimaOccidente!=1 && misVariables.result_evento.tarimaCentro!=1}"-->
+							<div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-6">
+								<span style="font-weight:  bold;margin-bottom: 20px;">Ubicación en el lugar del evento</span>
+									<div class="has-feedback">
+										<label class="checkbox-inline" for="inp_tarimnor">
+											<input  name="ubicanor" type="checkbox" ng-true-value="1" ng-checked="misVariables.result_evento.tarimaNorte==1" class="px" id="inp_tarimnor" ng-model="misVariables.result_evento.tarimaNorte" ng-disabled="solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador'">
+											<span class="lbl">Norte</span>
+										</label>
+										<label class="checkbox-inline" for="inp_tarimsur" >
+											<input  name="ubicasur" type="checkbox" class="px" ng-true-value="1" id="inp_tarimsur" ng-checked="misVariables.result_evento.tarimaSur==1" ng-model="misVariables.result_evento.tarimaSur" ng-disabled="solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador'"> 
+											<span class="lbl">Sur</span>
+										</label>
+										<label class="checkbox-inline" for="inp_tarimoriente">
+											<input  name="ubicaorie" type="checkbox" class="px" ng-true-value="1" id="inp_tarimoriente" ng-checked="misVariables.result_evento.tarimaOriente==1" ng-model="misVariables.result_evento.tarimaOriente" ng-disabled="solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador'">
+											<span class="lbl">Oriente</span>
+										</label>
+										<label class="checkbox-inline" for="inp_tarimoccid">
+											<input  name="ubicaoccid" type="checkbox" class="px" ng-true-value="1" id="inp_tarimoccid"  ng-checked="misVariables.result_evento.tarimaOccidente==1" ng-model="misVariables.result_evento.tarimaOccidente" ng-disabled="solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador'">
+											<span class="lbl">Occidente</span>
+										</label>
+										<label class="checkbox-inline" for="inp_tarimocentro">
+											<input  name="ubicacent" type="checkbox" class="px" ng-true-value="1" id="inp_tarimocentro" ng-checked="misVariables.result_evento.tarimaCentro==1" ng-model="misVariables.result_evento.tarimaCentro" ng-disabled="solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador'">
+											<span class="lbl">Centro</span>
+										</label>
+									</div>
+								<!--p ng-show="misVariables.result_evento.tarimaNorte!=1 && misVariables.result_evento.tarimaSur!=1 && misVariables.result_evento.tarimaOriente!=1 && misVariables.result_evento.tarimaOccidente!=1 && misVariables.result_evento.tarimaCentro!=1" class="help-block" style="color: #b94a48;">* Este campo es obligatorio.</p-->
+							</div>
+
+	<!-- ...........................................................................................................-->
+
+					 	<!--div class="col-md-12 row table-primary">
+	                        <h4 class="padding-sm no-padding-t padding-xs-hr">
+	                        	<i class="fa fa-map-o text-primary" aria-hidden="true">                        		
+	                        	</i>&nbsp;&nbsp;Cronograma
+	                        </h4>
+	                        <table class="table table-striped table-bordered ">
+	                            <thead>
+	                                <tr>
+	                                    <th align="center">Actividad</th>
+	                                    <th align="center">Fecha</th>                                   
+	                                    <th align="center">Hora</th>                                   
+	                                    <th align="center">Opciones</th>                                   
+	                                </tr>
+	                            </thead>
+	                            <tr ng-repeat="item_cronograma in item.cronogramas track by $index">
+	                                <td ng-if="item_cronograma.editable!==1">{{item_cronograma.actividad}}</td>
+	                                <td ng-if="item_cronograma.editable==1">
+	                                  <input type="text" class="form-control no-padding" ng-model="item_cronograma.actividad">
+	                                </td>
+	                                <td ng-if="item_cronograma.editable!==1">{{item_cronograma.fecha}}</td>
+	                                <td ng-if="item_cronograma.editable==1">
+	                                	<div class="has-feedback date input-group bs-datepicker-component" id="bs-datepicker-component2">
+	                                    	<input type="text" class="form-control" ng-model="item_cronograma.fecha">
+	                                    	<span class="input-group-addon">
+	                                		<i class="fa fa-calendar"></i>
+	                                		</span>
+	                                	</div>
+	                                </td>
+	                                <td ng-if="item_cronograma.editable!==1">{{item_cronograma.hora}}</td>
+	                                <td ng-if="item_cronograma.editable==1">
+	                                     <input type="text" class="form-control no-padding" ng-model="item_cronograma.hora">
+	                                </td>
+	                                
+	                                <td ng-if="item_cronograma.editable!==1">
+	                                    <i class="fa fa-times fa-2x" aria-hidden="true" ng-click="quitarCronograma($index)"></i>
+	                                    <i class="fa fa-pencil-square-o fa-2x" aria-hidden="true"  ng-click="item_cronograma.editable=1"></i>
+	                                </td>
+	                                <td ng-if="item_cronograma.editable==1">
+	                                    <i class="fa fa-check fa-2x" aria-hidden="true" ng-click="item_cronograma.editable=0"></i>
+	                                </td>
+	                            </tr>
+	                            <tr>
+	                                <td>
+	                                      <input type="text" class="form-control no-padding" ng-model="demarcacion.actividad">
+	                                </td>
+	                                <td>
+	                                	<div class="has-feedback date input-group bs-datepicker-component" id="bs-datepicker-component1">
+	                                    <input type="text" class="form-control" ng-model="demarcacion.fecha"><span class="input-group-addon"><i class="fa fa-calendar"></i></span></div>
+	                                </td>
+	                                <td>
+	                                   <input type="text" class="form-control no-padding" ng-model="demarcacion.hora">
+	                                </td>                                
+	                                <td>
+	                                    <i class="fa fa-check fa-2x" aria-hidden="true" ng-click="agregarCronograma(demarcacion)"></i>
+	                                </td>
+	                            </tr>
+	                            <tfoot>
+	                               
+	                            </tfoot>
+	                        </table>
+	                        
+	                    </div-->
+	<!-- ...........................................................................................................-->
+							<div ng-show="misVariables.result_evento.usoAmplificacionSonora=='1'" class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-12">
+				               	<div ng-repeat="input in inputs | limitTo:1:16">
+									<div class="col-md-6" style="display: inline;" >					   
+										<archivoserver required="{{misVariables.result_evento.usoAmplificacionSonora==1}}" disabled-remove="{{(solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador')}}" validate="{{(solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador')?1:0}}" label="{{input.nombre}}" id-solicitud="{{misVariables.result_evento.idsolicitud}}" id-tipo-documento="{{input.id}}" files="input.files" types="input.mimes[0].tipo"></archivoserver>
+										</div>  							
+					            </div>	
+					        </div>
+				        </div>
+					</form>
+					<div class="col-md-12 col-xs-12">
+						<button class="btn wizard-prev-step-btn">Paso anterior</button>
+						<button class="btn btn-primary wizard-next-step-btn">Paso siguiente</button>
+					</div>
+				</div> 
+
+				<!-- Fin Quinto paso =====================================================================-->
+
+				<!-- Sexto paso =====================================================================-->		
+
+				<div class="wizard-pane" id="wizard-example-step6" style="display: none;">
+					<form name="form_input_derechos_autor" id="id_form_input_derechos_autor">		
+						<div class="col-md-12" style="margin-top: 15px;margin-bottom: 20px;">
+							<h4>DERECHOS DE AUTOR</h4>	
+							Autorización, Constancia o Pago de derechos de autor y/o derechos conexos previstos en la ley, si en el espectáculo público de las artes escénicas se ejecutarán obras causantes de dicho pago
+						</div>				
+		               <div ng-repeat="input in inputs | limitTo:1:17">
+							<div class="col-md-6" >					   
+    							<archivoserver required="{{true}}" disabled-remove="{{(solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador')}}" validate="{{(solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador')?1:0}}" label="{{input.nombre}}" id-solicitud="{{misVariables.result_evento.idsolicitud}}" id-tipo-documento="{{input.id}}" files="input.files" types="input.mimes[0].tipo"></archivoserver>
+  							</div>  							
+			            </div>	
+					</form>	
+
+					<form name="form_input_contribucion" id="id_form_input_contribucion">	
+						<div class="col-md-12" style="margin-top: 15px;margin-bottom: 20px;">
+							<h4>CONTRIBUCIÓN PARAFISCAL</h4>	
+							Constancia de cumplimiento con el pago y la declaración de la contribución parafiscal de que trata el artículo 8 de la ley 1493 y demás obligaciones tributarias consagradas legalmente. Certificado que debe ser solicitado por el productor ante el Grupo de Gestión FInanciera y Contable del Ministerio de Cultura y verificado por las Secretaría de Gobierno y/o Cultura (Resolución Ministerio de Cultura 3969 de 2013, Artículo 8)<br><br>
+							Si es productor ocasional debe cumplir con las garantías o pólizas para amparar la contribución parafiscal que se genera por la boletería que supere los 3UVTs en adelante
+						</div>					
+		               <div ng-repeat="input in inputs | limitTo:1:18">
+							<div class="col-md-6" >					   
+    							<archivoserver required="{{true}}" disabled-remove="{{(solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador')}}" validate="{{(solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador')?1:0}}" label="{{input.nombre}}" id-solicitud="{{misVariables.result_evento.idsolicitud}}" id-tipo-documento="{{input.id}}" files="input.files" types="input.mimes[0].tipo"></archivoserver>
+  							</div>  							
+			            </div>		
+			            <div ng-repeat="input in inputs | limitTo:1:19">
+							<div class="col-md-6" >					   
+    							<archivoserver required="{{false}}" disabled-remove="{{(solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador')}}" validate="{{(solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador')?1:0}}" label="{{input.nombre}}" id-solicitud="{{misVariables.result_evento.idsolicitud}}" id-tipo-documento="{{input.id}}" files="input.files" types="input.mimes[0].tipo"></archivoserver>
+  							</div>  							
+			            </div>			              
+					</form>
+
+					<div class="col-md-12"">
+								<button class="btn wizard-prev-step-btn">Paso anterior</button>
+								<button class="btn btn-primary wizard-next-step-btn">Paso siguiente</button>
+					</div>	
+				</div> 
+
+				<!-- Fin Sexto paso =====================================================================-->
+
+				<!-- Séptimno paso =====================================================================-->		
+
+				<div class="wizard-pane" id="wizard-example-step7" style="display: none;">
+					<form name="form_cumplimiento" id="id_form_cumplimiento row" class="row">	
+						<div class="form-group no-padding-t no-border-t panel-padding-h col-xs-12 col-md-6" ng-class="{ 'has-error' : !form_cumplimiento.compromisoplan.$valid && (!form_cumplimiento.compromisoplan.$pristine ||  form_cumplimiento.compromisoplan.$touched)}">
+							<label for="inp_diascon">Me comprometo a dar cumplimiento a lo estipulado en el Plan de Emergencia y Contingencia que se presenta para el desarrollo del evento</label>
+							<p style="color: #b94a48;">* Este campo es obligatorio.</p>
+								<div class="has-feedback">									
+									<select required class="form-control" id="compromiso" name="compromisoplan" ng-model="compromisos" ng-disabled="solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador'">
+										<option ng-repeat="item in select_sn" ng-value="item.value" >{{item.label}}</option>
+									</select>															
+							</div>
+							<p ng-show="!form_cumplimiento.compromisoplan.$valid && (!form_cumplimiento.compromisoplan.$pristine ||  form_cumplimiento.compromisoplan.$touched)" class="help-block" style="color: #b94a48;">Debe seleccionar una opción</p>
+						</div>
+					</form>
+					<div class="col-md-12" style="margin-top: 20px;">	
+						<button class="btn wizard-prev-step-btn">Paso anterior</button>						
+					</div>
+				</div> 
+
+				<!-- Fin Séptimo paso =====================================================================-->
+			</div> <!-- final del contenido del wizard -->
+			
+		</div> <!-- final del wizard -->
+		
+
+		<div ng-if="!solicitud_result.radicado" class="alert alert-primary col-md-12 col-xs-12" role="alert" role="alert">
+		  <center><p style="font-size: 18px;" >Recuerda revisar:</p></center>
+		  <p style="font-size: 14px;"> - Datos del evento (1) <i style="color: green;" ng-show="form_datos_evento.$valid && (misVariables.result_evento.ingresoBoleta==1 || misVariables.result_evento.ingresoManilla==1 || otro==true)"  class="fa fa-check form-control-feedback"></i><i style="color: red;" ng-show="!form_datos_evento.$valid ||  (misVariables.result_evento.ingresoBoleta!=1 && misVariables.result_evento.ingresoManilla!=1 && otro!=true)"  class="fa fa-times form-control-feedback"></i></p>
+		  <p style="font-size: 14px;"> - Condiciones ambientales y sanitarias (3) <i style="color: green;" ng-show="form_condiciones_ambientales.$valid "  class="fa fa-check form-control-feedback"></i><i style="color: red;" ng-show="!form_condiciones_ambientales.$valid"  class="fa fa-times form-control-feedback"></i>	</p>
+		   <p style="font-size: 14px;"> - Concepto téncico del comportamiento estructural (4) <i style="color: green;" ng-show="form_concep_tecnico_estructural.$valid"  class="fa fa-check form-control-feedback"></i><i style="color: red;" ng-show="!form_concep_tecnico_estructural.$valid"  class="fa fa-times form-control-feedback"></i>	</p>	
+		  <p style="font-size: 14px;"> - Cumplimiento de las normas de intensidad auditiva (5) <i style="color: green;" ng-show="form_auditivo1.$valid && form_auditivo1_1.$valid"  class="fa fa-check form-control-feedback"></i><i style="color: red;" ng-show="!form_auditivo1.$valid || !form_auditivo1_1.$valid"  class="fa fa-times form-control-feedback"></i>	</p>
+		  <p style="font-size: 14px;"> - Compromisos del productor (7)<i style="color: green;" ng-show="compromisos==1"  class="fa fa-check form-control-feedback"></i><i style="color: red;" ng-show="compromisos!=1"  class="fa fa-times form-control-feedback"></i> </p>
+		  <p style="font-size: 14px;"> - Archivos <i style="color: green;" ng-show="validarInputs()" class="fa fa-check form-control-feedback"></i><i style="color: red;" ng-show="!validarInputs()"  class="fa fa-times form-control-feedback"></i></p>
+		</div>
+		<center>
+			<input type="button" class="btn " ng-hide="solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador'" value="Guardar borrador" ng-click="actualizar(misVariables.result_evento)" >			
+			<input type="button" class="btn btn-primary" ng-hide="(solicitud_result.radicado && solicitud_result.estado['codigo']!='borrador') || diasradicado<=0" value="Radicar Evento" ng-click="radicar(misVariables.result_evento)" ng-disabled=" !form_datos_evento.$valid || !form_condiciones_ambientales.$valid || !form_concep_tecnico_estructural.$valid || !form_auditivo2.$valid || !form_auditivo3.$valid || !form_auditivo1_1.$valid || compromisos!=1 || !validarInputs() || (misVariables.result_evento.ingresoBoleta!=1 && misVariables.result_evento.ingresoManilla!=1 && otro!=true)">
+		</center>
+			
+	</div>
+</div>
+</div>

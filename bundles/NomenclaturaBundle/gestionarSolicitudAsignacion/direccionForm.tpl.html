@@ -1,0 +1,42 @@
+    <div class="modal-header">
+        <h3 class="modal-title">Dirección</h3>
+    </div>
+    <div class="modal-body">
+        <div class="panel-body">
+			<div class="col-md-9">
+				<div class="form-group">
+					<label class="control-label" >Número predial nacional</label>
+					<input required placeholder="Ingrese el número predial" class="form-control" type="text" ng-model="direccion.numeroPredial" />
+				</div>
+			</div>
+			<div class="col-md-9">
+				<div class="form-group">
+					<label class="control-label" >Dirección</label>
+					<input id="FormDireccionesDireccion" required placeholder="Ingrese la dirección" class="form-control" type="text" ng-model="direccion.direccion" ng-click="obtenerModalIngresoDireccion()" readonly="readonly" />
+				</div>
+			</div>
+            <div class="col-md-9">
+                <div class="col-md-9">
+                    <button class="btn-link" ng-click="cancelar()" >Cancelar</button>
+                    ó 
+                    <button class="btn btn-primary" ng-click="guardar()" >Guardar</button>
+                </div>
+            </div>
+
+		</div>
+    </div>
+    <!--div class="modal-footer">
+        <button class="btn btn-success form-control" ng-click="guardar()">Guardar</button>
+        <div class="divider-lg"></div><br>
+        <button class="btn btn-warning form-control" ng-click="cancelar()">Cancelar</button>
+
+
+            <div class="col-md-9">
+                <div class="col-md-9">
+                    <button class="btn-link" ng-click="cancelar()" >Cancelar</button>
+                    ó 
+                    <button class="btn btn-primary" ng-click="guardar()" >Guardar</button>
+                </div>
+            </div>
+
+    </div-->

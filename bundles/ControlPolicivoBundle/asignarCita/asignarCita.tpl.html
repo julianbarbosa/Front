@@ -1,0 +1,108 @@
+<div>
+    <div class="col-md-8">
+        <div ng-show="validator.alert.content">
+            <div class="alert {{validator.alert.type}} alert-dismissable">
+                <i class="fa fa-danger"></i>
+                <button type="button" class="close" aria-hidden="true" ng-click="hideAlert()">×</button>
+                <b>{{validator.alert.title}}</b> <span ng-bind-html="validator.alert.content"></span>
+            </div>
+        </div>
+        <div class="panel panel-success">
+            <div class="panel-heading ">
+                <span class="panel-title">Asignar Cita para Audiencia</span>
+                <div class="panel-heading-controls">
+                </div>
+            </div>
+            <div class="panel-body">
+                <form name="userForm">
+                    
+                    <div class="row table-primary">
+                        <h4 class="padding-sm no-padding-t padding-xs-hr"><i class="fa fa-map-o text-primary" aria-hidden="true"></i>&nbsp;&nbsp;Citados</h4>
+                        <table class="table table-striped table-bordered ">
+                            <thead>
+                                <tr>
+                                    <th align="center" width="120">Crear Cita?</th>
+                                    <th align="center" width="120">Compareciente</th>
+                                    <th align="center" width="100">Numero Identificación</th>
+                                    <th align="center" width="80">Nombre</th>
+                                    <th align="center">Apellido</th>                                    
+                                </tr>
+                            </thead>
+                            <tr>
+                                <td><input type="checkbox" ng-model="cita.solicitante"></td>
+                                <td>Solicitante</td>
+                                <td>{{comparendo.solicitante.identificacion}}</td>
+                                <td>{{comparendo.solicitante.nombre}}</td>
+                                <td>{{comparendo.solicitante.apellido}}</td>                                       
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox" ng-model="cita.infractor"></td>
+                                <td>Infractor</td>
+                                <td>{{comparendo.infractor.identificacion}}</td>
+                                <td>{{comparendo.infractor.nombre}}</td>
+                                <td>{{comparendo.infractor.apellido}}</td>                                       
+                            </tr>                            
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-4">
+                            <label class="control-label" for="informacion_adicional">Duración (Minutos)</label>
+                            <select class="form-control"
+                                    ng-model="cita.duracion"
+                                    ng-change="consultarEventos()">
+                                <option value="">-- Seleccione --</option>
+                                <option value="20">20</option>
+                                <option value="40">40</option>
+                                <option value="60">60</option>
+                                <option value="80">80</option>
+                                <option value="100">100</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4" ng-show="cita.duracion">
+                            <label class="control-label" for="informacion_adicional">Fecha de Cita</label>
+                            <select class="form-control"
+                                    ng-model="cita.fechaCita"
+                                    ng-options="(fecha.fecha|date:'yyyy-MM-dd') for fecha in fechas"
+                                    ng-change="consultarEventos()"
+                                    required>
+                            </select>                                
+                        </div>
+                        <div class="form-group col-md-4" ng-show="arrayHorasDisponibles">
+                            <label class="control-label" for="informacion_adicional">Hora de Cita</label>
+                            <select class="form-control"
+                                    ng-model="cita.horaCita"
+                                    ng-options="horaDisponible.hora|date:'HH:mm' for horaDisponible in arrayHorasDisponibles"
+                                    autofocus>                                
+                            </select>
+                        </div>
+                    </div>                    
+                    <div class="row col-md-12">
+                        <div class="form-group">
+                            <label class="control-label" for="informacion_adicional">Observaciones de Cita</label>
+                            <textarea rows="4"
+                                      cols="30"
+                                      placeholder="Escriba un comentario sobre la visita"
+                                      ng-model="cita.observaciones"
+                                      class="form-control"
+                                      name="comentario"
+                                      id="comentario">
+                            </textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="row padding-sm ">
+                        <div class="col-md-6 text-left-sm">
+                            <a href="https://www.google.com/calendar?tab=wc" target="_blank"><i class="fa fa fa-calendar" aria-hidden="true"></i> Google Calendar</a>&nbsp;&nbsp;&nbsp;
+                            <a href="{{root}}controlpolicivo/vercitaciones/{{proceso.idsolicitud}}"  target="_blank"><i class="fa fa-file-text" aria-hidden="true"></i> Ver Citación</a>&nbsp;&nbsp;&nbsp;
+                        </div>
+                        <div class="col-md-6 text-right-sm">
+                            <input type="submit" class="btn btn-primary" ng-click="save()" value="Asignar Cita" ng-if="!isSuccess"/>
+                            ó
+                            <a ui-sref="listar-peticion">Cancelar</a>
+                        </div>                        
+                    </div>                    
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

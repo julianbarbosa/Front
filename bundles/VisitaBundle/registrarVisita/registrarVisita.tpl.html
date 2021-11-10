@@ -1,0 +1,283 @@
+
+<style>
+    .number-control { 
+        padding-right: 2px !important; 
+}
+input.ng-dirty.ng-invalid {
+  color: red
+}
+</style>
+
+<link rel="stylesheet" href="https://js.arcgis.com/4.8/esri/css/main.css">
+    <script src="https://js.arcgis.com/4.8/"></script>
+<style>
+    /* Esri JSAPI */
+    
+    html, body, #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 600px;
+        width: 100%;
+    }
+
+    .esri-feature {
+        letter-spacing: 0em;
+        font-family: "Avenir Next", "Helvetica Neue", sans-serif;
+        line-height: 1.55rem;
+        font-feature-settings: "liga"1, "calt"0;
+        background: #fff;
+        padding: 1em;
+    }
+
+    .esri-popup__main-container {
+        min-height: 400px;
+    } 
+    
+    .esri-view-width-xlarge .esri-popup__main-container,
+    .esri-view-width-large .esri-popup__main-container,
+    .esri-view-width-medium .esri-popup__main-container
+    {
+        width: 500px !important;
+    }
+
+    .legend-well {
+        margin-top: 20px;
+        float: none;
+    }
+
+    .legend-well div {
+        white-space: initial;
+    }
+</style>
+
+
+<div>
+    <div id="modalIngresoDireccion" class="modal fade modal-change" role="dialog" aria-hidden="true" style="display: none;"></div>
+    <div ng-show="validator.alert.content">
+        <div class="alert alert-{{validator.alert.type}} alert-dismissable">
+            <i class="fa fa-danger"></i>
+            <button type="button" class="close" aria-hidden="true" ng-click="hideAlert()">×</button>
+            <b>{{validator.alert.title}}</b> <span ng-bind-html="validator.alert.content"></span>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="panel panel-success">
+            <div class="panel-heading ">
+                <span class="panel-title">Creación de Visita</span>
+                <div class="panel-heading-controls">
+                </div>
+            </div>
+            
+            <div class="panel-body">
+                <form name="form" class="form-horizontal">
+                    <div  class="form-group has-feedback simple">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4>GEOREFERENCIACIÓN DE LA VISITA</h4>
+                            </div>
+                        </div>
+                        <div class="col-lg-12" >
+                            <esri-scene-view map="vm.map"  id="viewDiv" view-options="{zoom:13, center:[-76.52,3.435]}" on-create="vm.onViewCreated" on-error="vm.onViewError" ng-hide="vm.showViewError" style="height: 70vh;"></esri-scene-view>
+                        </div>
+                        <span>Longitud: {{datavisita.longitud}}, Latitud: {{datavisita.latitud}}</span>
+                    </div>
+                    <div  class="form-group has-feedback simple"  ng-repeat="campo in camposformularioVisita track by $index">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4>{{campo.nombre}}</h4>
+                            </div>
+                        </div>
+                        
+                        <!-- Construcción de Grid -->
+                        
+                        <!-- Encabezados-->
+                        <div class="row align-items-center">
+                            <div class="col-md-12">
+                                <div class="col-md-12" ng-if="campo.arrayDescripcion.length > 1">
+                                    <div class="col-md-{{12-((12 / campo.arrayDescripcion.length) | number:0)*(campo.arrayDescripcion.length-1)}}  text-center" >
+                                        <strong>{{campo.arrayDescripcion[0]}} </strong> 
+                                    </div>
+                                    <div class="col-md-{{(12 / campo.arrayDescripcion.length) | number:0}} text-center" ng-repeat="subtitulo in campo.arrayDescripcion | limitTo:50:1">
+                                        <strong>{{subtitulo}}</strong>
+                                    </div>
+                                </div>
+                            </div> 
+                        </div>
+                        <!-- Fin encabezados-->
+                        
+                        <div class="row" ng-repeat="arrayItem in campo.arrayItems track by $index" ng-if="campo.arrayItems[0].item.items.length > 1" style="margin-top:3px;">
+                            <div class="col-md-12">
+                                <!-- -->
+                                <div class="col-md-{{12-((12 / campo.arrayDescripcion.length) | number:0)*(campo.arrayDescripcion.length-1)}}">
+                                    <span ng-if="campo.arrayDescripcion.length>campo.arrayItems[0].item.items.length">
+                                        {{arrayItem.item.nombre}}
+                                    </span> 
+                                    <input type="text" class="form-control" ng-if="campo.arrayDescripcion.length==campo.arrayItems[0].item.items.length"  ng-model="campo.arrayItems[$index].item.items[0].valor" value="{{campo.arrayItems[$index].item.items[0].valor}}" >
+                                </div>
+                                <div class="col-md-{{(12 / campo.arrayDescripcion.length) | number:0}}" ng-repeat="input in arrayItem.item.items" ng-if="(campo.arrayDescripcion.length==campo.arrayItems[0].item.items.length && $index>0) || campo.arrayDescripcion.length>campo.arrayItems[0].item.items.length">
+                                    <input type="text" name="{{input.valor}}" class="form-control" ng-model="input.valor" value="{{input.valor}}"  ng-if="input.tipoItem === 'texto-min' &&  input.soloLectura==0" ng-readonly="form[input.valor].$untouched && input.valor"> 
+                                    
+                                    <input type="number" step ="0.01" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" class="form-control number-control" ng-model="input.valor" value="{{input.valor}}" ng-if="input.tipoItem === 'numero' &&  input.soloLectura==0" >
+                                    
+                                    <select class="form-control input-xlarge" ng-model="input.valor" ng-if="input.tipoItem === 'lista' &&  input.soloLectura==0">                                <option  ng-repeat="opcion in input.parametros.opciones" value="{{opcion}}">{{opcion}}</option>
+                                    </select>
+                                    
+                                    <input type="date" class="form-control input-xlarge" ng-if="input.tipoItem === 'fecha'" title="{{input.descripcion}}" value="{{input.valor}}" ng-model="input.valor" date-serializer> 
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Fin Construcción de Grid -->
+                        
+                        
+                        <div  ng-repeat="arrayItem in campo.arrayItems track by $index" ng-if="campo.arrayItems[0].item.items.length == 1">
+                            <!-- Solo lectura -->
+                            <div class="col-md-6" ng-if="arrayItem.item.items[0].soloLectura==1" >
+                                <label class="control-label" >--{{ arrayItem.item.nombre }}</label>
+                                <div class="col-md-8" ng-repeat="input in arrayItem.item.items">                                     
+                                    <input type="text" 
+                                           class="form-control input-xlarge"                                           
+                                           title="{{input.descripcion}}" 
+                                           value="{{input.valor}}"
+                                           readonly="readonly"
+                                           value="{{ camposLectura[0][input.codigo] }}">
+                                </div>
+                            </div>
+                            <!-- Fin Solo Lectura -->
+
+                            <!-- Texto Mediano -->
+                            <div class="col-md-6" ng-if="arrayItem.item.items[0].tipoItem === 'texto-min' && arrayItem.item.items[0].soloLectura==0" >  
+                                                             
+                                <div class="col-md-12" ng-repeat="input in arrayItem.item.items">
+                                    <label class="control-label" >{{ arrayItem.item.nombre }}</label>
+                                    <div class="input-group" ng-show="form[input.valor].$pristine && form[input.valor].$untouched && input.valor">
+                                        <input type="text" name="{{input.valor}}"
+                                            class="form-control"
+                                            ng-model="input.valor"
+                                            title="{{input.descripcion}}" 
+                                            ng-readonly="form[input.valor].$untouched && input.valor">
+                                        <div class="input-group-addon" >
+                                            <i class="fa fa-lock" aria-hidden="true" ng-click="form[input.valor].$setTouched();form[input.valor].$setDirty()" style="cursor: pointer; "></i>
+                                        </div>
+                                    </div>
+                                    <input type="text" name="{{input.valor}}" class="form-control" ng-model="input.valor" title="{{input.descripcion}}" ng-show="form[input.valor].$dirty || !input.valor" ng-change="form[input.valor].$setTouched()">
+                                </div>
+                            </div>
+                            <!-- Fin Texto Mediano -->
+                            
+                            <!-- texto corto -->
+                            <div class="col-md-6" ng-if="arrayItem.item.items[0].tipoItem === 'texto' && arrayItem.item.items[0].soloLectura==0" >
+                                <!-- <div class="col-md-3" ng-if="$index % 2 == 0">
+                                    {{arrayItem.item.nombre}} 
+                                </div>
+                                <div class="col-md-3 col-md-offset-1" ng-if="$index % 2 != 0">
+                                    {{arrayItem.item.nombre}} 
+                                </div> -->
+                                <div class="col-md-12" ng-repeat="input in arrayItem.item.items">    
+                                    <label class="control-label" >{{ arrayItem.item.nombre }}</label>                                 
+                                    <input type="text" 
+                                           class="form-control input-xlarge"
+                                           ng-model="input.valor"
+                                           title="{{input.descripcion}}"
+                                           value="{{input.valor}}">
+                                </div>
+                            </div>
+                            <!-- Fin texto -->
+                            
+                            <!-- Lista -->
+                            <div class="col-md-6" ng-if="arrayItem.item.items[0].tipoItem === 'lista' && arrayItem.item.items[0].soloLectura==0">
+                                
+                                <div class="col-md-12" ng-repeat="input in arrayItem.item.items">
+                                    <label class="control-label" >{{ arrayItem.item.nombre }}</label>        
+                                    <select class="form-control input-xlarge" ng-model="input.valor">                                        
+                                        <option  ng-repeat="opcion in input.parametos.opciones" value="{{opcion}}">{{opcion}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- Lista -->
+
+                            
+                            <!-- Número -->
+                            <div class="col-md-6" ng-if="arrayItem.item.items[0].tipoItem === 'numero' && arrayItem.item.items[0].soloLectura==0">
+                                 <div class="col-md-12" ng-repeat="input in arrayItem.item.items">
+                                    <label class="control-label" >{{ arrayItem.item.nombre }}</label>        
+                                    <input type="text" number-mask=""  class="form-control input-xlarge" 
+                                           title="{{input.descripcion}}" 
+                                           value="{{input.valor}}"
+                                           ng-model="input.valor">
+                                </div>
+                            </div>
+                            <!-- Fin Número -->
+
+                            
+                            <!-- Fecha -->
+                            <div class="col-md-6" ng-if="arrayItem.item.items[0].tipoItem == 'fecha' && arrayItem.item.items[0].soloLectura==0">
+                                <div class="col-md-12" ng-repeat="input in arrayItem.item.items">
+                                    <label class="control-label" >{{ arrayItem.item.nombre }}</label>        
+                                    <input type="date" 
+                                           class="form-control input-xlarge" 
+                                           title="{{input.descripcion}}" 
+                                           value="{{input.valor}}"
+                                           ng-model="input.valor"
+                                           date-serializer>
+                                </div>
+                            </div>
+                            <!-- Fin Fecha -->
+                            
+                            <!-- Archivo -->                            
+                            <div class="col-md-6" ng-if="arrayItem.item.items[0].tipoItem == 'archivo' && arrayItem.item.items[0].soloLectura==0">
+                                <input type="file" class="form-control" name="uploadedfile" file-upload multiple>
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th width="50%">Nombre</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="item in files">
+                                            <td><strong>{{ item.name}}</strong></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- Fin Archivo -->
+                            
+                            <!-- texto-largo -->
+                            <div class="col-md-12"  ng-if="arrayItem.item.items[0].tipoItem == 'texto-largo' && arrayItem.item.items[0].soloLectura==0">
+                                <div class="col-md-12" ng-repeat="input in arrayItem.item.items">
+                                    <label class="control-label" >{{ arrayItem.item.nombre }}</label>                 
+                                    <textarea class="form-control input-xlarge" ng-model="input.valor" style="height:150"></textarea>
+                                </div>
+                            </div>
+                            <!-- Fin texto-largo -->
+                            
+                            <!-- Imagen -->         
+                            <div class="col-md-6" ng-if="arrayItem.item.items[0].tipoItem == 'imagen' && arrayItem.item.items[0].soloLectura==0">
+                                <div class="col-md-12" >
+                                    <div class="col-md-12"  ng-repeat="input in arrayItem.item.items">
+                                        <input-file label="{{input.nombre}}" description="" model="inputFiles[input.codigo]" required="{{requiredLicencia}}"></input-file>
+                                        <a href="{{root}}upload/documentos/{{input.valor}}" target="_blank"><img src="{{root}}upload/documentos/{{input.valor}}"  width="50px" ng-show="input.valor"></a>
+                                    </div>
+                                </div>
+                            </div> 
+                            <!-- Fin Imagen -->
+                        </div>
+                        
+                        
+                        
+                    </div>    
+                    <ul>
+                        <li ng-repeat="visitaxdocumento in visitasxdocumento track by $index">
+                            <a href="{{root}}.. /upload/documentos/{{visitaxdocumento.archivo}}" target="blank">Adjunto {{$index+1}}</a>
+                        </li>
+                    </ul>
+                    <div class="row padding-sm text-right-sm">
+                        <input type="submit" class="btn btn-primary" ng-click="save(0)" ng-disabled="form.$invalid" value="Guardar en Borrador" />
+                        <input type="submit" class="btn btn-primary" ng-click="save(1)" ng-disabled="form.$invalid"value="Registrar Visita" />
+                        ó
+                        <a ui-sref="listar-peticion">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

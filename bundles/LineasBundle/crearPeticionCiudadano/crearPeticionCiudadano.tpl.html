@@ -1,0 +1,284 @@
+<script>
+    function cerrarModal() {
+        $('#modalIngresoDireccion').modal('toggle');
+    }
+</script>
+<style>
+    .form-group.required .control-label:after {
+        content:"*";
+        color:red;
+    }
+</style>
+<div class="panel">
+    <div class="panel-body">
+        <div id="modalIngresoDireccion" class="modal fade modal-change" role="dialog" aria-hidden="true" ></div>
+        <div class="page-header">
+            <h1 class="col-xs-12 col-sm-12 text-center text-left-sm">
+                <i class="fa fa-map" aria-hidden="true"></i>
+                &nbsp;&nbsp;Solicitud de Lineas de Demarcación
+            </h1>
+        </div>
+        <div class="col-md-8">
+            <div ng-show="validator.alert.content">
+                <div class="alert {{validator.alert.type}} alert-dismissable">
+                    <i class="fa fa-danger"></i>
+                    <button type="button" class="close" aria-hidden="true" ng-click="hideAlert()">×</button>
+                    <b>{{validator.alert.title}}</b> <span ng-bind-html="validator.alert.content"></span>
+                </div>
+            </div>
+            <div class="wizard-wrapper no-border  no-padding">
+                <ul class="wizard-steps" class="col-md-12">
+                    <li data-target="#wizard-account" class="col-md-3" ng-class="{'active': step === 1,'completed':step > 1 }" ng-click="step = 1">
+                        <span class="wizard-step-number">1</span>
+                        <span class="wizard-step-caption">
+                            Localización
+                            <span class="wizard-step-description">Ubicación del predio.</span>
+                        </span>
+                    </li>
+                    <li data-target="#wizard-profile" class="col-md-3"  ng-class="{'active': step === 2,'completed':step > 2 }" ng-click="step = 2"> <!-- ! Remove space between elements by dropping close angle -->
+                        <span class="wizard-step-number">2</span>
+                        <span class="wizard-step-caption">
+                            Básico
+                            <span class="wizard-step-description">Información básica</span>
+                        </span>
+                    </li>
+                    <li data-target="#wizard-credit-card" class="col-md-3"  ng-class="{'active': step === 3,'completed':step > 3 }" ng-click="step = 3"> <!-- ! Remove space between elements by dropping close angle -->
+                        <span class="wizard-step-number">3</span>
+                        <span class="wizard-step-caption">
+                            Anexos
+                            <span class="wizard-step-description">Adjunte archivos.</span>
+                        </span>
+                    </li>
+                    <li data-target="#wizard-finish" class="col-md-3" ng-class="{'active': step === 4,'completed':step > 4 }" ng-click="step = 4"> <!-- ! Remove space between elements by dropping close angle -->
+                        <span class="wizard-step-number">4</span>
+                        <span class="wizard-step-caption">
+                            Terminar
+                            <span class="wizard-step-description">Estampilla</span>
+                        </span>
+                    </li>
+                </ul> <!-- / .wizard-steps -->
+            </div>
+            <form name="form">
+                <div class="row padding-sm" id="zona">
+                    <div ng-show="step == 2">
+                        
+                        <div class="form-group  form-inline has-feedback simple" ng-class="{'has-error': validator.zona }">
+                            <p class="help-block">{{validator.tipo_busqueda}}</p>
+                            <div class="col-sm-10">
+                                <div class="col-sm-4">
+                                    <label class="control-label" for="tipo_busqueda">Seleccione la Zona del Predio:  </label>
+                                </div>
+                                <div class="radio col-sm-2">
+                                    <label>
+                                        <input type="radio" ng-model="peticion.zona_predio" ng-value="1" class="px" checked="">
+                                        <span class="lbl">Urbana</span>
+                                    </label>
+                                </div>
+                                <div class="radio col-sm-2">
+                                    <label>
+                                        <input type="radio" ng-model="peticion.zona_predio" ng-value="2" class="px">
+                                        <span class="lbl">Rural</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" ng-class="{'has-error': validator.predio}" ng-show=" peticion.zona_predio == 1">
+                            <div class="form-group required col-md-4" >
+                                <label class="control-label" for="direccion">Dirección:</label>
+                                <div class="input-group">
+                                    <input type="text"
+                                           id="BusquedaDireccion"
+                                           class="form-control input-xlarge"
+                                           ng-model="peticion.direccion"
+                                           ng-click="obtenerModalIngresoDireccion()"
+                                           readonly="readonly"
+                                           placeholder="Ingrese la dirección"
+                                           data-toggle="tooltip"
+                                           title="De clic aquí para ingresar la dirección."
+                                           autocomplete="off"
+                                           required/>
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-primary" ng-click="obtenerModalIngresoDireccion()">
+                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group required col-md-4"
+                                 ng-class="{'has-error': validator.predio}">
+                                <label class="control-label" for="direccion">Información Adicional:</label>
+                                <input type="text"
+                                       id="BusquedaInformacionAdicional"
+                                       class="form-control input-xlarge"
+                                       ng-model="peticion.informacionadicional"
+                                       ng-click="obtenerModalIngresoDireccion()"
+                                       readonly="readonly"
+                                       placeholder="Ingrese la información adicional de la dirección"
+                                       data-toggle="tooltip"
+                                       title="De clic aquí para ingresar la dirección."
+                                       autocomplete="off"
+                                       />
+                                <p class="help-block">{{validator.predio}}</p>
+                            </div>
+                            <div class="form-group  required col-md-4"
+                                 ng-class="{'has-error': form.NPN.$touched && form.NPN.$invalid}">
+                                <label class="control-label" for="codigo_unico">Número Predial Nacional:</label>
+                                <input type="text"
+                                       id="NPN"
+                                       name="NPN"
+                                       class="form-control input-xlarge col-md-12"
+                                       ng-model="peticion.codigo_unico"
+                                       ng-maxlength="maxlengthcodigounico"
+                                       maxlength="{{maxlengthcodigounico}}"
+                                       data-toggle="tooltip"
+                                       title="El numero codigo único contiene 30 caracteres."
+                                       autocomplete="off"
+                                       ui-mask="760019999999999999999999999999"
+                                       ui-mask-placeholder
+                                       ui-mask-placeholder-char="_"
+                                       ui-mask-use-viewvalue="true"
+                                       required/>
+                            </div>
+                        </div>
+                        <div class="row" ng-if="peticion.zona_predio == 1">
+                            <div class="form-group required col-md-3"
+                                 ng-class="{'has-error': form.numero_predial.$touched && form.numero_predial.$invalid}">
+                                <label class="control-label" for="numero_predial">Número Predial</label>
+                                <input type="text"
+                                       name="numero_predial"
+                                       class="form-control input-xlarge"
+                                       ng-model="peticion.numero_predial"
+                                       ui-mask="*999*99999999"
+                                       ui-mask-placeholder
+                                       ui-mask-placeholder-char="_"
+                                       ui-mask-use-viewvalue="true"
+                                       ui-options='{"allowInvalidValue" : true}'
+                                       required
+                                       capitalize/>
+                                <p class="help-block" ng-if="form.numero_predial.$touched && form.numero_predial.$invalid">Ingrese el número predial.</p>
+                            </div>
+                            <div class="form-group required col-md-4"
+                                 ng-class="{'has-error': form.matricula.$touched && form.matricula.$invalid}">
+                                <label class="control-label" for="matricula">Matricula</label>
+                                <input type="text"
+                                       id="matricula"
+                                       name="matricula"
+                                       ui-mask="370-999999*"
+                                       ui-mask-placeholder
+                                       ui-mask-placeholder-char="_"
+                                       ui-mask-use-viewvalue="true"
+                                       class="form-control input-xlarge"
+                                       ng-model="peticion.matricula"
+                                       autocomplete="off"
+                                       required/>
+                                <p class="help-block" ng-if="form.matricula.$touched && form.matricula.$invalid">Ingrese la matricula.</p>
+                            </div>
+                            <div class="form-group required col-md-5" ng-class="{'has-error': form.BusquedaBarrio.$touched && !peticion.idbarrio.idbarrio}">
+                                <label class="control-label" for="barrio">Barrio: <i ng-show="loadingBarrio" class="fa fa-spinner fa-spin"></i></label>
+                                <input type="text"
+                                       id="BusquedaBarrio"
+                                       name="BusquedaBarrio"
+                                       class="form-control input-xlarge"
+                                       ng-model="peticion.idbarrio"
+                                       uib-typeahead="itembarrio as itembarrio.nombre for itembarrio in getBarrios($viewValue)"
+                                       typeahead-wait-ms="1000"
+                                       typeahead-loading="loadingBarrio"
+                                       typeahead-on-select="onSelect($item, 'nombre', $label)"
+                                       uib-typeahead-min-length="3"
+                                       bs-typeahead placeholder="Ingrese el nombre del barrio del predio"
+                                       typeahead-no-results="noResults"
+                                       autocomplete="off"
+                                       required/>
+                                <span ng-if="noResults" auto-close="disabled" is-open="true" uib-dropdown uib-dropdown-toggle>
+                                    <ul class="dropdown-menu">
+                                        <li role="menuitem"><a href>No se encontraron resultados</a></li>
+                                    </ul>
+                                </span>
+                                <p class="help-block" ng-if="form.BusquedaBarrio.$touched && !peticion.idbarrio.idbarrio">Por favor seleccione un barrio.</p>
+                            </div>
+                        </div>
+                        <div class="note note-warning" ng-show=" peticion.zona_predio == 1">
+                            Los campos marcados con un <span class="text-danger">*</span> son obligatorios.
+                        </div>
+                        <div class="note note-danger" ng-show=" peticion.zona_predio == 2">
+                            <!-- Modificacion por esquema basico-->
+                            <strong class="text-danger">Advertencia:</strong> Toda línea de demarcación de los predios Rurales se debe tramitar por <strong>Delineación con esquema básico - Plano topográfico con afectaciones</strong>.
+                            <br><br>Para obtener mas información de este trámite de clic <strong><a href="http://www.cali.gov.co/tramites/257/delineacion-con-esquema-basico---plano-topografico-con-afectaciones/" target="_blank">aquí</a></strong>
+                        </div>
+                        <div class="row padding-sm text-right-sm" ng-show=" peticion.zona_predio === 1">
+                            <input type="button" class="btn btn-primary" ng-click="step = step + 1" value="Siguiente" ng-disabled="form.$invalid || !peticion.idbarrio.idbarrio"/>
+                        </div>
+                    </div>
+                    <div ng-show="step == 1">
+                        <div class="note note-info">
+                            <strong>Nota:</strong> Indique la localización del predio dando clic sobre su ubicación en el mapa.<i class="fa fa-2x fa-map-marker text-primary" aria-hidden="true"></i>
+                        </div>                        
+                        <div class="row">
+                            <div>Latitud: {{peticion.latitud}}, Longitud: {{peticion.longitud}}</div>
+                            <div map-lazy-load="{{googleMapsUrl}}">
+                                <ng-map  id="map"  center="3.4424863,-76.524086" zoom="10" ng-click="llamar()">                                  
+                                </ng-map>                         
+                            </div>
+                            <div class="row padding-sm text-right-sm">
+                                <input type="button" class="btn btn-info" ng-click="step = step - 1" value="Anterior" />
+                                <input type="button" class="btn btn-primary" ng-click="step = step + 1" value="Siguiente" ng-disabled="!peticion.longitud || !peticion.latitud" />
+                            </div>                            
+                        </div>
+                    </div>
+                    <div class="row"  ng-show="step == 3">
+                        <div class="note note-info">
+                            <strong class="text-info">Información:</strong> Para agilizar el proceso del trámite se recomienda anexar los siguientes documentos:<br><br>
+                            <ul>
+                                <li>Títulos de propiedad</li>
+                                <li>Certificado de Tradición</li>
+                                <li>Fotos del Predio</li>
+                            </ul>
+                        </div>                       
+                        <input type="file" class="btn form-control" ng-model="peticion.uploadedfile" name="uploadedfile" file-upload multiple>
+                        <div class="panel">
+                            <div class="panel-heading">
+                                <span class="panel-title">Archivos Seleccionados</span>
+                            </div>
+                            <div class="panel-body">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Nombre Archivo</th>                                            
+                                            <th>Eliminar</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="item in files track by $index">
+                                            <td>{{ $index +1}}</td>
+                                            <td>{{ item.name}}</td>
+                                            <td><i class="fa fa-2x fa-times text-danger" aria-hidden="true" title="eliminar" ng-click="deleteFile($index)"></i></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row padding-sm text-right-sm">
+                            <input type="button" class="btn btn-info" ng-click="step = step - 1" value="Anterior" />
+                            <input type="button" class="btn btn-primary" ng-click="step = step + 1" value="Siguiente" />
+                        </div>
+                    </div>
+                    <div ng-show="step == 4">
+                        <div class="note note-info">
+                            <strong class="text-info">Información:</strong> El Certificado de Líneas de Demarcación no tiene validez si no lleva las estampillas de prodesarrollo urbano establecidas en el acuerdo municipal 321 del 30 de diciembre del 2011. Artículos 10, 199-201 y las circulares que actualicen la tarifa para su cobro.
+                            <br><br>En caso de que su Solicitud de Certificado de Lineas de demarcación sea aprobado deberá adquirir la estampilla en físico en la oficina de tesorería del CAM.
+                        </div>
+                        <div class="note note-danger">
+                            <strong class="text-danger">Información:</strong> Lo invitamos a consultar el estado del trámite a través de la opción <span class="text-danger"><i class="fa fa-search" aria-hidden="true"></i> Consultar estado del Trámite</span> en el Menú Principal.
+                        </div>
+                        <div class="row padding-sm text-right-sm">
+                            <input type="button" class="btn btn-info" ng-click="step = step - 1" value="Anterior" />
+                            <input type="button" class="btn btn-primary" ng-click="save()" ng-if="saveButton" prevent-enter-submit value="Crear Solicitud" />                            
+                            <a ui-sref="listar-peticion">Cancelar</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

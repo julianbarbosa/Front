@@ -1,0 +1,241 @@
+<script>
+    function cerrarModal() {
+        $('#modalIngresoDireccion').modal('toggle'); 
+    }
+</script>
+<style>
+
+</style>
+<div>
+    <div id="modalIngresoDireccion" class="modal fade modal-change" role="dialog" aria-hidden="true" ></div>
+    <div class="col-md-12 col-lg-11">
+        <div ng-show="validator.alert.content">
+            <div class="alert {{validator.alert.type}} alert-dismissable">
+                <i class="fa fa-danger"></i>
+                <button type="button" class="close" aria-hidden="true" ng-click="hideAlert()">×</button>
+                <b>{{validator.alert.title}}</b> <span ng-bind-html="validator.alert.content"></span>
+            </div>
+        </div>	
+        <div >
+        <div class="panel"> 
+            <div class="panel-body">
+                <div class="page-header">
+                    <h1 class="col-xs-12 col-sm-10 text-center text-left-sm"><i class="padding-sm-hr fa fa-hand-paper-o"></i>&nbsp;&nbsp;Ver Linea de Demarcación Por Lado de Manzana {{linea.id}}</h1>            
+                </div>
+                <form name="form">                                       
+                    <div class="alert alert-danger" ng-if="solicitudes_asociadas_npn.success==true" ng-bind-html="solicitudes_asociadas_npn.msg"></div>
+                    <div class="row" ng-if="linea.direccion">
+                        <div class="col-md-3">
+                            Dirección:  <strong>{{linea.direccion}}</strong><br><br>
+                        </div>
+                        <div class="col-md-3">
+                            NPN: <strong>{{linea.npn}}</strong><br><br>
+                        </div>
+                        
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label>Demarcación definida por: </label>
+                            {{linea.definicionDemarcacion}}
+                        </div>
+                        <div class="col-md-1">
+                            <label>Zona: </label>
+                            {{linea.zona}}
+                        </div>                        
+                        <div class="col-md-3">
+                            <div class="form-group ">
+                                <label class="control-label" for="nombreViaSecundaria">Fuente 1 </label>
+                                {{linea.fuente1}}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label" for="fuente2">Fuente 2 </label>
+                                {{linea.fuente2}}                                
+                            </div>
+                        </div>                        
+                    </div>
+                    <!--Izquierdo-->                    
+                    <div class="row">
+                        <div class="col-md-1">
+                            <h5 class="text-blue text-semibold">Lado Izquierdo</h5>
+                        </div>
+                        <div class="form-group  col-md-3" 
+                             ng-if="linea.zona=='Urbana'"
+                             ng-class="{'has-error': form.BusquedaBarrioIzquierdo.$touched && !linea.barrioIzquierdo.idbarrio}">
+                            <label class="control-label" for="barrio">Barrio: <i ng-show="loadingBarrioIzquierdo" class="fa fa-spinner fa-spin"></i></label>
+                            {{linea.barrioIzquierdo.nombre}}
+                        </div>
+                        <div class="form-group  col-md-3" ng-if="linea.zona=='Rural'">
+                            <label class="control-label" for="barrio">Vereda: <i ng-show="loadingVeredaIzquierdo" class="fa fa-spinner fa-spin"></i></label>
+                            {{linea.veredaIzquierdo.nombre}}
+                        </div>
+                        <div class="form-group  col-md-2" ng-if="linea.tiene_separador===true">
+                            <label class="control-label" for="calzadaIzquierdo">Calzada </label>
+                            {{linea.calzada}}                          
+                        </div>   
+                        <div class="form-group  col-md-2">
+                            <label class="control-label" for="numeroPredial">Número Predial </label>
+                            {{linea.numeroPredialIzquierdo}}
+                        </div>    
+                        <div class="col-md-2">
+                            <div class="form-group ">
+                                <label class="control-label" for="antejardinIzquierdo">Antejardín </label>
+                                {{linea.antejardinIzquierdo}}
+                            </div>
+                        </div>                        
+                        <div class="col-md-2">
+                            <div class="form-group ">
+                                <label class="control-label" for="anden">Andén </label>
+                                {{linea.andenIzquierdo}}
+                            </div>
+                        </div>                        
+                    </div>
+                    <div class="row" ng-if="linea.esquina_diferente==true">     
+                        <div class="col-md-6">
+                            &nbsp;
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group "
+                                 ng-class="{'has-error': form.antejardinIzquierdoEsquina.$touched && form.antejardinIzquierdoEsquina.$invalid}">
+                                <label class="control-label" for="antejardinIzquierdoEsquina">Antejardín Esq</label>
+                                {{linea.antejardinIzquierdoEsquina}}
+                            </div>
+                        </div>                        
+                        <div class="col-md-2">
+                            <div class="form-group "
+                                 ng-class="{'has-error': form.andenIzquierdoEsquina.$touched && form.andenIzquierdoEsquina.$invalid}">
+                                <label class="control-label" for="anden">Andén Esq</label>
+                                {{linea.andenIzquierdoEsquina}}
+                            </div>
+                        </div>  
+                    </div>
+                    <!--Derecho-->
+                    <div class="row" ng-if="linea.lado==null || linea.lado=='LadoDerecho'">
+                        <div class="col-md-1">
+                            <h5 class="text-blue text-semibold">Lado Derecho</h5>
+                        </div>
+                        <div class="form-group  col-md-3" 
+                             ng-if="linea.zona=='Urbana'"
+                             ng-class="{'has-error': form.BusquedaBarrioDerecho.$touched && !linea.barrioDerecho.idbarrio}">
+                            <label class="control-label" for="barrio">Barrio: <i ng-show="loadingBarrioDerecho" class="fa fa-spinner fa-spin"></i></label>
+                            {{linea.barrioDerecho.nombre}}
+                        </div>
+                        <div class="form-group  col-md-3" 
+                             ng-if="linea.zona=='Rural'"
+                             ng-class="{'has-error': form.BusquedaVereda.$touched && !linea.vereda.idVereda}">
+                            <label class="control-label" for="barrio">Vereda: <i ng-show="loadingVeredaDerecho" class="fa fa-spinner fa-spin"></i></label>
+                            {{linea.veredaDerecho.nombre}} 
+                        </div>
+                        <div class="form-group  col-md-2"
+                             ng-class="{'has-error': form.calzadaDerecha.$touched && form.calzadaDerecha.$invalid}"
+                             ng-if="linea.tiene_separador===true">
+                            <label class="control-label" for="calzadaDerecha">Calzada </label>
+                            {{linea.calzadaDerecha}}                    
+                        </div>   
+                        <div class="form-group  col-md-2"
+                             ng-class="{'has-error': form.numeroPredialDerecho.$touched && form.numeroPredialDerecho.$invalid}">
+                            <label class="control-label" for="numeroPredial">Número Predial </label>
+                            {{linea.numeroPredialDerecho}}
+                        </div>    
+                        <div class="col-md-2">
+                            <div class="form-group ">
+                                <label class="control-label" for="antejardinDerecho">Antejardín </label>
+                                {{linea.antejardinDerecho}}
+
+                            </div>
+                        </div>                        
+                        <div class="col-md-2">
+                            <div class="form-group "
+                                 ng-class="{'has-error': form.andenDerecho.$touched && form.andenDerecho.$invalid}">
+                                <label class="control-label" for="anden">Andén </label>
+                                {{linea.andenDerecho}}                                
+                            </div>
+                        </div>                        
+                    </div>
+                    <div class="row" ng-if="linea.esquina_diferente==true">     
+                        <div class="col-md-6">
+                            &nbsp;
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group "
+                                 ng-class="{'has-error': form.antejardinDerechoEsquina.$touched && form.antejardinDerechoEsquina.$invalid}">
+                                <label class="control-label" for="antejardinDerechoEsquina">Antejardín Esq</label>
+                                {{linea.antejardinDerechoEsquina}}
+                                <p class="help-block" ng-if="form.antejardinDerechoEsquina.$touched && form.antejardinDerechoEsquina.$invalid">Ingrese Antejardín</p>
+                            </div>
+                        </div>                        
+                        <div class="col-md-2">
+                            <div class="form-group ">
+                                <label class="control-label" for="anden">Andén Esq</label>
+                                {{linea.andenDerechoEsquina}}
+                                <p class="help-block" ng-if="form.andenDerechoEsquina.$touched && form.andenDerechoEsquina.$invalid">Ingrese Anden</p>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group ">
+                                <label class="control-label" for="tipoViaPrincipalId">Tipo Via Principal: </label>
+                                {{linea.tipoViaPrincipalId}}                                
+                            </div>
+                        </div>                        
+                        <div class="col-md-3">
+                            <div class="form-group "                                 
+                                 ng-class="{'has-error': form.nombreViaPrincipal.$touched && form.nombreViaPrincipal.$invalid}">
+                                <label class="control-label" for="nombreViaPrincipal">Nombre Vía Principal </label>
+                                {{linea.nombreViaPrincipal}}                                
+                            </div>                            
+                        </div> 
+                        <div class="col-md-3">
+                            <div class="form-group ">
+                                <label class="control-label" for="tipoViaSecundariaId">Tipo Via Secundaria: </label>
+                                {{linea.tipoViaSecundariaId}}
+                            </div>
+                        </div>                        
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label" for="nombreViaSecundaria">Nombre Vía Secundaria </label>
+                                {{linea.nombreViaSecundaria}}
+                            </div>
+                        </div>                           
+                    </div>
+                    <div class="row">  
+                        <div class="col-md-3">
+                            <div class="form-group "                                 
+                                 ng-class="{'has-error': form.claseVia.$touched && form.claseVia.$invalid}">
+                                <label class="control-label" for="nombreViaSecundaria">Clase Vía: </label>
+                                {{linea.claseViaId}}                                    
+                        </div>                        
+                        <div class="form-group  col-md-3"
+                             ng-class="{'has-error': form.separador.$touched && form.separador.$invalid}"
+                             ng-if="linea.tiene_separador===true">
+                            <label class="control-label" for="calzada">Separador </label>
+                            {{linea.separador}}
+                        </div>    
+                        <div class="form-group  col-md-3"
+                             ng-class="{'has-error': form.calzada.$touched && form.calzada.$invalid}"
+                             ng-if="linea.tiene_separador!==true">
+                            <label class="control-label" for="calzada">Calzada </label>
+                            {{linea.calzada}}
+                        </div>                            
+                        <div class="form-group  col-md-3"
+                             ng-class="{'has-error': form.via.$touched && form.via.$invalid}">
+                            <label class="control-label" for="via">Vía </label>
+                            {{linea.via}}
+                        </div>                                             
+                    </div>                                                                                
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label" for="localización">Observaciones:</label>
+                                {{linea.observaciones}}
+                            </div>
+                        </div>
+                    </div>                   
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

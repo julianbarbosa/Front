@@ -1,0 +1,93 @@
+<div class="col-sm-12 col-md-10 col-lg-8" ng-show="alert.msg" >
+    <div uib-alert class="alert-{{alert.type}}" ><strong>{{alert.title}}:</strong> {{alert.msg}}</div>
+</div>
+<div class="panel col-sm-12 col-md-10 col-lg-8">       
+    <div class="panel-body">
+        <div class="page-header">
+            <h1 class="col-xs-12 col-sm-10 text-center text-left-sm"><i class="padding-sm-hr fa fa-cloud-download"></i>&nbsp;&nbsp;Actualizar del RNMC</h1><br>            
+        </div>         
+        <form name="form">
+            <div class="note note-info">
+                Permite descargar los comparendos registrados del RNMC de un presunto infractor.
+            </div>
+			<div class="row">
+				<div class="form-group col-md-5">
+                    <label class="control-label" for="tipoidentificacion">
+                        Actualización de:                    
+                    </label>
+                    <select ng-model="tipoactualizacion" class="form-control">
+						<option value="comparendo">Comparendo</option>
+						<option value="custodio">Custodio</option>
+                    </select>
+                </div>
+			</div>
+			<div class="row" ng-if="tipoactualizacion=='custodio'">
+                <div class="form-group col-md-5">
+                    <label class="control-label" for="tipoidentificacion">
+                        Número de expediente / Comparendo            
+                    </label>
+                    <input type="text"
+                            id="numeroExpediente"
+                            class="form-control input-xlarge"                            
+                            ng-model="actualizacion.expediente"
+                            placeholder="Ingrese número de expediente o comparendo"
+                            autocomplete="off"
+                            required/>  
+                </div>
+                <div class="form-group col-md-5">
+                    <label class="control-label" for="numeroidentificacion">
+                        Número de Identificación                        
+                    </label>
+                    <input type="text"
+                            id="numeroidentificacion"
+                            class="form-control input-xlarge"                            
+                            ng-model="actualizacion.numeroidentificacion"
+                            placeholder="Ingrese número de identificación"
+                            autocomplete="off"
+                            required/>                    
+                </div>
+                <div class="col-md-2 ">   
+                    <br>
+                    <input type="button" 
+                           class="btn btn-success" 
+                           value="Actualizar" 
+                           ng-click="actualizarDatosCustodio()" 
+                           ng-disabled="form.$invalid">
+                </div>
+			</div>
+            <div class="row" ng-if="tipoactualizacion=='comparendo'">
+                <div class="form-group col-md-5">
+                    <label class="control-label" for="tipoidentificacion">
+                        Tipo de Identificación                   
+                    </label>
+                    <select id="tipoidentificacion"
+                            ng-model="actualizacion.tipoidentificacion" 
+                            ng-options="tipoIdentificacion.tipo as tipoIdentificacion.tipo for tipoIdentificacion in arrayTipoDocIdentificacion"
+                            class="form-control"
+                            required>                        
+                    </select>
+                </div>
+                 <div class="form-group col-md-5">
+                    <label class="control-label" for="numeroidentificacion">
+                        Número de Identificación                        
+                    </label>
+                    <input type="text"
+                            id="numeroidentificacion"
+                            class="form-control input-xlarge"                            
+                            ng-model="actualizacion.numeroidentificacion"
+                            placeholder="Ingrese número de identificación"
+                            autocomplete="off"
+                            required/>                    
+                </div>
+                <div class="col-md-2 ">   
+                    <br>
+                    <input type="button" 
+                           class="btn btn-success" 
+                           value="Actualizar" 
+                           ng-click="actualizarDatosComparendo()" 
+                           ng-disabled="form.$invalid">
+                </div>
+			</div>
+        </form>
+    </div>    
+</div>

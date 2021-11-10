@@ -1,0 +1,65 @@
+<style>
+    input[type=number]::-webkit-inner-spin-button, 
+    input[type=number]::-webkit-outer-spin-button { 
+      -webkit-appearance: none; 
+      margin: 0; 
+    } 
+</style>
+<div>
+    <div class="col-md-12">
+       <div ng-show="validator.alert.content">
+            <div class="alert {{validator.alert.type}} alert-dismissable">
+                <i class="fa fa-danger"></i>
+                <button type="button" class="close" aria-hidden="true" ng-click="hideAlert()">×</button>
+                <b>{{validator.alert.title}}</b> <span ng-bind-html="validator.alert.content"></span>
+            </div>
+        </div>	
+	<div class="panel panel-success">
+            <div class="panel-heading ">
+                <span class="panel-title">Devolver Linea de Demarcación</span>
+                <div class="panel-heading-controls">
+                </div>
+            </div>
+            <div class="panel-body">
+                <form name="userForm">                    
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label class="control-label" for="barrio">No. Solicitud</label>
+                            <input type="number"
+                                   name="idSolicitud"
+                                   class="form-control"
+                                   ng-model="solicitud.idsolicitud"
+                                   placeholder="Ingrese el número de Solicitud"
+                                   autocomplete="off"
+                                   required/>
+                            <p class="help-block" ng-if="form.idsolicitud.$touched && form.idsolicitud.$invalid">El número de solicitud es obligatorio</p>
+                        </div>     
+                        <div ng-if="solicitud.tiposolicitud.codigo=='certificado_lineas'" class="col-md-12">
+                            <strong>Solicitud No.</strong> {{solicitud.idsolicitud}}<br>
+                            <strong>Radicado:</strong> {{solicitud.radicado}}<br>
+                            <strong>Fecha Radicación:</strong> {{solicitud.fechainicial * 1000| date:'yyyy-MM-dd HH:mm:ss'}}<br>
+                            <strong>Solicitante:</strong> {{solicitud.solicitante.firstName}} {{solicitud.solicitud.lastName}}<br>
+                            <input type="submit"
+                                   class="btn btn-primary"
+                                   ng-click="devolver()"
+                                   ng-disabled="form.$invalid"
+                                   value="Devolver" />
+                        </div>    
+                        <div ng-if="solicitud.tiposolicitud.codigo && solicitud.tiposolicitud.codigo!=='certificado_lineas'" class="col-md-12">
+                            <div class="text-danger">No se ha encontrado un solicitud de Lineas de Demarcación con este numero.</div>
+                        </div>
+                        <div class="row padding-sm text-right-sm">
+                            <input type="submit"
+                                   class="btn btn-primary"
+                                   ng-click="consultar()"
+                                   ng-disabled="form.$invalid"
+                                   value="Consultar" />
+                            ó
+                            <a ui-sref="listar-peticion">Cancelar</a>
+                        </div>
+                    </div>                    
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

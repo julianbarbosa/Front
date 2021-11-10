@@ -1,0 +1,139 @@
+<div class="panel">
+    <div class="panel-body">
+        <div id="modalIngresoDireccion" class="modal fade modal-change" role="dialog" aria-hidden="true" ></div>
+        <div class="page-header">
+            <h1 class="col-md-12 col-lg-10 text-center text-left-sm"><i class="padding-sm-hr fa fa-graduation-cap"></i>&nbsp;&nbsp;Programar Pedagogía</h1>
+        </div>
+        <div ng-show="validator.alert.content">
+            <div class="alert {{validator.alert.type}} alert-dismissable">
+                <i class="fa fa-danger"></i>
+                <button type="button" class="close" aria-hidden="true" ng-click="hideAlert()">×</button>
+                <b>{{validator.alert.title}}</b> <span ng-bind-html="validator.alert.content"></span>
+            </div>
+        </div>
+        <form name="form" class="col-sm-12 col-md-10 col-lg-8">
+            <div class="row">
+                <div class="form-group required col-md-4" ng-class="{'has-error': form.duracion.$touched && form.duracion.$invalid}">
+                    <label class="control-label" for="duracion">Duración (Minutos) </label>
+                    <select required
+                            name="duracion"
+                            class="form-control"
+                            ng-model="programacion.duracion"
+                            ng-change="consultarEventos()"
+                            ng-if="edicion==false">
+                        <option value="20">20</option>
+                        <option value="40">40</option>
+                        <option value="60">60</option>
+                        <option value="80">80</option>
+                        <option value="100">100</option>
+                    </select>
+                    <p ng-if="edicion==true">
+                       {{programacion.duracion}}
+                    </p>
+                    <p class="help-block" ng-if="form.duracion.$touched && form.duracion.$invalid">Ingrese Duración</p>
+                </div>
+                <div class="form-group  required col-md-4" ng-show="programacion.duracion"  ng-class="{'has-error': form.fecha.$touched && form.fecha.$invalid }">
+                    <label class="control-label" for="fecha">Fecha </label>
+                    <select class="form-control" name="fecha"
+                            ng-model="programacion.fechaCita"
+                            ng-options="(fecha.fecha | date:'yyyy-MM-dd') for fecha in fechas"
+                            ng-change="consultarEventos()"
+                            required ng-show="edicion==false || (edicion==true && programacion.cupoUsado*1==0)">
+                    </select>
+                    <p class="help-block" ng-if="form.fecha.$touched && form.fecha.$invalid">Ingrese la Fecha.</p>
+                    <p ng-show="edicion==true"></p>
+                    Fecha Registrada: {{programacion.fecha.timestamp*1000 | date:'yyyy-MM-dd'}} {{programacion.hora.timestamp*1000 | date:'HH:mm:ss'}}
+                     </p>
+                </div>
+                <div class="form-group required col-md-4" ng-show="arrayHorasDisponibles"  ng-class="{'has-error': form.hora.$touched && form.hora.$invalid }">
+                    <label class="control-label" for="hora">Hora </label>
+                    <select class="form-control"
+                            name="hora"
+                            ng-model="programacion.horaCita"
+                            ng-options="horaDisponible.hora | date:'HH:mm' for horaDisponible in arrayHorasDisponibles"
+                            required
+                            autofocus>
+                    </select>
+                    <p class="help-block" ng-if="form.hora.$touched && form.hora.$invalid">Ingrese la Hora.</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group required col-md-6"  ng-class="{'has-error': form.pedagogia.$touched && form.pedagogia.$invalid }">
+                    <label class="control-label">Pedagogía</label>
+                    <select class="form-control"
+                            name="pedagogia"
+                            ng-model="programacion.pedagogia"
+                            ng-options="pedagogia.nombre for pedagogia in pedagogias"
+                            ng-show="edicion==false "
+                            required>
+                    </select>
+                    <p class="help-block" ng-if="form.pedagogia.$touched && form.pedagogia.$invalid">Ingrese la Pedagogía.</p>
+                    <p ng-if="edicion==true">
+                        {{programacion.pedagogia.descripcion}}
+                     </p>
+                </div>
+                <div class="form-group required col-md-6"  ng-class="{'has-error': form.cupo.$touched && form.cupo.$invalid}">
+                    <label class="control-label">Cupo </label>
+                    <input type="number" name="cupo" class="form-control" ng-model="programacion.cupo" max="20" required>
+                    <p class="help-block" ng-if="form.cupo.$touched && form.cupo.$invalid">Ingrese el cupo.</p>
+                </div>
+            </div>
+			<div class="row">
+                <div class="form-group required col-md-6"  ng-class="{'has-error': form.pedagogia.$touched && form.pedagogia.$invalid }">
+                    <label class="control-label">Modalidad</label>
+                    <select class="form-control"
+                            name="pedagogia"
+                            ng-model="programacion.modalidad"
+                            required
+                            ng-change="programacion.lugar=(programacion.modalidad=='presencial')?'':programacion.lugar">
+							<option value="presencial">Presencial</option>
+							<option value="virtual">Virtual</option>
+                    </select>
+                    <p class="help-block" ng-if="form.pedagogia.$touched && form.pedagogia.$invalid">Ingrese la Pedagogía.</p>
+                </div>
+                <div class="form-group required col-md-6"  ng-class="{'has-error': form.cupo.$touched && form.cupo.$invalid}" ng-if="programacion.modalidad=='virtual'">
+                    <label class="control-label">Url aula virtual <a href="https://meet.google.com/" target="_blank">meet</a></label>
+                    <input type="text" name="url_aula_virtual" class="form-control" ng-model="programacion.lugar" required>
+                    <p class="help-block" ng-if="form.cupo.$touched && form.cupo.$invalid">Ingrese el cupo.</p>
+                </div>
+            </div>
+			<div class="row">
+				<div class="form-group required col-md-6"  ng-class="{'has-error': form.pedagogia.$touched && form.pedagogia.$invalid }">
+                    <label class="control-label">Capacitador</label>
+                    <select class="form-control"
+                            name="pedagogia"
+                            ng-model="programacion.responsable.id"
+                            ng-options="responsable.id as responsable.nombre for responsable in responsables"
+                            required>
+                    </select>
+                    <p class="help-block" ng-if="form.pedagogia.$touched && form.pedagogia.$invalid">Ingrese la Pedagogía.</p>
+                </div>
+			</div>
+            <div class="row" ng-show="edicion && programacion.estado.codigo!='pendiente'">
+				<span class="checkbox" >
+					<label class="checkbox-inline">
+						<input type="checkbox" 
+							   class="px"
+                               ng-model="programacion.habilitarCertificacion"						
+							   name="Habilitar asistencia"
+							   value="true">
+						<span class="lbl">
+							Deseo habilitar esta pedagogías para certificación de asistencia?
+						</span>
+					</label>
+				</span>
+			</div>
+            <div class="row padding-sm ">
+                <div class="col-md-6 text-left-sm">
+                    <a href="https://www.google.com/calendar?tab=wc" target="_blank"><i class="fa fa fa-calendar" aria-hidden="true"></i> Google Calendar</a>&nbsp;&nbsp;&nbsp;
+                </div>
+                <div class="col-md-6 text-right-sm">
+                    <input type="submit" class="btn btn-primary" ng-click="save()" ng-disabled="form.$invalid" value="Crear Programación de Pedagogía" ng-if="!isSuccess && edicion==false">
+                    <input type="submit" class="btn btn-primary" ng-click="edit()" value="Editar Programación de Pedagogía" ng-if="edicion==true">
+                    ó
+                    <a ui-sref="listar-peticion">Cancelar</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

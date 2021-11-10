@@ -1,0 +1,21 @@
+<div class="form-group {{ model.$valid?'': 'has-error'}}" >
+    <label class="control-label" ng-show="label">{{ label }}</label>
+
+    <div class="pixel-file-input form-control">
+        <span class="pfi-filename"></span>
+        <div class="pfi-actions">
+            <a href="#" class="btn btn-xs clear_btn_dom pfi-clear" style="display: inline-block;"><i class="fa fa-times"></i> Limpiar</a>
+            <a href="#" class="btn btn-xs btn-primary pfi-choose">Seleccionar</a>
+        </div>
+        <input type="file" ng-model="model" name="uploadedfile" class="input_file" file-upload multiple >
+    </div>
+    <span ng-if="model.$error.msg.length>0" class="help-block" >
+        El campo presenta errores:
+        <ul>
+        	<li ng-repeat="msg in model.$error.msg">{{msg}}</li>
+        </ul>
+    </span>
+    <span>
+        {{ description }}
+    </span>
+</div>

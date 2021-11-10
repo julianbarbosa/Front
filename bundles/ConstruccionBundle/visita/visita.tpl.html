@@ -1,0 +1,24 @@
+<div ng-controller="VisitaCtrl" class="col-md-6">    
+    <div class="panel panel-success">
+        <div class="panel-heading ">
+            <span class="panel-title" ng-if="visitas[0].propietario">Información Visita</span>
+            <span class="panel-title" ng-if="!visitas[0].propietario">Predio</span>
+            <div class="panel-heading-controls">
+            </div>
+        </div>        
+        
+        <div class="panel-body">
+            <p class="text-danger" ng-if="cantidadSolicitudes>1"><strong>**ADVERTENCIA**</strong> Este predio ha tenido una solicitud previamente. <a ng-href="#!/peticion/listar?predio={{solicitud.nomenclatura.predio.codigounico}}"><strong>Clic aquí para Ver</strong></a></p>
+            <strong>Dirección:</strong> {{solicitud.nomenclatura.idnomenclatura}} - {{solicitud.nomenclatura.direccion}} {{solicitud.nomenclatura.informacionadicional}}<br/>                        
+            <strong>Predial:</strong> {{solicitud.nomenclatura.predio.codigounico}}<br/>
+            <strong>Barrio:</strong> {{solicitud.nomenclatura.predio.barrio.codigo}} - {{solicitud.nomenclatura.predio.barrio.nombre}}<br/>                        
+            <strong>Comuna:</strong> {{solicitud.nomenclatura.predio.barrio.comuna.codigo}}<br/>
+            <div ng-repeat="visita in visitas">                   
+                <br>
+                <strong>Propietario:</strong> {{visita.propietario}}<br>
+                <strong>{{visita.tipoIdentificacionPropietario}}:</strong> {{visita.identificacionPropietario}}<br>                            
+                <strong>Observaciones:</strong> {{visita.observacion}}
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,120 @@
+<div class="panel panel-success">
+    <div class="panel-heading ">
+        <span class="panel-title">Listar </span>
+        <div class="panel-heading-controls">
+        </div>
+    </div>
+    <div class="panel-body">
+        <div class="table-primary">
+            <table cellpadding="0" cellspacing="0" border="0" class="table-hover table table-bordered dataTable" id="listaSolicitudes" width="100%" role="grid" aria-describedby="listaSolicitudes_info">
+                <thead>
+                    <tr>
+                        <th class="ui-state-default accion" rowspan="1" colspan="1">                            
+                        </th>
+                        <th class="filtro ui-state-default text-right" rowspan="1" colspan="1" style="color: rgb(85, 85, 85);">
+                            <input type="text" class="form-control input-sm" placeholder="Número" style="width: 100%;">
+                        </th>
+                        <th class="filtro ui-state-default text-center" rowspan="1" colspan="1" style="color: rgb(85, 85, 85);">
+                            <input type="text" class="form-control input-sm" placeholder="Solicitante" style="width: 100%;">
+                        </th>
+                        <th class="filtro ui-state-default text-center" rowspan="1" colspan="1" style="color: rgb(85, 85, 85);">
+                            <input type="text" class="form-control input-sm" placeholder="Radicado" style="width: 100%;">
+                        </th>
+                        <th class="filtro ui-state-default text-center" rowspan="1" colspan="1" style="color: rgb(85, 85, 85);">
+                            <input type="text" class="form-control input-sm" placeholder="Respuesta" style="width: 100%;">
+                        </th>
+                        <th class="filtro ui-state-default text-left" rowspan="1" colspan="1" style="color: rgb(85, 85, 85);">
+                            <input type="text" class="form-control input-sm" placeholder="Tipo Solicitud" style="width: 100%;">
+                        </th>
+                        <th class="filtroSelect ui-state-default text-center" name="idestado" rowspan="1" colspan="1">
+                            <select class="form-control input-sm" style="color: #999;">
+                                <option selected="" value="">Estado</option>
+                                <option value="1">Pendiente</option>
+                                <option value="2">Pendiente por Firmar</option>
+                                <option value="12">Revisión de documentos</option>
+                                <option value="20">Emitido</option>
+                                <option value="21">Pendiente Visita Pot</option>
+                                <option value="22">Pendiente Gestion Pot</option>
+                                <option value="23">Pendiente Por Informacion</option>
+                                <option value="24">Pendiente Revision POT</option>
+                                <option value="26">Pendiente por revisión </option>
+                                <option value="27">Pendiente Aprobacion Pot</option>
+                            </select>
+                        </th>
+                        <th class="filtro ui-state-default text-center fecha" rowspan="1" colspan="1" style="color: rgb(85, 85, 85);">
+                            <input type="text" class="form-control input-sm" placeholder="Fecha Inicial" style="width: 100%;">
+                        </th>
+                        <th class="filtro ui-state-default text-center fecha" rowspan="1" colspan="1" style="color: rgb(85, 85, 85);">
+                            <input type="text" class="form-control input-sm" placeholder="Actualizado" style="width: 100%;">
+                        </th>
+                        <th class="filtro ui-state-default text-center" rowspan="1" colspan="1" style="color: rgb(85, 85, 85);">
+                            <input type="text" class="form-control input-sm" placeholder="Funcionario" style="width: 100%;">
+                        </th>
+                    </tr>
+                    <tr role="row">
+                        <th class="accion ui-state-default sorting_disabled" rowspan="1" colspan="1" style="width: 1%;" aria-label="Acciones">Acciones</th>
+                        <th class="text-right ui-state-default sorting" tabindex="0" aria-controls="listaSolicitudes" rowspan="1" colspan="1" style="width: 8%;" aria-label="Número: ordenar ascendente">Número</th>
+                        <th class="text-center ui-state-default sorting_asc" tabindex="0" aria-controls="listaSolicitudes" rowspan="1" colspan="1" style="width: 20%;" aria-label="Solicitante: ordenar descendente" aria-sort="ascending">Solicitante</th>
+                        <th class="text-center ui-state-default sorting" tabindex="0" aria-controls="listaSolicitudes" rowspan="1" colspan="1" style="width: 10%;" aria-label="Radicado: ordenar ascendente">Radicado</th>
+                        <th class="text-center ui-state-default sorting" tabindex="0" aria-controls="listaSolicitudes" rowspan="1" colspan="1" style="width: 10%;" aria-label="Respuesta: ordenar ascendente">Respuesta</th>
+                        <th class="text-left ui-state-default sorting" tabindex="0" aria-controls="listaSolicitudes" rowspan="1" colspan="1" style="width: 11%;" aria-label="Tipo Solicitud: ordenar ascendente">Tipo Solicitud</th>
+                        <th class="text-center ui-state-default sorting" tabindex="0" aria-controls="listaSolicitudes" rowspan="1" colspan="1" style="width: 12%;" aria-label="Estado: ordenar ascendente">Estado</th>
+                        <th class="text-center fecha ui-state-default sorting" tabindex="0" aria-controls="listaSolicitudes" rowspan="1" colspan="1" style="width: 12%;" aria-label="Fecha Inicial: ordenar ascendente">Fecha Vencimiento</th>
+                        <th class="text-center fecha ui-state-default sorting" tabindex="0" aria-controls="listaSolicitudes" rowspan="1" colspan="1" style="width: 12%;" aria-label="Actualizado: ordenar ascendente">Actualizado</th>
+                        <th class="text-center ui-state-default sorting" tabindex="0" aria-controls="listaSolicitudes" rowspan="1" colspan="1" style="width: 10%;" aria-label="Funcionario: ordenar ascendente">Funcionario</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr role="row" class="odd" style="font-weight: bold;" ng-repeat="solicitud in solicitudes">
+                        <td class=" accion" >                            
+                            <a ng-hide="!solicitud.ruta" ng-href="#!{{solicitud.ruta}}{{solicitud.idsolicitud}}" title="Clic para ver la información completa del expediente" id="ver informacion completa" class="fa fa-external-link"></a>
+                            <a ng-href="#!/expediente/listar_historial/{{solicitud.idsolicitud}}" title="Clic para ver el historial" id="ver informacion completa" class="fa fa-history"></a>
+                            <a ng-hide="solicitud.codigoEstado=='cerrado'" ng-href="#!/expediente/proceso_manual/{{solicitud.idsolicitud}}" title="Relizar Proceso Manual" id="ver informacion completa" class="fa fa-hand-paper-o"></a>
+                        </td>
+                        <td class="text-right">
+                            <i class="ver-detalle fa fa-angle-right pull-left" title="Ver información adicional"></i>
+                            <span class="ver-detalle text-right">
+                                {{solicitud.idsolicitud}}
+                            </span>
+                        </td>
+                        <td class="text-center sorting_1">
+                            {{solicitud.firstName}} {{solicitud.lastName}}
+                        </td>
+                        <td class=" text-center">
+                            <a title="Haga clic aquí para ver los documentos anexos a este número de Orfeo" target="blank" href="http://www.cali.gov.co/aplicaciones/orweb/orweb/principal.php?id={{solicitud.radicado}}">
+                                {{solicitud.radicado}}
+                            </a>
+                        </td>
+                        <td class=" text-center">
+                            <a title="Haga clic aquí para ver el documento de respuesta" target="blank" href="/saul/solicitud/consultarradicado/radicado/{{solicitud.radicado}}">                              
+                            </a>
+                        </td>
+                        <td class=" text-left">
+                            {{solicitud.nombreTipoSolicitud}}
+                        </td>
+                        <td class=" text-center">
+                            {{solicitud.nombreEstado}}
+                        </td>
+                        <td class=" text-center fecha">
+                            <div ng-if="solicitud.tiempoVencimiento*1>0" style="color:red;">
+                                {{solicitud.fechaVencimiento}}
+                            </div>
+                            <div ng-if="solicitud.tiempoVencimiento*1==0" style="color:orange;">
+                                {{solicitud.fechaVencimiento}}
+                            </div>
+                            <div ng-if="solicitud.tiempoVencimiento*1<0" style="color:green;">
+                                {{solicitud.fechaVencimiento}}
+                            </div>
+                        </td>
+                        <td class=" text-center fecha">
+                            {{solicitud.updatedAt.timestamp * 1000 | date:'yyyy-MM-dd HH:mm:ss'}}                           
+                        </td>
+                        <td class=" text-center">
+                            {{solicitud.ruta}}
+                        </td>
+                    </tr>                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

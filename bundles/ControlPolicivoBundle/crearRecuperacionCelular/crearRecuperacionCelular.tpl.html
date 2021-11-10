@@ -1,0 +1,168 @@
+﻿
+<div>
+    <div class="col-md-12 col-lg-12">
+        <div ng-show="validator.alert.content">
+            <div class="alert {{validator.alert.type}} alert-dismissable">
+                <i class="fa fa-danger"></i>
+                <button type="button" class="close" aria-hidden="true" ng-click="hideAlert()">×</button>
+                <b>{{validator.alert.title}}</b>
+                <span ng-bind-html="validator.alert.content"></span>
+            </div>
+        </div>
+        <div class="panel panel-success">
+            <div class="panel-heading ">
+                <span class="panel-title">Registrar Recuperaci&oacute;n de Celular</span>
+                <div class="panel-heading-controls"></div>
+            </div>
+            <div class="panel-body">
+
+                <form name="form" id="form" class="" autocomplete="off" novalidate>
+                    <!-- INFORMACIÓN DEL PRESUNTO Propietario-->
+                    <h4 class="padding-sm no-padding-t padding-xs-hr">
+                        <i class="fa fa-id-card text-primary"></i>
+                        &nbsp;&nbsp;Información del Celular
+                    </h4>
+
+                    <div class="row">
+                        <div class="form-group col-md-3" ng-class="{'has-error': form.numeroImei.$touched && form.numeroImei.$invalid}">
+                            <label class="control-label" for="Propietario_identificacion">
+                                Número Imei
+                                <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                            </label>
+                            <input type="number" ng-pattern="/^\d{15}$/" id="numeroImei" name="numeroImei" class="form-control input-xlarge" ng-class="{'has-error': validator.numeroComparendo}" ng-model="recuperacion.numero" placeholder="Ingrese el número de comparendo" required/>
+                            <p class="help-block" ng-if="form.numeroImei.$touched && form.numeroImei.$invalid">El número de imei debe tener 15 digítos.</p>
+                        </div>
+                        <div class="form-group col-sm-3">
+                            <label>
+                                Marca
+                                <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>                            
+                            </label>
+                            <select class="form-control" id="empresa" ng-model="recuperacion.marca.id" ng-options="marca.id as marca.nombre for marca in marcas">
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6" ng-class="{'has-error': form.descripcion.$touched && form.descripcion.$invalid}">
+                            <label class="control-label" for="Propietario_identificacion">
+                                Descripción                                
+                            </label>
+                            <input type="text" id="descripcion" name="movil.descripcion" class="form-control input-xlarge" ng-class="{'has-error': validator.descripcion}" ng-model="recuperacion.descripcion" placeholder="Ingrese la descripcion del celular"/>                          
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-4">
+                            <label class="control-label" for="empresa">
+                                Empresa                                
+                            </label>
+                            <select class="form-control" id="empresa" ng-model="recuperacion.empresas">
+                                <option value="N/A">N/A</option>
+                                <option value="Movistar">Movistar</option>
+                                <option value="Claro">Claro</option>
+                                <option value="Tigo">Tigo</option>
+                                <option value="Exito">Exito</option>
+                                <option value="ETB">ETB</option>
+                            </select>
+                              <p class="help-block" ng-if="form.empresa.$touched && form.empresa.$invalid">La empresa es obligatoria.</p>
+                        </div>
+                        <div class="form-group col-md-4" ng-class="{'has-error': form.reporte.$touched && form.reporte.$invalid}">
+                            <label class="control-label" for="Propietario_identificacion">
+                                Reporte
+                                <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                            </label>
+                            <select class="form-control" id="reporte" name="reporte" ng-model="recuperacion.reporte">
+                                <option value="Robo/Hurto">Robo/Hurto</option>
+                                <option value="Extravío">Extravío</option>
+                            </select>
+                              <p class="help-block" ng-if="form.fecharecuperacion.$touched && form.fecharecuperacion.$invalid">La fecha de comparendo es obligatoria.</p>
+                        </div>
+						<div class="form-group col-md-4">
+                            <label class="control-label" for="Propietario_identificacion">
+								<input type="checkbox" ng-init="tienepropietario=true" ng-model="tienepropietario">
+                                &nbsp;Se cuenta con información propietario
+                                <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                            </label>
+                            
+                        </div>
+						
+                    </div>
+					<div ng-if="tienepropietario==true">
+                    <!-- INFORMACION DEL BENEFICIARIO-->
+                    <h4 class="padding-sm no-padding-t padding-xs-hr">
+                        <i class="fa fa-id-card text-primary"></i>
+                        &nbsp;&nbsp;Información del Propietario
+                    </h4>
+
+                    <div class="row">
+                        <div class="form-group col-md-2" ng-class="{'has-error': form.identificacionPropietario.$touched && form.identificacionPropietario.$invalid}">
+                            <label class="control-label" for="Propietario_identificacion">
+                                Número Identificación
+                                <i ng-hide="loadingPropietario" class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                                <i ng-show="loadingPropietario" class="fa fa-spinner fa-spin"></i>
+                            </label>
+                            <input type="text" name="identificacionPropietario" class="form-control input-xlarge" ng-class="{'has-error': validator.usuario}" ng-model="recuperacion.propietario.identificacion" ng-blur="getPropietario(recuperacion.propietario.identificacion)" typeahead-wait-ms="1000" typeahead-on-select="onSelect($item, $model, $label)" typeahead-no-results="noResults" typeahead-loading="loadingPropietario" typeahead-min-length="3" bs-typeahead placeholder="Ingrese su identificación" tooltip="{{validator.usuario}}" required/>
+                            <span ng-if="noResults" uib-dropdown uib-dropdown-toggle auto-close="disabled" is-open="true">
+                                <ul class="uib-dropdown-menu">
+                                    <li>No hay Resultados</li>
+                                </ul>
+                            </span>
+                            <p class="help-block" ng-if="form.identificacionPropietario.$touched && form.identificacionPropietario.$invalid">La identificación es obligatoria.</p>
+                        </div>
+                        <div class="form-group col-md-2" ng-class="{'has-error': form.tipoIdentificacion.$touched && form.tipoIdentificacion.$invalid}">
+                            <label class="control-label" for="Propietario_tipoidentificacion">
+                                Tipo de Identificación
+                                <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                            </label>
+                            <select class="form-control" name="tipoIdentificacion" ng-model="recuperacion.propietario.tipoIdentificacion" ng-options="tipoIdentificacion.nombre for tipoIdentificacion in arrayTipoDocIdentificacion" required>
+                            </select>
+                            <p class="help-block" ng-if="form.tipoIdentificacion.$touched && form.tipoIdentificacion.$invalid">El tipo de identificación es obligatorio.</p>
+                        </div>
+                        <div class="form-group col-sm-4"  ng-class="{'has-error': form.nombrePropietario.$touched && form.nombrePropietario.$invalid}">
+                            <label>
+                                Nombre
+                                <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                            </label>
+                            <input type="text" name="nombrePropietario" class="form-control" ng-model="recuperacion.propietario.nombre" placeholder="Ingrese el nombre" required/>
+                            <p class="help-block" ng-if="form.nombrePropietario.$touched && form.nombrePropietario.$invalid">El nombre del Propietario es obligatorio.</p>
+                        </div>
+                        <div class="form-group col-sm-4" ng-class="{'has-error': form.apellidoPropietario.$touched && form.apellidoPropietario.$invalid}">
+                            <label>
+                                Apellido
+                                <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                            </label>
+                            <input type="text" name="apellidoPropietario" class="form-control" ng-model="recuperacion.propietario.apellido" placeholder="Ingrese el apellido" required
+                            />
+                            <p class="help-block" ng-if="form.apellidoPropietario.$touched && form.apellidoPropietario.$invalid">La fecha de comparendo es obligatoria.</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <label>
+                                Dirección
+                            </label>
+                            <input type="text" name="direccionPropietario" class="form-control" ng-model="recuperacion.propietario.direccion" placeholder="Ingrese la dirección."/>
+                        </div>
+
+                        <div class="form-group has-feedback simple col-sm-3">
+                            <label>
+                                Teléfono
+                            </label>
+                            <input type="text" name="telefonoPropietario" class="form-control" ng-model="recuperacion.propietario.telefono" ng-class="{'has-error': validator.telefono}" placeholder="Ingrese el teléfono" />
+                        </div>
+                        <div class="form-group has-feedback simple col-sm-4">
+                            <label>
+                                Correo electrónico
+                            </label>
+                            <input type="text" name="emailPropietario" class="form-control" ng-model="recuperacion.propietario.email" placeholder="Ingrese el correo electrónico (Opcional)"
+                            />
+                        </div>
+                    </div>
+					</div>
+
+                   
+                   
+                    <div class="row padding-sm text-right-sm">
+                        <input type="submit" ng-disabled="form.$invalid" class="btn btn-primary" ng-click="save()" value="Registrar Recuperación" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

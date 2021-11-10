@@ -1,0 +1,94 @@
+<div class="panel">
+    <div class="panel-body">
+        <div class="page-header">
+            <h1 class="col-xs-12 col-sm-12 col-sm-10 text-center text-left-sm"><i class="padding-sm-hr fa fa-bar-chart"></i>&nbsp;&nbsp;Indicadores Control a Sanciones</h1>
+        </div>  
+        <div class="row">
+            <div class="col-md-12">
+                Ingrese las fechas limites para generar el indicador de las actividades realizadas por los funcionarios dentro del módulo de Control a Sanciones.
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                &nbsp;
+            </div>
+        </div>
+        <form name="form">
+            <div class="row">
+                <div class="form-group required col-md-4" ng-class="{'has-error': form.fechaInicial.$touched && form.fechaInicial.$invalid}">
+                    <label class="control-label" >Fecha Inicial</label>
+                    <input type="date" name="fechaInicial" ng-model="data.fechaInicial" ng-blur="data.fechaEjecutoria=data.fechaDecision" class="form-control" required>
+                </div>
+                <div class="form-group required col-md-4" ng-class="{'has-error': form.fechaFinal.$touched && form.fechaFinal.$invalid && data.fechaInicial>data.fechaFinal}">
+                    <label class="control-label" >Fecha Final</label>
+                    <input type="date" name="fechaFinal" ng-model="data.fechaFinal" class="form-control" required>
+                </div>        
+                <div class="col-md-2">
+                    <br>
+                    <input type="button" class="btn btn-primary" ng-click="consultar()" value="Consultar"/>                
+                </div>
+            </div>
+        </form>
+        <div class="container col-md-10" ng-if="result.success!==true"> 
+            {{result.msg}}
+        </div>
+        <br>
+		
+        <div class="container col-md-10" ng-if="result.success==true">
+                <strong>Cantidad de Aprobaciones y Rechazos por Funcionario</strong>
+                <table class="table table-primary table-responsive table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th class="col-md-6">Colaborador</th>
+                        <th class="col-md-2">Pendientes</th>
+                        <th class="col-md-2">Aprobadas</th>
+                        <th class="col-md-2">Rechazadas</th>
+						<th class="col-md-2">Cerradas por Cumplimiento</th>
+                    </tr>
+                </thead>        
+                <tr ng-repeat="row in result.data">
+                    <td>{{row.colaborador}}</td>
+                    <td align="center">{{row.pendiente}}</td>
+                    <td align="center">{{row.aprobada}}</td>
+                    <td align="center">{{row.rechazado}}</td>
+					<td align="center">{{row.cerrarporpago}}</td>
+                </tr>
+            </table>
+        </div>   
+		<br>
+		
+		<div class="container col-md-10" ng-if="result.success==true">
+			<strong>Cantidad de Movimientos por Estado</strong>
+                <table class="table table-primary table-responsive table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Estado</th>
+                        <th>Cantidad</th>
+                    </tr>
+                </thead>        
+                <tr ng-repeat="row in resultPorEstado.data">
+                    <td>{{row.estado}}</td>
+                    <td align="center">{{row.cantidad}}</td>                    
+                </tr>
+            </table>
+        </div>   
+		<br>
+		<div class="container col-md-10" ng-if="result.success==true">
+				<strong>Cantidad de Ingresos por Inspección</strong>
+                <table class="table table-primary table-responsive table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Inspeccion</th>
+                        <th align="center">Cantidad</th>
+                    </tr>
+                </thead>        
+                <tr ng-repeat="row in resultPorInspeccion.data">
+                    <td>{{row.inspeccion}}</td>
+                    <td align="center">{{row.cantidad}}</td>                    
+                </tr>
+            </table>
+        </div>   
+    </div>
+   
+</div>
+<div class="overlap_espera_2"><i class="fa fa-gear fa-spin fa-2x"></i></div>
