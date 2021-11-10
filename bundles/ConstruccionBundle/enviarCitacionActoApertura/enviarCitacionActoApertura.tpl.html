@@ -1,0 +1,42 @@
+<div>
+<div id="modalIngresoDireccion" class="modal fade modal-change" role="dialog" aria-hidden="true" style="display: none;"></div>
+<div ng-show="validator.alert.content">
+    <div class="alert alert-{{validator.alert.type}} alert-dismissable">
+        <i class="fa fa-danger"></i>
+        <button type="button" class="close" aria-hidden="true" ng-click="hideAlert()">×</button>
+        <b>{{validator.alert.title}}</b> <span ng-bind-html="validator.alert.content"></span>
+    </div>
+</div>
+<div  ng-include="'../bundles/ConstruccionBundle/solicitud/solicitud.tpl.html'" ng-init="idsolicitud=proceso.idsolicitud"></div>                
+<div  ng-include="'../bundles/ConstruccionBundle/visita/visita.tpl.html'" ng-init="idsolicitud=proceso.idsolicitud"></div>                
+<div class="col-md-12">
+    <div class="panel panel-success">
+        <div class="panel-heading ">
+            <span class="panel-title">Enviar Citación Acto de Apertura</span>
+            <div class="panel-heading-controls">
+            </div>
+        </div>
+        <div class="panel-body">
+            <form name="userForm">                                            
+                <div class="row">
+                        <div class="form-group">
+                            <label class="control-label" for="informacion_adicional">Ingrese numero de Guía: </label>
+                            <input type="text"
+                                   id="radicado"
+                                   name="radicado"
+                                   ng-model="proceso.guia"
+                                   class="form-control input-xlarge"
+                                   autocomplete="off"
+                                   placeholder="Ingrese el numero de guía."/>
+                        </div>
+                    </div>                               
+                <div class="row padding-sm text-right-sm">
+                    <input type="submit" class="btn btn-primary" ng-click="save()" value="Registrar Guia" ng-if="!isSuccess"/>                    
+                    ó
+                    <a ui-sref="listar-peticion">Cancelar</a>
+                </div>               
+            </form>
+        </div>
+    </div>
+</div>
+</div>

@@ -1,0 +1,53 @@
+<div>
+    <div ng-show="validator.alert.content">
+        <div class="alert alert-{{validator.alert.type}} alert-dismissable">
+            <i class="fa fa-danger"></i>
+            <button type="button" class="close" aria-hidden="true" ng-click="hideAlert()">×</button>
+            <b>{{validator.alert.title}}</b> <span ng-bind-html="validator.alert.content"></span>
+        </div>
+    </div>
+    <div class="page-header">
+        <h1 class="col-xs-12 col-sm-10 text-center text-left-sm"><i class="padding-sm-hr fa fa-question-circle"></i>&nbsp;&nbsp;Ayuda</h1>
+    </div>
+    <div class="col-md-10 col-lg-8 col-sm-12">
+        <div class="panel panel-success">
+            <div class="panel-body">
+                A continuación podrá encontrar los manuales y videos de ayuda para cada uno de los trámites. De clic sobre el icono para abrir el archivo.
+                <br><br>
+                <ul class="list-group no-margin" ng-repeat="tramite in arrayTramitesServicios">
+                    <li class="row list-group-item no-border-hr padding-xs-hr no-bg no-border-radius" >
+                        <h4>{{tramite.nombre}}</h4>
+                        <div class="col-md-6" ng-repeat="archivo in tramite.archivos">
+                            <div class="row">
+                                <div class="col-md-3 text-right" ng-if="archivo.tipo == 'pdf'" style="padding-bottom: 10px;">
+                                    <a href="{{archivo.url}}" target="_blank"><img src="../images/pdf.png"/></a>
+                                </div>
+                                <div class="col-md-3 text-right" ng-if="archivo.tipo == 'mp4'"  style="padding-bottom: 10px;">
+                                    <a href="{{archivo.url}}" target="_blank"><img src="../images/mp4.png"/></a>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <strong>Nombre:</strong>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <strong>{{archivo.nombre}}</strong>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <strong>Descripción:</strong>
+                                        </div>
+                                        <div class="col-md-8" ng-if="archivo.descripcion">
+                                            {{archivo.descripcion}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

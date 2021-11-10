@@ -1,0 +1,65 @@
+<div class="panel panel-success">
+    <div class="panel-heading ">
+        <span class="panel-title">Crear Usuario</span>
+        <div class="panel-heading-controls">
+        </div>
+    </div>
+    <div class="panel-body">
+        <form>
+            <div class="row">
+                <div class="form-group has-feedback simple col-sm-6" ng-class="{'has-error': validator.nombre }">
+                    <label>Nombre</label>
+                    <input type="text" class="form-control" ng-model="usuario.nombre" ng-class="{'has-error': validator.nombre}" placeholder="Ingrese su nombre" autofocus/>
+                    <p class="help-block">{{validator.nombre}}</p>
+                </div>
+                <div class="form-group has-feedback simple col-sm-6" ng-class="{'has-error': validator.apellido}" >
+                    <label>Apellido</label>
+                    <input type="text" class="form-control" ng-model="usuario.apellido" placeholder="Ingrese su apellido" />
+                    <p class="help-block">{{validator.apellido}}</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group has-feedback simple col-sm-6" ng-class="{'has-error': validator.tipo_identificacion}">
+                    <label>Tipo de Documento</label>
+                    <select class="form-control" ng-model="usuario.tipo_identificacion" >
+                        <option value="">-- Seleccione --</option>
+                        <option value="1">Cédula</option>
+                        <option value="2">Nit</option>
+                    </select>
+                    <p class="help-block">{{validator.tipo_identificacion}}</p>
+                </div>
+                <div class="form-group has-feedback simple col-sm-6" ng-class="{'has-error': validator.identificacion}">
+                    <label>Número de Identificación</label>
+                    <input type="text" class="form-control" ng-model="usuario.identificacion"  readonly="readonly"/>
+                    <p class="help-block">{{validator.identificacion}}</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group has-feedback simple col-sm-6" ng-class="{'has-error': validator.email}">
+                    <label>Correo electrónico</label>{{validator.email}}
+                    <input type="text" class="form-control" ng-model="usuario.email"  placeholder="Ingrese su correo electrónico"/>
+                    <p class="help-block">{{validator.email}}</p>
+                </div>
+                <div class="form-group has-feedback simple col-sm-6" ng-class="{'has-error': validator.email_confirm}">
+                    <label>Confirmar correo electrónico</label>
+                    <input type="text" class="form-control" ng-model="usuario.email_confirm"  placeholder="Repita el mismo correo electrónico" />
+                    <p class="help-block">{{validator.email_confirm}}</p>
+                </div>
+                <div ng-messages="usuario.email_confirm.$error" ng-messages-include="messages.html">
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group has-feedback simple col-sm-6" ng-class="{'has-error': validator.telefono}">
+                    <label>Teléfono</label>
+                    <input type="text" class="form-control" ng-model="usuario.telefono" ng-class="{'has-error': validator.telefono}" placeholder="Ingrese su teléfono"/>
+                    <p class="help-block">{{validator.telefono}}</p>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="save()">Guardar</button>
+        <button class="btn btn-warning" ng-click="cancel()">Cancelar</button>
+    </div>
+</div>
+

@@ -1,0 +1,249 @@
+<script>
+    function cerrarModal() {
+        $('#modalIngresoDireccion').modal('toggle');
+    }
+</script>
+<style>
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    hr {
+        margin-top: 0px;
+        border-top: 0.2em solid #006c99 !important;
+    }
+   
+</style>
+<div>
+<div class="panel">    
+    <div class="panel-body col-md-12 col-lg-10">
+        <div class="page-header">
+            <h1 class="col-xs-12 col-sm-10 text-center text-left-sm">{{titulo}}
+                <strong class="subtitulo">Titulación Gratuita de Predios</strong>
+                <br>
+                <small>Permite crear una respuesta a la solicitud para su posterior firma. <a href="/" target="_blank">Ver más</a>
+                </small>
+            </h1>
+        </div>
+        <div class="note note-info col-md-12" ng-show="responseSolicitud.success == true">
+            <p><strong>Almacenamiento Exitoso</strong></p>
+            <p><strong>Solicitud No:</strong> {{responseSolicitud.data.solicitud.idsolicitud}}</p>
+            <p><strong>Estado:</strong>{{responseSolicitud.data.solicitud.estado.nombre}}: {{responseSolicitud.data.solicitud.estado.descripcion}}</p>
+            <p ng-show="responseSolicitud.data.solicitud.estado.tipo=='cerrado'"><strong>Radicado Respuesta</strong> {{responseSolicitud.data.solicitud.radicadohijo}}</p><br>
+            <p ng-show="responseSolicitud.data.solicitud.estado.codigo=='pendiente'"><strong>Radicado</strong> {{responseSolicitud.data.solicitud.radicado}}</p><br>
+            <p>
+                <a href="#!/solicitud/verhistorial/{{responseSolicitud.data.solicitud.idsolicitud}}" target="_blank">Ver Historial</a>
+            </p>
+            <p>
+                <a href="https://www.cali.gov.co/aplicaciones/orweb/orweb/principal.php?id={{responseSolicitud.data.solicitud.radicado}}" target="_blank">Ver Radicado Solicitud</a>
+            </p>
+            <p ng-show="responseSolicitud.data.solicitud.estado.tipo!=='cerrado'">
+                <a href ng-click="previsualizar()">Previsualizar Respuesta</a>
+            </p>
+            <p ng-show="responseSolicitud.data.solicitud.estado.tipo=='cerrado'">
+                <a href="https://www.cali.gov.co/aplicaciones/orweb/orweb/principal.php?id={{responseSolicitud.data.solicitud.radicadohijo}}" target="_blank">Ver Radicado Respuesta</a>
+            </p>
+        </div>
+    
+    
+        <div class="page-body" ng-show="responseSolicitud.success !== true ">
+            <div class="wizard-wrapper  no-padding col-sm-12" style="width: 100% !important" >
+                <ul class="wizard-steps col-sm-12">
+                    <li data-target="#wizard-account" class="col-md-4" ng-class="{'active': step === 1,'completed':step > 1 }" ng-click="step = 1">
+                        <span class="wizard-step-number">1</span>
+                        <span class="wizard-step-caption">
+                            Solicitante
+                            <span class="wizard-step-description">Datos del solicitante</span>
+                        </span>
+                    </li>
+                    <li data-target="#wizard-account" class="col-md-4" ng-class="{'active': step === 2,'completed':step > 1 }" ng-click="step = 2">
+                        <span class="wizard-step-number">2</span>
+                        <span class="wizard-step-caption">
+                            Solicitud
+                            <span class="wizard-step-description">Información de la Solicitud</span>
+                        </span>
+                    </li>
+                    <li data-target="#wizard-profile" class="col-md-4"  ng-class="{'active': step === 3,'completed':step > 2 }" ng-click="step = 3"> <!-- ! Remove space between elements by dropping close angle -->
+                        <span class="wizard-step-number">3</span>
+                        <span class="wizard-step-caption">
+                            {{titulo}}
+                            <span class="wizard-step-description">Solicitudes TGP</span>
+                        </span>
+                    </li>
+                </ul> <!-- / .wizard-steps -->
+            </div>
+            
+            <div class="col-sm-12">
+                <div ng-init="step=1" ng-show="step == 1">
+                    <h5 class="subtitulo">Solicitante</h5>
+                    <hr>
+                    <dl class="row">
+                        <dt class="col-sm-2">Identificación</dt>
+                        <dd class="col-sm-4">{{item.solicitud.solicitante.tipoIdentificacion.tipo}} {{item.solicitud.solicitante.numidentificacion}}</dd>
+                    
+                        <dt class="col-sm-2">Nombre</dt>
+                        <dd class="col-sm-4">{{item.solicitud.solicitante.firstName}} {{item.solicitud.solicitante.lastName}}</dd>
+                    
+                        <dt class="col-sm-2">Direccion</dt>
+                        <dd class="col-sm-4">{{item.solicitud.solicitante.direccion}}</dd>
+                    
+                        <dt class="col-sm-2">Telefono</dt>
+                        <dd class="col-sm-4">{{item.solicitud.solicitante.telefono}}</dd>
+                    
+                        <dt class="col-sm-2">Email</dt>
+                        <dd class="col-sm-10">{{item.solicitud.solicitante.emailAddress}}</dd>
+                    
+                    </dl>
+                    
+                    <h5 class="subtitulo">Grupo Familiar</h5>
+                    <div class="table-primary">
+                        <table class="table table-hover table-striped table-bordered table-condensed">
+                            <thead class="table-header">
+                                <tr>
+                                    <th>Identificación</th>
+                                    <th>Nombre</th>
+                                    <th>Parentesco</th>
+                                    <th>Identificación</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="familiar in item.tercerosSolicitud">
+                                    <td>{{familiar.identificacion}}</td>
+                                    <td>{{familiar.nombre}} {{familiar.apellido}}</td>
+                                    <td>{{familiar.parentesco.nombre}}</td>
+                                    <td><a href="{{root}}solicitud/{{item.solicitud.idsolicitud}}/visualizardoc/{{familiar.identificacionDocumento.documento.iddocumento}}/{{familiar.identificacionDocumento.idSolicitudXDocumento}}" target="_blank"><i class="fa fa-search"></i></a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <input type="button" class="btn btn-primary" ng-click="step = step + 1" value="Siguiente"/>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div ng-show="step == 2">
+                    <h5 class="subtitulo">Solicitud</h5>
+                    <hr>
+                    <dl class="row">
+                        <dt class="col-sm-2">Solicitud Id</dt>
+                        <dd class="col-sm-4">{{item.solicitud.idsolicitud}}</dd>
+                    
+                        <dt class="col-sm-2" ng-show="item.solicitud.radicado">Radicado</dt>
+                        <dd class="col-sm-4" ng-show="item.solicitud.radicado"><a href="https://www.cali.gov.co/aplicaciones/orweb/orweb/principal.php?id={{item.solicitud.radicado}}" target="_blank">{{item.solicitud.radicado}}</a></dd>
+                    
+                        <dt class="col-sm-2">Estado</dt>
+                        <dd class="col-sm-4">{{item.solicitud.estado.nombre}}</dd>
+                    
+                        <dt class="col-sm-2">Fecha Creación</dt>
+                        <dd class="col-sm-4">{{item.solicitud.fechainicial.timestamp * 1000| date:'yyyy-MM-dd HH:mm:ss'}}</dd>
+                    </dl>
+                    <h5 class="subtitulo">Archivos Adjuntos</h5>
+                    <div class="table-primary">
+                        <table class="table table-hover table-striped table-bordered table-condensed">
+                            <thead class="table-header">
+                                <tr>
+                                
+                                    <th>Nombre</th>
+                                    <th>Archivo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="documento in item.documentosSolicitud" ng-show="documento.documento.nombre!=='otro'">
+                                    <td>{{documento.nombre}}</td>
+                                    <td><a href="{{root}}solicitud/{{item.solicitud.idsolicitud}}/visualizardoc/{{documento.documento.iddocumento}}/{{documento.idSolicitudXDocumento}}" target="_blank"><i class="fa fa-search"></i></a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <h5 class="subtitulo">Predio</h5>
+                    <hr>
+                    <dl class="row">
+                        <dt class="col-sm-2">Lote</dt>
+                        <dd class="col-sm-4">{{item.lote}}&nbsp;</dd>
+                    
+                        <dt class="col-sm-2">Manzana</dt>
+                        <dd class="col-sm-4">{{item.manzana}}&nbsp;</dd>
+                    
+                        <dt class="col-sm-2">Dirección</dt>
+                        <dd class="col-sm-4">{{item.direccion}}</dd>
+                    
+                        <dt class="col-sm-2">NPN</dt>
+                        <dd class="col-sm-4">{{item.npn}}</dd>
+                        
+                        <dt class="col-sm-2">ID</dt>
+                        <dd class="col-sm-4">{{item.predioId}}</dd>
+                    </dl>
+                    
+                    <dl class="row">
+                        <dt class="col-sm-2">Programa Vivienda</dt>
+                        <dd class="col-sm-10">{{item.programaVivienda.nombre}} <p ng-show="item.otroProgramaVivienda">{{item.otroProgramaVivienda}}</p></dd>    
+                    </dl>
+                    
+                    <dl class="row">
+                        <dt class="col-sm-2">Años Ocupación</dt>
+                        <dd class="col-sm-4">{{item.tiempoOcupacion}} años</dd>
+                    </dl>
+                    <dl class="row">
+                        <dt class="col-sm-2">Descripción</dt>
+                        <dd class="col-sm-10">{{item.solicitud.observacion}}</dd>
+                    </dl>
+                    <input type="button" class="btn btn-info" ng-click="step = step - 1" value="Anterior" />
+                    <input type="button" class="btn btn-primary" ng-click="step = step + 1" value="Siguiente"/>
+                </div>
+            </div>    
+            <div class="col-sm-12">
+                <div ng-show="step == 3">        
+                    <div class="panel-body">
+                        <form name="formGestion"> 
+                            <div class="note note-danger" ng-if="respuesta.devolucion">
+                                <strong>Comentario Devolución: </strong>{{respuesta.devolucion}}
+                            </div>
+                            <div class="row text-danger" ng-if="item.comentariodevolucion">
+                                <div class="form-group has-feedback simple col-md-12">
+                                    <label class="control-label" for="localización">Comentarios de Devolución:</label>
+                                    {{item.devolucion}}
+                                </div>
+                            </div> 
+                            <div class="row" ng-show="esUsuarioGestion">
+                                <label class="control-label">Completar la respuesta:</label>
+                                <select class="form-control" ng-model="item.respuestaSeleccionada" ng-options="tipoRespuesta.id as tipoRespuesta.nombre for tipoRespuesta in tiposDeRespuesta" ng-change="obtenerTextoRespuesta(item.respuestaSeleccionada)" ng-disabled="validator.alert.content==undefined?false:true">
+                                </select>
+                            </div>
+                            <br>
+                            <div class="row" ng-show="esUsuarioGestion" ng-show="item.respuestaSeleccionada">
+                                <textarea class="form-control"  minlength="10" ng-model="item.textoRespuesta" rows="10" cols="5"></textarea>
+                            </div>
+                            <div class="row" ng-show="esUsuarioFirma">
+                                <label class="control-label">Comentarios de Devolución:</label>
+                                <textarea class="form-control" ng-init="item.textoDevolucion=null" ng-model="item.textoDevolucion" rows="10" cols="5"></textarea>
+                                <button class="btn btn-primary btn-sm" ng-click="item.textoDevolucion=null">Limpiar</button>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-md-6 text-right-sm">
+                                    <div ng-show="esUsuarioGestion">
+                                        <input type="button" class="btn btn-info" ng-click="step = step - 1" value="Anterior" />
+                                        <input type="submit" class="btn btn-primary" ng-click="save('preaprobada', 1)" value="Guardar"  ng-disabled="!formGestion.$valid"/>
+                                        <input type="submit" class="btn btn-danger" ng-click="save('pendiente', 0)" value="Guardar Borrador"  ng-disabled="!formGestion.$valid"/>
+                                        <input type="button" class="btn btn-warning" ng-click="previsualizar()" value="Previsualizar Respuesta"  ng-show="respuestaGuardada" />
+                                    </div>
+                                    <div ng-show="esUsuarioFirma">
+                                        <input type="button" class="btn btn-info" ng-click="step = step - 1" value="Anterior" />
+                                        <input type="submit" class="btn btn-primary" ng-click="save('aprobada', 1)" value="Firmar"  ng-disabled="!formGestion.$valid" ng-show="item.textoDevolucion.length<=4"/>
+                                        <input type="submit" class="btn btn-danger" ng-click="save('pendiente', 1)" value="Devolver"  ng-disabled="!formGestion.$valid" ng-show="item.textoDevolucion.length>4"/>
+                                        <input type="button" class="btn btn-warning" ng-click="previsualizar()" value="Previsualizar Respuesta"/>
+                                    </div>
+                                    
+                                    
+                                    ó                          
+                                    <a ui-sref="listar-peticion">Cancelar</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+    </div>
+</div>

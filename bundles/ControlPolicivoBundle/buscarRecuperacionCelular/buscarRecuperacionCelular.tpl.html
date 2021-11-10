@@ -1,0 +1,80 @@
+﻿
+<div>
+    <div class="col-md-12 col-lg-12">
+        <div ng-show="validator.alert.content">
+            <div class="alert alert-{{validator.alert.type}} alert-dismissable">
+                <i class="fa fa-danger"></i>
+                <button type="button" class="close" aria-hidden="true" ng-click="hideAlert()">×</button>
+                <b>{{validator.alert.title}}</b>
+                <span ng-bind-html="validator.alert.content"></span>
+            </div>
+        </div>
+        <div class="panel panel-success">
+            <div class="panel-heading ">
+                <span class="panel-title">Buscar Recuperaci&oacute;n de Celular</span>
+                <div class="panel-heading-controls"></div>
+            </div>
+            <div class="panel-body">
+
+                <form name="form" id="form" class="" autocomplete="off" novalidate>
+                    <!-- INFORMACIÓN DEL PRESUNTO Propietario-->
+                    <h4 class="padding-sm no-padding-t padding-xs-hr">
+                        <i class="fa fa-id-card text-primary"></i>
+                        &nbsp;&nbsp;Información del Celular
+                    </h4>
+
+                    <div class="row">
+                        <div class="form-group col-md-6" ng-class="{'has-error': form.numeroImei.$touched && form.numeroImei.$invalid}">
+                            <label class="control-label" for="Propietario_identificacion">
+                                Número Imei
+                                <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                            </label>
+                            <form class="form-inline">                               
+                                <div class="input-group col-md-12">                               
+                                    <input type="number" min="100000000000000" max="999999999999999" id="numeroImei" name="numeroImei" class="form-control input-xlarge" ng-class="{'has-error': validator.numeroComparendo}" ng-model="imei" placeholder="Ingrese el número de comparendo" required/>
+                                    <a href="" type="button" class="input-group-addon btn-primary" ng-click="buscarRecuperacionCelular()"><i class="fa fa fa-search fa-2"  title="Buscar por Imei."></i></a>
+                                </div>
+                            </form>                        
+                            <p class="help-block" ng-if="form.numeroImei.$touched && form.numeroImei.$invalid">El número de imei debe tener 15 digítos.</p>
+                        </div>
+						
+                    </div>
+					<div class="row" ng-if="data">
+						<div class="col-md-12">						
+							<strong>Identificador:</strong>{{data.id}}<br>
+							<strong>Marca:</strong>{{data.dispositivo.marca.nombre}}<br>
+							<strong>Descripción:</strong>{{data.dispositivo.descripcion}}<br>
+							<strong>Imei:</strong> {{data.dispositivo.imei}}<br>
+                            <strong>Propietario:</strong> {{data.tercero.identificacion}} - {{data.tercero.nombre}} {{data.data.data[0].tercero.apellido}}<br>                            
+                            
+						</div>
+					</div>
+					<br><br>
+					<div class="row" ng-if="data.id">
+						<div class="form-group col-md-4" ng-class="{'has-error': form.estado.$touched && form.estado.$invalid}">
+                            <label class="control-label" for="estado" ng-if="data.estado.codigo=='pendiente' && data.estado">
+                                Cambiar a Estado
+                                <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                            </label>
+                            <label class="control-label" for="estado" ng-if="data.estado.codigo!=='pendiente' && data.estado">
+                                Estado Actual
+                                <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                            </label>
+                            <select class="form-control" id="estado" ng-model="data.estado" ng-disabled="data.estado.codigo!=='pendiente' && !data.estado">
+                                <option value="cerrado" selected>Entregado</option>
+                                <option value="anulada">Anulado</option>
+                                <option value="eliminada">Destruido</option>
+                            </select>
+                            <p class="help-block" ng-if="form.estado.$touched && form.estado.$invalid">El estado es obligatorio.</p>
+						</div>						
+                    </div>                    
+					<div class="row" ng-if="data.estado">
+						<div class="row padding-sm text-right-sm">
+							<input type="submit" ng-disabled="form.$invalid" class="btn btn-primary" ng-click="save()" value="Registrar Cambio de Estado" />
+						</div>
+					</div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

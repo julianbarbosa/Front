@@ -1,0 +1,389 @@
+<style>
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+    }
+
+	* {
+		font-size: 12px;
+		font-style: normal;
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		box-sizing: border-box;
+	}
+
+	.tags {
+		margin-bottom: 4px;
+		margin-top: 4px;
+	} 
+
+	.tags .tag {
+		margin-top: 1px;
+		display: inline-block;
+		margin-right: 4px;		
+		font-size: 11px;
+	}
+
+	.tag .close {
+		margin-top: 1px;
+		font-size: 11px;
+		margin-left: 4px; 
+	}
+
+	.tooltip {
+		font-style: normal; 
+		position: absolute;
+		z-index: 1030;
+		display: block;
+		visibility: visible;
+		font-size: 12px;
+		line-height: 1.4;
+		opacity: 0;
+		filter: alpha(opacity=0);
+	}
+	.tooltip.in {
+		opacity: 0.9;
+		filter: alpha(opacity=90);
+	}
+	.tooltip.top {
+		margin-top: -3px;
+		padding: 5px 0;
+	}	
+
+	.tooltip-inner {
+		font-size: 11px;
+		font-style: normal; 
+		max-width: 500px;
+		padding: 3px 8px;
+		text-align: justify;
+		text-decoration: none;
+		background-color: #ffffff;
+		color: #333333;
+		border-radius: 2px;
+		webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+		box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+	}	
+
+	form.tab-form-demo .tab-pane {
+		margin: 20px 20px;
+
+	</style>	
+
+	<script>
+		$(document).ready(function () {
+			$('[data-toggle="tooltip"]').tooltip();
+
+			$(".tag").on('DOMNodeInserted', function () {
+				$('[data-toggle="tooltip"]').tooltip();
+			});
+
+			$(".close").on('DOMNodeInserted', function () {
+				$('[data-toggle="tooltip"]').tooltip();
+			});
+		});
+	</script>
+	<div class="page-header">
+		<div class="row">
+			<!-- Page header, center on small screens -->
+			<h1 class="col-xs-12 col-sm-12 text-center text-left-sm"><br>
+				<i class="padding-sm-hr fa fa-arrow-circle-right"></i>GESTIÓN DE {{ solicitud.tiposolicitud.nombre | uppercase }}<span ng-if="solicitud.idSolicitud">Solicitud {{ solicitud.idSolicitud}}</span>
+			</h1>
+			<div class="col-xs-12 col-sm-12">
+				<div class="row">
+					<hr class="visible-xs no-grid-gutter-h">
+					<div class="visible-xs clearfix form-group-margin"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-12">
+		<!--Panel de Información General-->
+		<div class="panel panel-success">
+			<div class="panel-heading">
+				<span class="panel-title">Información General</span>
+			</div>
+			<div class="panel-body">
+				<div>
+					<uib-tabset active="activeJustified" justified="true">
+						<uib-tab index="0" heading="Solicitud">				
+							<strong>IdSolicitud: </strong>{{ solicitud.idsolicitud}}<br>
+							<strong>Tipo Solicitud: </strong>{{ solicitud.tiposolicitud.nombre}}<br>
+							<strong>Radicado:  </strong><a target="_blank" href="http://www.cali.gov.co/aplicaciones/orweb/orweb/principal.php?id={{ solicitud.radicado}}">{{ solicitud.radicado}}</a><br>
+							<strong>Fecha: </strong>{{ solicitud.fechainicial.timestamp * 1000 | date:'yyyy-MM-dd HH:mm:ss' }}<br>
+							<strong>Estado: </strong>{{ solicitud.estado.codigo}}<br>						
+							<strong>Areá del predio declarada por el solicitante: </strong>{{ eir.areapredio}} mt<sup>2</sup><br>
+							<strong>Areá para las actividades declarada por el solicitante: </strong>{{ eir.areaxactividades}} mt<sup>2</sup><br>
+							<span ng-if="eir.matriculainmobiliaria != ''">	
+							<strong>Matricula Inmobiliaria: </strong>{{ eir.matriculainmobiliaria}}<br>
+							</span>
+							<strong>Licencia de Construcción: </strong>{{ eir.licenciaconstruccion}}<br>	
+							<span ng-if="eir.licenciaconstruccion == 'Si'">							
+								<strong>Número de Licencia: </strong>{{ eir.numerolicencia}}<br>
+								<strong>Curaduría Urbana: </strong>{{ eir.curaduriaurbana}}<br>
+							</span>
+						</uib-tab>
+						<uib-tab index="1" heading="Predial">
+							<strong>Número Predial Nacional:  </strong>{{ solicitud.nomenclatura.predio.codigounico}}<br>
+							<span ng-if="eir.numeropredial != ''">			
+							<strong>Número Predial Local:  </strong>{{ eir.numeropredial}}<br>
+							</span>
+							<strong>Dirección:  </strong>{{ solicitud.nomenclatura.direccion}} {{ solicitud.nomenclatura.informacionadicional}} - <i class="fa fa-map-marker"></i><a target="_blank" href="https://www.google.com/maps/place/{{ solicitud.nomenclatura.direccion}},+Cali,+Valle+del+Cauca/"> Ver En Mapa</a><br>
+							<strong>Area:  </strong>{{ solicitud.nomenclatura.predio.area | number:2 }} mt<sup>2</sup><br>
+							<strong>Comuna  </strong>{{ solicitud.nomenclatura.predio.barrio.idcomuna}}<br>
+							<strong>Barrio:  </strong>{{ solicitud.nomenclatura.predio.barrio.nombre}}<br>
+						</uib-tab>
+						<uib-tab index="2" heading="Radicados">
+							<span  ng-repeat="radicados in radicados.data">
+								<strong>Solicitud: </strong>{{ radicados.idsolicitud}} - <strong>Radicado:  </strong><a target="_blank" href="http://www.cali.gov.co/aplicaciones/orweb/orweb/principal.php?id={{ radicados.radicado}}">{{ radicados.radicado}}</a>
+								/ <strong>Observación:  </strong>{{ radicados.observaciones}}
+								/ <strong>Usuario:  </strong>{{ radicados.usuario}}<br>	
+							</span>
+						</uib-tab>
+						<uib-tab index="3" heading="Visita Tecnica">
+							<span ng-if="datosguardados.visitatecnica.data.radicado">
+								<strong>IdSolicitud: </strong>{{ datosguardados.visitatecnica.data.idsolicitud}}<br>
+								<strong>Fecha: </strong>{{ datosguardados.visitatecnica.data.fechainicial.timestamp * 1000 | date:'yyyy-MM-dd HH:mm:ss' }}<br>
+								<strong>Tipo Solicitud:  </strong>{{ datosguardados.visitatecnica.data.tiposolicitud}}<br>	
+								<strong>Estado  </strong>{{ datosguardados.visitatecnica.data.estado}}<br>			
+								<strong>Radicado:  </strong><a target="_blank" href="http://www.cali.gov.co/aplicaciones/orweb/orweb/principal.php?id={{ datosguardados.visitatecnica.data.radicado}}">{{ datosguardados.visitatecnica.data.radicado}}</a><br>
+								<strong>Observación:  </strong>{{ datosguardados.visitatecnica.data.observacionesvisitatecnica}}<br>	
+							</span>
+						</uib-tab>		
+						<uib-tab index="4" heading="Visita Dagma">
+							<span ng-if="datosguardados.visitadagma.data.radicado">
+								<strong>IdSolicitud: </strong>{{ datosguardados.visitadagma.data.idsolicitud}}<br>
+								<strong>Fecha: </strong>{{ datosguardados.visitatecnica.data.fechainicial.timestamp * 1000 | date:'yyyy-MM-dd HH:mm:ss' }}<br>
+								<strong>Tipo Solicitud:  </strong>{{ datosguardados.visitadagma.data.tiposolicitud}}<br>	
+								<strong>Estado  </strong>{{ datosguardados.visitadagma.data.estado}}<br>								
+								<strong>Radicado:  </strong><a target="_blank" href="http://www.cali.gov.co/aplicaciones/orweb/orweb/principal.php?id={{ datosguardados.visitadagma.data.radicado}}">{{ datosguardados.visitadagma.data.radicado}}</a><br>
+								<strong>Observación:  </strong>{{ datosguardados.visitadagma.data.observacionesvisitadagma}}<br>	
+							</span>
+						</uib-tab>
+						<uib-tab index="5" heading="Seguridad y Justicia">
+							<span ng-if="datosguardados.visitaseguridadyjusticia.data.radicado">
+								<strong>IdSolicitud: </strong>{{ datosguardados.visitaseguridadyjusticia.data.idsolicitud}}<br>
+								<strong>Fecha: </strong>{{ datosguardados.visitaseguridadyjusticia.data.fechainicial.timestamp * 1000 | date:'yyyy-MM-dd HH:mm:ss' }}<br>
+								<strong>Tipo Solicitud:  </strong>{{ datosguardados.visitaseguridadyjusticia.data.tiposolicitud}}<br>	
+								<strong>Estado  </strong>{{ datosguardados.visitaseguridadyjusticia.data.estado}}<br>								
+								<strong>Radicado:  </strong><a target="_blank" href="http://www.cali.gov.co/aplicaciones/orweb/orweb/principal.php?id={{ datosguardados.visitaseguridadyjusticia.data.radicado}}">{{ datosguardados.visitaseguridadyjusticia.data.radicado}}</a><br>
+								<strong>Observación:  </strong>{{ datosguardados.visitaseguridadyjusticia.data.observacionesvisitaseguridadyjusticia}}<br>	
+							</span>
+						</uib-tab>						
+
+					</uib-tabset>
+				</div>
+			</div>
+		</div>
+		<!--Panel de Actividades Economicas-->
+		<div class="panel panel-success"  ng-if="!respuesta">
+			<div class="panel-heading">
+				<span class="panel-title">Actividades Economicas</span>
+			</div>
+			<!--{{ allTags.length | json }}-->
+			<div class="panel-body">
+				<ul class="list-unstyled tag">
+					<span ng-if="eir.descripcionactividades != ''">							
+						<strong>Descripción de actividades declarada por el solicitante: </strong>{{ eir.descripcionactividades}}<br>
+						<hr>
+					</span>
+					<li ng-repeat="tag in allTags">
+						<div class="well well-sm">							
+							<span ng-click="mostrarDiv($index)" style="cursor:pointer;" data-toggle="tooltip" data-placement="left" title="Gestionar" data-original-title=" " >{{tag.ciiu.codigo}} - {{tag.ciiu.nombre}}</span>
+							<span ng-click="mostrarDiv($index)" style="cursor:pointer; color:#4ab6d5; border-bottom: 1px solid #c1c1c1;" class="pull-right btn-label icon fa fa-pencil-square" data-toggle="tooltip" data-placement="left" title="Por favor de clic para gestionar la actividad" data-original-title=" "></span>							
+							<div ng-show="tag.mostrarDiv" >
+								<form class="form-group" name="tag.form" novalidate>
+									<br>
+									<div class="form-group{{ haveError('respuesta', tag.form) ? 'has-error' : ''}}">
+										<label class="control-label" >Permite</label>					
+										<p>
+											<label class="radio">
+												<input type="radio" ng-model="tag.respuesta" name="respuesta" value="7" class="px" ng-required="true">
+												<span class="lbl">Si</span>
+											</label>
+											<label class="radio">
+												<input type="radio" ng-model="tag.respuesta" name="respuesta" value="1" class="px" ng-required="true">
+												<span class="lbl">No</span>
+											</label>						
+											<span class="text-danger" ng-show="haveError('respuesta', tag.form)" >
+												Este campo es obligatorio.
+											</span>						
+										</p>
+										<div class="form-group {{ haveError('observacionesrespuesta', tag.form) ? 'has-error' : ''}}">
+											<label class="control-label" >Observaciones</label>
+											<textarea rows="4" cols="50" ng-model="tag.observacionesrespuesta" name="observacionesrespuesta" type="text"  placeholder="Ingrese las observaciones para la respuesta" class="form-control"  ng-value=""> </textarea>
+											<span class="text-danger" ng-show="haveError('observacionesrespuesta', tag.form)" >
+												Este campo es obligatorio.
+											</span>
+										</div>
+									</div>									
+									<div align="right">
+										<button class="btn btn-warning" ng-click="cerrarDiv($index)">Cancelar</button>
+										<button class="btn btn-success" ng-if="!haveError('respuesta', tag.form)" ng-click="guardarDiv($index)">Guardar</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</li>
+				</ul>
+				<span class="text-danger" ng-if="validForms() == false">
+					Debe gestionar todas las respuestas para las actividades economicas.
+				</span>
+			</div>	
+		</div>
+
+		<!--Panel de Actividades Economicas-->
+		<div class="panel panel-success"  ng-if="respuesta">
+			<div class="panel-heading ">
+				<span class="panel-title">Actividades Economicas</span>
+			</div>
+			<!--{{ allTags.length | json }}-->
+			<div class="panel-body">
+				<ul class="list-unstyled tag">
+					<span ng-if="eir.descripcionactividades != ''">							
+						<strong>Descripción de actividades declarada por el solicitante: </strong>{{ eir.descripcionactividades}}<br>
+						<hr>
+					</span>
+					<li ng-repeat="tag in respuesta.data">
+						<div class="well well-sm">							
+							<span style="cursor:pointer;"  data-placement="left"  data-original-title=" " >{{tag.codigo}} - {{tag.nombre}}</span>
+							<div ng-show="tag.observaciones" >
+								{{tag.observaciones}}
+							</div>
+							<div ng-show="tag.respuesta" >
+								<span><strong>{{tag.respuesta}}</strong></span>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>	
+		</div>		
+
+		<!--Panel de Visitas-->
+		<!--{{datosguardados |json }}-->
+		<div class="panel panel-success">
+			<div class="panel-heading ">
+				<span class="panel-title">Gestionar Visita</span>
+			</div>
+			<div class="panel-body">
+
+				<uib-tabset active="activeForm" justified="false">	
+					<uib-tab index="9" heading="Visita Tecnica EIR">
+						<form class="form-group" name="gestionEIR.formVisitaTecnicaEir">
+							<div class="form-group{{ haveError('visitatecnica', gestionEIR.formVisitaTecnicaEir) ? 'has-error' : ''}}">
+
+								<label class="radio">
+									<input type="radio" name="visitatecnica" ng-model="gestionEIR.visitatecnica" value="1" class="px" ng-required="true">
+									<span class="lbl" data-toggle="tooltip" data-placement="right" title="Recuerde que si selecciona Si, al momento de darle clic en el botón guardar el sistema generá una visita con su solicitud y orfeo asociado y no hay como devolverse." data-original-title=" "  >Si</span>
+								</label>
+								<label class="radio">
+									<input type="radio" ng-change="gestionEIR.observacionesvisitatecnica = ''" name="visitatecnica" ng-model="gestionEIR.visitatecnica" value="0" class="px" ng-required="true">
+									<span class="lbl">No</span>
+								</label>						
+								<span class="text-danger" ng-show="haveError('visitatecnica', gestionEIR.formVisitaTecnicaEir)" >
+									Este campo es obligatorio.
+								</span>						
+
+								<div>
+									<div ng-if="gestionEIR.visitatecnica == '1'" class="form-group {{ haveError('observacionesvisitatecnica', gestionEIR.formVisitaTecnicaEir) ? 'has-error' : ''}}">
+										<label class="control-label" >Observaciones</label>
+										<textarea char-count maxlength="500" rows="4" cols="50" ng-model="gestionEIR.observacionesvisitatecnica" type="text" ng-required="true" placeholder="Ingrese las observaciones para la visita" class="form-control" name="observacionesvisitatecnica" ng-value=""> </textarea>
+										<span class="text-danger">
+											Número de Caracteres Restantes: {{ 500 - numberOfCharacters}}<br>
+										</span>
+										<span class="text-danger" ng-show="haveError('observacionesvisitatecnica', gestionEIR.formVisitaTecnicaEir)" >
+											Este campo es obligatorio.
+										</span>
+									</div>
+								</div>
+							</div>
+						</form>
+
+					</uib-tab>	
+					<uib-tab index="10" heading="Visita Dagma EIR">
+						<form class="form-group" name="gestionEIR.formVisitaDagmaEir">
+							<div class="form-group {{ haveError('visitadagma', gestionEIR.formVisitaDagmaEir) ? 'has-error' : ''}}">
+
+								<label class="radio">
+									<input type="radio" name="visitadagma" ng-model="gestionEIR.visitadagma" value="1" class="px" required>
+									<span class="lbl" data-toggle="tooltip" data-placement="right" title="Recuerde que si selecciona Si, al momento de darle clic en el botón guardar el sistema generá una visita con su solicitud y orfeo asociado y no hay como devolverse." data-original-title=" "  >Si</span>
+								</label>
+								<label class="radio">
+									<input type="radio" ng-change="gestionEIR.observacionesvisitadagma = ''" name="visitadagma" ng-model="gestionEIR.visitadagma" value="0" class="px" required>
+									<span class="lbl">No</span>
+								</label>						
+								<span class="text-danger" ng-show="haveError('visitadagma', gestionEIR.formVisitaDagmaEir)" >
+									Este campo es obligatorio.
+								</span>						
+
+								<div>
+									<div ng-if="gestionEIR.visitadagma == '1'" class="form-group {{ haveError('observacionesvisitadagma', gestionEIR.formVisitaDagmaEir) ? 'has-error' : ''}}">
+										<label class="control-label" >Observaciones</label>
+										<textarea char-count maxlength="500" rows="4" cols="50" ng-model="gestionEIR.observacionesvisitadagma" type="text" ng-required="true" placeholder="Ingrese las observaciones para la visita" class="form-control" name="observacionesvisitadagma" value=""></textarea>
+										<span class="text-danger">
+											Número de Caracteres Restantes: {{ 500 - numberOfCharacters}}<br>
+										</span>
+										<span class="text-danger" ng-show="haveError('observacionesvisitadagma', gestionEIR.formVisitaDagmaEir)" >
+											Este campo es obligatorio.
+										</span>
+									</div>
+								</div>
+							</div>			
+						</form>
+					</uib-tab>
+					<uib-tab index="11" heading="Seguridad y Justicia">
+						<form class="form-group" name="gestionEIR.formVisitaSeguridadJusticia">
+							<div class="form-group {{ haveError('visitaseguridadyjusticia', gestionEIR.formVisitaSeguridadJusticia) ? 'has-error' : ''}}">
+
+								<label class="radio">
+									<input type="radio" name="visitaseguridadyjusticia" ng-model="gestionEIR.visitaseguridadyjusticia" value="1" class="px" required>
+									<span class="lbl" data-toggle="tooltip" data-placement="right" title="Recuerde que si selecciona Si, al momento de darle clic en el botón guardar el sistema generá una visita con su solicitud y orfeo asociado y no hay como devolverse." data-original-title=" "  >Si</span>
+								</label>
+								<label class="radio">
+									<input type="radio" ng-change="gestionEIR.observacionesvisitaseguridadyjusticia = ''" name="visitaseguridadyjusticia" ng-model="gestionEIR.visitaseguridadyjusticia" value="0" class="px" required>
+									<span class="lbl">No</span>
+								</label>						
+								<span class="text-danger" ng-show="haveError('visitaseguridadyjusticia', gestionEIR.formVisitaSeguridadJusticia)" >
+									Este campo es obligatorio.
+								</span>						
+
+								<div>
+									<div ng-if="gestionEIR.visitaseguridadyjusticia == '1'" class="form-group {{ haveError('observacionesvisitaseguridadyjusticia', gestionEIR.formVisitaSeguridadJusticia) ? 'has-error' : ''}}">
+										<label class="control-label" >Observaciones</label>
+										<textarea char-count rows="4" cols="50"  maxlength="500" ng-model="gestionEIR.observacionesvisitaseguridadyjusticia" type="text" ng-required="true" placeholder="Ingrese las observaciones para la visita" class="form-control" name="observacionesvisitaseguridadyjusticia" value=""></textarea>
+										<span class="text-danger">
+											Número de Caracteres Restantes: {{ 500 - numberOfCharacters}}<br>
+										</span>
+										<span class="text-danger" ng-show="haveError('observacionesvisitaseguridadyjusticia', gestionEIR.formVisitaSeguridadJusticia)" >
+											Este campo es obligatorio.
+										</span>
+									</div>
+								</div>
+							</div>			
+						</form>
+					</uib-tab>
+				</uib-tabset>
+				<span class="text-danger" ng-if="!gestionEIR.formVisitaTecnicaEir.$valid || !gestionEIR.formVisitaDagmaEir.$valid">
+					Debe gestionar todas las visitas para poder guardar los cambios.
+				</span>
+			</div>
+		</div>
+
+		<!--{{ estado | json }}
+		
+		{{datosguardado.visitatecnica.data.radicado| json}}-->
+		<div class="col-md-12">
+			<div class="col-sm-12" style="text-align: right;">
+				<button class="btn-link" ng-click="cancelarSolicitud()" >Cancelar</button> 
+
+				<span ng-if="gestionEIR.formVisitaTecnicaEir.$valid && gestionEIR.formVisitaDagmaEir.$valid && validForms() && estado != 'guardado'">
+					ó 
+					<button ng-disabled="" class="btn btn-primary" ng-click="guardarSolicitud()" >Guardar >></button>
+				</span>
+				<span ng-if="estado == 'guardado'">
+					ó 
+					<button ng-disabled="" class="btn btn-primary" ng-click="listarTareas()" >Continuar >></button>
+				</span>				
+			</div>
+		</div>	
+

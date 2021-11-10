@@ -1,0 +1,190 @@
+<div class="col-sm-12 col-md-12 col-lg-10" ng-show="validator.alert.content">
+    <div class="alert alert-{{validator.alert.type}} alert-dismissable">
+        <i class="fa fa-danger"></i>
+        <button type="button" class="close" aria-hidden="true" ng-click="hideAlert()">×</button>
+        <b>{{validator.alert.title}}</b> <span ng-bind-html="validator.alert.content"></span>
+    </div>
+</div>
+<div class="panel col-sm-12 col-md-12 col-lg-10">
+    <form name="userForm">
+        <div class="panel-body">
+            <div class="page-header">
+                <h1 class="col-xs-12 col-sm-10 text-center text-left-sm"><i
+                        class="padding-sm-hr fa fa-list-alt"></i>&nbsp;&nbsp;Control a Sanciones - Movimiento Multiple
+                </h1>
+            </div>
+            <div class="row" ng-show="!expedientes">
+                <div class="form-group col-md-5">
+                    <label class="control-label" for="idInterno">
+                        Estado
+                    </label>
+                    <select class="form-control input-xlarge" ng-model="busqueda.estado" ng-change="data=''">
+                        <option value="pendiente">Pendiente</option>
+                        <option value="aprobada">Aprobado</option>
+                        <option value="rechazado">Rechazado</option>
+                        <option value="enviadotesoreria">Enviado a Tesorería</option>
+                        <option value="cerrarporpago">Cerrado por pago</option>
+                        <option value="devueltoportesoreria">Devuelto por Tesorería</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-5" ng-show="busqueda.estado=='rechazado' || busqueda.estado=='cerrarporpago'">
+                    <label class="control-label" for="inspeccion">
+                        Inspección
+                    </label>
+                    <select class="form-control input-xlarge" ng-model="busqueda.inspeccion"
+                        ng-options="inspeccion.id as inspeccion.nombre for inspeccion in inspecciones">
+                    </select>
+                </div>
+                <div class="col-md-2 ">
+                    <br>
+                    <input type="button" class="btn btn-success" value="Buscar"
+                        ng-click="actualizarDatos(busqueda.estado, busqueda.inspeccion)">
+                </div>
+            </div>
+            <div ng-show="data">
+
+                <div class="panel panel-success">
+                    <div class="panel-heading ">
+                        <span class="panel-title">Listado de Expedientes en estado {{estado}}</span>
+                        <div class="panel-heading-controls">
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="col-md-4">
+                            <label>Buscar por identificador interno</label>
+                            <input type="text" ng-model="filter" class="form-control">
+                        </div>
+                        <div class="col-md-4">
+                            <label>Buscar por número comparendo</label>
+                            <input type="text" ng-model="filterNumeroFormato" class="form-control">
+                        </div>
+                    </div>
+                    <table class="table ">
+                        <thead>
+                            <th>
+                                Id
+                            </th>
+                            <th>
+                                Comparendo
+                            </th>
+                            <th>
+                                Identificacion Infractor
+                            </th>
+                            <th>
+                                Nombre Infractor
+                            </th>
+                            <th>
+                                Fecha
+                            </th>
+                            <th>
+                                Acción
+                            </th>
+                        </thead>
+                        
+                        <tr
+                            ng-repeat="item in data | filter: {id: filter, numeroFormato: filterNumeroFormato}">
+                            <td>
+                                {{item.id}}
+                            </td>
+                            <td>
+                                {{item.numeroFormato}}
+                            </td>
+                            <td>
+                                {{item.identificacion}}
+                            </td>
+                            <td>
+                                {{item.nombre}} {{item.apellido}}
+                            </td>
+                            <td>
+                                {{item.updatedAt.timestamp * 1000| date:'yyyy-MM-dd HH:mm:ss'}}
+                            </td>
+                            <td ng-if="busqueda.estado=='pendiente'">
+                                <a href="#!/controlsanciones/registrarmovimiento/{{item.id}}"><i class="fa fa-check-circle" aria-hidden="true"></i></a>
+                            </td>
+                            <td ng-if="busqueda.estado!=='pendiente'">
+                                <input type="checkbox" ng-model="item.isChecked" ng-true-value="true"
+                                ng-false-value="false" ng-click="consultarCantidadCheckeado(data)">
+                            </td>
+                            
+                        </tr>
+                    </table>
+
+                </div>
+                Cantidad Seleccionados: {{cantidadCheckeado}}<br>
+                <ul uib-pagination total-items="data.length" ng-model="currentPage" class="pagination-sm"
+                    items-per-page="itemsPerPage" ng-change="pageChanged()"></ul>
+                <div class="row text-right-sm">
+                    <input type="submit" ng-disabled="form.$invalid" class="btn btn-primary"
+                        ng-click="registrarMovimiento('pendiente', data)" value="Reingresar"
+                        ng-if="permisos.controlsanciones_ingresar_expediente" ng-show="busqueda.estado=='devuelto'" />
+                    <input type="submit" ng-disabled="form.$invalid" class="btn btn-info"
+                        ng-click="generarDocumento('informeSecretarial', data)" value="Informe Secretarial"
+                        ng-if="permisos.controlsanciones_movimiento_expediente_oficina"
+                        ng-show="busqueda.estado=='aprobada'" />
+                    <input type="submit" ng-disabled="form.$invalid" class="btn btn-info"
+                        ng-click="generarBase('aprobada', 0)" value="Base"
+                        ng-if="permisos.controlsanciones_movimiento_expediente_inspeccion"
+                        ng-show="busqueda.estado=='aprobada'" />
+                    <input type="submit" ng-disabled="form.$invalid" class="btn btn-info"
+                        ng-click="generarFUID('aprobada', 0)" value="FUID"
+                        ng-if="permisos.controlsanciones_movimiento_expediente_inspeccion"
+                        ng-show="busqueda.estado=='aprobada'" />
+                    <input type="submit" ng-disabled="form.$invalid" class="btn btn-primary"
+                        ng-click="registrarMovimiento('enviadotesoreria', data)" value="Enviar a Tesorería"
+                        ng-if="permisos.controlsanciones_movimiento_expediente_tesoreria"
+                        ng-show="busqueda.estado=='aprobada'" />
+                    <input type="submit" ng-disabled="form.$invalid" class="btn btn-primary"
+                        ng-click="registrarMovimiento('devuelto', data)" value="Devolver a Inspección"
+                        ng-if="permisos.controlsanciones_movimiento_expediente_inspeccion"
+                        ng-show="busqueda.estado=='rechazado'" />
+                    <input type="submit" ng-disabled="form.$invalid" class="btn btn-primary"
+                        ng-click="registrarMovimiento('cerrado', data)" value="Devolver a Control Sanciones"
+                        ng-if="permisos.tesoreria_cargar_expediente"
+                        ng-show="busqueda.estado=='devueltoportesoreria'" />
+                    <input type="submit" ng-disabled="form.$invalid" class="btn btn-info"
+                        ng-click="generarDocumentoDevolucionCSV(null, 'devueltoportesoreria')" value="Oficio Devolución"
+                        ng-if="permisos.tesoreria_cargar_expediente"
+                        ng-show="busqueda.estado=='devueltoportesoreria'" />
+                    <input type="submit" ng-disabled="form.$invalid" class="btn btn-info"
+                        ng-click="generarDocumentoDevolucion(busqueda.inspeccion, 'rechazado')" value="Oficio Devolución"
+                        ng-if="permisos.controlsanciones_movimiento_expediente_inspeccion"
+                        ng-show="busqueda.estado=='rechazado'" />
+                    <input type="submit" ng-disabled="form.$invalid" class="btn btn-info"
+                        ng-click="generarFUID('rechazado', busqueda.inspeccion)" value="FUID Devolución"
+                        ng-if="permisos.controlsanciones_movimiento_expediente_inspeccion"
+                        ng-show="busqueda.estado=='rechazado'" />
+                    <input type="submit" ng-disabled="form.$invalid" class="btn btn-primary"
+                        ng-click="registrarMovimiento('pendiente', data)" value="Devolver a Revisión"
+                        ng-if="permisos.controlsanciones_movimiento_expediente_inspeccion"
+                        ng-show="busqueda.estado=='rechazado'  && data.comentario.length>=5 " />
+                    <input type="submit" ng-disabled="form.$invalid" class="btn btn-primary"
+                        ng-click="registrarMovimiento('cerrado', data)" value="Envío Custodia"
+                        ng-if="permisos.controlsanciones_cerrar_expediente"
+                        ng-show="busqueda.estado=='enviadotesoreria'" />
+                    <input type="submit" ng-disabled="form.$invalid" class="btn btn-primary"
+                        ng-click="registrarMovimiento('aprobada', data)" value="Aprobar"
+                        ng-if="permisos.controlsanciones_movimiento_expediente_oficina"
+                        ng-show="busqueda.estado=='pendiente' && expediente.responsable.id==userId && (data.comentario.length==0 || data.comentario.length==null )" />
+                    <input type="submit" ng-disabled="form.$invalid" class="btn btn-primary"
+                        ng-click="registrarMovimiento('rechazado', data)" value="Rechazar"
+                        ng-if="permisos.controlsanciones_movimiento_expediente_oficina"
+                        ng-show="busqueda.estado=='pendiente' && expediente.responsable.id==userId && data.comentario.length>=5 " />
+					<input type="submit" ng-disabled="form.$invalid" class="btn btn-info"
+                        ng-click="generarFUID('cerrarporpago', busqueda.inspeccion)" value="FUID Cerrado por Pago"
+                        ng-if="permisos.controlsanciones_movimiento_expediente_oficina"
+                        ng-show="busqueda.estado=='cerrarporpago'" />
+					<input type="submit" ng-disabled="form.$invalid" class="btn btn-info"
+                        ng-click="generarDocumentoEnvioCerradoPorPago(busqueda.inspeccion)" value="Informe Envio Cerrado Por Pago"
+                        ng-if="permisos.controlsanciones_movimiento_expediente_oficina"
+                        ng-show="busqueda.estado=='cerrarporpago'" />
+                    <input type="button" ng-disabled="form.$invalid" class="btn btn-primary" ng-click="limpiar()"
+                        value="Limpiar" />
+
+                </div>
+
+
+            </div>
+    </form>
+</div>
+</div>
+<div class="overlap_espera_2"><i class="fa fa-gear fa-spin fa-2x"></i></div>

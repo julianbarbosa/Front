@@ -1,0 +1,53 @@
+<div>
+    <div ng-show="validator.alert.content" class="col-lg-10 col-md-12 col-sm-12">
+        <div class="alert alert-{{validator.alert.type}} alert-dismissable">
+            <i class="fa fa-danger"></i>
+            <button type="button" class="close" aria-hidden="true" ng-click="hideAlert()">×</button>
+            <b>{{validator.alert.title}}</b> <span ng-bind-html="validator.alert.content"></span>
+        </div>
+    </div> 
+    <div class="col-lg-10 col-md-12 col-sm-12">                
+        <div class="panel panel-success">
+            <div class="panel-heading ">
+                <span class="panel-title">Asignar Visita</span>
+                <div class="panel-heading-controls">
+                </div>
+            </div>
+            <div class="panel-body">
+                <form name="userForm">                                       
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label class="control-label" for="tecnico">Visitador</label>
+                            <select class="form-control"
+                                    ng-model="proceso.idtecnico"
+                                    ng-options="tecnico as tecnico.firstName + ' ' + tecnico.lastName for tecnico in tecnicos">
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">     
+                            <label class="control-label">Fecha de Visita</label>
+                            <input type="month" class="form-control input-xlarge" title="Fecha de Visita"  ng-model="proceso.fecha_visita" date-serializer>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <label class="control-label" for="informacion_adicional">Observaciones de Visita</label>
+                            <textarea rows="4"
+                                      cols="30"
+                                      placeholder="Escriba un comentario sobre la visita"
+                                      ng-model="proceso.observacion"
+                                      class="form-control"
+                                      name="comentario"
+                                      id="comentario">
+                            </textarea>
+                        </div>
+                    </div>
+                    <div class="row padding-sm text-right-sm">
+                        <input type="submit" class="btn btn-primary" ng-click="save()" value="Asignar Visita" ng-if="!isSuccess"/>
+                        ó
+                        <a ui-sref="listar-peticion">Cancelar</a>
+                    </div>                        
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

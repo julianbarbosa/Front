@@ -1,0 +1,77 @@
+<script>
+    function cerrarModal() {
+    $('#modalIngresoDireccion').modal('toggle');
+    }
+</script>
+<div class="panel">
+    <div class="panel-body">
+        <div id="modalIngresoDireccion" class="modal fade modal-change" role="dialog" aria-hidden="true" ></div>
+        <div class="page-header">
+            <h1 class="col-xs-12 col-sm-10 text-center text-left-sm"><i class="padding-sm-hr fa fa-graduation-cap"></i>&nbsp;&nbsp;Crear Pedagogías</h1>            
+        </div>  
+        <div class="col-md-10 col-lg-8">
+            <div ng-show="validator.alert.content">
+                <div class="alert {{validator.alert.type}} alert-dismissable">
+                    <i class="fa fa-danger"></i>
+                    <button type="button" class="close" aria-hidden="true" ng-click="hideAlert()">×</button>
+                    <b>{{validator.alert.title}}</b> <span ng-bind-html="validator.alert.content"></span>
+                </div>
+            </div>
+            <div class="panel panel-success">            
+                <div class="panel-body">               
+                    <form name="userForm" class="" autocomplete="off">                                      
+                        <div class="row col-sm-12">                    
+                            <div class="form-group required col-md-12" ng-class="{'has-error': validator.nombre}">
+                                <label class="control-label">
+                                    Nombre
+                                </label>
+                                <input type="text" 
+                                       id="direccionHechos"
+                                       class="form-control" 
+                                       ng-model="pedagogia.nombre" 
+                                       placeholder="Nombre de la Pedagogía."/>
+                            </div>                                               
+                        </div>
+                        <div class="row col-sm-12">                                       
+                            <div class="form-group required col-md-12" ng-class="{'has-error': validator.descripcion}">
+                                <label class="control-label">
+                                    Descripción
+                                </label>
+                                <textarea rows="4" 
+                                          cols="30" 
+                                          placeholder="Ingrese la descripción de la pedagogía." 
+                                          ng-model="pedagogia.descripcion" 
+                                          class="form-control"
+                                          autocomplete="off"
+                                          required></textarea>
+                            </div>                   
+                        </div>  
+                        <div class="row col-sm-12">
+                            <div class="form-group required col-md-12" ng-class="{'has-error': validator.tipo}">
+                                <label class="control-label">
+                                    Tipo
+                                </label>
+                                <select class="form-control" ng-model="pedagogia.tipo" >
+                                    <option value="">-- Seleccione --</option>
+                                    <option value="Pedagogía">Pedagogía</option>
+                                    <option value="Actividad Comunitaria">Actividad Comunitaria</option>
+                                </select>
+                            </div>
+                        </div>                        
+                        <table class="table table-striped table-bordered">
+                            <tr ng-repeat="comportamiento in comportamientosContrarios track by $index">
+                                <td><input type="checkbox" ng-model="pedagogia.comportamientos[comportamiento.id]" ng-true-value="true"></td>
+                                <td>{{comportamiento.descripcion}}</td>
+                            </tr>    
+                        </table>
+                        <div class="row padding-sm text-right-sm col-sm-12">
+                            <input type="submit"  ng-disabled="userForm.$invalid" class="btn btn-primary" ng-click="save()" value="Crear Pedagogía" />
+                            ó
+                            <a ui-sref="listar-peticion">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

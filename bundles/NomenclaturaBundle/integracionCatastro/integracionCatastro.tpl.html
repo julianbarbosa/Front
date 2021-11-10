@@ -1,0 +1,165 @@
+<div class="page-header">
+    <div class="row">
+        <!-- Page header, center on small screens -->
+        <h1 class="col-xs-12 col-sm-8 text-center text-left-sm">
+        	Sincronización de Nomenclaturas
+        </h1>
+        <h1>
+        	DAPM -&gt; Catastro
+        </h1>
+        <div class="col-xs-12 col-sm-8">
+            <div class="row">
+                <hr class="visible-xs no-grid-gutter-h">
+                <div class="visible-xs clearfix form-group-margin"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel">
+    <div class="panel-body">
+    	<div class="row">
+    		<div class="col-sm-12">
+    			<form novalidate class="form-inline pull-right" >
+			        <div class="form-group">
+						<label class="control-label" >Campo:</label>
+						<select class="form-control" ng-model="consulta.filtro.campo" >
+							<option value="" ></option>
+							<option value="id" > ID del registro </option>
+							<option value="id_predio" > ID del predio</option>
+							<option value="direccion_actual" > Dirección Actual </option>
+							<option value="direccion_certificada" > Dirección Certificada </option>
+							<option value="fecha" > Fecha </option>
+						</select>
+			        </div>
+			        <div class="form-group">
+						<label class="control-label" >Filtro:</label>
+						<select class="form-control" ng-model="consulta.filtro.operador" >
+							<option value="" ></option>
+							<option value="=" > Es igual a </option>
+							<option value="like" > Contiene </option>
+							<option value=">" > Mayor que </option>
+							<option value=">=" > Mayor o igual que </option>
+							<option value="<" > Menor que </option>
+							<option value="<=" > Menor o igual que </option>
+						</select>
+			        </div>
+			        <div class="form-group" ng-show="consulta.filtro.campo != 'fecha'">
+						<label class="control-label" >Valor:</label>
+						<input type="text" class="form-control" ng-model="consulta.filtro.parametro" placeholder="Búsqueda">
+			        </div>
+			        <div class="form-group" ng-show="consulta.filtro.campo == 'fecha'">
+						<label class="control-label" >Valor:</label>
+						<input type="text" class="form-control" uib-datepicker-popup ng-model="dt"  datepicker-options="dateOptions" ng-required="true" close-text="Cerrar" current-text="Hoy" clear-text="Limpiar" is-open="opened" ng-click="open()" />
+			        </div>
+			        <div class="form-group">
+						<button class="btn btn-default" ng-click="filtrar()">Buscar</button>
+			        </div>
+    			</form>
+    		</div>
+    	</div>
+        <div class="table-primary">
+            <table cellpadding="0" cellspacing="0" border="0" class="table-hover table table-bordered dataTable" id="listaSolicitudes" width="100%" role="grid" aria-describedby="listaSolicitudes_info">
+                <thead>
+                    <tr>
+                    	<th class="ui-state-default">
+                    		<input type="checkbox" name="" ng-model="checkedAll" ng-click="seleccionarTodos(checkedAll)" />
+                    	</th>
+                    	<th class="ui-state-default" >
+                    		Id Predio
+                    	</th>
+                    	<th class="ui-state-default" >
+                    		Dirección Actual
+                    	</th>
+                    	<th class="ui-state-default" >
+                    		Dirección Certificada
+                    	</th>
+                    	<th class="ui-state-default" >
+                    		Fecha de Registro
+                    	</th>
+                    	<th class="ui-state-default" >
+                    		Estado
+                    	</th>
+                    	<th class="ui-state-default" >
+                    		Acciones
+                    	</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="odd" style="font-weight: bold;" ng-repeat="row in data">
+                    	<td>
+                    		<input type="checkbox" name="" ng-checked="idsSeleccionados.indexOf(row.id)>-1" ng-click="seleccionar(row.id)" />
+                    	</td>
+                    	<td>
+                    		{{ row.id }}
+                    	</td>
+                    	<td>
+                    		{{ row.direccion_actual }}
+                    	</td>
+                    	<td>
+                    		{{ row.direccion_certificada }}
+                    	</td>
+                    	<td>
+                    		{{ row.fecha | date:'yyyy-MM-dd HH:mm:ss' }}
+                    	</td>
+                    	<td>
+                    		{{ row.nombre_estado }}
+                    	</td>
+                    	<td>
+                    		<div class="btn btn-primary" ng-click="abrirModalCambiarEstado(row)">
+                    			Cambiar estado
+                    		</div>
+                    	</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                <td ng-show="data.length==0" colspan="7" class="currency">
+                	No hay registros para mostrar
+                </td>
+                </tfoot>
+            </table>
+        </div>
+
+    	<div class="row">
+    		<div class="col-sm-6">
+    			<form novalidate class="form-inline pull-left">
+    				<div class="form-group">
+	                    <uib-pagination ng-model="consulta.page" total-items="consulta.total" max-size="5" boundary-links="true" ng-click="buscar()" first-text="Primera" last-text="Última" next-text="Siguiente" previous-text="Anterior" boundary-link-numbers="true" rotate="true" force-ellipses="true"></uib-pagination>
+	                </div>
+                    <div class="form-group">
+			        	<label class="control-label" >Resultados por página</label>
+			        	<select class="form-control" ng-model="consulta.limit" ng-change="cambiarLimit(13)">
+			        		<option value="10" ng-selected="consulta.limit=='10'">10</option>
+			        		<option value="25" ng-selected="consulta.limit=='25'">25</option>
+			        		<option value="50" ng-selected="consulta.limit=='50'">50</option>
+			        		<option value="100" ng-selected="consulta.limit=='100'">100</option>
+			        		<option value="200" ng-selected="consulta.limit=='200'">200</option>
+			        	</select>
+			        </div>
+			    </form>
+    		</div>
+    		<div class="col-sm-6">
+    			<form novalidate class="form-inline pull-right">
+	                <div class="form-group" >
+	                     <label class="control-label" >Estado</label>
+	                     <select required class="form-control" ng-model="estadoSeleccionado" >
+	                     	<option value=""></option>
+	                        <option 
+	                        ng-repeat="estado in estados" 
+	                        ng-selected="estado.id_estado == estadoSeleccionado"
+	                        value="{{ estado.id_estado }}" >
+	                        	{{ estado.nombre_estado }}
+	                        </option>
+	                     </select>
+	                </div>
+			        <div class="form-group" ng-hide="idsSeleccionados.length>0">
+			        	<button class="btn btn-default" ng-disabled="!estadoSeleccionado" ng-click="actualizarTodos()">Cambiar todos</button>
+			        </div>
+			        <div class="form-group" ng-show="idsSeleccionados.length>0">
+			        	<button class="btn btn-default" ng-disabled="!estadoSeleccionado" ng-click="actualizarSeleccionados()">Cambiar Seleccionados</button>
+			        </div>
+    			</form>
+    		</div>
+    	</div>
+        
+    </div>
+</div>

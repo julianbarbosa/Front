@@ -1,0 +1,61 @@
+<div ng-controller="SolicitarVisitaCtrl">
+    <div id="modalIngresoDireccion" class="modal fade modal-change" role="dialog" aria-hidden="true" style="display: none;"></div>
+    <div ng-show="validator.alert.content">
+        <div class="alert alert-{{validator.alert.type}} alert-dismissable">
+            <i class="fa fa-danger"></i>
+            <button type="button" class="close" aria-hidden="true" ng-click="hideAlert()">×</button>
+            <b>{{validator.alert.title}}</b> <span ng-bind-html="validator.alert.content"></span>
+        </div>
+    </div>
+    <div class="row">
+        <div  ng-include="'../bundles/ConstruccionBundle/solicitud/solicitud.tpl.html'" ng-init="idsolicitud=proceso.idsolicitud"></div>                
+        <div  ng-include="'../bundles/ConstruccionBundle/visita/visita.tpl.html'" ng-init="idsolicitud=proceso.idsolicitud"></div> 
+    </div>
+    <div class="row">
+        <div class="col-md-6">                
+            <div class="panel panel-success">
+                <div class="panel-heading ">
+                    <span class="panel-title">Solicitar Visita</span>
+                    <div class="panel-heading-controls">
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <form name="userForm">                                       
+                        <div class="row">
+                            Seleccione los tipos de visita que requiere:
+                            <table cellpadding="0" cellspacing="0" border="0" class="table-hover table table-bordered dataTable">               
+                                <tr ng-repeat="tipoVisitaXSolicitud in tiposVisitaXSolicitud">
+                                    <td colspan="2" class="col-md-4" ng-if="tipoVisitaXSolicitud.idTipoVisita === -1">                                    
+                                        <select class="form-control"
+                                            ng-model="proceso.tipovisita"
+                                            ng-options="tipoVisita as tipoVisita.nombre for tipoVisita in tiposVisitaFiltrado | orderBy : 'idTipoVisita'"
+                                            ng-change="addNew()">
+                                        </select>
+                                    </td>
+                                    <td class="col-md-4" ng-if="tipoVisitaXSolicitud.idTipoVisita !== -1">
+                                        {{tipoVisitaXSolicitud.nombre}}                                    
+                                    </td>
+                                    <td class="col-md-1" ng-if="tipoVisitaXSolicitud.idTipoVisita !== -1">
+                                        <input type="button" class="btn btn-primary pull-right" ng-click="remove(tipoVisitaXSolicitud.idTipoVisita)" value="Eliminar">
+                                    </td>
+                                </tr>
+                            </table>      
+                        </div>
+                        <div class="row">
+                            <div class="form-group has-feedback simple" ng-class="{'has-error': validator.observacion }" >
+                                <label class="control-label" for="comentario">Observaciones</label>
+                                <textarea rows="4" cols="30" placeholder="Escriba una observación sobre las visitas" ng-model="proceso.observacion" class="form-control" name="observacion" id="observacion"></textarea>
+                                <p class="help-block">{{validator.observacion}}</p>
+                            </div>
+                        </div>
+                        <div class="row padding-sm text-right-sm">
+                            <input type="submit" class="btn btn-primary" ng-click="save()" value="Solicitar Visita" ng-if="!isSuccess"/>
+                            ó
+                            <a ui-sref="listar-peticion">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

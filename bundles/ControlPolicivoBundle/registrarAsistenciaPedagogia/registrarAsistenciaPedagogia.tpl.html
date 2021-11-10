@@ -1,0 +1,99 @@
+<div class="panel">
+    <div class="panel-body">
+        <div class="page-header">
+            <h1 class="col-xs-12 col-sm-10 text-center text-left-sm"><i class="padding-sm-hr fa fa-hand-paper-o"></i>&nbsp;&nbsp;Registrar Asistencia a Pedagogías</h1>
+        </div>
+        <div ng-show="validator.alert.content">
+            <div class="alert {{validator.alert.type}} alert-dismissable">
+                <i class="fa fa-danger"></i>
+                <button type="button" class="close" aria-hidden="true" ng-click="hideAlert()">×</button>
+                <b>{{validator.alert.title}}</b> <span ng-bind-html="validator.alert.content"></span>
+            </div>
+        </div>
+        <div class="note note-info">
+            <h4 class="note-title">Programación Pedagogía</h4>
+            <strong>Nombre:</strong> {{programacionPedagogia.pedagogia.nombre}}<br>
+            <strong>Descripción:</strong> {{programacionPedagogia.pedagogia.descripcion}}<br>
+            <strong>Lugar:</strong> {{programacionPedagogia.lugar}}<br>
+            <strong>Fecha:</strong> {{programacionPedagogia.fecha.timestamp * 1000| date:'yyyy-MM-dd'}} {{programacionPedagogia.hora.timestamp * 1000| date:'HH:mm:ss'}}<br>
+            <strong>Cupo:</strong> {{programacionPedagogia.cupo}}<br>
+        </div>
+        <div class="table-primary">
+            <table cellpadding="0" cellspacing="0" border="0" class="table-hover table table-bordered" id="listaSolicitudes" width="100%" role="grid" aria-describedby="solicitud_listar_tareas">
+                <thead>
+                    <tr role="row">
+                        <th ng-repeat="header in headers" class="ui-state-default {{header.sorting}} {{header.header_align}}" style="width: {{header.width}}" ng-click="ordenarPor(headers[$index].name)">
+                            {{header.title}}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr  class="odd" style="font-weight: bold;" ng-repeat="row in data track by $index" ng-class="{'danger': row[rowWarning] === false}">
+                        <td ng-repeat="header in headers" class="{{header.body_align}}">
+
+                            <!--Acciones-->
+                            <span ng-if="header.values" >
+                                <span ng-if="value['link']" ng-repeat="value in header.values" ng-bind-html="'<a href=\''+value['link']+row['id']+'\' >'+value['icon']+' </a>'"></span>
+                                <span ng-if="row['ruta'] && !value['link']" ng-repeat="value in header.values" ng-bind-html="'<a href=\'#!'+row['ruta']+row['id']+'\' >'+value['icon']+' </a>'"></span>
+                            </span>
+
+                            <!--Opciones dependientes de valores-->
+                            <span ng-if="header.options" >
+                                <span ng-repeat="option in header.options" ng-bind-html="option['link']" ng-if="option['value'] == row[option['nameValidate']]"></span>
+                            </span>
+
+                            <!-- Valor de Text-->
+                            <span ng-if="header.type === 'checkbox'">
+                                <input type="checkbox" ng-model="row['check']" ng-true-value="true">
+                            </span>
+
+                            <!-- Valor de Text-->
+                            <span ng-if="header.type === 'text'">
+                                {{row[header.name]}} {{row[header.name2]}}
+                            </span>
+
+                            <!-- Valor de Link-->
+                            <span ng-if="header.type === 'link'">
+                                <a href="{{header.link}}{{row[header.name]}}" target="_blank">{{row[header.name]}}</a>
+                            </span>
+
+                            <!-- Valor de Objeto Fecha-->
+                            <span ng-if="header.type === 'date'">
+                                {{row[header.name].timestamp * 1000| date:'yyyy-MM-dd HH:mm:ss'}}
+                            </span>
+
+                            <!-- Valor de Objeto Fecha-->
+                            <span ng-if="header.type === 'onlydate'">
+                                {{row[header.name].timestamp * 1000| date:'yyyy-MM-dd'}}
+                            </span>
+
+                            <!-- Valor de Objeto Fecha-->
+                            <span ng-if="header.type === 'onlytime'">
+                                {{row[header.name].timestamp * 1000| date:'HH:mm:ss'}}
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                <td colspan="10" class="currency" ng-if="pagination==true">
+                    <uib-pagination ng-model="currentPage" total-items="totalItems" max-size="5" boundary-links="true" ng-click="actualizarDatos()"></uib-pagination>
+                </td>
+                </tfoot>
+            </table>
+        </div>
+        <div class="row padding-sm ">
+            <div class="col-md-3 text-left-sm">
+                <a href="https://www.google.com/calendar?tab=wc" target="_blank"><i class="fa fa fa-calendar" aria-hidden="true"></i> Google Calendar</a>&nbsp;&nbsp;&nbsp;
+            </div>
+			<div class="col-md-3 text-left-sm">
+                <a href="../../saul2/controlpolicivo/programacionpedagogiaverasistencia/{{programacionPedagogia.id}}" target="_blank"><i class="fa fa fa-print" aria-hidden="true"></i> Imprimir Asistencia</a>&nbsp;&nbsp;&nbsp;
+            </div>
+            <div class="col-md-6 text-right-sm">
+                <input type="submit" class="btn btn-primary" ng-click="save()" value="Registrar Asistencia" ng-if="!isSuccess"/>
+                ó
+                <a ui-sref="listar-peticion">Cancelar</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="overlap_espera_2"><i class="fa fa-gear fa-spin fa-2x"></i></div>

@@ -1,0 +1,168 @@
+<div id="modalIngresoDireccion" class="modal fade modal-change" role="dialog" aria-hidden="true" ></div>    
+<div class="modal-header">
+	<table>
+		<tr><td>
+				<h3 class="modal-title">Información del Usuario</h3></td>
+			<td align="right">
+				&nbsp;<span ng-if="usuario.foto"><img ng-src="{{usuario.foto}}" style="-webkit-border-radius: 50%;-moz-border-radius: 50%; border-radius: 50%;" width="30" height="30" alt="Foto Perfil" /></span>
+			</td>
+		</tr>
+	</table>
+</div>
+<div class="modal-body">	
+	<form class="panel-body" name="formUsuario">
+		<div ng-if="messageErrorUsuario != ''" class="col-md-12">
+			{{ messageErrorUsuario}}
+		</div>				
+		<div class="col-md-4">
+			<div class="form-group {{ haveError('idtipodocidentificac', formUsuario) ? 'has-error' : ''}}">
+				<label class="control-label" >Tipo de identificación</label>
+				<select required class="form-control" ng-model="usuario.idtipodocidentificacion" 
+						name="idtipodocidentificac" >
+					<option 
+						ng-repeat="tipo in tiposIdentificacion" 
+						ng-selected="usuario.idtipodocidentificacion == tipo.idTipoDocIdentificacion"
+						value="{{ tipo.idTipoDocIdentificacion}}" >
+						{{ tipo.nombre}}
+					</option>
+				</select>
+				<span style="visibility: {{haveError('idtipodocidentificac', formUsuario) ? 'visible' : 'hidden'}}" >
+					Este campo es obligatorio.
+				</span>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group {{ haveError('numidentificacion', formUsuario) ? 'has-error' : ''}}">
+				<label class="control-label" >Número de Identificación (NIT o CC)</label>
+				<input required  placeholder="Ingrese el número de identificación" class="form-control" type="text" ng-model="usuario.numidentificacion"
+					   name="numidentificacion" />
+				<span style="visibility: {{haveError('numidentificacion', formUsuario) ? 'visible' : 'hidden'}}" >
+					Este campo es obligatorio.
+				</span>
+			</div>
+		</div>		
+		<div class="col-md-4">
+			<div class="form-group {{ haveError('funcionario', formUsuario) ? 'has-error' : ''}}">
+				<label class="control-label" >Funcionario</label>
+				<select required class="form-control" ng-model="usuario.funcionario" name="funcionario"						
+						ng-options = "opcion.id as opcion.nombre for opcion in arrayopciones">
+				</select>
+				<span style="visibility: {{haveError('funcionario', formUsuario) ? 'visible' : 'hidden'}}" >
+					Este campo es obligatorio.
+				</span>
+			</div>
+		</div>		
+		<div class="col-md-4" ng-if="usuario.funcionario == 1">
+			<div class="form-group {{ haveError('isSuperAdmin', formUsuario) ? 'has-error' : ''}}">
+				<label class="control-label" >Es Super Administrador</label>
+				<select required class="form-control" ng-model="usuario.isSuperAdmin" name="isSuperAdmin"						
+						ng-options = "opcion.id as opcion.nombre for opcion in arrayopciones">
+				</select>
+				<span style="visibility: {{haveError('isSuperAdmin', formUsuario) ? 'visible' : 'hidden'}}" >
+					Este campo es obligatorio.
+				</span>
+			</div>
+		</div>			
+		<div class="col-md-4">
+			<div class="form-group {{ haveError('firstName', formUsuario) ? 'has-error' : ''}}">
+				<label class="control-label" >Nombre</label>
+				<input required placeholder="Nombre del usuario" class="form-control" type="text" ng-model="usuario.firstName" name="firstName" ng-minlength="4" ng-disabled='mostrarFormSolicitud' />
+				<span style="visibility: {{haveError('firstName', formUsuario) ? 'visible' : 'hidden'}}" >
+					Este campo es obligatorio y su longitud mínima es de 4. 
+				</span>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group {{ haveError('lastName', formUsuario) ? 'has-error' : ''}}">
+				<label class="control-label" >Apellido</label>
+				<input required placeholder="Apellido del usuario" class="form-control" type="text" ng-model="usuario.lastName" name="lastName" ng-minlength="4" ng-disabled='mostrarFormSolicitud' />
+				<span style="visibility: {{haveError('lastName', formUsuario) ? 'visible' : 'hidden'}}" >
+					Este campo es obligatorio y su longitud mínima es de 4.
+				</span>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group {{ haveError('emailAddress', formUsuario) ? 'has-error' : ''}}">
+				<label class="control-label" >Email</label>
+				<input required placeholder="Email del usuario (Opcional)" class="form-control" type="email" ng-model="usuario.emailAddress" name="emailAddress" ng-minlength="4" ng-disabled='mostrarFormSolicitud' />
+				<span style="visibility: {{haveError('emailAddress', formUsuario) ? 'visible' : 'hidden'}}" >
+					Este campo es obligatorio, su longitud mínima es de 4 y debe ser un mail válido.
+				</span>
+			</div>
+		</div>
+
+		<div class="col-md-4">
+			<div class="form-group {{ haveError('direccion', formUsuario) ? 'has-error' : ''}}">								
+				<label class="control-label" >Dirección</label>								
+				<input required placeholder="Dirección de la residencia" class="form-control" type="text" ng-click="obtenerModalIngresoDireccion()" readonly="readonly" ng-model="usuario.direccion" name="direccion" minlength="6" ng-disabled='mostrarFormSolicitud' />								
+				<span style="visibility: {{haveError('direccion', formUsuario) ? 'visible' : 'hidden'}}" >								
+					Este campo es obligatorio y su longitud mínima es de 6.								
+				</span>								
+				<input id="npn" type="hidden" />								
+				<input id="direccion" type="hidden">								
+				<input id="infoAdicional" type="hidden" />								
+				<input id="predioId" type="hidden" />								
+				<input id="nomenclaturaId" type="hidden" />													
+				<span ng-if="usuario.npn != '' && usuario.npn != null">									
+					<p></p>									
+					<div class="well well-sm">										
+						<strong>NPN: </strong>{{ usuario.npn}}<br>										
+						<strong>DIRECCION: </strong>{{ usuario.direccion}} {{ usuario.infoAdicional}}									
+					</div>								
+				</span>							
+			</div>						
+		</div>						
+		<div class="col-md-4">										
+			<div class="form-group {{ haveError('barrio', formUsuario) ? 'has-error' : ''}}">								
+				<label class="control-label" >Barrio</label>												
+				<select required class="form-control" ng-model="usuario.idbarrio" name="barrio"																
+						ng-options = "barrio.idbarrio as barrio.nombre for barrio in barrios">								
+				</select>	
+				<span style="visibility: {{haveError('barrio', formUsuario) ? 'visible' : 'hidden'}}" >								
+					Este campo es obligatorio.								
+				</span>							
+			</div>						
+		</div>						
+		<div class="col-md-4">							
+			<div class="form-group {{ haveError('telefono', formUsuario) ? 'has-error' : ''}}">								
+				<label class="control-label" >Teléfono</label>								
+				<!--input required placeholder="Teléfono" class="form-control" type="number" ng-min="1000000" ng-max="4000000000" ng-model="usuario.telefono" name="telefono" ng-disabled='mostrarFormSolicitud' /-->								
+				<input required placeholder="Teléfono" class="form-control" type="text" ng-model="usuario.telefono" name="telefono" ng-disabled='mostrarFormSolicitud' />								
+				<span style="visibility: {{haveError('telefono', formUsuario) ? 'visible' : 'hidden'}}" >									
+					Debe colocar un número de teléfono válido.								
+				</span>							
+			</div>						
+		</div>	
+		<div class="col-md-12" ng-if="usuario.isSuperAdmin == 0 && usuario.funcionario == 1">							
+			<div class="form {{ haveError('grupos', formUsuario) ? 'has-error' : ''}}">								
+				<label class="control-label">Por favor seleccione los grupos para ser asociados</label>								
+				<br>
+				<span class="checkbox" ng-repeat="grupo in grupos" >
+					<label class="checkbox-inline">
+						<input type="checkbox" 
+							   class="px"						
+							   name="selectedGrupos[]"
+							   value="{{grupo.id}}" 
+							   ng-checked="selection.indexOf(grupo.id) > -1" 
+							   ng-click="toggleSelection(grupo.id)">
+						<span class="lbl">
+							{{grupo.name}} - {{grupo.description}}
+						</span>
+					</label>
+				</span>
+
+				<span ng-show="haveError('selectedGrupos', formUsuario)" >									
+					Este campo es obligatorio.								
+				</span>						
+			</div>						
+		</div>				
+		<div class="col-md-12">							
+			<div class="col-md-12">								
+				<button class="btn-link" ng-click="cancelar()" >Cancelar</button>								
+				ó 								
+				<button ng-disabled="!formUsuario.$valid" class="btn btn-primary" ng-click="guardar()" >Guardar</button>							
+			</div>						
+		</div>
+	</form>	
+</div>
+

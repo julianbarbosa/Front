@@ -1,0 +1,207 @@
+<style>
+        .form-group.required .control-label:after {
+            content:"*";
+            color:red;
+        }
+</style>
+<div class="col-sm-12 col-md-10 col-lg-8" ng-show="validator.alert.content">
+    <div class="alert alert-{{validator.alert.type}} alert-dismissable">
+        <i class="fa fa-danger"></i>
+        <button	 type="button" class="close" aria-hidden="true" ng-click="hideAlert()">×</button>
+        <b>{{validator.alert.title}}</b> <span ng-bind-html="validator.alert.content"></span>
+    </div>
+</div>
+<div class="panel col-sm-12 col-md-10 col-lg-10">
+    <form name="form">
+        <div class="panel-body">
+            <div class="page-header">
+                <h1 class="col-xs-12 col-sm-10 text-center text-left-sm"><i class="padding-sm-hr fa fa-list-alt"></i>&nbsp;&nbsp;Tesorería - Carga comparendos a SAP</h1>
+            </div>
+            <div class="row" ng-show="!comparendo">
+                <div class="form-group col-md-5" ng-show="!busqueda.idInterno">
+                    <label class="control-label" for="numerocomparendo">
+                        Número Comparendo
+                    </label>
+                    <input type="text" id="numerocomparendo" class="form-control input-xlarge"
+                        ng-model="busqueda.comparendo" placeholder="Ingrese número de comparendo" autocomplete="off" />
+                </div>
+                <div class="col-md-2 ">
+                    <br>
+                    <input type="button" class="btn btn-success" value="Buscar" ng-click="actualizarDatos()">
+                </div>
+            </div>
+            <div ng-show="comparendo">
+                <div ng-include="'../bundles/ControlPolicivoBundle/comun/comparendo.tpl.html'"
+                    ng-init="idcomparendo=comparendo"></div>
+                <div class="row ">
+    
+					<div class="form-group col-md-5" ng-show="permisos.tesoreria_cargar_expediente && expediente.numeroDecision!==null ">
+                        <label>Este expediente es administrado por Control a Sanciones por favor comuniquese con el Administrador</label>
+					</div>
+					<div class="form-group col-md-5" ng-show="permisos.tesoreria_cargar_expediente && (expediente!=='null' && expediente.estado.codigo=='cerradoportesoreria')">
+                       <strong>Numero Decision:</strong>  {{expediente.numeroDecision}}<br>
+						<strong>Numero Folios:</strong>  {{expediente.numeroFolios}}<br>
+						<strong>Fecha Decisión:</strong>  {{expediente.fechaDecision.timestamp * 1000| date:'yyyy-MM-dd HH:mm:ss'}}<br>
+						<strong>Fecha Ejecutoria:</strong>  {{expediente.fechaEjecutoria.timestamp * 1000| date:'yyyy-MM-dd HH:mm:ss'}}<br>
+                        <strong>Estado:</strong> {{expediente.estado.nombre}}
+					</div>
+                </div>
+                
+                <div class="alert alert-danger alert-dismissable" ng-show="pago!==null">
+                    <i class="fa fa-danger"></i>
+                    <button type="button" class="close" aria-hidden="true" ng-click="hideAlert()">×</button>
+                    <b>Se encontró un pago.</b> <span ng-bind-html="pago.msg"></span>
+                    <a href="{{root}}controlsanciones/comprobantepago/{{comparendo.id}}" target="_blank" >Ver comprobante de pago.</a>
+                </div>
+	
+                <div class="row" ng-show="permisos.tesoreria_cargar_expediente && expediente.numeroDecision==null && pago.success!==true" >
+                    <div class="col-md-3" ng-repeat="criterio in criteriosVerificacion track by $index">
+                        <input type="checkbox" ng-change="setEstadoRevision()" ng-true-value="true" ng-false-value="false" ng-model="criteriosVerificacion[$index].checked">{{criterio.nombre}}
+                    </div>
+                    <input type="button" ng-click="generarTextoDevolucion()" ng-if="estadoRevision==false" value="Generar Texto de Devolución">
+                </div>
+				
+                <div class="panel panel-success" ng-if="permisos.tesoreria_cargar_expediente && expediente.numeroDecision==null && pago.success!==true && estadoRevision==true">
+                    <div class="panel-heading ">
+                        <span class="panel-title">Revisión del Expediente</span>
+                        <div class="panel-heading-controls">
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="form-group required col-md-6" ng-class="{'has-error': form.fechaDecision.$touched && form.fechaDecision.$invalid}">
+                                <label class="control-label" >Fecha Decisión</label>
+                                <input type="date" name="fechaDecision" ng-model="data.fechaDecision" ng-blur="data.fechaEjecutoria=data.fechaDecision" class="form-control" required>
+                            </div>
+                            <div class="form-group required col-md-6" ng-class="{'has-error': form.fechaEjecutoria.$touched && form.fechaEjecutoria.$invalid}">
+                                <label class="control-label" >Fecha Ejecutoria</label>
+                                <input type="date" name="fechaEjecutoria" ng-model="data.fechaEjecutoria" class="form-control" required readonly>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group required col-md-6" ng-class="{'has-error': form.numeroDecision.$touched && form.numeroDecision.$invalid}">
+                                <label class="control-label" >Numero decisión</label>
+                                <input type="text" id="numeroDecision" name="numeroDecision" ng-model="data.numeroDecision" class="form-control" required>
+                            </div>
+                            <div class="form-group col-md-6"  ng-class="{'has-error': form.fechaNotificacion.$touched && form.fechaNotificacion.$invalid}">                                
+                                <label class="control-label" >Fecha Notificación</label>
+                                <input type="date" name="fechaNotificacion" ng-model="data.fechaNotificacion" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6" >
+                                <label class="control-label" >Recursos</label>
+                                <input type="text" name="recursos" ng-model="data.recursos" class="form-control">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label" >Fecha Notificación Recursos</label>
+                                <input type="date" name="fechaNotificacionRecursos" ng-model="data.fechaNotificacionRecursos" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group required col-md-6">
+                                <label class="control-label" >Porcentaje Incremento</label>
+                                <select class="form-control" ng-model="data.incremento" required>
+                                    <option value="0">0%</option>
+                                    <option value="50">50%</option>
+                                    <option value="75">75%</option>
+                                </select>
+                            </div>
+                            <div class="form-group required col-md-6" >
+                                <label class="control-label" >Número Folios</label>
+                                <input type="number" name="numeroFolios" ng-model="data.numeroFolios" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6" >
+                                <input type="checkbox" name="cargarInmediatamenteASAP" ng-model="data.cargarInmediatamenteASAP">
+                                <label class="control-label" >Requiero cargar el expediente inmediatamente a SAP.</label>
+                            </div>
+                        </div>
+                        <!--<div class="row"  ng-show="permisos.controlsanciones_movimiento_expediente_oficina && expediente.estado.codigo=='pendiente' && expediente.responsable.id==userId && pago.success!==true">																						
+                                <div class="form-group col-sm-12">
+                                    <label>
+                                        Artículo									
+                                        <i ng-show="loadingComportamiento" class="fa fa-spinner fa-spin"></i>
+                                        <i ng-show="data.comportamientoContrario.id" class="fa fa-check text-success"></i>
+                                    </label>
+                                    <input type="text" class="form-control" ng-model="data.comportamientoContrario" uib-typeahead="comportamientoContrario as comportamientoContrario.descripcion for comportamientoContrario in getComportamientosContrarios($viewValue, null)" typeahead-wait-ms="1000" typeahead-editable="false" typeahead-loading="loadingComportamiento" typeahead-on-select="onSelect($item, 'nombre', $label)" bs-typeahead placeholder="Ingrese el número del artículo" ng-change="data.comportamientoContrario2=null;" />
+                                    </textarea>
+                                </div>
+                                <div class="form-group col-sm-12" ng-if="data.comportamientoContrario && data.comportamientoContrario.cantidad>0"  ng-class="{'has-error': form.numeral.$touched && form.numeral.$invalid}">
+                                    <label>
+                                        Numeral/Literal									
+                                        <i ng-show="loadingComportamiento2" class="fa fa-spinner fa-spin"></i>
+                                        <i ng-show="data.comportamientoContrario2.id" class="fa fa-check text-success"></i>
+                                    </label>
+                                    <input type="hidden" name="numeral" ng-value="data.comportamientoContrario2.id">
+                                    <input type="text" class="form-control" ng-model="data.comportamientoContrario2" uib-typeahead="comportamientoContrario as comportamientoContrario.descripcion for comportamientoContrario in getComportamientosContrarios($viewValue, data.comportamientoContrario.id)" typeahead-wait-ms="1000" typeahead-editable="false" typeahead-loading="loadingComportamiento2" typeahead-on-select="onSelect($item, 'nombre', $label)" bs-typeahead placeholder="Ingrese el numeral o literal" ng-change="data.comportamientoContrario3=null;" />
+                                    </textarea>
+                                    <p class="help-block" ng-if="form.numeral.$touched && form.numeral.$invalid">El numeral obligatorio.</p>
+                                </div>
+                            </div>-->
+                           
+                    </div>
+                    
+                </div>
+                
+                <div class="row" ng-show="permisos.tesoreria_cargar_expediente==true && estadoRevision==false && expediente.numeroDecision==null && pago.success!==true" >
+                    <div class="form-group col-md-12">
+                        <label>Comentario de Devolución ({{data.comentario.length}})</label>
+                        <textarea class="form-control" ng-model="data.comentario"></textarea>
+                    </div>                            
+                </div>
+                <div class="row text-right-sm">
+					<input type="button" ng-disabled="form.$invalid" class="btn btn-primary" ng-click="registrarMovimiento('cerradoportesoreria', data)" value="Cargar a SAP" ng-if="permisos.tesoreria_cargar_expediente" ng-show="expediente.numeroDecision==null && pago.success!==true && estadoRevision==true" /> 
+                    <input type="button" class="btn btn-primary" ng-click="registrarMovimiento('devueltoportesoreria', data)" value="Devolver"  ng-show="expediente.numeroDecision==null && pago.success!==true"
+                    ng-if="permisos.tesoreria_cargar_expediente" ng-disabled="data.comentario==null || data.comentario=='' || data.comentario.length<10"
+                    />                           
+					<input type="button" class="btn btn-primary" ng-click="limpiar()" value="Limpiar"/>
+				</div>
+    </form>
+</div>
+</div>
+<div class="panel panel-success"  ng-show="historial && historial!==null && historial.length>0">
+                    <div class="panel-heading ">
+                        <span class="panel-title">Historial Traslados Expediente</span>
+                        <div class="panel-heading-controls">
+                        </div>
+                    </div>
+                    <table class="table ">
+                        <thead>
+                            <th>
+                                Estado Anterior
+                            </th>
+                            <th>
+                                Estado Actual
+                            </th>
+                            <th>
+                                Usuario
+                            </th>
+                            <th>
+                                Comentario
+                            </th>
+                            <th>
+                                Fecha
+                            </th>
+                        </thead>
+                        <tr ng-repeat="item in historial">
+                            <td>
+                                {{item.estadoAnterior.nombre}}
+                            </td>
+                            <td>
+                                {{item.estadoActual.nombre}}
+                            </td>
+                            <td>
+                                {{item.sfGuardUser.firstName}} {{item.sfGuardUser.lastName}}
+                            </td>
+                            <td>
+                                {{item.comentario}}
+                            </td>
+                            <td>
+                                {{item.createdAt.timestamp * 1000| date:'yyyy-MM-dd HH:mm:ss'}}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+<div class="overlap_espera_2"><i class="fa fa-gear fa-spin fa-2x"></i></div>

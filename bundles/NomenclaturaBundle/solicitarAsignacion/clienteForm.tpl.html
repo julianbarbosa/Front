@@ -1,0 +1,93 @@
+    <div class="modal-header">
+        <h3 class="modal-title">Información de cliente</h3>
+    </div>
+    <div class="modal-body">
+        <form class="panel-body" name="formCliente">
+
+			<div ng-if="messageErrorCliente != ''" class="col-md-9">
+				{{ messageErrorCliente }}
+			</div>
+
+            <div class="col-md-9">
+                <div class="form-group {{ haveError('idtipodocidentificac', formCliente )?'has-error':'' }}">
+                     <label class="control-label" >Tipo de identificación</label>
+                     <select required class="form-control" ng-model="cliente.idtipodocidentificacion" 
+                     	name="idtipodocidentificac" >
+                        <option 
+                        ng-repeat="tipo in tiposIdentificacion" 
+                        ng-selected="cliente.idtipodocidentificacion == tipo.idTipoDocIdentificacion"
+                        value="{{ tipo.idTipoDocIdentificacion }}" >
+                        	{{ tipo.nombre }}
+                        </option>
+                     </select>
+                     <span ng-show="haveError('idtipodocidentificac', formCliente)" >
+                            Este campo es obligatorio.
+                      </span>
+                </div>
+            </div>
+
+			<div class="col-md-9">
+				<div class="form-group {{ haveError('numidentificacion', formCliente )?'has-error':'' }}">
+					<label class="control-label" >Número de Identificación (NIT o CC)</label>
+					<input required readonly placeholder="Ingrese el número de identificación" class="form-control" type="text" ng-model="cliente.numidentificacion"
+					name="numidentificacion" />
+					<span ng-show="haveError('numidentificacion', formCliente)" >
+                        Este campo es obligatorio.
+                    </span>
+				</div>
+			</div>
+			<div class="col-md-9">
+				<div class="form-group {{ haveError('firstName', formCliente )?'has-error':'' }}">
+					<label class="control-label" >Nombre</label>
+					<input required placeholder="Nombre del cliente" class="form-control" type="text" ng-model="cliente.firstName" name="firstName" ng-minlength="4" ng-disabled='mostrarFormSolicitud' />
+					<span ng-show="haveError('firstName', formCliente)" >
+                            Este campo es obligatorio y su longitud mínima es de 4. 
+                    </span>
+				</div>
+			</div>
+			<div class="col-md-9">
+				<div class="form-group {{ haveError('lastName', formCliente )?'has-error':'' }}">
+					<label class="control-label" >Apellido</label>
+					<input required placeholder="Apellido del cliente" class="form-control" type="text" ng-model="cliente.lastName" name="lastName" ng-minlength="4" ng-disabled='mostrarFormSolicitud' />
+					<span ng-show="haveError('lastName', formCliente)" >
+                        Este campo es obligatorio y su longitud mínima es de 4.
+                    </span>
+				</div>
+			</div>
+			<div class="col-md-9">
+				<div class="form-group {{ haveError('emailAddress', formCliente )?'has-error':'' }}">
+					<label class="control-label" >Email</label>
+					<input placeholder="Email del cliente (Opcional)" class="form-control" type="email" ng-model="cliente.emailAddress" name="emailAddress" ng-minlength="4" ng-disabled='mostrarFormSolicitud' />
+					<span ng-show="haveError('emailAddress', formCliente)" >
+                        Este campo es obligatorio, su longitud mínima es de 4 y debe ser un mail válido.
+                    </span>
+				</div>
+			</div>
+			<div class="col-md-9">
+				<div class="form-group {{ haveError('direccion', formCliente )?'has-error':'' }}">
+					<label class="control-label" >Dirección</label>
+					<input required placeholder="Dirección der residencia" class="form-control" type="text" ng-model="cliente.direccion" name="direccion" minlength="6" ng-disabled='mostrarFormSolicitud' />
+					<span ng-show="haveError('direccion', formCliente)" >
+                        Este campo es obligatorio y su longitud mínima es de 6.
+                    </span>
+				</div>
+			</div>
+			<div class="col-md-9">
+				<div class="form-group {{ haveError('telefono', formCliente )?'has-error':'' }}">
+					<label class="control-label" >Teléfono</label>
+					<input required placeholder="Teléfono" class="form-control" type="number" ng-min="1000000" ng-max="4000000000" ng-model="cliente.telefono" name="telefono" ng-disabled='mostrarFormSolicitud' />
+					<span ng-show="haveError('telefono', formCliente)" >
+                        Debe colocar un número de teléfono válido.
+                    </span>
+				</div>
+			</div>
+            <div class="col-md-9">
+                <div class="col-md-9">
+                    <button class="btn-link" ng-click="cancelar()" >Cancelar</button>
+                    ó 
+                    <button ng-disabled="!formCliente.$valid" class="btn btn-primary" ng-click="guardar()" >Guardar</button>
+                </div>
+            </div>
+
+		</form>
+    </div>

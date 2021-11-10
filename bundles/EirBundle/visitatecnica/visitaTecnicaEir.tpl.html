@@ -1,0 +1,197 @@
+<style>
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+    }
+
+	* {
+		font-size: 12px;
+		font-style: normal;
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		box-sizing: border-box;
+	}
+
+	.tags {
+		margin-bottom: 4px;
+		margin-top: 4px;
+	} 
+
+	.tags .tag {
+		margin-top: 1px;
+		display: inline-block;
+		margin-right: 4px;		
+		font-size: 11px;
+	}
+
+	.tag .close {
+		margin-top: 1px;
+		font-size: 11px;
+		margin-left: 4px; 
+	}
+
+	.tooltip {
+		font-style: normal; 
+		position: absolute;
+		z-index: 1030;
+		display: block;
+		visibility: visible;
+		font-size: 12px;
+		line-height: 1.4;
+		opacity: 0;
+		filter: alpha(opacity=0);
+	}
+	.tooltip.in {
+		opacity: 0.9;
+		filter: alpha(opacity=90);
+	}
+	.tooltip.top {
+		margin-top: -3px;
+		padding: 5px 0;
+	}	
+
+	.tooltip-inner {
+		font-size: 11px;
+		font-style: normal; 
+		max-width: 500px;
+		padding: 3px 8px;
+		text-align: justify;
+		text-decoration: none;
+		background-color: #ffffff;
+		color: #333333;
+		border-radius: 2px;
+		webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+		box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+	}	
+
+	form.tab-form-demo .tab-pane {
+		margin: 20px 20px;
+
+	</style>
+
+	<script>
+		$(document).ready(function () {
+			$('[data-toggle="tooltip"]').tooltip();
+
+			$(".tag").on('DOMNodeInserted', function () {
+				$('[data-toggle="tooltip"]').tooltip();
+			});
+
+			$(".close").on('DOMNodeInserted', function () {
+				$('[data-toggle="tooltip"]').tooltip();
+			});
+		});
+	</script>
+
+	<div class="page-header">
+		<div class="row">
+			<!-- Page header, center on small screens -->
+			<h1 class="col-xs-12 col-sm-12 text-center text-left-sm">
+				<i class="padding-sm-hr fa fa-arrow-circle-right"></i>GESTIÓN DE ESQUEMA DE IMPLANTACION Y REGULARIZACION - VISITA TECNICA<span ng-if="solicitud.idSolicitud">Solicitud {{ solicitud.idSolicitud}}</span>
+			</h1>
+			<div class="col-xs-12 col-sm-12">
+				<div class="row">
+					<hr class="visible-xs no-grid-gutter-h">
+					<div class="visible-xs clearfix form-group-margin"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-12">
+		<!--Panel de Información General-->
+		<div ng-include="tplinformacionEir" ng-controller="InformacionEirCtrl">
+		</div>
+	</div>
+	<div class="col-md-12">
+		<!--Panel de Información General-->
+		<div class="panel panel-success">
+			<div class="panel-heading">
+				GESTIONAR VISITA TECNICA
+			</div>
+			
+			<div class="panel-body">
+				<form class="form-group" name="formDatosSolicitud">
+					<div class="col-md-12" >							
+						<div class="form{{ haveError('infracciones', formDatosSolicitud) ? 'has-error' : ''}}">								
+							<label class="control-label">Infracciones de la visita</label>								
+							<br>
+							<span class="checkbox" ng-required="true" ng-repeat="infraccion in infracciones">
+								<label class="checkbox-inline">
+									<input type="checkbox"										   
+										   class="px"						
+										   name="selectedInfracciones[]"
+										   value="{{infraccion.idinfraccion}}" 
+										   ng-checked="selection.indexOf(infraccion.idinfraccion) > -1" 
+										   ng-click="toggleSelection(infraccion.idinfraccion)">
+									<span class="lbl">
+										{{infraccion.nombre}}
+									</span>
+								</label>
+							</span>
+
+							<span ng-show="haveError('infracciones', formDatosSolicitud)" >									
+								Este campo es obligatorio.								
+							</span>						
+						</div>						
+					</div>	
+					<div class="col-md-12">
+						<div class="form-group  {{ haveError('descripcion', formDatosSolicitud) ? 'has-error' : ''}} ">
+							<label class="control-label" >Observaciones</label>
+							<textarea char-count rows="5" cols="50"  maxlength="1500" ng-model="solicitud.descripcion" type="text" ng-required="true" placeholder="Ingrese las observaciones para la resolución" class="form-control" name="solicitud.descripcion" value=""></textarea>
+							<span class="text-danger">
+								Número de Caracteres Restantes: {{ 1500 - numberOfCharacters}}<br>
+							</span>
+							<span ng-show="haveError('descripcion', formDatosSolicitud)" class="help-block" >
+								Este campo es obligatorio.
+							</span>
+						</div>
+					</div>
+					<div class="col-md-12">
+						<div class="form-group  {{ haveError('fechadeingreso', formDatosSolicitud) ? 'has-error' : ''}} ">
+							<label class="control-label" >Fecha de Ingreso</label>
+							<input ng-required="true" required placeholder="Fecha de Ingreso" class="form-control" type="date" ng-model="solicitud.fechadeingreso" name="fechadeingreso" ng-disabled="estado == 'visualizacion'" />
+							<span ng-show="haveError('fechadeingreso', formDatosSolicitud)" class="help-block" >
+								Este campo es obligatorio.
+							</span>
+						</div>	
+					</div>
+
+					<!--Panel de archivos-->
+					<div class="col-md-12">
+						<input-file model="inputFileCmp" label="Archivos" description="Archivos para adjuntar" placeholder="Seleccione un archivo" required="true"></input-file>
+						<div ng-hide="archivos == null">
+							<label class="control-label" >Archivos cargados ({{ archivos.length}}):</label>
+							<div ng-repeat="archivo in archivos">
+								<span data-toggle="tooltip" data-placement="left" title="Eliminar Archivo ({{$index + 1}})" data-original-title=" " ><i class="fa fa-trash" ng-click="eliminarArchivo($index)"></i></span><span>Archivo{{ $index + 1}}: {{ archivo.name}}</span>
+							</div>
+						</div>
+						<br>
+						<div>
+							<button ng-click="reset()">Limpiar</button>
+							<button ng-click="agregar()">Agregar</button>
+						</div>
+
+					</div>
+
+					{{ estado | json}}
+					{{ formDatosSolicitud.$valid | json  }}
+					<div class="col-md-12">
+						<div class="col-sm-12" style="text-align: right;">
+							<button class="btn-link" ng-click="cancelarSolicitud()" >Cancelar</button> 
+
+							<span ng-if="formDatosSolicitud.$valid == true && estado != 'guardado'">
+								ó 
+								<button ng-disabled="" class="btn btn-primary" ng-click="guardarSolicitud()" >Guardar >></button>
+							</span>
+							<span ng-if="estado == 'guardado'">
+								ó 
+								<button ng-disabled="" class="btn btn-primary" ng-click="listarTareas()" >Continuar >></button>
+							</span>				
+						</div>
+					</div>	
+				</form>
+			</div>
+		</div>
+	</div>
+

@@ -1,0 +1,55 @@
+<div>
+    <div id="modalIngresoDireccion" class="modal fade modal-change" role="dialog" aria-hidden="true" style="display: none;"></div>
+    <div ng-show="validator.alert.content">
+        <div class="alert alert-{{validator.alert.type}} alert-dismissable">
+            <i class="fa fa-danger"></i>
+            <button type="button" class="close" aria-hidden="true" ng-click="hideAlert()">×</button>
+            <b>{{validator.alert.title}}</b> <span ng-bind-html="validator.alert.content"></span>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="panel panel-success">
+            <div class="panel-heading ">
+                <span class="panel-title">Aprobación de Visita</span>
+                <div class="panel-heading-controls">
+                </div>
+            </div>
+            <div class="panel-body">
+                <form name="userForm">
+                    <a href="{{root}}ver_visita/{{id}}" target="_blank">Ver documento de Visita</a>                      
+                    <div>
+                        <div class="row col-md-12">
+                            <div class="col-md-12">
+                                Comentarios
+                            </div>
+                            <div class="col-md-12">
+                                <textarea class="form-control input-xlarge" ng-model="input.valor" placeholder="Comentarios del Aprobador."></textarea>
+                            </div>
+                        </div>
+                    </div>    
+                    <div class="row">
+                        <div class="col-md-3">
+                            <input type="checkbox" ng-model="nuevaVisita.requiereVisita" > Requiere de una nueva Visita?
+                        </div>             
+                        <div class="row col-md-3" ng-if="nuevaVisita.requiereVisita==true">
+                            <div>
+                              <p class="input-group">
+                                <input type="text" ng-model="nuevaVisita.fecha_visita" class="form-control" uib-datepicker-popup="yyyy-MM-dd" ng-model="dt" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
+                                <span class="input-group-btn">
+                                  <button type="button" class="btn btn-default" ng-click="open1()"><i class="fa fa-calendar" aria-hidden="true"></i></button>
+                                </span>
+                              </p>
+                            </div>
+                        </div>
+                    </div>                    
+                    <div class="row padding-sm text-right-sm col-md-12">
+                        <input type="submit" class="btn btn-primary" ng-click="save('aprobada')" value="Aprobar" />
+                        <input type="submit" class="btn btn-warning" ng-click="save('devuelto')" value="Devolver" />
+                        ó
+                        <a ui-sref="listar-peticion">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

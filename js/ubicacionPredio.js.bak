@@ -1,0 +1,309 @@
+$(document).ready(function ()
+{
+    $('#direccion').parent().parent().hide();
+    $('#ubicacionrural').hide();
+    $('#nuevaubicacion').hide();
+    var input = $('#archivo_rural');
+    $('input[name="tipozona"]').click(function ()
+    {
+        if ($(this).val() == 'urbano')
+        {
+            $('#latitud').val('');
+            $('#longitud').val('');
+            $(".select2-chosen").text('');
+            input.replaceWith(input.val('').clone(true));
+            $('#tipobusqueda').parent().parent().parent().parent().show();
+            $('#numeropre').parent().parent().show();
+            $('#numeropre_rural').parent().parent().show();
+            $('#consistencia').parent().parent().parent().parent().show();
+            $('#ubicacionrural').hide();
+        }
+        else if ($(this).val() == 'rural')
+        {
+            $('#tipobusqueda').parent().parent().parent().parent().hide();
+            $('#numeropre').parent().parent().hide();
+            $('#numeropre_rural').parent().parent().show();
+            $('#direccion').parent().parent().hide();
+            $('#consistencia').parent().parent().parent().parent().hide();
+            $('#nuevaubicacion').hide();
+            $('#ubicacionrural').show();
+            displayMap();
+        }
+    });
+    $('input[name="consistencia"]').click(function ()
+    {
+        if ($(this).val() == 'si')
+        {
+            $('#direccionnueva').val('');
+            $('#numeroprenuevo').val('');
+            $('direccionadicional').val('');
+            $('#nuevaubicacion').hide();
+            $('#tipobusqueda').parent().parent().parent().parent().show();
+            $('#numeropre').parent().parent().show();
+        }
+        else if ($(this).val() == 'no')
+        {
+            $('.overlap_espera').fadeIn(500, 'linear');
+            $('.overlap_espera_1').fadeIn(500, 'linear');
+            $('#numeropre').select2('data', null);
+            $('#tipobusqueda').parent().parent().parent().parent().hide();
+            $('#numeropre').parent().parent().hide();
+            $('#nuevaubicacion').show();
+            obtenerModalIngresoDireccion();
+//            validador.resetForm();
+        }
+    });
+    $('input[name="tipobusqueda"]').click(function ()
+    {
+        if ($(this).val() == 'numeropre')
+        {
+            $('#direccion').select2('data', null);
+            $('#direccion').parent().parent().hide();
+            $('#numeropre').parent().parent().show();
+        }
+        else if ($(this).val() == 'direccion')
+        {
+            $('#numeropre').select2('data', null);
+            $('#numeropre').parent().parent().hide();
+            $('#direccion').parent().parent().show();
+        }
+    });
+    jQuery.extend(jQuery.validator.messages, {
+        required: "Este campo es obligatorio.",
+        extension: "El documento debe estar en formato pdf o jpg",
+//        remote: "Por favor, rellena este campo.",
+//        email: "Por favor, escribe una dirección de correo válida",
+//        url: "Por favor, escribe una URL válida.",
+//        date: "Por favor, escribe una fecha válida.",
+//        dateISO: "Por favor, escribe una fecha (ISO) válida.",
+//        number: "Por favor, escribe un número entero válido.",
+//        digits: "Por favor, escribe sólo dígitos.",
+//        creditcard: "Por favor, escribe un número de tarjeta válido.",
+//        equalTo: "Por favor, escribe el mismo valor de nuevo.",
+//        accept: "Por favor, escribe un valor con una extensión aceptada.",
+//        maxlength: jQuery.validator.format("Por favor, no escribas más de {0} caracteres."),
+//        minlength: jQuery.validator.format("Por favor, no escribas menos de {0} caracteres."),
+//        rangelength: jQuery.validator.format("Por favor, escribe un valor entre {0} y {1} caracteres."),
+//        range: jQuery.validator.format("Por favor, escribe un valor entre {0} y {1}."),
+//        max: jQuery.validator.format("Por favor, escribe un valor menor o igual a {0}."),
+//        min: jQuery.validator.format("Por favor, escribe un valor mayor o igual a {0}.")
+    });
+    $.validator.addMethod('filesize', function (value, element, param) {
+        // param = size (in bytes) 
+        // element = element to validate (<input>)
+        // value = value of the element (file name)
+        return this.optional(element) || (element.files[0].size <= param)
+    }, 'El documento debe tener un tamaño no superior a 2 MB o {0} bytes');
+
+//  Setup validation
+    $("#form_solicitud").validate({
+        ignore: '.ignore, .select2-input',
+        focusInvalid: false,
+        rules: {
+            'numidentificacion': {
+                required: true
+            },
+            'idtiposolicitud': {
+                required: true
+            },
+            'archivo': {
+                required: true
+            },
+            'direccion': {
+                required: {
+                    depends: function () {
+                        var tipozona_direccion = $('input:radio[name=tipozona]:checked').val();
+                        var consistencia_direccion = $('input:radio[name=consistencia]:checked').val();
+                        var tipobusqueda_direccion = $('input:radio[name=tipobusqueda]:checked').val();
+                        if (tipozona_direccion == 'urbano' && consistencia_direccion == 'si' && tipobusqueda_direccion == 'direccion')
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                }
+            },
+            'numeropre': {
+                required: {
+                    depends: function () {
+                        var tipozona_numeropre = $('input:radio[name=tipozona]:checked').val();
+                        var consistencia_numeropre = $('input:radio[name=consistencia]:checked').val();
+                        var tipobusqueda_numeropre = $('input:radio[name=tipobusqueda]:checked').val();
+                        if (tipozona_numeropre == 'urbano' && consistencia_numeropre == 'si' && tipobusqueda_numeropre == 'numeropre')
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                }
+            },
+            'numeropre_rural': {
+                required: false
+            },
+            'latitud': {
+                required: {
+                    depends: function () {
+                        var tipozona_latitud = $('input:radio[name=tipozona]:checked').val();
+                        if (tipozona_latitud == 'urbano')
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            return true;
+                        }
+                    }
+                }
+            },
+            'longitud': {
+                required: {
+                    depends: function () {
+                        var tipozona_longitud = $('input:radio[name=tipozona]:checked').val();
+                        if (tipozona_longitud == 'urbano')
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            return true;
+                        }
+                    }
+                }
+            },
+            'direccionnueva': {
+                required: {
+                    depends: function () {
+                        var consistencia_direccionnueva = $('input:radio[name=consistencia]:checked').val();
+                        if (consistencia_direccionnueva == 'si')
+                        {
+                            return false;
+                        }
+                        else if ($('#numeroprenuevo').val() != "")
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            return true;
+                        }
+                    }
+                }
+            },
+            'numeroprenuevo': {
+                required: {
+                    depends: function () {
+                        var consistencia_numeroprenuevo = $('input:radio[name=consistencia]:checked').val();
+                        if (consistencia_numeroprenuevo == 'si')
+                        {
+                            return false;
+                        }
+                        else if ($('#direccionnueva').val() != "")
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            return true;
+                        }
+                    }
+                }
+            },
+            'direccionadicional': {
+                required: false
+            },
+            'documento[archivoservicios]': {
+                extension: 'jpg|pdf',
+                filesize: 2097152
+            },
+            'documento[archivopredial]': {
+                extension: 'jpg|pdf',
+                filesize: 2097152
+            }
+        },
+        messages: {
+        },
+        submitHandler: function () {
+            $('.overlap_espera').fadeIn(500, 'linear');
+            $('.overlap_espera_1').fadeIn(500, 'linear');
+            $(this).find('input[type="submit"]').attr('disabled', true);
+            $(this).find('input[type="button"]').attr('disabled', true);
+            $(this).find('input[type="submit"]').val('Enviando...');
+            $(this).find('input[type="button"]').val('Enviando...');
+            form.submit();
+        }
+    });
+    window.jQuery || document.write('<script src="../../../../../../web/js/pixeladmin/libs/jquery.flot-0.8.2">' + "<" + "/script>");
+    init.push(function () {
+        // Javascript code here
+    })
+    window.PixelAdmin.start(init);
+    $('#direccion').select2({
+        minimumInputLength: 3,
+        allowClear: true,
+        ajax: {
+            url: "../../../solicitud/Direccion",
+            dataType: 'json',
+            data: function (term, page) {
+                return {
+                    q: term
+                };
+            },
+            results: function (data, page) {
+
+                console.log(data);
+//                if (data.length == 0)
+//                    $("#modalDireccion").modal('show');
+//                else
+//                    $('#modalDireccion').modal('hide');
+
+                return {results: data};
+            }
+        }
+    });
+    $('#numeropre').select2({
+        minimumInputLength: 2,
+        allowClear: true,
+        ajax: {
+            url: "../../../solicitud/Numpredial",
+            dataType: 'json',
+            data: function (term, page) {
+                return {
+                    q: term,
+                    tipozona: 'urbano'
+                };
+            },
+            results: function (data, page) {
+
+
+                return {results: data};
+            }
+        }
+    });
+    $('#numeropre_rural').select2({
+        minimumInputLength: 2,
+        allowClear: true,
+        ajax: {
+            url: "../../../solicitud/Numpredial",
+            param: "",
+            dataType: 'json',
+            data: function (term, page) {
+                return {
+                    q: term,
+                    tipozona: 'rural'
+                };
+            },
+            results: function (data, page) {
+                return {results: data};
+            }
+        }
+    });
+    $('#Direccion').select2('enable', false);
+    $('#NumeroPredio').select2('enable', true);
+    $('#NumeroPreRural').select2('enable', true);
+});

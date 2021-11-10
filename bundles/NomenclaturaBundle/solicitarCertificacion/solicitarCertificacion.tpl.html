@@ -1,0 +1,246 @@
+<style>
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+</style>
+<script type="text/ng-template" id="alert.html">
+    <div ng-transclude></div>
+</script>
+<div id="modalIngresoDireccion" class="modal fade modal-change" role="dialog" aria-hidden="true"></div>
+<div class="page-header">
+    <div class="row">
+        <!-- Page header, center on small screens -->
+        <h1 class="col-xs-12 col-sm-8 text-center text-left-sm">
+            <i class="padding-sm-hr fa fa-plus"></i>Solicitar Certificado de Nomenclatura <span
+                ng-if="solicitud.idSolicitud">Solicitud {{ solicitud.idSolicitud }}</span>
+        </h1>
+        <div class="col-xs-12 col-sm-8">
+            <div class="row">
+                <hr class="visible-xs no-grid-gutter-h">
+                <div class="visible-xs clearfix form-group-margin"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div ng-if="requiredReciboEstampillaMunicipio" class="col-md-12">
+    <div class="alert alert-warning">
+        <span>Señor(a) Usuario: Por favor realice el proceso de liquidar y pagar las estampillas antes de iniciar la
+            radicación del trámite, es necesario que aporte los recibos de pago para validarlos en el Certificado,
+            además, debe aportar la Escritura Pública y el recibo de los servicios públicos del predio
+            objeto de la solicitud (en formato PDF con un peso no mayor de 2MB para los recibos y de 5MB para la
+            escritura).
+        </span>
+    </div>
+</div>
+
+
+<div ng-if="requiredEscritura" class="col-md-12">
+    <div class="alert alert-info text-sm">
+        <span>
+            <p>
+                La respuesta a esta solicitud requiere de estampillas emitidas por la Alcaldía de Santiago de Cali y
+                Gobernación del Valle del Cauca.
+            </p>
+            <p>
+                En los siguientes enlaces encontrara toda la información necesaria para realizar la liquidación y el
+                pago de las estampillas requeridas para este trámite, tambien encontrara tutoriales y guías con el paso
+                a paso de todo el procedimiento para diligenciar este formulario
+            <ul>
+                <li>
+                    <a href="https://www.cali.gov.co/planeacion/publicaciones/140192/Nomenclatura/#menu3"
+                        target="_blank">Información para realizar el trámite
+                    </a>
+                </li>
+                <li>
+                    <a
+                        href="https://www.cali.gov.co/planeacion/loader.php?lServicio=Tools2&lTipo=descargas&lFuncion=descargar&idFile=47017">Como
+                        Liquidar y Pagar Estampillas Gobernación
+                    </a>
+                </li>
+                <li>
+                    <a
+                        href="https://www.cali.gov.co/planeacion/loader.php?lServicio=Tools2&lTipo=descargas&lFuncion=descargar&idFile=47018">Como
+                        Liquidar y Pagar Estampillas Municipales
+                    </a>
+                </li>
+            </ul>
+            Recuerde que sin las estampillas el documentos no tendrá validez.
+            </p>
+        </span>
+    </div>
+</div>
+<div class="col-md-12">
+    <div class="alert alert-info">
+        <span>Recibirá por correo electrónico la respuesta a su solicitud en <strong>15 días hábiles</strong>.</span>
+    </div>
+</div>
+<div class="col-md-12">
+    <div class="alert alert-info">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <span>Para verificar el estado de tus solicitudes ingresa a </span><strong><a href="/saul/solicitud">Mis
+                solicitudes</a></strong>
+    </div>
+</div>
+<div class="col-md-12">
+    <!--Panel de búsqueda de cliente-->
+    <div ng-show='funcionario' class="panel panel-success">
+        <div class="panel-heading ">
+            <span class="panel-title">Búsqueda de Solicitante</span>
+            <div ng-show="cliente.firstName != null" class="panel-heading-controls">
+                <i class="fa fa-edit" title="Editar solicitante" ng-click="actualizarCliente()"></i>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="col-md-9">
+                <div class="form-group {{ messageErrorCliente!=''?'has-error':'' }} }}">
+                    <label class="control-label">Número de Identificación del Solicitante (NIT o CC)</label>
+                    <input required placeholder="Ingrese el número de identificación del solicitante"
+                        class="form-control" type="text" ng-model="cliente.numidentificacion"
+                        ng-disabled='mostrarFormSolicitud' ng-keydown="($event.keyCode==13) && buscarCliente()" />
+                    <span ng-if="messageErrorCliente != ''">{{ messageErrorCliente }}</span>
+                </div>
+            </div>
+            <div class="col-md-9" ng-hide="mostrarFormSolicitud">
+                <div class="col-md-9">
+                    <button class="btn-link" ng-click="limpiarCliente()">Limpiar</button>
+                    ó
+                    <button class="btn btn-primary" ng-click="buscarCliente()">Buscar</button>
+                </div>
+            </div>
+            <!--Panel que muestra la información de el cliente -->
+            <div ng-show="cliente.firstName != null" class="col-md-9">
+                <strong>Solicitante: </strong> {{ cliente.firstName +' '+ cliente.lastName }} <br>
+                <strong>Email: </strong> {{ cliente.emailAddress }} <br>
+                <strong>Teléfono: </strong> {{ cliente.telefono }} <br>
+                <strong>Dirección: </strong> {{ cliente.direccion }} <br>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-success" ng-show='mostrarFormSolicitud'>
+        <div class="panel-heading ">
+            <span class="panel-title">Datos del Predio</span>
+            <div class="panel-heading-controls"></div>
+        </div>
+        <div class="panel-body">
+            <div class="col-md-9">
+                <form class="form-group" name="formPredio" class="form-group">
+                    <div class="form-group" ng-class="{'has-error': haveError('predio', formPredio )}">
+                        <label class="control-label"> Número Predial </label> <i
+                            class="plg-npn-info fa fa-question-circle" data-toggle="tooltip" data-placement="right"
+                            title="Número predial nacional. Puede encontrarlo en el recibo predial."
+                            data-original-title="Clic aquí para seleccionar el predio."></i>
+                        <input required placeholder="Clic aquí para seleccionar el predio" class="form-control"
+                            type="text" ng-click="obtenerModalIngresoDireccion()" readonly="readonly"
+                            ng-model="solicitud.npn" ng-disabled="estado=='visualizacion'" name="predio" ng-min="20"
+                            style="cursor: pointer" />
+                        <span ng-show="haveError('predio', formPredio )" class="jquery-validate-error help-block">
+                            Este campo es obligatorio. Se requiere el Número predial Nacional de 30 dígitos.
+                        </span>
+
+                    </div>
+                </form>
+                <input id="npn" type="hidden" />
+                <input id="direccion" type="hidden">
+                <input id="direccionVisual" type="hidden" />
+                <input id="infoAdicional" type="hidden" />
+                <input id="predioId" type="hidden" />
+                <input id="nomenclaturaId" type="hidden" />
+                <div ng-if="solicitud.npn != '' && solicitud.npn != null">
+                    <span>NPN:<strong>{{ solicitud.npn }}</strong><br></span>
+                    <span>Dirección:<strong>{{ solicitud.direccion }} {{ solicitud.infoAdicional }}</strong><br></span>
+                    <span>Dirección Visual:<strong>{{ solicitud.direccionVisual }}</strong><br></span>
+                    <span
+                        ng-if="solicitud.nombreBarrio">Barrio/Vereda:<strong>{{ solicitud.nombreBarrio }}</strong></span>
+                    <span ng-if="msgPredio">Nota: <strong>{{ msgPredio }}</strong></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Panel de Datos de Solicitud-->
+    <div class="panel panel-success" ng-show='mostrarFormSolicitud'>
+        <div class="panel-heading ">
+            <span class="panel-title">Datos de solicitud</span>
+            <div class="panel-heading-controls"></div>
+        </div>
+        <form class="panel-body" name="formDatosSolicitud">
+            <div class="col-md-9">
+                <div class="form-group" ng-class="{'has-error': haveError('npl', formDatosSolicitud )}">
+                    <label class="control-label">Número Predial Local</label> <i
+                        class="plg-npn-info fa fa-question-circle" data-toggle="tooltip" data-placement="right"
+                        title="Si no aparece el número predial local (alfanumérico) por favor digitarlo. Contiene 13 caracteres."
+                        data-original-title="Número predial alfanumérico de 13 dígitos"></i>
+                    <input required placeholder="Digite el código alfanumérico del predio" class="form-control"
+                        type="text" ng-minlength="13" ng-maxlength="13" ng-model="solicitud.npl" name="npl"
+                        ng-disabled="estado=='visualizacion'" />
+                    <span ng-show="haveError('npl', formDatosSolicitud)" class="jquery-validate-error help-block">
+                        Este campo es obligatorio. Se requiere el código predial Alfanumérico de 13 caracteres.
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="form-group" ng-class="{'has-error': haveError('comentario', formDatosSolicitud )}">
+                    <label class="control-label">Comentario</label>
+                    <textarea ng-required="requiredComentario" placeholder="Escriba un comentario sobre la petición"
+                        class="form-control" rows="5" ng-model="solicitud.comentario" name="comentario"
+                        ng-disabled="estado=='visualizacion'" />
+                    <span ng-show="haveError('comentario', formDatosSolicitud)" class="jquery-validate-error help-block" >
+                        Este campo es obligatorio.
+                    </span>
+                </div>
+            </div>
+
+            <div class="col-md-9">
+                <div ng-hide="solicitud.documentos == null">
+                    <label class="control-label" >Archivos cargados({{ solicitud.documentos.length }}):</label>
+                    <a ng-if="solicitud.documentos.length>0" ng-repeat="documento in solicitud.documentos" ng-href="{{documento.url}}" target="_blank">Archivo{{ $index + 1 }}{{ $last?'.':', ' }}</a>
+                    <span ng-if="solicitud.documentos.length==0">No hay archivos cargados</span>
+                </div>
+                <div ng-show="solicitud.documentos == null" >
+                    <label class="control-label" >Cargando archivos...</label>
+                    <span ><i class="fa fa-spinner fa-spin fa-2x fa-fw"></i></span>
+                </div>
+            </div>
+
+            <div class="col-md-9" >
+                <div class="form-group" ng-hide="estado=='visualizacion'">
+                    <input-file label="Recibo de servicios públicos" description="Factura de Energía y Acueducto del predio." model="inputFiles.recibo" required="{{requiredRecibo}}">
+                </div>
+                <div class="form-group" ng-hide="estado=='visualizacion'">
+                    <input-file max="5000" label="Escritura pública (Tamaño máximo 5MB)" description="" model="inputFiles.escritura" required="{{requiredEscritura}}">
+                </div>
+                <div class="form-group" ng-hide="estado=='visualizacion'">
+                    <input-file label="Recibo del pago de Estampillas Municipio" description="" model="inputFiles.reciboEstampillaMunicipio" required="{{requiredReciboEstampillaMunicipio}}">
+                </div>
+                <div class="form-group" ng-hide="estado=='visualizacion'">
+                    <input-file label="Recibo del pago de Estampillas Gobernación" description="" model="inputFiles.reciboEstampillaDepartamento" required="{{requiredReciboEstampillaDepartamento}}">
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="col-sm-12" ng-show="estado=='creacion'">
+                    <button ng-disabled="!(formDatosSolicitud.$valid && inputFiles.recibo.$valid && inputFiles.escritura.$valid && inputFiles.reciboEstampillaMunicipio.$valid && inputFiles.reciboEstampillaDepartamento.$valid) || !formPredio.$valid" class="btn btn-primary" ng-click="guardarSolicitud()" >Crear Solicitud</button>
+                </div>
+                <div class="col-sm-12" ng-show="estado=='confirmacion'">
+                    <!--button class="btn-link" ng-click="anular()" title="Se presiona cuando el solicitante desiste de hacer la solicitud." >Anular</button>
+                    ó -->
+                    <button ng-disabled="!(formDatosSolicitud.$valid && inputFiles.recibo.$valid && inputFiles.escritura.$valid && inputFiles.reciboEstampillaMunicipio.$valid && inputFiles.reciboEstampillaDepartamento.$valid)" class="btn btn-primary" ng-click="guardarCambios()" title="Se presiona cuando haya hecho cambios en el formulario por petición del solicitante." >Guardar Cambios</button>
+                    <button ng-disabled="!(formDatosSolicitud.$valid && inputFiles.recibo.$valid && inputFiles.escritura.$valid && inputFiles.reciboEstampillaMunicipio.$valid && inputFiles.reciboEstampillaDepartamento.$valid)" class="btn btn-primary" ng-click="imprimir()" title="Úselo para imprimir el documento que va a firmar el solicitante." >Imprimir</button>
+                    <button ng-disabled="!(formDatosSolicitud.$valid  && inputFiles.recibo.$valid && inputFiles.escritura.$valid && inputFiles.reciboEstampillaMunicipio.$valid && inputFiles.reciboEstampillaDepartamento.$valid) || !impreso" class="btn btn-primary" ng-click="confirmar()" title="Se presiona cuando el solicitante haya firmado el documento y aceptado los términos. No tiene vuelta atrás." >Confirmar Solicitud</button>
+                </div>
+                <div class="col-sm-12" ng-show="estado=='visualizacion'">
+                    <button ng-disabled="!formDatosSolicitud.$valid" class="btn btn-primary" ng-click="imprimir()" title="Úselo para imprimir el documento que va a firmar el solicitante." >Visualizar</button>
+                </div>
+            </div>
+        </form>  
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>

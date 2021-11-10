@@ -1,0 +1,34 @@
+<div class="panel">
+    <div class="panel-body">
+        <div class="page-header">
+            <h1 class="col-xs-12 col-sm-10 text-center text-left-sm"><i class="padding-sm-hr fa fa-bar-chart"></i>&nbsp;&nbsp;Reporte Comparendos Por Fecha</h1>
+        </div>  
+        <div class="row">
+            <div class="col-md-10">
+                Ingrese las fechas limites para generar el reporte Base de Pagos.
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-10">
+                &nbsp;
+            </div>
+        </div>
+        <form name="form">
+            <div class="row">
+                <div class="form-group required col-md-4" ng-class="{'has-error': form.fechaInicial.$touched && form.fechaInicial.$invalid}">
+                    <label class="control-label" >Fecha Inicial</label>
+                    <input type="date" name="fechaInicial" ng-model="data.fechaInicial" ng-blur="data.fechaEjecutoria=data.fechaDecision" class="form-control" required>
+                </div>
+                <div class="form-group required col-md-4" ng-class="{'has-error': form.fechaFinal.$touched && form.fechaFinal.$invalid && data.fechaInicial>data.fechaFinal}">
+                    <label class="control-label" >Fecha Final</label>
+                    <input type="date" name="fechaFinal" ng-model="data.fechaFinal" class="form-control" required>
+                </div>        
+                <div class="col-md-2">
+                    <br>
+                    <input type="button" class="btn btn-primary" ng-click="consultar()" value="Consultar"/>                
+                </div>
+            </div>
+        </form>
+	</div>
+</div>
+<div class="overlap_espera_2"><i class="fa fa-gear fa-spin fa-2x"></i></div>

@@ -1,0 +1,361 @@
+<script>
+    function cerrarModal() {
+        $('#modalIngresoDireccion').modal('toggle');
+    }
+</script>
+<style>
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+</style>
+<div>
+    <div id="modalIngresoDireccion" class="modal fade modal-change" role="dialog" aria-hidden="true" ></div>
+    <div class="col-md-12">
+        <div ng-show="validator.alert.content">
+            <div class="alert {{validator.alert.type}} alert-dismissable">
+                <i class="fa fa-danger"></i>
+                <button type="button" class="close" aria-hidden="true" ng-click="hideAlert()">×</button>
+                <b>{{validator.alert.title}}</b> <span ng-bind-html="validator.alert.content"></span>
+            </div>
+        </div>
+        <div ng-if="item.comentarios">
+            <div class="alert alert-danger alert-dismissable">
+                <i class="fa fa-danger"></i>
+                <b>Linea devuelta:</b> <span ng-bind-html="item.comentarios"></span>
+            </div>
+        </div>
+        <div class="panel panel-success">
+            <div class="panel-heading ">
+                <span class="panel-title">Gestionar Solicitud Linea de Demarcación No. <strong>{{item.idSolicitud}}</strong></span>
+                <div class="panel-heading-controls">
+                </div>
+            </div>
+            <div class="panel-body">
+                <form name="userForm">                    
+                     
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group col-md-1" style="width:30">
+                                <label class="control-label" for="codigo_unico">Es lote?</label>
+                                <input type="checkbox" ng-value="1" ng-model="es_lote">
+                            </div>
+                            <div class="form-group  has-feedback col-md-11" ng-if="es_lote==1">
+                                <label class="control-label" for="codigo_unico">Dirección: <i ng-show="loadingNomenclatura" class="fa fa-spinner fa-spin"></i></label>
+                                <div class="input-group col-md-12">                                
+                                    <input type="text"
+                                       id="BusquedaDireccionVisualLote"
+                                       class="form-control input-xlarge"
+                                       ng-model="item.direccion"
+                                       placeholder="Ingrese la dirección"
+                                       data-toggle="tooltip"
+                                       title="De clic aquí para ingresar la dirección."
+                                       autocomplete="off"/>                                    
+                                </div>                                
+                            </div>                            
+                            <div class="form-group col-md-6" ng-if="es_lote!=1"
+                                 ng-class="{'has-error': validator.predio}">                            
+                                <label class="control-label" for="direccion">Dirección: <i ng-show="loadingNomenclatura" class="fa fa-spinner fa-spin"></i></label>
+                                <div class="input-group col-md-12">                               
+                                    <input type="text"
+                                           id="BusquedaDireccionVisual"
+                                           class="form-control input-xlarge"
+                                           ng-model="item.direccion"
+                                           ng-click="obtenerModalIngresoDireccion()"                                   
+                                           readonly="readonly"
+                                           placeholder="Ingrese la dirección"
+                                           data-toggle="tooltip"
+                                           title="De clic aquí para ingresar la dirección."
+                                           autocomplete="off"/>
+                                    <a href="" type="button" target="_blank" class="input-group-addon btn-info" ng-click="consultarLineaPorLadoManzana('direccion')"><i class="fa fa fa-search fa-2"  title="Consultar Lineas por lado de manzana"></i></a>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-5" ng-show="es_lote!=1"
+                             ng-class="{'has-error': validator.predio}">
+                                <label class="control-label" for="direccion">Información Adicional: <i ng-show="loadingNomenclatura" class="fa fa-spinner fa-spin"></i></label>                                
+                                <input type="text"
+                                       id="BusquedaInformacionAdicional"
+                                       class="form-control input-xlarge"
+                                       ng-model="item.informacionadicional"
+                                       ng-click="obtenerModalIngresoDireccion()"
+                                       readonly="readonly"
+                                       placeholder="Ingrese la dirección"
+                                       data-toggle="tooltip"
+                                       title="De clic aquí para ingresar la dirección."
+                                       autocomplete="off"/>                                
+                                <p class="help-block">{{validator.predio}}</p>                                
+                            </div>
+                        </div>                        
+                        <div class="form-group col-md-2">
+                            <label class="control-label" for="numero_predial">Número Predial</label>
+                            <div class="input-group col-md-12">
+                                <input type="text"
+                                    class="form-control input-xlarge"
+                                    ng-model="item.numero_predial"/>
+                                <a href="" type="button" target="_blank" class="input-group-addon btn-info" ng-click="consultarLineaPorLadoManzana('numeropredial')"><i class="fa fa fa-search fa-2"  title="Consultar Lineas por lado de manzana"></i></a>
+                            </div>
+                        </div>
+                        <div class="form-group  has-feedback col-md-4"
+                             ng-class="{'has-error': validator.codigo_unico || faltante_codigo_unico !== 0}">
+                            <label class="control-label" for="codigo_unico">Número Predial Nacional: <i ng-show="loadingNomenclatura" class="fa fa-spinner fa-spin"></i></label>
+                            <div class="input-group col-md-12">
+                                <input type="text"
+                                       id="NPN"
+                                       name="NPN"
+                                       class="form-control input-xlarge col-md-12"
+                                       ng-model="item.codigo_unico"
+                                       placeholder="Ingrese el código único"
+                                       ng-maxlength="maxlengthcodigounico"
+                                       maxlength="{{maxlengthcodigounico}}"
+                                       data-toggle="tooltip"
+                                       title="El número predial nacional contiene 30 caracteres."
+                                       autocomplete="off"/>                                
+                                <a ng-href="{{urlLinea}}" target="_blank" class="input-group-addon" ng-if="urlLinea!==''"><i class="fa fa-history fa-2"  title="Ver historial"></i></a>
+                            </div>
+                        </div>
+                        <p class="help-block" ng-if="faltante_codigo_unico !== 0">Caracteres Faltantes: {{faltante_codigo_unico}}</p>
+                    </div>
+                    <div class="row">                       
+                        <div class="col-md-12" ng-if="buscandoLineaPorLadoManzana===false && lineasPorLadoManzana.length>0">                            
+                            <div class="alert alert-info alert-dismissable">
+                                El predio tiene líneas de demarcación por lado de manzana: <br>
+                                <table>
+                                    <tr ng-repeat="lineaPorLadoManzana in lineasPorLadoManzana" height="23px">
+                                        <td width="50%">{{lineaPorLadoManzana.tipoViaPrincipal.texto}} {{lineaPorLadoManzana.nombreViaPrincipal}} {{lineaPorLadoManzana.tipoViaSecundaria.texto}} {{lineaPorLadoManzana.nombreViaSecundaria}} ({{lineaPorLadoManzana.estado.nombre}})</td>
+                                        <td width="20%"><a href="#!/lineademarcacion/aprobarlinealadomanzana/{{lineaPorLadoManzana.id}}/1/revisar" target="_blank"><span class="label label-danger  pull-right">Ver</span></a></td>
+                                        <td width="20%"><a href="" ng-click="cargarLineaDeLadoManzana(lineaPorLadoManzana)"><span class="label label-success  pull-right">Cargar</span></a></td>
+                                    </tr>
+                               </table> 
+                            </div>                                                           
+                        </div>
+                        <div ng-if="buscandoLineaPorLadoManzana">
+                            <div class="alert alert-warning alert-dismissable">                                
+                                <i class="fa fa-spinner fa-spin" aria-hidden="true"></i> Cargando información...
+                            </div>                            
+                        </div>
+                        <div class="col-md-12" ng-if="buscandoLineaPorLadoManzana===false && lineasPorLadoManzana.length==0">
+                            <div class="alert alert-info alert-dismissable">
+                                No se encontraron líneas por lado de manzana.
+                            </div>
+                        </div>
+                    </div>    
+                    <div class="alert alert-danger" ng-if="solicitudes_asociadas_npn.success==true" ng-bind-html="solicitudes_asociadas_npn.msg"></div>
+                    <div class="row">
+                        <div class="form-group col-md-2" ng-class="{'has-error': validator.idbarrio}">
+                            <label class="control-label" for="barrio">Barrio: <i ng-show="loadingBarrio" class="fa fa-spinner fa-spin"></i></label>
+                            <input type="text"
+                                id="BusquedaBarrio"
+                                class="form-control input-xlarge"
+                                ng-model="item.barrio"                                
+                                uib-typeahead="itembarrio as itembarrio.nombre for itembarrio in getBarrios($viewValue)"
+                                uib-typeahead-wait-ms="1000"                               
+                                uib-typeahead-loading="loadingBarrio"
+                                typeahead-on-select="onSelect($item,  'nombre', $label)"
+                                uib-typeahead-min-length="3"
+                                bs-typeahead placeholder="Ingrese el nombre del barrio del predio"
+                                autocomplete="off"/>      
+                            <p class="help-block">{{validator.idbarrio}}</p>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label class="control-label" for="manzana">Manzana</label>
+                            <input type="text"
+                                class="form-control input-xlarge"
+                                ng-model="item.manzana"
+                                placeholder="Manzana"/>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label class="control-label" for="lote">Lote</label>
+                            <input type="text"
+                                class="form-control input-xlarge"
+                                ng-model="item.lote"
+                                placeholder="Lote"/>
+                        </div>
+                        <div class="form-group has-feedback simple col-md-3" ng-class="{'has-error': validator.zona }">
+                            <p class="help-block">{{validator.tipo_busqueda}}</p>
+                            <div class="col-md-6">
+                                <label class="control-label" for="tipo_busqueda">Demarcación definida por:  </label>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="radio-inline"><input type="radio" value="Plano" ng-model="item.definicionDemarcacion">Plano</label>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="radio-inline"><input type="radio" value="Visita" ng-model="item.definicionDemarcacion">Visita</label>
+                            </div>
+                            <p class="help-block">{{validator.tipo_busqueda}}</p>
+                        </div>
+                        <div class="form-group has-feedback simple col-md-3" ng-class="{'has-error': validator.localizacion }">
+                            <label class="control-label" for="localización">Localización en esquina:</label>
+                                <select class="form-control"
+                                   ng-model="item.localizacionEsquina"
+                                   ng-options="localizacion.nombre as localizacion.nombre for localizacion in localizaciones">
+                                   <option value="">Seleccione</option>
+                                </select>
+                            <p class="help-block">{{validator.tipo_busqueda}}</p>
+                        </div>
+                    </div>
+                    <div class="row table-primary">
+                        <h4 class="padding-sm no-padding-t padding-xs-hr"><i class="fa fa-map-o text-primary" aria-hidden="true"></i>&nbsp;&nbsp;Demarcación</h4>
+                        <table class="table table-striped table-bordered ">
+                            <thead>
+                                <tr>
+                                    <th align="center" width="120">Tipo Vía</th>
+                                    <th align="center" width="100">Nombre Vía</th>
+                                    <th align="center" width="80">Clase Vía</th>
+                                    <th align="center">Observaciones</th>
+                                    <th align="center" width="80">Antejardín<br>Izquierdo</th>
+                                    <th align="center" width="80">Antejardín<br>Derecho</th>
+                                    <th align="center" width="80">Andén<br>Izquierdo</th>
+                                    <th align="center" width="80">Andén<br>Derecho</th>
+                                    <th align="center" width="80">Calzada</th>
+                                    <th align="center" width="80">Vía</th>
+                                    <th align="center" width="80">Frente</th>
+
+                                    <th align="center" width="80">Acción</th>
+                                </tr>
+                            </thead>
+                            <tr ng-repeat="item_demarcacion in item.demarcaciones track by $index">
+                                <td ng-if="item_demarcacion.editable!==1">{{item_demarcacion.tipoVia.texto}}</td>
+                                <td ng-if="item_demarcacion.editable==1">
+                                   <select class="form-control"
+                                        ng-model="item_demarcacion.tipoVia"
+                                        ng-options="tipovia as tipovia.texto for tipovia in tiposvia">
+                                        <option value="">Seleccione</option>
+                                    </select>
+                                </td>
+                                <td ng-if="item_demarcacion.editable!==1">{{item_demarcacion.nombreVia}}</td>
+                                <td ng-if="item_demarcacion.editable==1">
+                                    <input type="text" class="form-control" ng-model="item_demarcacion.nombreVia">
+                                </td>
+                                <td ng-if="item_demarcacion.editable!==1">{{item_demarcacion.claseVia.estandar}}</td>
+                                <td ng-if="item_demarcacion.editable==1">
+                                    <select class="form-control"
+                                        ng-model="item_demarcacion.claseVia"
+                                        ng-options="claseVia as claseVia.estandar for claseVia in clasesVias">
+                                        <option value="">Seleccione</option>
+                                    </select>
+                                </td>
+                                <td ng-if="item_demarcacion.editable!==1">{{item_demarcacion.observacion}}</td>
+                                <td ng-if="item_demarcacion.editable==1">
+                                    <textarea class="form-control" rows="2" style="resize: vertical;" ng-model="item_demarcacion.observacion"></textarea>
+                                </td>
+                                <td ng-if="item_demarcacion.editable!==1">{{item_demarcacion.antejardinIzq}}</td>
+                                <td ng-if="item_demarcacion.editable==1">
+                                    <input type="number" class="form-control" number-converter ng-model="item_demarcacion.antejardinIzq"
+                                </td>
+                                <td ng-if="item_demarcacion.editable!==1">{{item_demarcacion.antejardinDer}}</td>
+                                <td ng-if="item_demarcacion.editable==1">
+                                    <input type="number" class="form-control" number-converter ng-model="item_demarcacion.antejardinDer"
+                                </td>
+                                <td ng-if="item_demarcacion.editable!==1">{{item_demarcacion.andenIzq}}</td>
+                                <td ng-if="item_demarcacion.editable==1">
+                                    <input type="number" class="form-control" number-converter ng-model="item_demarcacion.andenIzq">
+                                </td>
+                                <td ng-if="item_demarcacion.editable!==1">{{item_demarcacion.andenDer}}</td>
+                                <td ng-if="item_demarcacion.editable==1">
+                                    <input type="number" class="form-control" number-converter ng-model="item_demarcacion.andenDer">
+                                </td>
+                                <td ng-if="item_demarcacion.editable!==1">{{item_demarcacion.calzada}}</td>
+                                <td ng-if="item_demarcacion.editable==1">
+                                    <input type="number" class="form-control" number-converter ng-model="item_demarcacion.calzada">
+                                </td>
+                                <td ng-if="item_demarcacion.editable!==1">{{item_demarcacion.via}}</td>
+                                <td ng-if="item_demarcacion.editable==1">
+                                    <input type="number" class="form-control" number-converter ng-model="item_demarcacion.via">
+                                </td>
+                                <td ng-if="item_demarcacion.editable!==1">{{item_demarcacion.frente}}</td>
+                                <td ng-if="item_demarcacion.editable==1">
+                                    <input type="number" class="form-control" number-converter ng-model="item_demarcacion.frente">
+                                </td>
+
+                                <td ng-if="item_demarcacion.editable!==1">
+                                    <i class="fa fa-times fa-2x text-danger" aria-hidden="true" ng-click="quitarDemarcacion($index)"></i>
+                                    <i class="fa fa-pencil-square-o fa-2x text-info" aria-hidden="true"  ng-click="item_demarcacion.editable=1"></i>
+                                </td>
+                                <td ng-if="item_demarcacion.editable==1">
+                                    <i class="fa fa-check fa-2x text-success" aria-hidden="true" ng-click="item_demarcacion.editable=0"></i>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <select class="form-control no-padding"
+                                        ng-model="demarcacion.tipoVia"
+                                        ng-options="tipovia as tipovia.texto for tipovia in tiposvia">
+                                        <option value="">Seleccione</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control no-padding" ng-model="demarcacion.nombreVia">
+                                </td>
+                                <td>
+                                    <select class="form-control" style="padding: 0px"
+                                        ng-model="demarcacion.claseVia"
+                                        ng-options="claseVia as claseVia.estandar for claseVia in clasesVias">
+                                        <option value="">Seleccione</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <textarea class="form-control" rows="2" style="resize: vertical;" ng-model="demarcacion.observacion"></textarea>
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control no-padding" ng-model="demarcacion.antejardinIzq">
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control no-padding" ng-model="demarcacion.antejardinDer">
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control no-padding" ng-model="demarcacion.andenIzq">
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control no-padding" ng-model="demarcacion.andenDer">
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control no-padding" ng-model="demarcacion.calzada">
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control no-padding"  ng-model="demarcacion.via">
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control no-padding"  ng-model="demarcacion.frente">
+                                </td>
+                                <td>
+                                    <i class="fa fa-check fa-2x text-success" aria-hidden="true" ng-click="agregarDemarcacion(demarcacion)"></i>
+                                </td>
+                            </tr>
+                            <tfoot>
+                                <td colspan="15">
+                                    <button class="btn btn-rounded btn-xs btn-labeled btn-primary" ng-click="demarcacion.observacion=demarcacion.observacion+'Según mojones de la urbanización'">Según Mojones</button>
+                                    <button class="btn btn-rounded btn-xs btn-labeled btn-primary" ng-click="demarcacion.observacion=demarcacion.observacion+'Según Proyecto Urbanistico'">Según Proyecto</button>
+                                    <button class="btn btn-rounded btn-xs btn-labeled btn-primary" ng-click="demarcacion.observacion=demarcacion.observacion+'Se Encuentra en línea'">Se encuentra en linea</button>
+                                    <button class="btn btn-rounded btn-xs btn-labeled btn-primary" ng-click="demarcacion.observacion=demarcacion.observacion+'A partir del cordón existente, colocar línea de construcción a ##metros1## mts como anden, más ##metros2## mts  como andén, mas ##metros3##  mts como antejardín, hacia adentro. Vía de ##metros4## mts'">A partir del cordón</button>
+                                    <button class="btn btn-rounded btn-xs btn-labeled btn-primary" ng-click="demarcacion.observacion=demarcacion.observacion+'A partir de la fachada del predio del frente, colocar la línea de contrucción  a ##metros1## mts. Vía de ##metros2## mts'">Según Mojones</button>
+                                    <button class="btn btn-rounded btn-xs btn-labeled btn-primary" ng-click="demarcacion.observacion=demarcacion.observacion+'Según regularización vial vigente'">Según regularización vial vigente</button>
+                                    <button class="btn btn-rounded btn-xs btn-labeled btn-primary" ng-click="demarcacion.observacion=demarcacion.observacion+'Según conformación de la cuadra'">Según conformación de la cuadra</button>
+                                </td>
+                            </tfoot>
+                        </table>
+                        <div class="form-group has-feedback simple" ng-class="{'has-error': validator.observacion }">
+                            <label class="control-label" for="localización">Observaciones:</label>
+                            <textarea rows="4" class="form-control" ng-model="item.observaciones"></textarea>
+                            <p class="help-block">{{validator.observacion}}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 text-left-sm">
+                            <a href="{{root}}lineas/certificado/{{item.idSolicitud}}"  target="_blank"><i class="fa fa-file-text" aria-hidden="true"></i> Ver Respuesta</a>&nbsp;&nbsp;&nbsp;
+                            <a href="{{root}}lineas/corte_terminos/{{item.idSolicitud}}" target="_blank" ng-click="newModalInfoCiudadano"><i class="fa fa-file-text" aria-hidden="true"></i> Ver Corte de Términos</a>&nbsp;&nbsp;&nbsp;
+                            <a href="#!/lineas/cerrar/{{item.idSolicitud}}" class="text-danger"><i class="fa fa-times"></i> Cerrar por Oficio</a>
+                        </div>
+                        <div class="col-md-6 text-right-sm">
+                           <input type="submit" class="btn btn-warning" ng-click="save(0)" value="Guardar en Borrador"/>
+                           <input type="submit" class="btn btn-primary" ng-click="save(1)" value="Guardar"/>
+                            ó
+                            <!--<input type="submit" class="btn btn-success" ng-click="save()" value="Finalizar" />-->
+                            <a ui-sref="listar-peticion">Cancelar</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

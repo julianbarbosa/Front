@@ -1,0 +1,160 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-success" ng-show="estadoBuscar">
+            <div class="panel-heading ">
+                <span class="panel-title">Generar Certificado de Nomenclatura</span>
+                <div class="panel-heading-controls">
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <p>La siguiente consulta genera un certificado de nomenclatura para las direcciones que se encuentran certificadas para un predio.</p>
+                    <p>La búsqueda del predio puede realizarse por número predial nacional o por una de sus direcciones asociadas</p>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="control-label" for="informacion_adicional">Número Predial Nacional </label>
+                            <input type="text"
+                                   ng-model="npn"
+                                   class="form-control input-xlarge"
+                                   autocomplete="off"
+                                   placeholder="Número Predial Nacional"
+                                   ng-click="obtenerModalIngresoDireccion()"
+                                   style="cursor: pointer;"
+                                   readonly
+                                   />
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="control-label" for="informacion_adicional">Dirección</label>
+                            <input type="text"
+                                   ng-model="direccion"
+                                   class="form-control input-xlarge"
+                                   autocomplete="off"
+                                   placeholder="Dirección"
+                                   ng-click="obtenerModalIngresoDireccion()"
+                                   style="cursor: pointer;"
+                                   readonly
+                                   />
+                        </div>
+                    </div>
+                </div>   
+            </div>
+            <div class="panel-footer" >
+                <div class="row padding-sm text-right-sm">
+                    <input type="submit" class="btn btn-primary" ng-click="consultar()" value="Consultar" />
+                    <a ng-click="limpiar()" style="cursor: pointer;">Limpiar</a>
+                </div>
+                <div class="row padding-sm text-right-sm">
+                    <a style="cursor: pointer;" ng-click="setBuscandoCodigo(true)">Deseo validar un certificado a través de un código</a>
+                </div>
+            </div>   
+        </div>
+        <div class="panel panel-success" ng-show="!estadoBuscar && predio != null">
+            <div class="panel-heading ">
+                <span class="panel-title">Información del Predio</span>
+                <div class="panel-heading-controls"></div>
+            </div>
+            <div class="panel-body">
+                <b>NPN:</b> <span ng-bind="predio.codigounico==null?' - ':predio.codigounico"></span><br>
+                <b>NPL:</b> <span ng-bind="predio.numero==null?' - ':predio.numero"></span><br>
+                <b>Barrio:</b> <span ng-bind="predio.barrio==null?' - ':predio.barrio.nombre"></span><br>
+                <b>Área:</b> <span ng-bind="predio.area==null?' - ':(predio.area+' m2')"></span><br>
+                <b>Propiedad Horizontal:</b> <span ng-bind="predio.ph==null?' - ':predio.ph"></span><br>
+            </div>
+        </div>
+
+        <div class="panel panel-success" ng-show="!estadoBuscar && predio != null">
+            <div class="panel-heading ">
+                <span class="panel-title">Nomenclaturas asociadas al predio {{ predio.codigounico }}</span>
+                <div class="panel-heading-controls"></div>
+            </div>
+            <div class="panel-body">
+                <div ng-if="nomenclaturas.length==0">
+                    No se tienen nomenclaturas asociadas a este predio.
+                </div>
+                <div class="table-primary" ng-if="nomenclaturas && nomenclaturas.length>0">
+                    <table class="table-hover table table-bordered table-responsive" role="grid">
+                        <thead>
+                            <tr>
+                                <th>Acción</th>
+                                <th>Id</th>
+                                <th>Direccion</th>
+                                <th>Direccion Anterior</th>
+                                <th>Direccion Visual</th>
+                                <th>Estado</th>
+                                <th>Última Actualización</th>
+                                <th ng-if="permisoVerHistorico">Histórico</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="nomenclatura in nomenclaturas" >
+                                <td><i class="fa fa-exclamation-triangle" style="cursor: pointer;" title="Notificar nomenclatura errada" ng-click="notificarNomenclaturaErrada($index)"></i></td>
+                                <td>{{ nomenclatura.idnomenclatura }}</td>
+                                <td>{{ nomenclatura.direccion }} {{ nomenclatura.informacionadicional }}</td>
+                                <td>{{ nomenclatura.direccionAnterior }}</td>
+                                <td>{{ nomenclatura.direccionVisual }} {{ nomenclatura.informacionadicional }}</td>
+                                <td><span class="badge" ng-class="nomenclatura.estado.codigo=='certificada'?'badge-success':'badge-warning'" >{{ nomenclatura.estado.nombre }}</span></td>
+                                <td>{{ nomenclatura.updatedAt.timestamp*1000 | date:'yyyy-MM-dd' }}</td>
+                                <td ng-if="permisoVerHistorico" >
+                                    <button ng-hide="nomenclatura.historico || nomenclatura.loading" class="btn-link" ng-click="consultarHistorico(nomenclatura)" >
+                                        <i class="fa fa-level-down" aria-hidden="true"></i>
+                                    </button>
+                                    <i class="fa fa-spinner fa-spin" aria-hidden="true" ng-show="nomenclatura.loading"></i>
+                                    <span ng-if="nomenclatura.historico && nomenclatura.historico.length>0">
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>Estado Anterior</th>
+                                                    <th>Estado Actual</th>
+                                                    <th>Comentario</th>
+                                                    <th>Usuario</th>
+                                                    <th>Fecha</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat='historia in nomenclatura.historico'>
+                                                    <td>{{historia.estadoAnterior}}</td>
+                                                    <td>{{historia.estadoActual}}</td>
+                                                    <td>{{historia.comentario}}</td>
+                                                    <td>{{historia.nombreUsuario}}</td>
+                                                    <td>{{historia.fechaCreacion}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </span>
+                                    <span ng-if="nomenclatura.historico && nomenclatura.historico.length==0">
+                                        No se tiene histórico de esta nomenclatura
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="panel-footer" >
+                <div class="row">
+                    <div class="col-sm-12">
+                        <span ng-if="nomenclaturas.length>0">
+                        <p>Esta opción es sólo para uso interno si desea generar un certificado de las nomenclaturas que aparecen certificadas.</p>
+                        <button class="btn btn-primary" ng-click="generarCertificado()" >
+                            Generar certificado
+                        </button>
+                        ó
+                        </span>
+                        <button class="btn btn-primary" ng-click="consultarOtro()" >
+                            Consultar otro predio
+                        </button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <a ui-sref="solicitar-certificacion({tipoUsuario: tipoUsuario})">La nomenclatura que necesito no se encontró</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

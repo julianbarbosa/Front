@@ -1,0 +1,64 @@
+<div class="panel">
+    <div class="panel-body">
+        <div class="page-header">
+            <h1 class="col-xs-12 col-sm-10 text-center text-left-sm"><i class="padding-sm-hr fa fa-list-alt"></i>&nbsp;&nbsp;Listado de Pedagogías</h1>
+        </div>  
+        <div class="table-primary">            
+            <table cellpadding="0" cellspacing="0" border="0" class="table-hover table table-bordered" id="listaSolicitudes" width="100%" role="grid" aria-describedby="solicitud_listar_tareas">
+                <thead>
+                    <tr>
+                        <th ng-repeat="header in headers track by $index" class="ui-state-default" style="width: {{header.width}}">
+                            <input type="text" ng-change="actualizarDatos()" ng-model="headers[$index].value" class="form-control input-sm" placeholder="{{header.title}}" style="width: 100%;"  ng-if="header.input !== false && !header.options" ng-model-options='{debounce: 2000}'>
+                            <select ng-change="actualizarDatos()" ng-model="headers[$index].value" class="form-control input-sm" ng-options="option.value as option.name for option in header.options" ng-if="header.input !== false && header.options">
+                                <option value=""></option>
+                            </select>
+                        </th>
+                    </tr>
+                    <tr role="row">
+                        <th ng-repeat="header in headers" class="ui-state-default {{header.sorting}} {{header.header_align}}" style="width: {{header.width}}" ng-click="ordenarPor(headers[$index].name)">
+                            {{header.title}}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr  class="odd" style="font-weight: bold;" ng-repeat="row in data" ng-class="{'danger': row[rowWarning] === false}">
+                        <td ng-repeat="header in headers" class="{{header.body_align}}">
+                            
+                            <!--Acciones-->
+                            <span ng-if="header.values" >
+                                <span ng-if="value['link']" ng-repeat="value in header.values" ng-bind-html="'<a href=\''+value['link']+row['id']+'\' >'+value['icon']+' </a>'"></span>
+                                <span ng-if="row['ruta'] && !value['link']" ng-repeat="value in header.values" ng-bind-html="'<a href=\'#!'+row['ruta']+row['id']+'\' >'+value['icon']+' </a>'"></span>
+                            </span>
+                            
+                            <!--Opciones dependientes de valores-->
+                            <span ng-if="header.options" >
+                                <span ng-repeat="option in header.options" ng-bind-html="option['link']" ng-if="option['value'] == row[option['nameValidate']]"></span>
+                            </span>
+                            
+                            <!-- Valor de Text-->
+                            <span ng-if="header.type === 'text'">
+                                {{row[header.name]}} {{row[header.name2]}}
+                            </span>
+                            
+                            <!-- Valor de Link-->
+                            <span ng-if="header.type === 'link'">
+                                <a href="{{header.link}}{{row[header.name]}}" target="_blank">{{row[header.name]}}</a>                                
+                            </span>
+                            
+                            <!-- Valor de Objeto Fecha-->
+                            <span ng-if="header.type === 'date'">
+                                {{row[header.name].timestamp * 1000| date:'yyyy-MM-dd HH:mm:ss'}}
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                <td colspan="10" class="currency">
+                    <uib-pagination ng-model="currentPage" total-items="totalItems" max-size="5" boundary-links="true" ng-click="actualizarDatos()"></uib-pagination>
+                </td>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="overlap_espera_2"><i class="fa fa-gear fa-spin fa-2x"></i></div>

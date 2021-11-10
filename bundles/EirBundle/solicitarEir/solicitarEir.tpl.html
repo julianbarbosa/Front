@@ -1,0 +1,365 @@
+<style>
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+    }
+
+	* {
+		font-size: 12px;
+		font-style: normal;
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		box-sizing: border-box;
+	}
+
+	.tags {
+		margin-bottom: 4px;
+		margin-top: 4px;
+	} 
+
+	.tags .tag {
+		margin-top: 1px;
+		display: inline-block;
+		margin-right: 4px;		
+		font-size: 11px;
+	}
+
+	.tag .close {
+		margin-top: 1px;
+		font-size: 11px;
+		margin-left: 4px; 
+	}
+
+	.tooltip {
+		font-style: normal; 
+		position: absolute;
+		z-index: 1030;
+		display: block;
+		visibility: visible;
+		font-size: 12px;
+		line-height: 1.4;
+		opacity: 0;
+		filter: alpha(opacity=0);
+	}
+	.tooltip.in {
+		opacity: 0.9;
+		filter: alpha(opacity=90);
+	}
+	.tooltip.top {
+		margin-top: -3px;
+		padding: 5px 0;
+	}	
+
+	.tooltip-inner {
+		font-size: 11px;
+		font-style: normal; 
+		max-width: 500px;
+		padding: 3px 8px;
+		text-align: justify;
+		text-decoration: none;
+		background-color: #ffffff;
+		color: #333333;
+		border-radius: 2px;
+		webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+		box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+	}	
+</style>
+<script>
+	$(document).ready(function () {
+		$('[data-toggle="tooltip"]').tooltip();
+
+		$(".tag").on('DOMNodeInserted', function () {
+			$('[data-toggle="tooltip"]').tooltip();
+		});
+
+		$(".close").on('DOMNodeInserted', function () {
+			$('[data-toggle="tooltip"]').tooltip();
+		});
+
+	});
+
+</script>
+<div id="modalIngresoDireccion" class="modal fade modal-change" role="dialog" aria-hidden="true" ></div>
+<div class="page-header">
+    <div class="row">
+        <!-- Page header, center on small screens -->
+        <h1 class="col-xs-12 col-sm-12 text-center text-left-sm">
+			<i class="padding-sm-hr fa fa-arrow-circle-right"></i>SOLICITAR ESQUEMA DE IMPLANTACION Y REGULARIZACION
+        </h1>
+        <div class="col-xs-12 col-sm-12">
+            <div class="row">
+                <hr class="visible-xs no-grid-gutter-h">
+                <div class="visible-xs clearfix form-group-margin"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-7">
+	<!--Panel de búsqueda de cliente-->
+    <div ng-show='funcionario' class="panel panel-success">
+        <div class="panel-heading ">
+            <span class="panel-title">Información del Solicitante</span>
+            <div ng-show="cliente.firstName != null" class="panel-heading-controls">
+				<spam ng-click="actualizarCliente()" title="Editar informacióm del solicitante" >Editar Solicitante &nbsp;<i class="fa fa-edit"></i></spam>
+            </div>
+        </div>
+        <div class="panel-body">
+			<div class="col-md-12">                    
+                <div class="form-group {{ messageErrorCliente!=''?'has-error':'' }} }}">
+					<label class="control-label" >Número de Identificación del Solicitante (CC ó NIT)</label>
+					<input required placeholder="Ingrese el número de identificación del solicitante" class="form-control" type="text" ng-model="cliente.numidentificacion" ng-disabled='mostrarFormSolicitud' ng-keydown="($event.keyCode == 13) && buscarCliente()" />
+					<span ng-if="messageErrorCliente != ''">{{ messageErrorCliente}}</span>
+				</div>
+			</div>
+            <div class="col-md-12" ng-hide="mostrarFormSolicitud">
+                <div class="col-md-12">
+                    <button class="btn-link" ng-click="limpiarCliente()" >Limpiar</button>
+                    ó 
+                    <button class="btn btn-primary" ng-click="buscarCliente()" >Buscar</button>
+                </div>
+            </div>
+            <!--Panel que muestra la información de el cliente -->
+            <div ng-show="cliente.firstName != null" class="col-md-12">
+				<div class="well well-sm">
+					<strong>Solicitante: </strong> {{ cliente.firstName + ' ' + cliente.lastName}} <br>
+					<strong>Email: </strong> {{ cliente.emailAddress}} <br>
+					<strong>Teléfono: </strong> {{ cliente.telefono}} <br>
+					<strong>Dirección: </strong> {{ cliente.direccion}} <br>
+				</div>
+            </div>
+        </div>  
+    </div>
+
+    <div class="panel panel-success" ng-show='mostrarFormSolicitud'>
+        <div class="panel-heading ">
+            <span class="panel-title">Información del Predio</span>
+            <div class="panel-heading-controls"></div>
+        </div>
+        <div class="panel-body">
+			<div class="col-md-12">
+				<form class="form-group" name="formPredio" class="form-group {{ haveError('fireccion', formPredio) ? 'has-error' : ''}}">
+					<label class="control-label" >Dirección del Predio</label>
+					<input required placeholder="Dirección del predio existente" class="form-control" type="text" ng-click="obtenerModalIngresoDireccion()" area  ng-model="solicitud.direccion" ng-disabled="estado == 'visualizacion' || solicitud.solicitud.predio.codigounico != '' && solicitud.solicitud.predio.codigounico != null" ng-min="20" />								
+					<span ng-if="solicitud.npn != '' && solicitud.npn != null">
+						<p></p>
+						<div class="well well-sm">
+							<strong>NPN: </strong>{{ solicitud.npn}}<br>
+							<strong>DIRECCION: </strong>{{ solicitud.direccion}} {{ solicitud.infoAdicional}}
+						</div>
+						<div class="form-group {{ haveError('numeropredial', formPredio) ? 'has-error' : ''}}">
+							<label class="control-label" >Número Predial Local</label>
+							<input placeholder="Número Predial Local" class="form-control" type="text" ng-model="solicitud.numeropredial" name="numeropredial" ng-min="1" ng-disabled="estado == 'visualizacion' || solicitud.idSolicitud"/>
+							<span ng-show="haveError('numeropredial', formPredio)" >
+								Este campo es obligatorio.
+							</span>
+						</div>							
+						<div class="form-group {{ haveError('numeropredial', formPredio) ? 'has-error' : ''}}">
+							<label class="control-label" >Matricula Inmobiliaria</label>
+							<input placeholder="Matricula Inmobiliaria" class="form-control" type="text" ng-model="solicitud.matriculainmobiliaria" name="matriculainmobiliaria" ng-min="1" ng-disabled="estado == 'visualizacion' || solicitud.idSolicitud"/>
+							<span ng-show="haveError('matriculainmobiliaria', formPredio)" >
+								Este campo es obligatorio.
+							</span>
+						</div>			
+						<div class="form-group {{ haveError('areapredio', formPredio) ? 'has-error' : ''}}">
+							<label class="control-label" >Area Mt<sup>2</sup> del Predio</label>
+							<div ng-if="solicitud.areapredio == 0 || solicitud.areapredio == null">
+								<input placeholder="Ingrese Metros cuadrados" class="form-control" type="number" ng-model="solicitud.areapredio" name="areapredio" min="1" max="99999" ng-readonly="estado == 'visualizacion' || solicitud.idSolicitud || solicitud.areaLlena != null" />
+								<span ng-show="haveError('areapredio', formPredio)" >
+									Este campo es obligatorio.
+								</span>
+							</div>
+							<div ng-if="solicitud.areapredio > 0">
+								<label class="control-label" >{{solicitud.areapredio}}</label>
+							</div>
+						</div>
+					</span>	
+				</form>
+			</div>	
+		</div>  
+	</div>
+
+	<!--Panel de Datos de Solicitud-->
+	<span ng-if="solicitud.direccion != '' && solicitud.direccion != null">
+		<div class="panel panel-success" ng-show='mostrarFormSolicitud'>
+			<div class="panel-heading ">
+				<span class="panel-title">Información de la solicitud</span>
+				<div class="panel-heading-controls"></div>
+			</div>
+			<form class="panel-body" name="formDatosSolicitud" >
+				<div class="col-md-12">
+
+					<div class="form-group {{ haveError('actividades', formDatosSolicitud) ? 'has-error' : ''}}">
+						<div ng-hide='solicitud.idSolicitud'>
+							<label class="control-label" >Buscar Actividades</label>				
+							<tag-manager tags="tags" autocomplete="allTags" request="request" codigo="codigo" fecha="fecha"></tag-manager>
+							<hr>
+						</div>						
+						<label class="control-label" >Actividades Seleccionadas</label>
+						<ul class="list-unstyled tag">
+							<li ng-repeat="tag in tags"><div class="well well-sm">
+									{{tag.codCiiu}} - {{tag.nombreCiiu}}
+									<input type="hidden" id="idciiu_{{ $index}}" name="idciiu" value="{{tag.idciiu}}">
+								</div></li>
+						</ul>
+						<span ng-show="haveError('actividades', formDatosSolicitud)" >
+							Este campo es obligatorio.
+						</span>					
+					</div>
+					<p></p>
+					<div class="form-group {{ haveError('descripcionactividades', formDatosSolicitud) ? 'has-error' : ''}}">
+						<label class="control-label" >Descripción de la(s) Actividad(es)</label>
+						<input required placeholder="Descripción de la(s) Actividad(es)" class="form-control" type="text" ng-model="solicitud.descripcionactividades" name="descripcionactividades" ng-min="1" ng-disabled="estado == 'visualizacion' || solicitud.idSolicitud" />
+						<span ng-show="haveError('descripcionactividades', formDatosSolicitud)" >
+							Este campo es obligatorio.
+						</span>
+					</div>
+
+					<div ng-if="tags.length > 0" class="form-group {{ haveError('areaxactividades', formDatosSolicitud) ? 'has-error' : ''}}">
+						<label class="control-label" >Area Mt<sup>2</sup> destinada a la(s) Actividad(es)</label>
+						<input required placeholder="Ingrese Metros cuadrados" class="form-control" type="number" id="areaxactividades" ng-model="solicitud.areaxactividades" name="areaxactividades" ng-min="1" ng-disabled="estado == 'visualizacion' || solicitud.idSolicitud" ng-change="consultaTipoSolicitud()"							   
+							   min="1"/>
+						<span ng-show="haveError('areaxactividades', formDatosSolicitud)" >
+							Este campo es obligatorio.
+						</span>
+					</div>
+					<div ng-if="areaxactividades > 0">
+						<label class="control-label" >Tipo de Solicitud</label>
+						<div ng-if="solicitud.tiposolicitud === 'eircomplejo'">
+							<label class="control-label" >EIR COMPLEJO</label>
+						</div>
+						<div ng-if="solicitud.tiposolicitud === 'eirsimple'">
+							<label class="control-label" >EIR SIMPLE</label>
+						</div>						
+
+						<!--<input type="hidden" required="" class="form-control ng-valid-min ng-dirty ng-valid ng-valid-required ng-touched" id="tiposolicitud" ng-model="solicitud.tiposolicitud" name="tiposolicitud" ng-disabled="estado == 'visualizacion' || solicitud.idSolicitud">
+						{{ respuesta | json }}-->
+					</div>
+					<p></p>
+					<div class="form-group {{ haveError('licenciaconstruccion', formDatosSolicitud) ? 'has-error' : ''}}">
+						<label class="control-label" >Licencia de Construcción</label>					
+						<p>
+							<label class="radio">
+								<input type="radio" name="licenciaconstruccion" ng-model="solicitud.licenciaconstruccion" value="Si" class="px" required ng-disabled="estado == 'visualizacion' || solicitud.idSolicitud" >
+								<span class="lbl">Si</span>
+							</label>
+							<label class="radio">
+								<input type="radio" name="licenciaconstruccion" ng-model="solicitud.licenciaconstruccion" value="No" class="px"  ng-click="solicitud.numerolicencia = '';  solicitud.curaduriaurbana = ''" ng-disabled="estado == 'visualizacion' || solicitud.idSolicitud" >
+								<span class="lbl">No</span>
+							</label>						
+							<span ng-show="haveError('licenciaconstruccion', formDatosSolicitud)" >
+								Este campo es obligatorio.
+							</span>						
+						</p>
+						<div>
+							<div ng-if="solicitud.licenciaconstruccion == 'Si'" class="form-group {{ haveError('numerolicencia', formDatosSolicitud) ? 'has-error' : ''}}">
+								<label class="control-label" >Número de Licencia de Construcción</label>
+								<input required placeholder="Ingrese el número de licencia de construcción" class="form-control" ng-model="solicitud.numerolicencia" name="numerolicencia" ng-min="1" ng-disabled="estado == 'visualizacion' || solicitud.idSolicitud" />
+								<span ng-show="haveError('numerolicencia', formDatosSolicitud)" >
+									Este campo es obligatorio.
+								</span>
+							</div>
+							<div ng-if="solicitud.numerolicencia" class="form-group {{ haveError('curaduriaurbana', formDatosSolicitud) ? 'has-error' : ''}}">
+								<label class="control-label" >Número de Curaduría Urbana</label>						
+								<select required name="curaduriaurbana" class="form-control" ng-model="solicitud.curaduriaurbana" ng-min="1" ng-disabled="estado == 'visualizacion' || solicitud.idSolicitud">
+									<option value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+								</select>
+								<span ng-show="haveError('curaduriaurbana', formDatosSolicitud)" >
+									Este campo es obligatorio.
+								</span>
+							</div>
+						</div>
+					</div>				
+				</div>
+				<div class="col-md-12" ng-hide='solicitud.idSolicitud'>
+					<div class="col-sm-12" ng-show="estado == 'creacion'" style="text-align: center; text-align: right;">
+						<button class="btn-link" ng-click="cancelarSolicitud()" >Cancelar</button>
+						ó 
+						<button ng-disabled="!formDatosSolicitud.$valid || !formPredio.$valid" class="btn btn-primary" ng-click="guardarSolicitud()" >Crear Solicitud</button>
+						<button ng-disabled="!formDatosSolicitud.$valid" class="btn btn-primary" ng-click="previsualizar()" title="Úselo para previsualizar el documento." >Previsualizar</button>
+					</div>
+				</div>			
+			</form>
+		</div>
+	</span>
+
+	<div class="panel panel-success" ng-show="solicitud.idSolicitud" >		
+		<div class="panel-heading ">			
+			<span class="panel-title">Anexos Opcionales</span>			
+			<div class="panel-heading-controls"></div>		
+		</div>			
+		<form class="panel-body" name="formDatosSolicitudArchivos" >			
+			<div class="col-md-12">	
+				<div class="form">										
+					<label class="control-label">Por favor seleccione los documentos para ser asociados a la solicitud</label>										
+					<br>		
+					<span class="checkbox" ng-repeat="doc in selectedDoc" >			
+						<label class="checkbox-inline">				
+							<input type="checkbox" 					   
+								   class="px"
+								   ng-model="selectedDoc[$index].value"				   
+								   ng-click="toggleSelection(doc.id)">				
+							<span class="lbl">					
+								{{doc.nombre}}				
+							</span>			
+						</label>		
+					</span>						
+				</div>
+				<label>					
+					1. Formato de Solicitud Firmada por el Solicitante.<br>					
+					2. Planos arquitectónicos a escala y formato adecuado (1:100, 1:200, 1:500)					
+					firmados por un profesional competente, con su respectiva matrícula					
+					profesional.<br>					
+					3. Plano de localización en el sector (relación con vías, espacio público y					
+					elementos ambientales).<br>					
+					4. Concepto Ambiental de la Corporación Autónoma Regional del Valle-CVC,					
+					sobre las franjas de protección de cuerpos de agua (permanentes o no) y					
+					bosques existentes, para predios rurales. (Original)<br>				
+				</label><br>				
+				<p></p>				
+				<div ng-hide="solicitud.documentos == null">					
+					<label class="control-label" >Archivos cargados ({{ solicitud.documentos.length}}):</label>					
+					<a ng-repeat="documento in solicitud.documentos" ng-href="{{documento.url}}" target="_blank">Archivo{{ $index + 1}}{{ $last?'.':', ' }}</a>				
+				</div>				
+				<div ng-show="solicitud.documentos == null" >					
+					<label class="control-label" >Cargando archivos...</label>					
+					<span ><i class="fa fa-spinner fa-spin fa-2x fa-fw"></i></span>				
+				</div>			
+			</div>							
+
+			<div class="col-md-12" >				
+				<div class="form-group" ng-hide="estado == 'visualizacion' || files.length == 4">					
+					<label class="control-label" >Seleccione un archivo cargar</label>					
+					<input type="file" id="input_file" ng-model="archivo" name="uploadedfile" file-upload multiple ng-disabled="files.length == 3">					
+					{{ $scope.progress}}				
+				</div>
+
+				<div uib-alert ng-repeat="alert in alerts" ng-class="'alert-' + (alert.type || 'warning')" dismiss-on-timeout="4000" close="closeAlert($index)">{{alert.msg}}</div>
+
+				<table class="table" ng-show="files.length > 0">					
+					<thead>						
+						<tr>							
+							<th>Acción</th>							
+							<th>Archivos</th>							
+							<th>Tamaño</th>						
+						</tr>					
+					</thead>					
+					<tbody>						
+						<tr ng-repeat="item in files">							
+							<td><strong><i class="fa fa-trash-o" title="Eliminar" ng-click="eliminarArchivo($index)"></i></strong></td>							
+							<td><strong>{{ item.name}}</strong></td>							
+							<td><strong>{{ item.size / 1024 | number:0 }} kb ({{item.type}})</strong></td>						
+						</tr>					
+					</tbody>				
+				</table>			
+			</div>			
+			<div class="col-md-12" ng-show='estado == "confirmacion"' style="text-align: center; text-align: right;">				
+				<div>					
+					<button ng-disabled="!formDatosSolicitudArchivos.$valid || !impreso" class="btn btn-primary" ng-click="confirmar()" title="Se presiona cuando el solicitante haya firmado el documento y aceptado los términos. No tiene vuelta atrás." >Confirmar Solicitud</button>					
+					<button ng-disabled="!formDatosSolicitudArchivos.$valid" class="btn btn-primary" ng-click="imprimir()" title="Úselo para imprimir el documento que va a firmar el solicitante." >Imprimir</button>				
+				</div>			
+			</div>		
+		</form>
+	</div>

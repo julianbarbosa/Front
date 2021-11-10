@@ -1,0 +1,138 @@
+<div class="page-header">
+    <div class="row">
+        <!-- Page header, center on small screens -->
+        <h1 class="col-xs-12 col-sm-8 text-center text-left-sm">
+        	Logs de Proceso de carga masiva de nomenclatura
+        </h1>
+        <div class="col-xs-12 col-sm-8">
+            <div class="row">
+                <hr class="visible-xs no-grid-gutter-h">
+                <div class="visible-xs clearfix form-group-margin"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-9">
+    <div class="panel panel-success" >
+        <div class="panel-heading ">
+            <span class="panel-title">Datos del Proceso</span>
+            <div class="panel-heading-controls"></div>
+        </div>
+        <div class="panel-body">
+        	<div class="col-md-9">
+        		<strong>Id del Proceso: </strong><span>{{ proceso.idProcesoCargaNomenclatura }}</span> <br>
+        		<strong>Nombre: </strong><span>{{ proceso.nombre }}</span> <br>
+        		<strong>Descripción: </strong><span>{{ proceso.descripcion }}</span> <br>
+        		<strong>Estado: </strong><span>{{ proceso.estado }}</span> <br>
+        		<strong>Nombre archivo: </strong><span>{{ proceso.rutaArchivo }}</span> <br>
+                <strong>Finalización: </strong><span ng-if="proceso.dataMensaje.success===true">Exitosa</span><span ng-if="proceso.dataMensaje.success===false">Fallida</span><br>
+                <strong>Último mensaje: </strong><span>{{ proceso.dataMensaje.msg }}</span><br>
+                <strong>Registros procesados: </strong><span>{{ proceso.dataMensaje.procesados }}</span><br>
+                <strong>Tiempo de ejecución: </strong><span ng-if="proceso.dataMensaje.time">{{ proceso.dataMensaje.time }} seg ({{ proceso.dataMensaje.time | secondsToDateTime | date:'HH:mm:ss' }})</span><br>
+                <strong>Cantidad de logs: </strong><span>{{ proceso.dataMensaje.numLogs }}</span><br>
+                <div ng-repeat="tipoMensaje in proceso.dataMensaje.tiposMensajes track by $index">
+                    <strong>Logs tipo {{ tipoMensaje.nivelLog }}: </strong><span>{{ tipoMensaje.cantidad }}</span><br>
+                </div>
+        	</div>
+        </div>  
+    </div>
+    <div class="panel panel-success" ng-show="log.idLogCargaNomenclatura" >
+        <div class="panel-heading ">
+            <span class="panel-title">Log {{ log.idLogCargaNomenclatura}}</span>
+            <div class="panel-heading-controls"></div>
+        </div>
+        <div class="panel-body">
+        	<div class="col-md-9">
+        		<strong>Id del log: </strong><span>{{ log.idLogCargaNomenclatura }}</span> <br>
+        		<strong>Respuesta: </strong><span>{{ log.respuesta }}</span> <br>
+        		<strong>Creada en: </strong><span>{{ log.createdAt }}</span> <br>
+        	</div>
+        </div>  
+    </div>
+	<!--Panel de Con Listade Logs-->
+    <div class="panel panel-success" >
+        <div class="panel-heading ">
+            <span class="panel-title">Lista de Logs del Proceso de carga masiva de nomenclatura #{{proceso.idProcesoCargaNomenclatura}}</span>
+            <div class="panel-heading-controls">
+                <button class="btn-link" ><i class="fa fa-download" ng-click="descargarLogs()" ></i></button>
+            </div>
+        </div>
+
+        <!--INICIO TABLA-->
+        <div class="panel">
+            <div class="panel-body">
+                <div class="table-primary">
+                    <table cellpadding="0" cellspacing="0" border="0" class="table-hover table table-bordered dataTable" width="100%" role="grid" aria-describedby="listaSolicitudes_info">
+                        <thead>
+                            <tr>
+                            	<th> </th>
+                                <th ng-repeat="header in headers track by $index" class="ui-state-default" style="width: {{header.width}}">
+                                    <input type="text" ng-keypress="buscar($event.keyCode)" ng-model="headers[$index].value" class="form-control input-sm" placeholder="{{header.title}}" style="width: 100%;"  ng-if="header.input !== false && !header.options" >
+                                </th>
+                            </tr>
+                            <tr role="row">
+                            	<th>#</th>
+                                <th ng-repeat="header in headers" class="ui-state-default {{header.sorting}} {{header.header_align}}" style="width: {{header.width}}" ng-click="ordenarPor(headers[$index].name)">
+                                    {{header.title}}
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr  class="odd" style="font-weight: bold;" ng-repeat="row in data" ng-class="{'danger': row[rowWarning] === false}">
+                            	<td>{{(currentPage - 1)*numPerPage+1+$index}}</td>
+                                <td ng-repeat="header in headers" class="{{header.body_align}}">
+                                    
+                                    <!--Acciones-->
+                                    <span ng-if="header.values" >
+                                        <span ng-if="value['link']" ng-repeat="value in header.values" ng-bind-html="'<a target=\''+value['target']+'\' href=\''+value['link']+'\' >'+value['icon']+' </a>'"></span>
+                                        <span ng-if="value['click']" ng-repeat="value in header.values" >
+                                            <button class="btn-link" ng-bind-html="value['icon']" ng-click="test(value, row)" ></button>
+                                        </span>
+                                    </span>
+                                    <span ng-if="header.options" >
+                                        <span ng-if="value['link'] && row[value['nameValidate']]==value['value']" ng-repeat="value in header.options" ng-bind-html="'<a target=\''+value['target']+'\' href=\''+value['link']+'\' >'+value['icon']+' </a>'"></span>
+                                        <span ng-if="value['click']&& row[value['nameValidate']]==value['value']" ng-repeat="value in header.options" >
+                                            <button class="btn-link" ng-bind-html="value['icon']" ng-click="test(value, row)" ></button>
+                                        </span>
+                                    </span>
+                                    
+                                    <!-- Valor de Text-->
+                                    <span ng-if="header.type === 'text'">
+                                        {{ row[header.name] }} {{row[header.name2]}}
+                                    </span>
+                                    
+                                    <!-- Valor de Link-->
+                                    <span ng-if="header.type === 'link'">
+                                        <a href="{{header.link}}{{row[header.name]}}" target="_blank">{{row[header.name]}}</a>
+                                    </span>
+
+                                    <!-- Valor de Label-->
+                                    <span ng-if="header.type === 'label'" class="label {{header.values[row[header.name]].cssClass}}">
+                                        {{header.values[row[header.name]].text}}
+                                    </span>
+                                    
+                                    <!-- Valor de Objeto Fecha-->
+                                    <span ng-if="header.type === 'date'">
+                                        {{row[header.name].timestamp * 1000 | date:'yyyy-MM-dd HH:mm:ss'}}
+                                    </span>
+                                    
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                        <td colspan="10" class="currency">
+                            <uib-pagination ng-model="currentPage" items-per-page="numPerPage" total-items="totalItems" max-size="5" boundary-links="true" ng-click="actualizarDatos()" first-text="Primero" previous-text="Anterior" next-text="Siguiente" last-text="Último"></uib-pagination>
+                        </td>
+                        </tfoot>
+                    </table>
+                    <div>
+                        <input placeholder="Registros por Página" type="number" ng-model="numPerPageTemp" ng-keypress="cambiarNumeroPorPagina($event.keyCode)">
+                        <span ng-show="data.length>0" >Página {{ currentPage }} / Mostrando del {{ (currentPage - 1)*numPerPage+1}} al {{ (currentPage - 1)*numPerPage+data.length }} de {{totalItems}} en total</span><span ng-hide="data.length>0" >No hay resultados para mostrar</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--FIN TABLA-->
+    </div>
+</div>
+

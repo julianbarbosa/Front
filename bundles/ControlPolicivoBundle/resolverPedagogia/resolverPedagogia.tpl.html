@@ -1,0 +1,11 @@
+<div ng-controller="ControlPolicivoResolverPedagogiaCtrl">
+    <div ng-show="validator.alert.content">
+        {{validator}}
+        <div class="alert alert-{{validator.alert.type}} alert-dismissable">
+            <i class="fa fa-danger"></i>
+            <button type="button" class="close" aria-hidden="true" ng-click="hideAlert()">×</button>
+            
+        </div>
+    </div> 
+    <div ng-include="'../bundles/ControlPolicivoBundle/resolverPedagogia/resolverPedagogiaForm.tpl.html'" ng-init="idcomparendo=idcomparendo"></div>    
+</div>

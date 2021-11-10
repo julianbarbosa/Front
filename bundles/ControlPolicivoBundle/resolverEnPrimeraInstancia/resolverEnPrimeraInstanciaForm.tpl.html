@@ -1,0 +1,89 @@
+<div>
+    <div class="col-sm-12 col-md-10 col-lg-8">
+        <div ng-if="validator.alert.content">
+            <div class="alert {{validator.alert.type}} alert-dismissable">
+                <i class="fa fa-danger"></i>
+                <button type="button" class="close" aria-hidden="true" ng-click="hideAlert()">×</button>
+                <b>{{validator.alert.title}}</b> <span ng-bind-html="validator.alert.content"></span>
+                <br><strong><a href="#!/controlpolicivo/consultarcomparendo/{{idcomparendo}}">{{validator.alert.linkText}}</a></strong>
+            </div>
+        </div>
+
+        <div class="panel panel-success">
+            <div class="panel-heading ">
+                <span class="panel-title">Registrar Decisión</span>
+                <div class="panel-heading-controls">
+                </div>
+            </div>
+
+            <div class="panel-body">
+                <form name="userForm">
+
+                    <!--- IMPONER MEDIDA !-->
+                    <div class="row">
+                        <div class="form-group col-md-4">
+                            <label class="control-label" for="consecutivoAudiencia">Consecutivo Audiencia </label>
+                            <input type="number"  class="form-control" ng-model="audiencia.consecutivoAudiencia">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="control-label" for="ConsecutivoDecision">Consecutivo Decisión </label>
+                            <input type="number"  class="form-control" ng-model="audiencia.consecutivoDecision">
+                        </div>
+                    </div>
+                    <div class="row">
+                            <div class="form-group col-md-4">
+                                    <label class="control-label" for="objeta">Infractor Objeta? </label>
+                                    <select class="form-control"
+                                            ng-model="audiencia.objeta"
+                                            autofocus>
+                                        <option value="">-- Seleccione --</option>
+                                        <option value="1">Si</option>
+                                        <option value="0">No</option>
+                                    </select>
+                                </div>
+                        <div class="form-group col-md-4">
+                            <label class="control-label" for="imponerMedida" >Decisión </label>
+                            <select class="form-control"
+                                    ng-model="audiencia.imponerMedida"
+                                    autofocus>
+                                <option value="">-- Seleccione --</option>
+                                <option value="1">Imponer</option>
+                                <option value="0">Exonerar</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4"  ng-if="audiencia.imponerMedida==1">
+                            <label class="control-label" for="decision" >Prohibición de ingreso a actividad en meses</label>
+                            <input type="number" min="6" max="36" class="form-control" ng-model="audiencia.prohibicion">
+                        </div>
+                        <div class="form-group col-md-4"  ng-if="audiencia.imponerMedida==1 && audiencia.objeta==1">
+                            <label class="control-label" for="decision" >Apela Medida? </label>
+                            <select class="form-control"
+                                    ng-model="audiencia.infractorApela"
+                                    autofocus>
+                                <option value="">-- Seleccione --</option>
+                                <option value="1">Si</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row" ng-if="audiencia.objeta==1 || audiencia.imponerMedida==0">
+                        <div class="form-group col-md-12">
+                            <label class="control-label" for="decision">Motivación Decisión</label>
+                                <textarea rows="4"
+                                        cols="30"
+                                        placeholder="Escriba el texto de la Decisión"
+                                        ng-model="audiencia.decision"
+                                        class="form-control">
+                            </textarea>
+                        </div>
+                    </div>
+                    <div class="row padding-sm text-right-sm">
+                        <input type="submit" class="btn btn-primary" ng-click="save()" value="Guardar" ng-if="!isSuccess"/>
+                        ó
+                    </div>
+                    <a ui-sref="listar-peticion">Cancelar</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

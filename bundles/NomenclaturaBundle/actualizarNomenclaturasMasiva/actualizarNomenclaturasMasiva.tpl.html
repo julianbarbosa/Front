@@ -1,0 +1,160 @@
+<div class="page-header">
+    <div class="row">
+        <!-- Page header, center on small screens -->
+        <h1 class="col-xs-12 col-sm-8 text-center text-left-sm">
+        	Proceso de carga masiva de nomenclatura
+        </h1>
+        <div class="col-xs-12 col-sm-8">
+            <div class="row">
+                <hr class="visible-xs no-grid-gutter-h">
+                <div class="visible-xs clearfix form-group-margin"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-9">
+	<!--Panel de Datos de Solicitud-->
+    <div class="panel panel-success" >
+        <div class="panel-heading ">
+            <span class="panel-title">Proceso de carga masiva de nomenclatura</span>
+            <div class="panel-heading-controls">
+                <i class="padding-sm-hr fa fa-plus" ng-click="mostrarFormularioCreacion()" ></i>
+            </div>
+        </div>
+        <form class="panel-body" name="formDatosSolicitud" ng-show="mostarPanelCargaMasiva" >
+            <div class="col-sm-9" >
+                <div class="form-group">
+                    <label class="control-label" >Nombre del proceso</label>
+                    <input class="form-control" type="text" ng-model="proceso.nombre">
+                </div>
+                <div class="form-group">
+                    <label class="control-label" >Descripción del proceso</label>
+                    <textarea class="form-control" ng-model="proceso.descripcion"></textarea>
+                </div>
+                <div class="form-group" ng-show="proceso.idProcesoCargaNomenclatura">
+                    <label class="control-label" >Nombre archivo</label>
+                    <input class="form-control" type="text" ng-model="proceso.rutaArchivo" disabled >
+                    <a href="{{dirDownloadFile+proceso.rutaArchivo}}">Descargar</a>
+                </div>
+
+                <div class="form-group">
+                     <label class="control-label" >Modificar Base de datos:</label>
+                     <select class="form-control" ng-model="proceso.persistir">
+                        <option value="1" ng-selected="proceso.persistir == 1"> Sí </option>
+                        <option value="0" ng-selected="proceso.persistir == 0"> No </option>
+                     </select>
+                </div>
+
+                <div ng-hide="proceso.idProcesoCargaNomenclatura">
+                    <div class="form-group" ng-show="files.length == 0">
+                        <label class="control-label" >Seleccione un archivo cargar</label>
+                        <input class="form-control" type="file" id="input_file" ng-model="archivo" name="uploadedfile" file-upload multiple >
+                        {{ $scope.progress }}
+                    </div>
+
+                    <div uib-alert ng-repeat="alert in alerts" ng-class="'alert-' + (alert.type || 'warning')" dismiss-on-timeout="4000" close="closeAlert($index)">{{alert.msg}}</div>
+
+                    <table class="table" ng-show="files.length > 0">
+                        <thead>
+                            <tr>
+                                <th>Acción</th>
+                                <th>Archivos</th>
+                                <th>Tamaño</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="item in files">
+                                <td><strong><i class="fa fa-trash-o" title="Eliminar" ng-click="eliminarArchivo($index)"></i></strong></td>
+                                <td><strong>{{ item.name}}</strong></td>
+                                <td><strong>{{ item.size/1024 | number:0 }} kb ({{item.type}})</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="col-sm-12">
+                    <button class="btn-link" ng-click="cancelar()" >Cancelar</button>
+                    ó 
+                    <button ng-hide="proceso.idProcesoCargaNomenclatura" class="btn btn-primary" ng-click="crearProceso()" >Crear proceso</button>
+                    <button ng-show="proceso.idProcesoCargaNomenclatura" class="btn btn-primary" ng-click="actualizarProceso()" >Guardar cambios</button>
+            </div>
+        </form>  
+
+        <!--INICIO TABLA-->
+        <div class="panel">
+            <div class="panel-body">
+                <div class="table-primary">
+                    <table cellpadding="0" cellspacing="0" border="0" class="table-hover table table-bordered dataTable" id="listaSolicitudes" width="100%" role="grid" aria-describedby="listaSolicitudes_info">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th ng-repeat="header in headers track by $index" class="ui-state-default" style="width: {{header.width}}">
+                                    <input type="text" ng-keypress="buscar($event.keyCode)" ng-model="headers[$index].value" class="form-control input-sm" placeholder="{{header.title}}" style="width: 100%;"  ng-if="header.input !== false && !header.options" >
+                                    <select ng-keypress="buscar($event.keyCode)" ng-model="headers[$index].value" class="form-control input-sm" ng-options="option.value as option.name for option in header.options" ng-if="header.input !== false && header.options">
+                                        <option value=""></option>
+                                    </select>
+                                </th>
+                            </tr>
+                            <tr role="row">
+                                <th>#</th>
+                                <th ng-repeat="header in headers" class="ui-state-default {{header.sorting}} {{header.header_align}}" style="width: {{header.width}}" ng-click="ordenarPor(headers[$index].name)">
+                                    {{header.title}}
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr  class="odd" style="font-weight: bold;" ng-repeat="row in data" ng-class="{'danger': row[rowWarning] === false}">
+
+                                <td>{{(currentPage - 1)*numPerPage+1+$index}}</td>
+
+                                <td ng-repeat="header in headers" class="{{header.body_align}}">
+                                    <!--Acciones-->
+                                    <span ng-if="header.values" >
+                                        <span ng-if="value['link']" ng-repeat="value in header.values" ng-bind-html="'<a target=\''+value['target']+'\' href=\''+value['link']+row['idProcesoCargaNomenclatura']+'\' >'+value['icon']+' </a>'"></span>
+                                        <span ng-if="value['click']" ng-repeat="value in header.values" >
+                                            <button class="btn-link" ng-bind-html="value['icon']" ng-click="test(value, row)" ></button>
+                                        </span>
+                                    </span><span ng-if="header.options" >
+                                        <span ng-if="value['link'] && row[value['nameValidate']]==value['value']" ng-repeat="value in header.options" ng-bind-html="'<a target=\''+value['target']+'\' href=\''+value['link']+row['idsolicitud']+'\' >'+value['icon']+' </a>'"></span>
+                                        <span ng-if="value['click']&& row[value['nameValidate']]==value['value']" ng-repeat="value in header.options" >
+                                            <button class="btn-link" ng-bind-html="value['icon']" ng-click="test(value, row)" ></button>
+                                        </span>
+                                    </span>
+                                    <!-- Valor de Text-->
+                                    <span ng-if="header.type === 'text'">
+                                        {{ row[header.name] }} {{row[header.name2]}}
+                                    </span>
+                                    <!-- Valor de Link-->
+                                    <span ng-if="header.type === 'link'">
+                                        <a href="{{header.link}}{{row[header.name]}}" target="_blank">{{row[header.name]}}</a>
+                                    </span>
+                                    <!-- Valor de Objeto Fecha-->
+                                    <span ng-if="header.type === 'date'">
+                                        {{row[header.name].timestamp * 1000 | date:'yyyy-MM-dd HH:mm:ss'}}
+                                    </span>
+                                    <!-- Valor de Objeto Fecha-->
+                                    <span ng-if="header.type === 'map'">
+                                        {{ header.hash[row[header.name]]}}
+                                    </span>
+                                    
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                        <td colspan="10" class="currency">
+                            <uib-pagination ng-model="currentPage" items-per-page="numPerPage" total-items="totalItems" max-size="5" boundary-links="true" ng-click="actualizarDatos()" first-text="Primero" previous-text="Anterior" next-text="Siguiente" last-text="Último"></uib-pagination>
+                        </td>
+                        </tfoot>
+                    </table>
+                    <div>
+                        <input placeholder="Registros por Página" type="number" ng-model="numPerPageTemp" ng-keypress="cambiarNumeroPorPagina($event.keyCode)">
+                        <span ng-show="data.length>0" >Página {{ currentPage }} / Mostrando del {{ (currentPage - 1)*numPerPage+1}} al {{ (currentPage - 1)*numPerPage+data.length }} de {{totalItems}} en total</span><span ng-hide="data.length>0" >No hay resultados para mostrar</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--FIN TABLA-->
+    </div>
+</div>
+

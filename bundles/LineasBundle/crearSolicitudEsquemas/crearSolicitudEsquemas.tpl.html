@@ -1,0 +1,226 @@
+<script>
+    function cerrarModal() {
+        $('#modalIngresoDireccion').modal('toggle');
+    }
+</script>
+<style>
+    .form-group.required .control-label:after {
+        content:"*";
+        color:red;
+    }
+</style>
+<div>
+    <div id="modalIngresoDireccion" class="modal fade modal-change" role="dialog" aria-hidden="true" ></div>
+
+    <div class="col-md-12 col-lg-10 ">
+        <div ng-show="validator.alert.content">
+            <div class="alert {{validator.alert.type}} alert-dismissable">
+                <i class="fa fa-danger"></i>
+                <button type="button" class="close" aria-hidden="true" ng-click="hideAlert()">×</button>
+                <b>{{validator.alert.title}}</b> <span ng-bind-html="validator.alert.content"></span>
+            </div>
+        </div>
+        <div class="panel panel-success">
+            <div class="panel-heading ">
+                <span class="panel-title">Solicitud de Esquemas Básicos</span>
+                <div class="panel-heading-controls">
+                </div>
+            </div>
+            <div class="panel-body">
+                <form name="form">
+                   <H5><b><span class="control-label">I - DATOS DEL SOLICITANTE</span></b></H5>
+                    <div class="row">
+
+                        <div class="form-group required col-md-3"  ng-class="{'has-error': form.identificacion.$touched && form.identificacion.$invalid}">
+                            <label class="control-label" for="numidentificacion">
+                                Identificación:
+                                <i ng-show="loadingTercero" class="fa fa-spinner fa-spin"></i>
+                            </label>
+                            <div class="input-group col-md-12">
+                                 <input type="text"
+                                       name="identificacion"
+                                       class="form-control input-xlarge"
+                                       ng-class="{'has-error': validator.usuario}"
+                                       ng-model="peticion.usuario.numidentificacion"
+                                       placeholder="Ingrese su identificación"
+                                       tooltip="{{validator.usuario}}"
+                                       autocomplete="off"
+                                       required
+                                       autofocus/>                                
+                                <a ng-href="" class="input-group-addon" ng-click="getUsuarios(peticion.usuario.numidentificacion)"><i class="fa fa-search fa-2" title="Buscar"></i></a>
+                            </div>
+                            <p class="help-block" ng-if="form.identificacion.$touched && form.identificacion.$invalid">La identificación es obligatoria</p>
+                        </div>
+                        <div class="form-group col-md-2"  ng-class="{'has-error': form.idtipodocidentificacion.$touched && form.idtipodocidentificacion.$invalid }">
+                            <label>Tipo de Documento</label>
+                            <select name="idtipodocidentificacion"
+                                    class="form-control"
+                                    ng-model="peticion.usuario.idtipodocidentificacion"
+                                    ng-init="peticion.usuario.idtipodocidentificacion == 1"
+                                    ng-options="tipoIdentificacion.id as tipoIdentificacion.name for tipoIdentificacion in tiposIdentificacion"
+                                    required>
+                                <option value="">-- Seleccione --</option>
+                            </select>
+                            <p class="help-block" ng-if="form.idtipodocidentificacion.$touched && form.idtipodocidentificacion.$invalid">Seleccione tipo de identificación.</p>
+                        </div>
+                        <div class="form-group required col-md-3" ng-class="{'has-error': form.nombre.$touched && form.nombre.$invalid}">
+                            <label for="nombre" class="control-label">Nombre</label>
+                            <input type="text"
+                                   name="nombre"
+                                   class="form-control"
+                                   ng-model="peticion.usuario.firstName"
+                                   placeholder="Ingrese el nombre"
+                                   autocomplete="off"
+                                   required/>
+                            <p class="help-block" ng-if="form.nombre.$touched && form.nombre.$invalid">El nombre es obligatorio</p>
+                        </div>
+                        <div class="form-group required col-md-4" ng-class="{'has-error': form.apellido.$touched && form.apellido.$invalid}" >
+                            <label for="apellido" class="control-label">Apellido</label>
+                            <input type="text"
+                                   name="apellido"
+                                   class="form-control"
+                                   ng-model="peticion.usuario.lastName"
+                                   placeholder="Ingrese el apellido"
+                                   autocomplete="off"
+                                   required/>
+                            <p class="help-block" ng-if="form.apellido.$touched && form.apellido.$invalid">El apellido es obligorio</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group has-feedback simple col-md-4" ng-class="{'has-error': validator.email}">
+                            <label>Correo electrónico</label>
+                            <input
+                                type="text"
+                                class="form-control"
+                                autocomplete="off"
+                                ng-model="peticion.usuario.emailAddress"  placeholder="Ingrese el correo electrónico (Opcional)"/>
+                            <p class="help-block">{{validator.emailAddress}}</p>
+                        </div>
+                        <div class="form-group has-feedback simple col-md-4" ng-class="{'has-error': validator.telefono}">
+                            <label>Teléfono</label>
+                            <input type="text"
+                                   class="form-control"
+                                   autocomplete="off"
+                                   ng-model="peticion.usuario.telefono"
+                                   ng-class="{'has-error': validator.telefono}"
+                                   placeholder="Ingrese el teléfono"/>
+                            <p class="help-block">{{validator.telefono}}</p>
+                        </div>
+                        <div class="form-group has-feedback simple col-md-4" ng-class="{'has-error': validator.email_confirm}">
+                            <label>Dirección</label>
+                            <input type="text"
+                                   class="form-control"
+                                   autocomplete="off"
+                                   ng-model="peticion.usuario.direccion"
+                                   placeholder="Ingrese la dirección." />
+                            <p class="help-block">{{validator.direccion}}</p>
+                        </div>
+                    </div>
+                    <div class="row padding-sm" id="zona">
+                        <H5><b><span class="control-label">I - DATOS DEL PREDIO</span></b></H5>
+                        <div class="form-group has-feedback simple" ng-class="{'has-error': validator.zona }">
+                            <p class="help-block">{{validator.tipo_busqueda}}</p>
+                            <div class="col-md-3">
+                                <label class="control-label" for="tipo_busqueda">Seleccione la Zona del Predio:  </label>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="radio-inline"><input type="radio" value="1" ng-model="peticion.zona_predio">Urbana</label>
+
+                                <div class="col-md-4">
+                                    <label class="radio-inline"><input type="radio" value="2" ng-model="peticion.zona_predio">Rural</label>
+                                </div>
+                                <p class="help-block">{{validator.tipo_busqueda}}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group required has-feedback col-md-5"                             
+                                 ng-class="{'has-error': validator.predio}">
+                                <label class="control-label" for="informacion_adicional">Localización del Predio: </label>
+                                <input type="text"
+                                       id="BusquedaInformacionAdicional"
+                                       name="informacion_adicional"
+                                       ng-model="peticion.direccion"
+                                       class="form-control input-xlarge"
+                                       placeholder="Ingrese la localización del Predio"/>
+                            </div>
+                            <div class="form-group required has-feedback col-md-5"
+                                 ng-class="{'has-error': form.NPN.$touched && form.NPN.$invalid}">
+                                <label class="control-label" for="codigo_unico">Número Predial Nacional: <i ng-show="loadingNomenclatura" class="fa fa-spinner fa-spin"></i></label>
+                                <div class="input-group col-md-12">
+                                    <input type="text"
+                                           id="NPN"
+                                           name="NPN"
+                                           class="form-control input-xlarge col-md-12"
+                                           ng-model="peticion.codigo_unico"
+                                           ng-maxlength="maxlengthcodigounico"
+                                           maxlength="{{maxlengthcodigounico}}"
+                                           data-toggle="tooltip"
+                                           title="El numero codigo único contiene 30 caracteres."
+                                           autocomplete="off"
+                                           ui-mask="760010099999999999999999999999"
+                                           ui-mask-placeholder
+                                           ui-mask-placeholder-char="_"
+                                           ui-mask-use-viewvalue="true"
+                                           required/>
+                                </div>
+                                <p class="help-block" ng-if="form.NPN.$touched && form.NPN.$invalid">
+                                    Ingrese el Número Predial Nacional.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-4" ng-class="{'has-error': form.numero_predial.$touched && form.numero_predial.$invalid}">
+                                <label class="control-label" for="numero_predial">Número Predial</label>
+                                <input type="text"
+                                       name="numero_predial"
+                                       class="form-control input-xlarge"
+                                       ng-model="peticion.numero_predial"
+                                       ui-mask="Z999*99999999"
+                                       ui-mask-placeholder
+                                       ui-mask-placeholder-char="_"
+                                       ui-mask-use-viewvalue="true"
+                                       ui-options="options"
+                                       uppercase-only
+                                       required/>
+                                <p class="help-block"
+                                   ng-if="form.numero_predial.$touched && form.numero_predial.$invalid">
+                                    Ingrese el número predial.
+                                </p>
+                            </div>
+                            <div class="form-group required col-md-4"
+                                 ng-class="{'has-error': form.areaLote.$touched && form.areaLote.$invalid}">
+                                <label class="control-label" for="areaLote">Área del Lote</label>
+                                <input type="number"
+                                       id="areaLote"
+                                       name="areaLote"
+                                       class="form-control input-xlarge"
+                                       ng-model="peticion.areaLote"
+                                       bs-typeahead placeholder="Ingrese área en metros cuadrados"             autocomplete="off"
+                                       required/>
+                                <p class="help-block"
+                                   ng-if="form.areaLote.$touched && form.areaLote.$invalid">
+                                    El área del lote es obligatorio.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input-file label="Levantamiento Topográfico" description="Levantamiento Topográfico en formato dwg." model="levantamiento" accept="zip" max="20000" required="true"></input-file>
+                        </div>
+                        <div class="note note-warning">
+                            <strong>Nota:</strong> Los campos marcados con un <span class="text-danger">*</span> son obligatorios.
+                        </div>
+                        <div class="row padding-sm text-right-sm">
+                            <input type="submit"
+                                   class="btn btn-primary"
+                                   ng-click="save()"
+                                   ng-if="saveButton"
+                                   ng-disabled="form.$invalid"
+                                   value="Crear Petición" />
+                            ó
+                            <a ui-sref="listar-peticion">Cancelar</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>

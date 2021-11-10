@@ -1,0 +1,87 @@
+<div ng-controller="ControlPolicivoBundleSolicitarPedagogiaCtrl">    
+    <div ng-show="validator.alert.content">
+        <div class="alert alert-{{validator.alert.type}} alert-dismissable">
+            <i class="fa fa-danger"></i>
+            <button type="button" class="close" aria-hidden="true" ng-click="hideAlert()">×</button>
+            <b>{{validator.alert.title}}</b> <span ng-bind-html="validator.alert.content"></span>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="panel panel-success">
+            <div class="panel-heading ">
+                <span class="panel-title">Proceso Manual</span>
+                <div class="panel-heading-controls">
+                </div>
+            </div>
+            <div class="panel-body">
+                <form name="userForm">
+                    <div class="row">
+                        Ingrese un criterio de búsqueda en el SIG. <strong>Esta funcionalidad está en construcción.</strong><br><br>
+                    </div>
+                    <div class="row">                                   
+                        <div class="form-group col-md-6">
+                            <label class="control-label" for="direccion">Dirección: </label>
+                            <input type="text"
+                                   id="direccion"
+                                   name="clave"
+                                   ng-model="data.direccion"
+                                   class="form-control input-xlarge"
+                                   autocomplete="off"
+                                   placeholder="Ingrese la dirección."/>
+                        </div>                        
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label class="control-label" for="ciudadano">Ciudadano: </label>
+                            <input type="text"
+                                   id="ciudadano"
+                                   name="ciudadano"
+                                   ng-model="data.ciudadano"
+                                   class="form-control input-xlarge"
+                                   autocomplete="off"
+                                   placeholder="Ingrese nombre o identificación del ciudadano."/>
+                        </div>                                          
+                        <div class="form-group col-md-6">
+                            <label class="control-label" for="ciudadano">Comision: </label>
+                            <input type="text"
+                                   id="radicado"
+                                   name="radicado"
+                                   ng-model="data.comision"
+                                   class="form-control input-xlarge"
+                                   autocomplete="off"
+                                   placeholder="Ingrese numero de comision."/>
+                        </div>                        
+                    </div>
+                    <div class="row padding-sm text-right-sm">
+                        <input type="submit" class="btn btn-primary" ng-click="save()" value="Consultar"/>                        
+                        ó
+                        <a ui-sref="listar-peticion">Cancelar</a>
+                    </div>
+                </form>
+                <div class="panel panel-success" ng-repeat="item in result">   
+                    <strong>Comisión:</strong>
+                    <span ng-if="item.comision">                   
+                        {{item.comision}}-{{item.anio_comision}}<br>
+                    </span>
+                    <span ng-if="!item.comision">                   
+                        No tiene comisión<br>
+                    </span>
+                    <strong>Tipo Solicitud:</strong> {{item.tiposolicitud}}<br>
+                    <strong>Razón Social:</strong> {{item.RazonSocial}}<br>
+                    <strong>RegRadicacion:</strong> {{item.RegRadicacion}}<br>
+                    <strong>Dirección:</strong> {{item.Direccion}}<br>
+                    <strong>Estado:</strong> {{item.Estado}}<br>
+                    <strong>Comuna:</strong> {{item.Comuna}}<br>
+                    <strong>Barrio:</strong> {{item.Barrio}}<br>
+                    <strong>Queja:</strong> {{item.DescripQueja}}<br> 
+                    <strong>Abogado:</strong> {{item.nombreAbogado}}<br><br>
+                    <strong>INFORMACIÓN VISITA</strong><br>
+                    <strong>IdVisita</strong> {{item.IdVisita}}<br>
+                    <strong>Observaciones:</strong> {{item.ObservaVisita}}<br>
+                    <strong>Fecha Visita:</strong>{{item.FechaVisita}}<br>
+                    <strong>Infracción:</strong>{{item.nombreInfraccion}}<br>                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

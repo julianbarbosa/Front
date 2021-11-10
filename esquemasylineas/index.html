@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Perfiles Viales </title>
+    
+    <link rel="stylesheet" href="https://saul.cali.gov.co/saul/bower_components/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="https://saul.cali.gov.co/saul/bower_components/font-awesome/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="https://saul.cali.gov.co/saul/css/main.css" />
+    <link rel="stylesheet" href="https://saul.cali.gov.co/saul/css/perfilvial.css" />
+    <link rel="stylesheet" href="https://js.arcgis.com/4.11/esri/css/main.css">
+    
+    <script src="https://js.arcgis.com/4.11/"></script>
+    <script type="text/javascript" src="https://saul.cali.gov.co/saul/bower_components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="https://saul.cali.gov.co/saul/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://saul.cali.gov.co/saul/js/perfilvial.js"></script>		
+</head>
+<body>
+    <div id="main-navbar" class="navbar navbar-white" role="navigation">
+        <div class="navbar-inner">
+            <div class="navbar-header">
+                <div tabindex="-1" class="navbar-brand">
+                    <div style="display:inline-block">
+                        <a href="http://saul.cali.gov.co/"><div class="logo-saul" alt="SAUL - Sistema automatizado en Línea"></div></a>
+                    </div>
+                    <div style="display:inline-block">
+                        <a href="http://www.cali.gov.co"><div class="logo-gobierno"></div></a>
+                    </div>                        
+                    <div style="display:inline-block">
+                        <a href="http://www.cali.gov.co"><div class="logo-alcaldia"></div></a>
+                    </div>
+                    <div style="display:inline-block">
+                        <h3>Esquema Básico y líneas demarcación</h3>
+                    </div>
+                </div>
+            </div>                     
+        </div>
+    </div> 
+<span id="btns" class="floating btns-normal">
+<div class="row" id="info_text">
+    <div class="col-sm-12 text-center">
+        <p align="justify">El siguiente servicio le permite a la ciudadanía, organismos y demás entidades que interactúan con la Administración Municipal, buscar o ubicar, a través de un mapa la localización de un predio determinado si le corresponde tramitar Esquema Básico o Línea de Demarcación como requisito para solicitudes de Licencias urbanísticas.</p>
+    </div>
+</div>
+<div class="row" id="botones">
+    <div id="botones_container" class="col-sm-12 text-center">
+        <div id="div_btn_center" class="wrapper-btn">
+            <button type="button" id="btn_center" class="btn btn-info btn-circle btn-lg btn-normal">
+                <i class="fa fa-map-marker"></i>
+            </button><br>
+            <span>Mapa</span>
+        </div>				
+        <div id="wrapper_esconder" class="wrapper-btn">
+            <button type="button" id="btn_esconder" class="">
+                <i class="fa fa-angle-right"></i>
+            </button>
+        </div>
+    </div>
+</div>
+</span>
+<div id="viewDiv">
+<script>
+    $(document).ready(function () {			
+        var overlap_espera = $(".overlap_espera");
+        var $div_btn_center = $(div_btn_center);
+        var $div_btn_left;
+        var $div_btn_right;
+        var $btn_right;
+        var $btn_center = $(btn_center);
+        var $btn_esconder = $(btn_esconder);
+        var $wrapper_esconder = $(wrapper_esconder);
+        var $btn_left;
+        var $btns = $(btns);
+        var $window = $(window);
+        var $info_text = $(info_text);
+
+        var clicked = false;
+        
+        var opened = false;
+
+        var fnResize = function () {
+            $btns.css('bottom', Math.round(($window.height() - $btns.height()) / 2));
+        };
+
+        //Mostramos la cortina de fondo transparente
+        overlap_espera.fadeIn(10000, 'linear');
+
+        $window.resize(function () {
+            if (clicked) {
+                return;
+            }
+            fnResize();
+        });
+
+        //Animación para el botón de búsqueda, el cual va a desaparecer
+         
+        $btn_center.on('click', function () {						
+            clicked = true;
+            //Animación con la que desaparece el botón
+            $div_btn_center.fadeOut(1000, 'linear');
+
+            //Desaparece el texto
+            $info_text.fadeOut(1000, 'linear', function () {
+                
+                //Los botones 
+                overlap_espera.hide('slow');
+                
+                $btns.animate({
+                    left: '-308px',
+                    width: '248px',
+                    'margin-left': '90px',
+                    top: '190px',
+                    height: '90px'
+                            //left: '38%', width: '80%', height: '80%'
+                            //bottom: '1040px', left: '550px', width: '180px', height: '70px'
+                }, 500, function(){
+                    $wrapper_esconder.show();
+                });
+            });
+        });
+        $('#botones').show();
+        $(this).show();
+
+        $btn_esconder.on('click', function () {
+            
+            if(!opened){
+            $btns.animate({
+                left: '-120px'
+            }, 500, function(){
+                $btn_esconder.html('<i class="fa fa-angle-left"></i>');
+            });
+            
+            }else{
+            $btns.animate({
+                left: '-308px'
+            }, 500, function(){
+                $btn_esconder.html('<i class="fa fa-angle-right"></i>');
+            });
+            }
+            opened = !opened;
+        });
+
+        fnResize();
+    });
+</script>
+</div>
+<div class="overlap_espera"> </div>
+</body>
+
+</html>

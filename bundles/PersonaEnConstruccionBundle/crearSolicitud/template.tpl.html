@@ -1,0 +1,578 @@
+<style>
+ 
+    .icon-text {
+        position: relative !important;
+        margin-left: 0px !important;
+        margin-top: 0px !important;
+        top: 0px !important;
+        display: inline-block;
+        background-color: transparent;
+    }
+</style>
+<div id="modalIngresoDireccion" class="modal fade modal-change" role="dialog" aria-hidden="true" ></div>    
+<div class="panel">    
+    <div class="panel-body col-md-12 col-lg-10">
+        <div class="page-header">
+            <h1 class="col-xs-12 col-sm-10 text-center text-left-sm">Registro de 
+                <strong class="subtitulo">Personas dedicadas a la actividad de construcción y/o enjenación de inmuebles destinados a vivienda
+                </strong>
+                <br>
+                <small>Este trámite permite que los Ciudadanos... <a href="https://www.cali.gov.co/tramites/148/registro-de-actividades-relacionadas-con-la-enajenacion-de-inmuebles-destinados-a-vivienda/" target="_blank">Ver más</a>
+                </small>
+            </h1>
+        </div>
+        <div class="note note-info" ng-show="responseSolicitud.success == true">
+            <p><strong>Almacenamiento Exitoso</strong></p>
+            <p><strong>Solicitud No:</strong> {{responseSolicitud.data.idsolicitud}}</p>
+            <p><strong>Estado:</strong>{{responseSolicitud.data.estado.nombre}}: {{responseSolicitud.data.estado.descripcion}}</p>
+            <p ng-show="responseSolicitud.data.estado.codigo=='pendiente'"><strong>Radicado</strong> {{responseSolicitud.data.radicado}}</p><br>
+            <p>
+                <a href="{{root}}solicitud/{{responseSolicitud.data.idsolicitud}}/visualizardoc/{{responseSolicitud.documentoRadicado.idDocumento}}/{{responseSolicitud.documentoRadicado.idSolicitudXDocumento}}" target="_blank">Previsualizar</a>
+            </p>
+            <p ng-show="responseSolicitud.data.estado.codigo=='pendiente'">
+                <a href="https://www.cali.gov.co/aplicaciones/orweb/orweb/principal.php?id={{responseSolicitud.data.radicado}}" target="_blank">Ver Radicado</a>
+            </p>
+        </div>
+        <div class="page-body" ng-show="respuesta.success == false">
+        <div class="wizard-wrapper  no-padding col-sm-12" style="width: 100% !important" >
+            <ul class="wizard-steps col-sm-12">
+                <li data-target="#wizard-account" class="col-md-3" ng-class="{'active': step === 1,'completed':step > 1 }" >
+                    <span class="wizard-step-number">1</span>
+                    <span class="wizard-step-caption">
+                        Solicitante
+                        <span class="wizard-step-description">Datos personales del solicitante</span>
+                    </span>
+                </li>
+                <li data-target="#wizard-account" class="col-md-3" ng-class="{'active': step === 2,'completed':step > 2 }">
+                    <span class="wizard-step-number">2</span>
+                    <span class="wizard-step-caption">
+                        Financiera
+                        <span class="wizard-step-description">Información Jurídica y Financiera</span>
+                    </span>
+                </li>
+                <li data-target="#wizard-profile" class="col-md-3"  ng-class="{'active': step === 3,'completed':step > 3 }" >
+                    <span class="wizard-step-number">3</span>
+                    <span class="wizard-step-caption">
+                        Adjuntos
+                        <span class="wizard-step-description">Documentación Requerida</span>
+                    </span>
+                </li>
+                <li data-target="#wizard-credit-card" class="col-md-3"  ng-class="{'active': step === 4,'completed':step > 3 }" >
+                    <span class="wizard-step-number">4</span>
+                    <span class="wizard-step-caption">
+                        Finalizar
+                        <span class="wizard-step-description">Radicar solicitud.</span>
+                    </span>
+                </li>
+            </ul> <!-- / .wizard-steps -->
+        </div>
+           
+        
+        <div class="col-sm-12" style="margin-top:20px;">
+            <div ng-init="step=1" ng-show="step == 1">
+                <form class="panel-body" name="formDatosSolicitante" id="formDatosSolicitante">
+                    <div class="note">
+                        Por favor ingrese los datos personales del solictante. 
+                    </div>
+                    <div class="row" ng-show="esFuncionario">
+                        <div class="col-md-6">
+                            <div class="form-group {{ !formDatosSolicitante.idtipodocidentificac.$valid && formDatosSolicitante.idtipodocidentificac.$touched ? 'has-error' : '' }}">
+                                <label class="control-label" >Tipo de identificación</label>
+                                <select class="form-control" ng-model="solicitud.solicitante.idtipodocidentificacion" ng-options="tipoIdentificacion.idTipoDocIdentificacion as tipoIdentificacion.nombre for tipoIdentificacion in arrayTipoIdentificacion" ng-disabled="seBuscoSolicitante" required>
+                                    <option value="">-- Seleccione --</option>
+                                </select>
+                                <span  class="help-block" ng-show="!formDatosSolicitante.idtipodocidentificac.$valid && formDatosSolicitante.idtipodocidentificac.$touched" >
+                                    Este campo es obligatorio.
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group {{ !formDatosSolicitante.identificacion.$valid && formDatosSolicitante.identificacion.$touched ? 'has-error' : '' }}">
+                                <label class="control-label" >Número de Identificación (NIT o CC)</label>
+                                <div class="input-group col-md-12">
+                                    <input required placeholder="Ingrese el número de identificación" class="form-control" type="text" ng-model="solicitud.solicitante.numidentificacion"  name="identificacion" ng-disabled="seBuscoSolicitante" autocomplete="off"/>
+                                    <a ng-href="" class="input-group-addon" ng-click="validarIdentificacionSolicitante(solicitud.solicitante.idtipodocidentificacion, solicitud.solicitante.numidentificacion)"><i class="fa fa-search fa-2" title="Buscar"></i></a>	
+                                </div>
+                                <span  class="help-block" ng-show="!formDatosSolicitante.identificacion.$valid && formDatosSolicitante.identificacion.$touched" >
+                                    Este campo es obligatorio.
+                                </span>
+                            </div>
+                        </div>
+                        
+                    </div>	
+                    <div class="row" ng-show="!esFuncionario">
+                        <div class="col-md-6">
+                            <div class="form-group {{ !formDatosSolicitante.idtipodocidentificac.$valid && formDatosSolicitante.idtipodocidentificac.$touched ? 'has-error' : '' }}">
+                                <label class="control-label" >Tipo de identificación</label>
+                                <select class="form-control" ng-model="solicitud.solicitante.idtipodocidentificacion" ng-options="tipoIdentificacion.idTipoDocIdentificacion as tipoIdentificacion.nombre for tipoIdentificacion in arrayTipoIdentificacion" required disabled>
+                                    <option value="">-- Seleccione --</option>
+                                </select>
+                                <span  class="help-block" ng-show="!formDatosSolicitante.idtipodocidentificac.$valid && formDatosSolicitante.idtipodocidentificac.$touched" >
+                                    Este campo es obligatorio.
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group {{ !formDatosSolicitante.numidentificacion.$valid && formDatosSolicitante.numidentificacion.$touched ? 'has-error' : '' }}">
+                                <label class="control-label" >Número de Identificación (NIT o CC)</label>
+                                <input required placeholder="Ingrese el número de identificación" class="form-control" type="text" ng-model="solicitud.solicitante.numidentificacion" name="numidentificacion" disabled/>	
+                                <span  class="help-block" ng-show="!formDatosSolicitante.numidentificacion.$valid && formDatosSolicitante.numidentificacion.$touched" >
+                                    Este campo es obligatorio.
+                                </span>
+                            </div>
+                        </div>
+                        
+                    </div>	
+                    <div ng-show="(seBuscoSolicitante && esFuncionario) || !esFuncionario">
+                        <div class="row" ng-show="solicitud.solicitante.idtipodocidentificacion == 2">
+                            <div class="col-md-12">
+                                <div class="form-group {{ !formDatosSolicitante.razonSocial.$valid && formDatosSolicitante.razonSocial.$touched ? 'has-error' : '' }}">
+                                    <label class="control-label" >Razón Social</label>
+                                    <input name="razonSocial" type="text" class="form-control" placeholder="Razón Social" ng-model="solicitud.solicitante.razonSocial" ng-required="solicitud.solicitante.idtipodocidentificacion == 2" ng-minlength="4" />
+                                    <span  class="help-block" ng-show="!formDatosSolicitante.razonSocial.$valid && formDatosSolicitante.razonSocial.$touched" >
+                                        Este campo es obligatorio y su longitud mínima es de 4.
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row" ng-show="solicitud.solicitante.idtipodocidentificacion !== 2">
+                            <div class="col-md-6">
+                                <div class="form-group {{ !formDatosSolicitante.firstName.$valid && formDatosSolicitante.firstName.$touched ? 'has-error' : '' }}">
+                                    <label class="control-label" >Nombre</label>
+                                    <input name="nombre" type="text" class="form-control" placeholder="Nombre del usuario"   ng-model="solicitud.solicitante.firstName" ng-minlength="4"/>
+                                    <span  class="help-block" ng-show="!formDatosSolicitante.firstName.$valid && formDatosSolicitante.firstName.$touched" ng-required="solicitud.solicitante.idtipodocidentificacion !== 2">
+                                        Este campo es obligatorio y su longitud mínima es de 4. 
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group {{ !formDatosSolicitante.lastName.$valid && formDatosSolicitante.lastName.$touched ? 'has-error' : '' }}">
+                                    <label class="control-label" >Apellido</label>
+                                    <input type="text" name="apellido" class="form-control" placeholder="Apellido del usuario"   ng-model="solicitud.solicitante.lastName" ng-minlength="4" ng-required="solicitud.solicitante.idtipodocidentificacion !== 2"/>
+                                    <span  class="help-block" ng-show="!formDatosSolicitante.lastName.$valid && formDatosSolicitante.lastName.$touched"  >
+                                        Este campo es obligatorio y su longitud mínima es de 4.
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row"  ng-show="esFuncionario">
+                            <div class="col-md-6">
+                                <div class="form-group {{ !formDatosSolicitante.emailAddress.$valid && formDatosSolicitante.emailAddress.$touched ? 'has-error' : '' }}">
+                                    <label class="control-label" >Email</label>
+                                    <input required placeholder="Email del usuario (Opcional)" class="form-control" type="email" ng-model="solicitud.solicitante.emailAddress" name="emailAddress" ng-minlength="4"  ng-disabled="seEncontroSolicitante"/>
+                                    <span  class="help-block" ng-show="!formDatosSolicitante.emailAddress.$valid && formDatosSolicitante.emailAddress.$touched" >
+                                        Este campo es obligatorio, su longitud mínima es de 4 y debe ser un mail válido.
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group {{ !formDatosSolicitante.direccion.$valid && formDatosSolicitante.direccion.$touched ? 'has-error' : '' }}">							
+                                    <label class="control-label" >Dirección</label>	
+                                    <input required placeholder="Dirección de la residencia" class="form-control" type="text" ng-click="obtenerModalIngresoDireccion()" readonly="readonly" ng-model="solicitud.solicitante.direccion" name="direccion" minlength="6"/>								
+                                    <span  class="help-block" ng-show="!formDatosSolicitante.direccion.$valid && formDatosSolicitante.direccion.$touched" >		
+                                        Este campo es obligatorio y su longitud mínima es de 6.								
+                                    </span>
+                                </div>						
+                            </div>	
+                        </div>			
+                        <div class="row" ng-if="!esFuncionario && actualizarDireccion==1">
+                            <div class="col-md-3">
+                                <div class="form-group {{ !formDatosSolicitante.direccion.$valid && formDatosSolicitante.direccion.$touched ? 'has-error' : '' }}">			
+                                    <label class="control-label" >Dirección</label>	
+                                    <select class="form-control col-md-3" ng-model="solicitud.solicitante.direccion_via" ng-options="tipoVia.estandar as tipoVia.estandar for tipoVia in arrayTipoVia" ng-change="solicitud.solicitante.direccion = establecerDireccion(solicitud.solicitante.direccion_via,solicitud.solicitante.direccion_numero,solicitud.solicitante.direccion_placa,solicitud.solicitante.direccion_complemento)"></select>
+                                    <span  class="help-block" ng-show="!formDatosSolicitante.direccion.$valid && formDatosSolicitante.direccion_complemento.$touched" >		
+                                        Este campo es obligatorio.								
+                                    </span>
+                                </div>						
+                            </div>
+                            <div class="col-md-5">
+                                <div class="form-group {{ !formDatosSolicitante.direccion.$valid && formDatosSolicitante.direccion.$touched ? 'has-error' : '' }}">			
+                                    <label class="control-label" >&nbsp;</label>
+                                    <div class="input-group col-md-12">
+                                        <input ng-required="direccionRequerida" placeholder="Número" class="form-control col-md-3" type="text" 
+                                        ng-model="solicitud.solicitante.direccion_numero" name="direccion_numero" ng-change="solicitud.solicitante.direccion = establecerDireccion(solicitud.solicitante.direccion_via,solicitud.solicitante.direccion_numero,solicitud.solicitante.direccion_placa,solicitud.solicitante.direccion_complemento)"/>
+                                        
+                                        <a class="input-group-addon">#</a>
+    		
+                                        <input  ng-required="direccionRequerida" placeholder="Placa" class="form-control col-md-6" type="text" ng-model="solicitud.solicitante.direccion_placa" name="direccion_placa" ng-change="solicitud.solicitante.direccion = establecerDireccion(solicitud.solicitante.direccion_via,solicitud.solicitante.direccion_numero,solicitud.solicitante.direccion_placa,solicitud.solicitante.direccion_complemento)"/>
+                                        
+                                    </div>
+                                    <span  class="help-block" ng-show="!formDatosSolicitante.direccion.$valid && formDatosSolicitante.direccion_complemento.$touched" >		
+                                        Este campo es obligatorio.						
+                                    </span>
+                                </div>						
+                            </div>
+                     
+                        	
+                            <div class="col-md-4">
+                                <div class="form-group {{ !formDatosSolicitante.direccion.$valid && formDatosSolicitante.direccion.$touched ? 'has-error' : '' }}">			
+                                    <label class="control-label" >&nbsp;</label>
+                                    <input placeholder="Complemento" class="form-control col-md-6" type="text" ng-model="solicitud.solicitante.direccion_complemento" name="direccion_complemento" ng-change="solicitud.solicitante.direccion = establecerDireccion(solicitud.solicitante.direccion_via,solicitud.solicitante.direccion_numero,solicitud.solicitante.direccion_placa,solicitud.solicitante.direccion_complemento)"/>
+                                    <span  class="help-block" ng-show="!formDatosSolicitante.direccion.$valid && formDatosSolicitante.direccion_complemento.$touched" >		
+                                        Este campo es obligatorio y su longitud mínima es de 6.								
+                                    </span>
+                                </div>						
+                            </div>	
+                        </div>
+                        <div class="row" ng-show="actualizarDireccion==0 && !esFuncionario">    
+                            <div class="col-md-12">
+                                <div class="note">
+                                    Dirección: {{solicitud.solicitante.direccion}}<br><button class="btn btn-xs btn-info" ng-click="actualizarDireccion=1" ng-init="actualizarDireccion=0">Actualizar dirección</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">     
+                            <div class="col-md-6">							
+                                <div class="form-group {{ !formDatosSolicitante.telefono.$valid && formDatosSolicitante.telefono.$touched ? 'has-error' : '' }}">	
+                                    <label class="control-label" >Teléfono</label>
+                                    <input  ng-required="direccionRequerida" placeholder="Teléfono" class="form-control" type="text" ng-model="solicitud.solicitante.telefono" name="telefono"/>								
+                                    <span  class="help-block" ng-show="!formDatosSolicitante.telefono.$valid && formDatosSolicitante.telefono.$touched" >
+                                        Debe colocar un número de teléfono válido.
+                                    </span>							
+                                </div>						
+                            </div>
+                            <div class="form-group col-md-6" ng-class="{'has-error': validator.idbarrio}">
+                                <label class="control-label" for="barrio">Barrio: <i ng-show="loadingBarrio" class="fa fa-spinner fa-spin"></i></label>
+                                <input type="text"
+                                    id="BusquedaBarrio"
+                                    class="form-control input-xlarge"
+                                    ng-model="solicitud.solicitante.barrio"                                
+                                    uib-typeahead="itembarrio as itembarrio.nombre for itembarrio in arrayBarrio | filter: $viewValue | limitTo: 8"
+                                    uib-typeahead-wait-ms="1000"                               
+                                    uib-typeahead-loading="loadingBarrio"
+                                    typeahead-on-select="onSelect($item,  'nombre', $label)"
+                                    uib-typeahead-min-length="3"
+                                    bs-typeahead placeholder="Ingrese el nombre del barrio"
+                                    autocomplete="off"/>      
+                                <p class="help-block">{{validator.idbarrio}}</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row" ng-show="solicitud.solicitante.idtipodocidentificacion == 2">
+                            <div class="col-md-6">
+                                <div class="form-group {{ !formDatosSolicitante.firstNameRepresentante.$valid && formDatosSolicitante.firstNameRepresentante.$touched ? 'has-error' : '' }}">
+                                    <label class="control-label" >Nombre Representante</label>
+                                    <input type="text" name="firstNameRepresentante" class="form-control" placeholder="Nombre del usuario" ng-model="solicitud.solicitante.firstNameRepresentante" ng-required="solicitud.solicitante.idtipodocidentificacion == 2" ng-minlength="4"   />
+                                    <span  class="help-block" ng-show="!formDatosSolicitante.firstNameRepresentante.$valid && formDatosSolicitante.firstNameRepresentante.$touched" >
+                                        Este campo es obligatorio y su longitud mínima es de 4. 
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group {{ !formDatosSolicitante.lastNameRepresentante.$valid && formDatosSolicitante.lastNameRepresentante.$touched ? 'has-error' : '' }}">
+                                    <label class="control-label" >Apellido Representante</label>
+                                    <input type="text" name="lastNameRepresentante" class="form-control" placeholder="Apellido del usuario" ng-model="solicitud.solicitante.lastNameRepresentante" ng-required="solicitud.solicitante.idtipodocidentificacion == 2" ng-minlength="4"/>
+                                    <span  class="help-block" ng-show="!formDatosSolicitante.lastNameRepresentante.$valid && formDatosSolicitante.lastNameRepresentante.$touched" >
+                                        Este campo es obligatorio y su longitud mínima es de 4.
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row padding-sm text-right-sm col-md-12">
+                            <input type="button" class="btn btn-warning" ng-click="inicializarDatosSolicitante()" ng-show="esFuncionario" value="Limpiar Datos"/>
+                            <input type="button" class="btn btn-primary" ng-disabled="!formDatosSolicitante.$valid || !solicitud.solicitante.barrio.idbarrio" ng-click="step = step + 1" value="Siguiente"/>
+                        </div>		
+                    </div>	
+                </form>	
+            </div>
+            
+            <div ng-show="step == 2">
+                <form name="formFinanciera">
+                    <div class="note">
+                        Es importante que tenga en cuenta que con base en los proyectos a desarrollar, el representante legal tenga la capacidad económica para contratar, es decir, que no existan limitaciones estatutarias que no se lo permitan.
+                    </div>
+                    <div class="row">
+                        <div class="form-group required col-md-12 " ng-class="{'has-error': !formFinanciera.objetoSocial.$valid && formFinanciera.objetoSocial.$touched }">
+                            <label class="control-label">Objeto Social</label>
+                            <input required placeholder="Objeto Social" class="form-control"
+                                type="text"
+                                ng-model="solicitud.objetoSocial" 
+                                name="objetoSocial"
+                            />
+                            <span  class="help-block" ng-show="!formFinanciera.objetoSocial.$valid && formFinanciera.objetoSocial.$touched" >		
+                                Este campo es obligatorio.								
+                            </span>
+                            <div class="note note-info">
+                                Registre el texto del objeto social del Certificado de existencia y representación Legal donde se evidencie la actividad de construcción y/o enajenación de inmuebles destinados a vivienda.
+                            </div>
+                        </div>
+                        <div class="form-group has-feedback simple col-md-6">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="control-label" for="esEntidadSinAnimoLucro">¿Entidad sin ánimo de lucro?</label>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="radio-inline"><input type="radio" value="1" ng-model="solicitud.esEntidadSinAnimoLucro">Si</label>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="radio-inline"><input type="radio" value="0" ng-model="solicitud.esEntidadSinAnimoLucro">No</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group required col-md-6 " ng-class="{'has-error': !formFinanciera.activoCorriente.$valid && formFinanciera.activoCorriente.$touched }">
+                            <label class="control-label">Activo Corriente</label>
+                            <input required placeholder="Valor numérico" class="form-control"
+                                type="number"
+                                min="0"
+                                ng-model="solicitud.activoCorriente" 
+                                name="activoCorriente"
+                                ng-blur="calcularValores()"
+                            />
+                            <span  class="help-block" ng-show="!formFinanciera.activoCorriente.$valid && formFinanciera.activoCorriente.$touched" >
+                                Este campo es obligatorio.								
+                            </span>
+                        </div>
+                        <div class="form-group required col-md-6 " ng-class="{'has-error': !formFinanciera.pasivoCorriente.$valid && formFinanciera.pasivoCorriente.$touched }">
+                            <label class="control-label">Pasivo Corriente</label>
+                            <input required placeholder="Valor numérico" class="form-control"
+                                type="number"
+                                min="0"
+                                ng-model="solicitud.pasivoCorriente" 
+                                name="pasivoCorriente"
+                                ng-blur="calcularValores()"
+                            />
+                            <span  class="help-block" ng-show="!formFinanciera.pasivoCorriente.$valid && formFinanciera.pasivoCorriente.$touched" >
+                                Este campo es obligatorio.								
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group required col-md-6 " ng-class="{'has-error': !formFinanciera.activoTotal.$valid && formFinanciera.activoTotal.$touched }">
+                            <label class="control-label">Activo Total</label>
+                            <input required placeholder="Valor numérico" class="form-control"
+                                type="number"
+                                min="0"
+                                ng-model="solicitud.activoTotal" 
+                                name="activoTotal"
+                                ng-blur="calcularValores()"
+                            />
+                            <span  class="help-block" ng-show="!formFinanciera.activoTotal.$valid && formFinanciera.activoTotal.$touched" >
+                                Este campo es obligatorio.								
+                            </span>
+                        </div>
+                        <div class="form-group required col-md-6 " ng-class="{'has-error': !formFinanciera.pasivoTotal.$valid && formFinanciera.pasivoTotal.$touched }">
+                            <label class="control-label">Pasivo Total</label>
+                            <input required placeholder="Valor numérico" class="form-control"
+                                type="number"
+                                min="0"
+                                ng-model="solicitud.pasivoTotal" 
+                                name="pasivoTotal"
+                                ng-blur="calcularValores()"
+                            />
+                            <span  class="help-block" ng-show="!formFinanciera.pasivoTotal.$valid && formFinanciera.pasivoTotal.$touched" >
+                                Este campo es obligatorio.								
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group required col-md-6 " ng-class="{'has-error': !formFinanciera.patrimonio.$valid && formFinanciera.patrimonio.$touched }">
+                            <label class="control-label">Patrimonio</label>
+                            <input required placeholder="Valor numérico" class="form-control"
+                                type="number"
+                                min="0"
+                                ng-model="solicitud.patrimonio" 
+                                name="patrimonio"
+                                ng-blur="calcularValores()"
+                            />
+                            <span  class="help-block" ng-show="!formFinanciera.patrimonio.$valid && formFinanciera.patrimonio.$touched" >
+                                Este campo es obligatorio.								
+                            </span>
+                        </div>
+                        <div class="form-group required col-md-6 " ng-class="{'has-error': !formFinanciera.inventario.$valid && formFinanciera.inventario.$touched }">
+                            <label class="control-label">Inventario</label>
+                            <input required placeholder="Valor numérico" class="form-control"
+                                type="number"
+                                min="0"
+                                ng-model="solicitud.inventario" 
+                                name="inventario"
+                                ng-blur="calcularValores()"
+                            />
+                            <span  class="help-block" ng-show="!formFinanciera.inventario.$valid && formFinanciera.inventario.$touched" >
+                                Este campo es obligatorio.								
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label class="control-label">Capital de trabajo</label>
+                            <input required placeholder="Valor calculado" class="form-control"
+                                type="number"
+                                ng-model="solicitud.capitalDeTrabajo" 
+                                name="capitalDeTrabajo"
+                                readonly="readonly"
+                            />
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="control-label">Prueba ácida</label>
+                            <input required placeholder="Valor calculado" class="form-control"
+                                type="number"
+                                ng-model="solicitud.pruebaAcida" 
+                                name="pruebaAcida"
+                                readonly="readonly"
+                            />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6 " >
+                            <label class="control-label">Endeudamiento</label>
+                            <input required placeholder="Valor calculado" class="form-control"
+                                type="number"
+                                ng-model="solicitud.endeudamiento" 
+                                name="endeudamiento"
+                                readonly="readonly"
+                            />
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="control-label">Apalancamiento</label>
+                            <input required placeholder="Valor calculado" class="form-control"
+                                type="number"
+                                ng-model="solicitud.apalancamiento" 
+                                name="apalancamiento"
+                                readonly="readonly"
+                            />
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="row padding-sm text-right-sm col-md-12">
+                        <input type="button" class="btn btn-info" ng-click="step = step - 1" value="Anterior" />
+                        <input type="button" class="btn btn-primary" ng-click="step = step + 1" value="Siguiente" ng-disabled="!formFinanciera.$valid"/>
+                    </div>   
+                </form>
+            </div>
+            
+            <div ng-show="step == 3">
+                <div class="note">
+                    A continuación podrá adjuntar los documentos anexos requeridos para radicar su solicitud.
+                </div>
+                <form class="panel-body col-md-12" name="formAdjuntosSolicitud" >   
+                    
+                    <div class="row" ng-show="solicitud.solicitante.idtipodocidentificacion == 2">
+                        <div class="col-md-6">							
+                            <div class="form-group {{ formAdjuntosSolicitud.fechaCertificadoExistencia.$touched && diferenciaEnDias(solicitud.fechaCertificadoExistencia)>30 ? 'has-error' : '' }}">	
+                                <label class="control-label" >Fecha de expedición del certificado de existencia</label>
+                                <input name="fechaCertificadoExistencia" type="date" class="form-control" ng-model="solicitud.fechaCertificadoExistencia"/>								
+                                <span  class="help-block" ng-show="!formAdjuntosSolicitud.fechaCertificadoExistencia.$valid && formAdjuntosSolicitud.fechaCertificadoExistencia.$touched" >
+                                    Debe ingresar una fecha válida.
+                                </span>		
+                                <span  class="help-block" ng-show="diferenciaEnDias(solicitud.fechaCertificadoExistencia)>30 && formAdjuntosSolicitud.fechaCertificadoExistencia.$touched">
+                                    El Certificado de existencia y representación legal debe tener una fecha de expedición inferior a 30 días con relación a la fecha de radicación de la solicitud.
+                                </span>						
+                            </div>						
+                        </div>
+                        <div class="col-md-6" ng-show="diferenciaEnDias(solicitud.fechaCertificadoExistencia)<=30">
+                            <input-file2 label="Certificado de Existencia" model="files.certificadoExistencia" name="certificadoExistencia" shadow="true" required="false">
+                            </input-file2>
+                        </div>
+                    </div>
+                    <div class="row" ng-show="solicitud.solicitante.idtipodocidentificacion == 2 && solicitud.esEntidadSinAnimoLucro==1">
+                        <div class="col-md-6">
+                            <input-file2 label="Estatutos" description="" model="files.estatutos" name="estatutos" shadow="true" required="false">
+                            </input-file2>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">							
+                            <div class="form-group {{ formAdjuntosSolicitud.fechaCorteFinanciera.$touched && diferenciaEnDias(solicitud.fechaCorteFinanciera)>60 ? 'has-error' : '' }}">	
+                                <label class="control-label" >Fecha de corte del Estado de situación financiera</label>
+                                <input name="fechaCorteFinanciera" type="date" class="form-control"  ng-model="solicitud.fechaCorteFinanciera" />								
+                                <span  class="help-block" ng-show="!formAdjuntosSolicitud.fechaCorteFinanciera.$valid && formAdjuntosSolicitud.fechaCorteFinanciera.$touched" >
+                                    Debe ingresar una fecha válida.
+                                </span>	
+                                <span  class="help-block" ng-show="diferenciaEnDias(solicitud.fechaCorteFinanciera)>60 && formAdjuntosSolicitud.fechaCorteFinanciera.$touched">
+                                    El Estado de situación financiera debe ser con corte menor a 60 días con relación a la fecha de radicación de la solicitud.
+                                </span>						
+                            </div>						
+                        </div>
+                        <div class="col-md-6" ng-show="diferenciaEnDias(solicitud.fechaCorteFinanciera)<=60">
+                            <input-file2 label="Estado de situación financiera" model="files.estadoSituacionFinanciera" name="estadoSituacionFinanciera" shadow="true" required="false">
+                            </input-file2>
+                        </div>
+                    </div>
+                    
+                    
+                    
+                    <div class="row">
+                        <div class="col-md-6">							
+                            <div class="form-group {{formAdjuntosSolicitud.fechaCorteEstadoResultados.$touched && diferenciaEnDias(solicitud.fechaCorteEstadoResultados)>60 ? 'has-error' : '' }}">	
+                                <label class="control-label" >Fecha de corte del Estado de Resultados.</label>
+                                <input name="fechaCorteEstadoResultados" type="date" class="form-control" ng-model="solicitud.fechaCorteEstadoResultados" />								
+                                <span  class="help-block" ng-show="!formAdjuntosSolicitud.fechaCorteEstadoResultados.$valid && formAdjuntosSolicitud.fechaCorteEstadoResultados.$touched" >
+                                    Debe ingresar una fecha válida.
+                                </span>
+                                <span  class="help-block" ng-show="diferenciaEnDias(solicitud.fechaCorteEstadoResultados)>60 && formAdjuntosSolicitud.fechaCorteEstadoResultados.$touched">
+                                    El Estado de Resultados debe ser con corte menor a 60 días con relación a la fecha de radicación de la solicitud.
+                                </span>								
+                            </div>						
+                        </div>
+                        <div class="col-md-6" ng-show="diferenciaEnDias(solicitud.fechaCorteEstadoResultados)<=60 ">
+                            <input-file2 label="Estado de resultados"  model="files.estadoResultados" name="estadoResultados" shadow="true" required="false">
+                            </input-file2>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input-file2 label="Tarjeta profesional del contador" description="Copia de la Tarjeta profesional del contador o revisor fiscal que firma la documentación financiera." model="files.tarjetaProfesionalContador" name="tarjetaProfesionalContador" shadow="true" required="false" >
+                            </input-file2>
+                        </div>
+                        <div class="col-md-6">
+                            <input-file2 label="Certificado Vigencia" description="Copia de Certificado de Vigencia de inscripción y Antecedentes disciplinarios del contador o revisor fiscal que firma la documentación financiera." model="files.certificadoVigenciaContador" name="certificadoVigenciaContador" required="false" shadow="true" >
+                            </input-file2>
+                        </div>
+                    </div>
+                
+                    <div class="row padding-sm text-right-sm col-md-12">
+                        <input type="button" class="btn btn-info" ng-click="step = step - 1" value="Anterior" />
+                        <input type="button" class="btn btn-primary" ng-click="validarFormAdjuntosSolicitud(formAdjuntosSolicitud)" value="Siguiente"/>
+                    </div>
+                </form>
+                
+            </div>
+            
+            <div ng-show="step == 4">
+                <div class="note">
+                    Acepte las politicas de privacidad.
+                </div>
+                <form class="form-group" name="formPredio" class="form-group {{ (solicitud.npn == '' || solicitud.npn == null)?'has-error':'' }}" >
+                    
+                    <div class="row">
+                        <div class="form-group col-md-12 ">
+                            <label class="control-label">Observaciones</label>
+                            <textarea class="form-control" ng-model="solicitud.observacion" name="observaciones"></textarea>
+                        </div>
+                    </div> 
+                   
+                    <div class="col-sm-12 note">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" ng-model="solicitud.informacion_veridica"><strong class="subtitulo">Declaramos bajo la gravedad de juramento</strong> que toda la información aquí suministrada es verídica y se entenderá presentada bajo la gravedad de juramento con su suscripción
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 note">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" ng-model="solicitud.acepto_formulario"><strong class="subtitulo">Acepto formulario</strong> y lo firmo virtualmente.</a>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 note note-danger" ng-show="solicitud.arrayFamiliares.length==0">
+                        <strong>Atención</strong> <span>Para radicar la solicitud debe aceptar la Declaración bajo gravedad de juramento y la firma digital del formulario.</span>
+                    </div>
+                    <div class="row padding-sm text-right-sm col-md-12">
+                        <input type="button" class="btn btn-info" ng-click="step = step - 1" value="Anterior" />
+                        <input type="button" class="btn btn-primary" ng-click="saveSolicitud(solicitud)" ng-disabled="!formPredio.$valid" value="Radicar Solicitud"/>
+                    </div> 
+                </form>    
+            </div>
+                    
+        </div>
+        
+    </div>
+    
+</div>
+</div>

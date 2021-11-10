@@ -1,0 +1,32 @@
+<div class="form-group {{(model.$pristine ||  model.$valid)?'': 'has-error'}} {{model.$errorformato && !model.required ? 'has-error':''}} {{model.required?'required':''}}" >
+    <label class="control-label" ng-show="label">{{ label }}</label>
+    <div class="pixel-file-input form-control">
+        <span class="pfi-filename"></span>
+        <div class="pfi-actions">
+            <a href="#" class="btn btn-xs clear_btn_dom pfi-clear" style="display: inline-block;"><i class="fa fa-times"></i> Limpiar</a>
+            <a href="#" class="btn btn-xs btn-primary pfi-choose" ng-click="model.$pristine = false">Seleccionar</a>
+        </div>
+        <input name="{{name}}" type="file" ng-model="model" class="input_file" file-upload multiple >
+    </div>
+    <span ng-show="model.$errorformato && !model.required" class="help-block">
+        El campo presenta errores:
+        <ul>
+        	<li>{{model.$errorformato}}</li>
+        </ul>
+    </span>
+    <span ng-if="!model.$pristine &&  model.$error.msg.length>0 && model.required" class="help-block">
+        El campo presenta errores:
+      
+        <ul>
+        	<li ng-repeat="msg in model.$error.msg">{{msg}}</li>
+        </ul>
+    </span>
+    <span ng-if="!shadow">
+        {{ description }}
+    </span>
+    <span ng-if="shadow && description">
+        <div class="note note-info">
+            {{ description }}
+        </div>
+    </span>
+</div>

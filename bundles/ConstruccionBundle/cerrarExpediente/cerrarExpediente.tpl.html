@@ -1,0 +1,72 @@
+<div>
+<div id="modalIngresoDireccion" class="modal fade modal-change" role="dialog" aria-hidden="true" style="display: none;"></div>
+<div ng-show="validator.alert.content">
+    <div class="alert alert-{{validator.alert.type}} alert-dismissable">
+        <i class="fa fa-danger"></i>
+        <button type="button" class="close" aria-hidden="true" ng-click="hideAlert()">×</button>
+        <b>{{validator.alert.title}}</b> <span ng-bind-html="validator.alert.content"></span>
+    </div>
+</div>
+<div  ng-include="'../bundles/ConstruccionBundle/solicitud/solicitud.tpl.html'" ng-init="idsolicitud=proceso.idsolicitud"></div>                
+<div  ng-include="'../bundles/ConstruccionBundle/visita/visita.tpl.html'" ng-init="idsolicitud=proceso.idsolicitud"></div>                
+<div class="col-md-12">
+    <div class="panel panel-success">
+        <div class="panel-heading ">
+            <span class="panel-title">Cerrar Expediente</span>
+            <div class="panel-heading-controls">
+            </div>
+        </div>
+        <div class="panel-body">
+            <form name="userForm">                                            
+                Esta seguro que desea cerrar el expediente?
+                <div class="row padding-sm" id="zona">
+                    <div class="form-group has-feedback simple" ng-class="{'has-error': validator.zona }">
+                        <label class="control-label" for="tipo_busqueda">Seleccione una opción de cierre:  </label>                        
+                        <div>
+                            <label class="radio-inline"><input type="radio" value="1" ng-model="proceso.tipo_cierre">Resolución Sanción</label>
+                        </div>
+                        <div>
+                            <label class="radio-inline"><input type="radio" value="2" ng-model="proceso.tipo_cierre">Acto de Archivo</label>
+                        </div>
+                        <p class="help-block">{{validator.tipo_busqueda}}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group" ng-if="proceso.tipo_cierre==1"                       
+                         ng-class="{'has-error': validator.predial_direccion}">
+                        <label class="control-label" for="informacion_adicional">Radicado: </label>
+                        <input type="text"
+                               id="radicado"
+                               name="radicado"
+                               ng-model="proceso.radicado"
+                               class="form-control input-xlarge"
+                               placeholder="Ingrese el numero de radicado de la Resolución"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group" ng-if="proceso.tipo_cierre==1"                        
+                         ng-class="{'has-error': validator.predial_direccion}">
+                        <label class="control-label" for="informacion_adicional">Comentario </label>
+                        <input type="text"
+                               id="comentario"
+                               name="comentario"
+                               ng-model="proceso.comentario"
+                               class="form-control input-xlarge"
+                               placeholder="Ingrese un comenatario acerca de la Resolución"/>
+                    </div>
+                </div>
+                <div class="row" ng-if="proceso.tipo_cierre==2">
+                    <br><a ng-href="actoarchivo/mostrar/{{proceso.idsolicitud}}" target="_blank">Vista Previa Acto de Archivo</a>
+                    <br><a ng-href="actoarchivo/mostrar_citacion/{{proceso.idsolicitud}}" target="_blank">Vista Previa Comunicación de Acto de Archivo</a>
+                </div>
+                <div class="row padding-sm text-right-sm">
+                    <input ng-if="proceso.tipo_cierre==1" type="submit" class="btn btn-primary" ng-click="saveResolucion()" value="Finalizar con Resolución Sanción" />                    
+                    <input ng-if="proceso.tipo_cierre==2" type="submit" class="btn btn-primary" ng-click="saveActoArchivo()" value="Finalizar con Acto de Archivo" />                    
+                    ó
+                    <a ui-sref="listar-peticion">Cancelar</a>
+                </div>               
+            </form>
+        </div>
+    </div>
+</div>
+</div>

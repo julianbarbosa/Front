@@ -1,0 +1,595 @@
+<script>
+    function cerrarModal() {
+        $('#modalIngresoDireccion').modal('toggle');
+    }
+</script>
+<style>
+
+</style>
+<div>
+    <div id="modalIngresoDireccion" class="modal fade modal-change" role="dialog" aria-hidden="true" ></div>
+    <div class="col-md-12 col-lg-11">
+        <div ng-show="validator.alert.content">
+            <div class="alert {{validator.alert.type}} alert-dismissable">
+                <i class="fa fa-danger"></i>
+                <button type="button" class="close" aria-hidden="true" ng-click="hideAlert()">×</button>
+                <b>{{validator.alert.title}}</b> <span ng-bind-html="validator.alert.content"></span>
+            </div>
+        </div>
+        <div >
+            <div class="panel">
+                <div class="panel-body">
+                    <div class="page-header">
+                        <h1 class="col-xs-12 col-sm-10 text-center text-left-sm"><i class="padding-sm-hr fa fa-hand-paper-o"></i>&nbsp;&nbsp;{{accion}} Linea de Demarcación Por Lado de Manzana {{linea.id}}</h1>
+                    </div>
+                    <form name="form">
+                        <div class="alert alert-danger" ng-if="solicitudes_asociadas_npn.success == true" ng-bind-html="solicitudes_asociadas_npn.msg"></div>
+                        <div class="row" ng-if="linea.direccion">
+                            <div class="col-md-3">
+                                Dirección:  <strong>{{linea.direccion}}</strong><br><br>
+                            </div>
+                            <div class="col-md-3">
+                                NPN: <strong>{{linea.npn}}</strong><br><br>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label>Demarcación definida por: </label>
+                                <select class="form-control"
+                                        id="definicionDemarcacion"
+                                        name="definicionDemarcacion"
+                                        ng-model="linea.definicionDemarcacion"
+                                        ng-disabled="accion == 'revisar' && (linea.observacionesDevolucion=='' || linea.observacionesDevolucion==null)">
+                                    <option value="automatizada">Automatización</option>
+                                    <option value="plano">Plano</option>
+                                    <option value="visita">Visita</option>
+                                </select>
+                            </div>
+                            <div class="col-md-1">
+                                <label>Zona: </label>
+                                <div class="radio ">
+                                    <label>
+                                        <input type="radio" ng-model="linea.zona" value="Urbana" class="px radio-inline" checked ng-disabled="accion == 'revisar' && (linea.observacionesDevolucion=='' || linea.observacionesDevolucion==null)">
+                                        <span class="lbl">Urbana</span>
+                                    </label>
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" ng-model="linea.zona" value="Rural" class="px radio-inline" checked="" ng-disabled="accion == 'revisar' && (linea.observacionesDevolucion=='' || linea.observacionesDevolucion==null)">
+                                        <span class="lbl">Rural</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group required"
+                                     ng-class="{'has-error': form.fuente1.$touched && form.fuente1.$invalid}">
+                                    <label class="control-label" for="nombreViaSecundaria">Fuente 1 </label>
+                                    <input type="text"
+                                           id="fuente1"
+                                           name="fuente1"
+                                           class="form-control input-xlarge"
+                                           ng-model="linea.fuente1"
+                                           autocomplete="off"
+                                           required
+                                           ng-disabled="accion == 'revisar' && (linea.observacionesDevolucion=='' || linea.observacionesDevolucion==null)"/>
+                                    <p class="help-block" ng-if="form.fuente1.$touched && form.fuente1.$invalid">Ingrese la fuente 1</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group"
+                                     ng-class="{'has-error': form.fuente2.$touched && form.fuente2.$invalid}">
+                                    <label class="control-label" for="fuente2">Fuente 2 </label>
+                                    <input type="text"
+                                           id="fuente2"
+                                           name="fuente2"
+                                           class="form-control input-xlarge"
+                                           ng-model="linea.fuente2"
+                                           autocomplete="off"
+                                           ng-disabled="accion == 'revisar' && (linea.observacionesDevolucion=='' || linea.observacionesDevolucion==null)"/>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Izquierdo-->
+                        <div class="row">
+                            <div class="col-md-6" style="padding-top:0px;padding-bottom: 0px;">
+                                <div class="form-group"
+                                     ng-class="{'has-error': form.claseVia.$touched && form.claseVia.$invalid}">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" ng-model="linea.tiene_separador" ng-value="true" class="px"> <span class="lbl">Tiene Separador Vial</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6" style="padding-top:0px;padding-bottom: 0px;">
+                                <div class="form-group"
+                                     ng-class="{'has-error': form.claseVia.$touched && form.claseVia.$invalid}">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" ng-model="linea.esquina_diferente" ng-value="true" class="px"> <span class="lbl">La esquina es diferente</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" ng-if="linea.lado == null || linea.lado == 'LadoIzquierdo'">
+                            <div class="col-md-1">
+                                <h5 class="text-blue text-semibold">Lado Izquierdo</h5>
+                            </div>
+                            <div class="form-group required col-md-3"
+                                 ng-if="linea.zona == 'Urbana'"
+                                 ng-class="{'has-error': form.BusquedaBarrioIzquierdo.$touched && !linea.barrioIzquierdo.idbarrio}">
+                                <label class="control-label" for="barrio">Barrio: <i ng-show="loadingBarrioIzquierdo" class="fa fa-spinner fa-spin"></i></label>
+                                <input type="text"
+                                       id="BusquedaBarrioIzquierdo"
+                                       name="BusquedaBarrioIzquierdo"
+                                       class="form-control input-xlarge"
+                                       ng-model="linea.barrioIzquierdo"
+                                       uib-typeahead="lineabarrio as lineabarrio.nombre for lineabarrio in getBarrios($viewValue)"
+                                       typeahead-wait-ms="500"
+                                       typeahead-loading="loadingBarrioIzquierdo"
+                                       typeahead-on-select="onSelect($linea,  'nombre', $label)"
+                                       typeahead-min-length="3"
+                                       bs-typeahead placeholder="Nombre del barrio"
+                                       autocomplete="off"
+                                       ng-disabled="accion == 'revisar' && (linea.observacionesDevolucion=='' || linea.observacionesDevolucion==null)"
+                                       ng-blur="linea.barrioDerecho = linea.barrioIzquierdo"
+                                       required/>
+                                <p class="help-block" ng-if="form.BusquedaBarrio.$touched && !linea.barrio.idbarrio">Por favor seleccione un barrio.</p>
+                            </div>
+                            <div class="form-group required col-md-3"
+                                 ng-if="linea.zona == 'Rural'"
+                                 ng-class="{'has-error': form.BusquedaVereda.$touched && !linea.vereda.idVereda}">
+                                <label class="control-label" for="barrio">Vereda: <i ng-show="loadingVeredaIzquierdo" class="fa fa-spinner fa-spin"></i></label>
+                                <input type="text"
+                                       id="BusquedaVeredaIzquierdo"
+                                       name="BusquedaVeredaIzquierdo"
+                                       class="form-control input-xlarge"
+                                       ng-model="linea.veredaIzquierdo"
+                                       uib-typeahead="lineabarrio as lineabarrio.nombre for lineabarrio in getVeredas($viewValue)"
+                                       typeahead-wait-ms="1000"
+                                       typeahead-loading="loadingVeredaIzquierdo"
+                                       typeahead-on-select="onSelect($linea,  'nombre', $label)"
+                                       typeahead-min-length="3"
+                                       bs-typeahead placeholder="Nombre de la vereda"
+                                       autocomplete="off"
+                                       ng-blur="copiarLadoIzquierdoADerecho()"
+                                       ng-disabled="accion == 'revisar' && (linea.observacionesDevolucion=='' || linea.observacionesDevolucion==null)"
+                                       required/>
+                                <p class="help-block" ng-if="form.BusquedaVeredaIzquierdo.$touched && !linea.veredaIzquierdo.idVereda">Por favor seleccione una vereda.</p>
+                            </div>
+                            <div class="form-group required col-md-2"
+                                 ng-class="{'has-error': form.calzadaIzquierdo.$touched && form.calzadaIzquierdo.$invalid}"
+                                 ng-if="linea.tiene_separador === true">
+                                <label class="control-label" for="calzadaIzquierdo">Calzada </label>
+                                <input type="text"
+                                       id="calzadaIzquierdo"
+                                       name="calzadaIzquierdo"
+                                       class="form-control input-xlarge"
+                                       ng-model="linea.calzada"
+                                       ng-blur="linea.calzadaDerecha = linea.calzada"
+                                       autocomplete="off"
+                                       ng-disabled="accion == 'revisar' && (linea.observacionesDevolucion=='' || linea.observacionesDevolucion==null)"
+                                       placeholder="Calzada"
+                                       required/>
+                            </div>
+                            <div class="form-group required col-md-2"
+                                 ng-class="{'has-error': form.numeroPredialIzquierdo.$touched && form.numeroPredialIzquierdo.$invalid}">
+                                <label class="control-label" for="numeroPredial">Número Predial </label>
+                                <input type="text"
+                                       id="numeroPredialIzquierdo"
+                                       name="numeroPredialIzquierdo"
+                                       class="form-control input-xlarge"
+                                       ng-model="linea.numeroPredialIzquierdo"
+                                       autocomplete="off"
+                                       ui-mask="A999*"
+                                       ui-mask-placeholder
+                                       ui-mask-placeholder-char="_"
+                                       ui-mask-use-viewvalue="true"
+                                       ng-disabled="accion == 'revisar' && (linea.observacionesDevolucion=='' || linea.observacionesDevolucion==null)"
+                                       uppercase-only
+                                       required/>
+                                <p class="help-block" ng-if="form.numeroPredialIzquierdo.$touched && form.numeroPredialIzquierdo.$invalid">Ingrese número predial.</p>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group required"
+                                     ng-class="{'has-error': form.antejardinIzquierdo.$touched && form.antejardinIzquierdo.$invalid}">
+                                    <label class="control-label" for="antejardinIzquierdo">Antejardín </label>
+                                    <input type="number"
+                                           step="0.01"
+                                           id="antejardinIzquierdo"
+                                           name="antejardinIzquierdo"
+                                           class="form-control input-xlarge"
+                                           ng-model="linea.antejardinIzquierdo"
+                                           ng-blur="linea.antejardinDerecho = linea.antejardinIzquierdo"
+                                           placeholder="Antejardín"
+                                           autocomplete="off"
+                                           ng-disabled="accion == 'revisar' && (linea.observacionesDevolucion=='' || linea.observacionesDevolucion==null)"
+                                           required/>
+                                    <p class="help-block" ng-if="form.antejardinIzquierdo.$touched && form.antejardinIzquierdo.$invalid">Ingrese Antejardín</p>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group required"
+                                     ng-class="{'has-error': form.andenIzquierdo.$touched && form.andenIzquierdo.$invalid}">
+                                    <label class="control-label" for="anden">Andén </label>
+                                    <input type="number"
+                                           step="0.01"
+                                           id="andenIzquierdo"
+                                           name="andenIzquierdo"
+                                           class="form-control input-xlarge"
+                                           ng-model="linea.andenIzquierdo"
+                                           ng-blur="linea.andenDerecho = linea.andenIzquierdo"
+                                           placeholder="Andén"
+                                           autocomplete="off"
+                                           ng-disabled="accion == 'revisar' && (linea.observacionesDevolucion=='' || linea.observacionesDevolucion==null)"
+                                           required/>
+                                    <p class="help-block" ng-if="form.andenIzquierdo.$touched && form.andenIzquierdo.$invalid">Ingrese Anden</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" ng-if="linea.esquina_diferente == true">
+                            <div class="col-md-6">
+                                &nbsp;
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group required"
+                                     ng-class="{'has-error': form.antejardinIzquierdoEsquina.$touched && form.antejardinIzquierdoEsquina.$invalid}">
+                                    <label class="control-label" for="antejardinIzquierdoEsquina">Antejardín Esq</label>
+                                    <input type="number"
+                                           step="0.01"
+                                           id="antejardinIzquierdo"
+                                           name="antejardinIzquierdoEsquina"
+                                           class="form-control input-xlarge"
+                                           ng-model="linea.antejardinIzquierdoEsquina"
+                                           ng-blur="linea.antejardinDerechoEsquina = linea.antejardinIzquierdoEsquina"
+                                           placeholder="Antejardín Esquina"
+                                           autocomplete="off"
+                                           ng-disabled="accion == 'revisar' && (linea.observacionesDevolucion=='' || linea.observacionesDevolucion==null)"
+                                           required/>
+                                    <p class="help-block" ng-if="form.antejardinIzquierdoEsquina.$touched && form.antejardinIzquierdoEsquina.$invalid">Ingrese Antejardín</p>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group required"
+                                     ng-class="{'has-error': form.andenIzquierdoEsquina.$touched && form.andenIzquierdoEsquina.$invalid}">
+                                    <label class="control-label" for="anden">Andén Esq</label>
+                                    <input type="number"
+                                           step="0.01"
+                                           id="andenIzquierdoEsquina"
+                                           name="andenIzquierdoEsquina"
+                                           class="form-control input-xlarge"
+                                           ng-model="linea.andenIzquierdoEsquina"
+                                           ng-blur="linea.andenDerechoEsquina = linea.andenIzquierdoEsquina"
+                                           placeholder="Andén Esquina"
+                                           autocomplete="off"
+                                           ng-disabled="accion == 'revisar' && (linea.observacionesDevolucion=='' || linea.observacionesDevolucion==null)"
+                                           required/>
+                                    <p class="help-block" ng-if="form.andenIzquierdoEsquina.$touched && form.andenIzquierdoEsquina.$invalid">Ingrese Anden</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Derecho-->
+                        <div class="row" ng-if="linea.lado == null || linea.lado == 'LadoDerecho'">
+                            <div class="col-md-1">
+                                <h5 class="text-blue text-semibold">Lado Derecho</h5>
+                            </div>
+                            <div class="form-group required col-md-3"
+                                 ng-if="linea.zona == 'Urbana'"
+                                 ng-class="{'has-error': form.BusquedaBarrioDerecho.$touched && !linea.barrioDerecho.idbarrio}">
+                                <label class="control-label" for="barrio">Barrio: <i ng-show="loadingBarrioDerecho" class="fa fa-spinner fa-spin"></i></label>
+                                <input type="text"
+                                       id="BusquedaBarrioDerecho"
+                                       name="BusquedaBarrioDerecho"
+                                       class="form-control input-xlarge"
+                                       ng-model="linea.barrioDerecho"
+                                       uib-typeahead="lineabarrio as lineabarrio.nombre for lineabarrio in getBarrios($viewValue)"
+                                       typeahead-wait-ms="500"
+                                       typeahead-loading="loadingBarrioDerecho"
+                                       typeahead-on-select="onSelect($linea,  'nombre', $label)"
+                                       typeahead-min-length="3"
+                                       bs-typeahead placeholder="Nombre del barrio"
+                                       autocomplete="off"
+                                       ng-disabled="accion == 'revisar' && (linea.observacionesDevolucion=='' || linea.observacionesDevolucion==null)"
+                                       required/>
+                                <p class="help-block" ng-if="form.BusquedaBarrio.$touched && !linea.barrio.idbarrio">Por favor seleccione un barrio.</p>
+                            </div>
+                            <div class="form-group required col-md-3"
+                                 ng-if="linea.zona == 'Rural'"
+                                 ng-class="{'has-error': form.BusquedaVereda.$touched && !linea.vereda.idVereda}">
+                                <label class="control-label" for="barrio">Vereda: <i ng-show="loadingVeredaDerecho" class="fa fa-spinner fa-spin"></i></label>
+                                <input type="text"
+                                       id="BusquedaVeredaDerecho"
+                                       name="BusquedaVeredaDerecho"
+                                       class="form-control input-xlarge"
+                                       ng-model="linea.veredaDerecho"
+                                       uib-typeahead="lineabarrio as lineabarrio.nombre for lineabarrio in getVeredas($viewValue)"
+                                       typeahead-wait-ms="1000"
+                                       typeahead-loading="loadingVeredaDerecho"
+                                       typeahead-on-select="onSelect($linea,  'nombre', $label)"
+                                       typeahead-min-length="3"
+                                       bs-typeahead placeholder="Nombre de la vereda"
+                                       autocomplete="off"
+                                       ng-disabled="accion == 'revisar' && (linea.observacionesDevolucion=='' || linea.observacionesDevolucion==null)"
+                                       required/>
+                                <p class="help-block" ng-if="form.BusquedaVeredaDerecho.$touched && !linea.veredaDerecho.idVereda">Por favor seleccione una vereda.</p>
+                            </div>
+                            <div class="form-group required col-md-2"
+                                 ng-class="{'has-error': form.calzadaDerecha.$touched && form.calzadaDerecha.$invalid}"
+                                 ng-if="linea.tiene_separador === true">
+                                <label class="control-label" for="calzadaDerecha">Calzada </label>
+                                <input type="text"
+                                       id="calzadaDerecha"
+                                       name="calzadaDerecha"
+                                       class="form-control input-xlarge"
+                                       ng-model="linea.calzadaDerecha"
+                                       autocomplete="off"
+                                       placeholder="Calzada"
+                                       ng-disabled="accion == 'revisar' && (linea.observacionesDevolucion=='' || linea.observacionesDevolucion==null)"
+                                       required/>
+                            </div>
+                            <div class="form-group required col-md-2"
+                                 ng-class="{'has-error': form.numeroPredialDerecho.$touched && form.numeroPredialDerecho.$invalid}">
+                                <label class="control-label" for="numeroPredial">Número Predial </label>
+                                <input type="text"
+                                       id="numeroPredialDerecho"
+                                       name="numeroPredialDerecho"
+                                       class="form-control input-xlarge"
+                                       ng-model="linea.numeroPredialDerecho"
+                                       autocomplete="off"
+                                       ui-mask="A999*"
+                                       ui-mask-placeholder
+                                       ui-mask-placeholder-char="_"
+                                       ui-mask-use-viewvalue="true"
+                                       uppercase-only
+                                       ng-disabled="accion == 'revisar' && (linea.observacionesDevolucion=='' || linea.observacionesDevolucion==null)"
+                                       required/>
+                                <p class="help-block" ng-if="form.numeroPredialDerecho.$touched && form.numeroPredialDerecho.$invalid">Ingrese número predial.</p>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group required"
+                                     ng-class="{'has-error': form.antejardinDerecho.$touched && form.antejardinDerecho.$invalid}">
+                                    <label class="control-label" for="antejardinDerecho">Antejardín </label>
+                                    <input type="number"
+                                           step="0.01"
+                                           id="antejardinDerecho"
+                                           name="antejardinDerecho"
+                                           class="form-control input-xlarge"
+                                           ng-model="linea.antejardinDerecho"
+                                           ng-disabled="accion == 'revisar' && (linea.observacionesDevolucion=='' || linea.observacionesDevolucion==null)"
+                                           placeholder="Antejardín"
+                                           autocomplete="off"
+                                           required/>
+                                    <p class="help-block" ng-if="form.antejardinDerecho.$touched && form.antejardinDerecho.$invalid">Ingrese Antejardín</p>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group required"
+                                     ng-class="{'has-error': form.andenDerecho.$touched && form.andenDerecho.$invalid}">
+                                    <label class="control-label" for="anden">Andén </label>
+                                    <input type="number"
+                                           step="0.01"
+                                           id="andenDerecho"
+                                           name="andenDerecho"
+                                           class="form-control input-xlarge"
+                                           ng-model="linea.andenDerecho"
+                                           placeholder="Andén"
+                                           autocomplete="off"
+                                           required
+                                           ng-disabled="accion == 'revisar' && (linea.observacionesDevolucion=='' || linea.observacionesDevolucion==null)"/>
+                                    <p class="help-block" ng-if="form.andenDerecho.$touched && form.andenDerecho.$invalid">Ingrese Anden</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" ng-if="linea.esquina_diferente == true">
+                            <div class="col-md-6">
+                                &nbsp;
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group required"
+                                     ng-class="{'has-error': form.antejardinDerechoEsquina.$touched && form.antejardinDerechoEsquina.$invalid}">
+                                    <label class="control-label" for="antejardinDerechoEsquina">Antejardín Esq</label>
+                                    <input type="number"
+                                           step="0.01"
+                                           id="antejardinDerechoEsquina"
+                                           name="antejardinDerechoEsquina"
+                                           class="form-control input-xlarge"
+                                           ng-model="linea.antejardinDerechoEsquina"
+                                           ng-blur="linea.antejardinDerecho = linea.antejardinDerechoEsquina"
+                                           placeholder="Antejardín Esquina"
+                                           autocomplete="off"
+                                           required
+                                           ng-disabled="accion == 'revisar' && (linea.observacionesDevolucion=='' || linea.observacionesDevolucion==null)"/>
+                                    <p class="help-block" ng-if="form.antejardinDerechoEsquina.$touched && form.antejardinDerechoEsquina.$invalid">Ingrese Antejardín</p>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group required"
+                                     ng-class="{'has-error': form.andenDerechoEsquina.$touched && form.andenDerechoEsquina.$invalid}">
+                                    <label class="control-label" for="anden">Andén Esq</label>
+                                    <input type="number"
+                                           step="0.01"
+                                           id="andenDerechoEsquina"
+                                           name="andenDerechoEsquina"
+                                           class="form-control input-xlarge"
+                                           ng-model="linea.andenDerechoEsquina"
+                                           ng-blur="linea.andenDerecho = linea.andenDerechoEsquina"
+                                           placeholder="Andén Esquina"
+                                           autocomplete="off"
+                                           required
+                                           ng-disabled="accion == 'revisar' && (linea.observacionesDevolucion=='' || linea.observacionesDevolucion==null)"/>
+                                    <p class="help-block" ng-if="form.andenDerechoEsquina.$touched && form.andenDerechoEsquina.$invalid">Ingrese Anden</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group required"
+                                     ng-class="{'has-error': form.tipoViaPrincipalId.$touched && form.tipoViaPrincipalId.$invalid}">
+                                    <label class="control-label" for="tipoViaPrincipalId">Tipo Via Principal: </label>
+                                    <select class="form-control"
+                                            id="tipoViaPrincipalId"
+                                            name="tipoViaPrincipalId"
+                                            ng-model="linea.tipoViaPrincipalId"
+                                            ng-blur="consultarExistencia()"
+                                            required
+                                            ng-disabled="accion == 'revisar' && (linea.observacionesDevolucion=='' || linea.observacionesDevolucion==null)">
+                                        <option value="">Seleccione</option>
+                                        <option ng-repeat="tipovia in tiposvia" value="{{tipovia.idItem}}">{{tipovia.texto}}</option>
+                                    </select>
+                                    <p class="help-block" ng-if="form.tipoViaPrincipalId.$touched && form.tipoViaPrincipalId.$invalid">Ingrese Tipo Vía</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group required"
+                                     ng-class="{'has-error': form.nombreViaPrincipal.$touched && form.nombreViaPrincipal.$invalid}">
+                                    <label class="control-label" for="nombreViaPrincipal">Nombre Vía Principal </label>
+                                    <input type="text"
+                                           id="nombreViaPrincipal"
+                                           name="nombreViaPrincipal"
+                                           class="form-control input-xlarge"
+                                           ng-model="linea.nombreViaPrincipal"
+                                           ng-blur="consultarExistencia()"
+                                           autocomplete="off"
+                                           uppercase-only
+                                           required
+                                           ng-disabled="accion == 'revisar' && (linea.observacionesDevolucion=='' || linea.observacionesDevolucion==null)"/>
+                                    <p class="help-block" ng-if="form.nombreViaPrincipal.$touched && form.nombreViaPrincipal.$invalid">Ingrese Nombre vía</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group required"
+                                     ng-class="{'has-error': (form.tipoViaSecundariaId.$touched && form.tipoViaSecundariaId.$invalid) }">
+                                    <label class="control-label" for="tipoViaSecundariaId">Tipo Via Secundaria: </label>
+                                    <select class="form-control"
+                                            id="tipoViaSecundariaId"
+                                            name="tipoViaSecundariaId"
+                                            ng-model="linea.tipoViaSecundariaId"
+                                            ng-blur="consultarExistencia()"
+                                            required
+                                            ng-disabled="accion == 'revisar' && (linea.observacionesDevolucion=='' || linea.observacionesDevolucion==null)">
+                                        <option value="">Seleccione</option>
+                                        <option ng-repeat="tipovia in tiposvia" value="{{tipovia.idItem}}">{{tipovia.texto}}</option>
+                                    </select>
+                                    <p class="help-block" ng-if="form.tipoViaSecundariaId.$touched && form.tipoViaSecundariaId.$invalid">Ingrese Tipo Vía</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group required"
+                                     ng-class="{'has-error': form.nombreViaSecundaria.$touched && form.nombreViaSecundaria.$invalid}">
+                                    <label class="control-label" for="nombreViaSecundaria">Nombre Vía Secundaria </label>
+                                    <input type="text"
+                                           id="nombreViaSecundaria"
+                                           name="nombreViaSecundaria"
+                                           class="form-control input-xlarge"
+                                           ng-model="linea.nombreViaSecundaria"
+                                           ng-blur="consultarExistencia()"
+                                           autocomplete="off"
+                                           required
+                                           uppercase-only
+                                           ng-disabled="accion == 'revisar' && (linea.observacionesDevolucion=='' || linea.observacionesDevolucion==null)"/>
+                                    <p class="help-block" ng-if="form.nombreViaSecundaria.$touched && form.nombreViaSecundaria.$invalid">Ingrese Nombre vía</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group required"
+                                     ng-class="{'has-error': form.claseVia.$touched && form.claseVia.$invalid}">
+                                    <label class="control-label" for="nombreViaSecundaria">Clase Vía: </label>
+                                    <select class="form-control"
+                                            name="claseVia"
+                                            ng-model="linea.claseViaId"
+                                            required
+                                            ng-disabled="accion == 'revisar' && (linea.observacionesDevolucion=='' || linea.observacionesDevolucion==null)">
+                                        <option value="">Seleccione</option>
+                                        <option ng-repeat="claseVia in clasesVias" value="{{claseVia.idItem}}">{{claseVia.texto}}</option>
+                                    </select>
+                                    <p class="help-block" ng-if="form.claseVia.$touched && form.claseVia.$invalid">Ingrese Clase vía</p>
+                                </div>
+                            </div>
+                            <div class="form-group required col-md-3"
+                                 ng-class="{'has-error': form.separador.$touched && form.separador.$invalid}"
+                                 ng-if="linea.tiene_separador === true">
+                                <label class="control-label" for="calzada">Separador </label>
+                                <input type="number"
+                                       step="0.01"
+                                       id="separador"
+                                       name="Separador"
+                                       placeholder="Separdor"
+                                       class="form-control input-xlarge"
+                                       ng-model="linea.separador"
+                                       autocomplete="off"
+                                       required
+                                       ng-disabled="accion == 'revisar' && (linea.observacionesDevolucion=='' || linea.observacionesDevolucion==null)"/>
+                                <p class="help-block" ng-if="form.separador.$touched && form.separador.$invalid">Ingrese Separador</p>
+                            </div>
+                            <div class="form-group required col-md-3"
+                                 ng-class="{'has-error': form.calzada.$touched && form.calzada.$invalid}"
+                                 ng-if="linea.tiene_separador !== true">
+                                <label class="control-label" for="calzada">Calzada </label>
+                                <input type="number"
+                                       step="0.01"
+                                       id="calzada"
+                                       name="calzada"
+                                       placeholder="Calzada"
+                                       class="form-control input-xlarge"
+                                       ng-model="linea.calzada"
+                                       autocomplete="off"
+                                       required
+                                       ng-disabled="accion == 'revisar' && (linea.observacionesDevolucion=='' || linea.observacionesDevolucion==null)"/>
+                                <p class="help-block" ng-if="form.calzada.$touched && form.calzada.$invalid">Ingrese Calzada</p>
+                            </div>
+                            <div class="form-group required col-md-3"
+                                 ng-class="{'has-error': form.via.$touched && form.via.$invalid}">
+                                <label class="control-label" for="via">Vía </label>
+                                <input type="number"
+                                       step="0.01"
+                                       id="via"
+                                       name="via"
+                                       placeholder="Vía"
+                                       class="form-control input-xlarge"
+                                       ng-model="linea.via"
+                                       autocomplete="off"
+                                       required
+                                       ng-disabled="accion == 'revisar' && (linea.observacionesDevolucion=='' || linea.observacionesDevolucion==null)"/>
+                                <p class="help-block" ng-if="form.via.$touched && form.via.$invalid">Ingrese Vía</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="control-label" for="localización">Observaciones:</label>
+                                    <textarea rows="4" class="form-control noresize" ng-model="linea.observaciones" ng-disabled="accion == 'revisar' && (linea.observacionesDevolucion=='' || linea.observacionesDevolucion==null)"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="control-label text-danger" for="observacionesDevolucion">Observaciones corrección:</label>
+                                    <textarea rows="4" class="form-control noresize" ng-model="linea.observacionesDevolucion"  ng-disabled="accion !== 'revisar'"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="text-warning" ng-if="linea.observacionesDevolucion !== '' && linea.observacionesDevolucion !== null && accion == 'revisar' && (linea.observacionesDevolucion=='' || linea.observacionesDevolucion==null)"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Para aprobar la Línea de Demarcación debe borrar las observaciones de devolución.</span>
+                        <div class="row">
+                            <div class="col-md-12 text-right-sm" ng-if="accion == 'revisar'">
+                                <input type="submit" class="btn btn-primary" ng-click="aprobar('aprobar')" ng-if="linea.observacionesDevolucion === '' || linea.observacionesDevolucion == null" value="Aprobar"/>
+                                <input type="submit" class="btn btn-danger" ng-click="save(2)" ng-if="(linea.observacionesDevolucion!=='' && linea.observacionesDevolucion!==null)" value="Corregir con Observación"/>
+                            </div>
+                            <div class="col-md-12 text-right-sm" ng-if="accion !== 'revisar'">
+                                <input type="button" class="btn btn-danger" ng-click="anular()" ng-if="linea.id" value="Anular"/>
+                                <input type="button" class="btn btn-warning" ng-click="duplicar()" ng-if="linea.id" value="Duplicar"/>
+                                <input type="submit" class="btn btn-primary" ng-click="save(1)"  ng-disabled="form.$invalid" value="Guardar"/>
+                                ó
+                                <a ui-sref="listar-linea">Cancelar</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>

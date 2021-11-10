@@ -1,0 +1,172 @@
+
+<div>
+    <div class="col-md-12 col-lg-12">
+        <div ng-show="validator.alert.content">
+            <div class="alert {{validator.alert.type}} alert-dismissable">
+                <i class="fa fa-danger"></i>
+                <button type="button" class="close" aria-hidden="true" ng-click="hideAlert()">×</button>
+                <b>{{validator.alert.title}}</b>
+                <span ng-bind-html="validator.alert.content"></span>
+            </div>
+        </div>
+        <div class="panel panel-success">
+            <div class="panel-heading ">
+                <span class="panel-title">Creación de Comparendo</span>
+                <div class="panel-heading-controls"></div>
+            </div>
+            <div class="panel-body">
+
+                <form name="form" id="form" class="" autocomplete="off" novalidate>
+                    <!-- INFORMACIÓN DEL PRESUNTO INFRACTOR-->
+                    <h4 class="padding-sm no-padding-t padding-xs-hr">
+                        <i class="fa fa-id-card text-primary"></i>
+                        &nbsp;&nbsp;Información del Comparendo
+                    </h4>
+
+                    <div class="row">
+                        <div class="form-group col-md-4" ng-class="{'has-error': form.numeroComparendo.$touched && form.numeroComparendo.$invalid}">
+                            <label class="control-label" for="infractor_identificacion">
+                                Número Comparendo
+                                <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                            </label>
+                            <input type="number" min="100000000"  id="numeroComparendo" name="numeroComparendo" class="form-control input-xlarge" ng-class="{'has-error': validator.numeroComparendo}" ng-model="Comparendo.numero" placeholder="Ingrese el número de comparendo" required/>
+                            <p class="help-block" ng-if="form.numeroComparendo.$touched && form.numeroComparendo.$invalid">El número de comparendo debe tener 9 digítos.</p>
+                        </div>
+                        <div class="form-group col-md-4" ng-class="{'has-error': form.fechaComparendo.$touched && form.fechaComparendo.$invalid}">
+                            <label class="control-label" for="infractor_identificacion">
+                                Fecha Comparendo
+                                <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                            </label>
+                            <div>
+                                <p class="input-group">
+                                  <input type="text" name="fechaComparendo" ng-model="Comparendo.fechaComparendo" class="form-control" uib-datepicker-popup="yyyy-MM-dd" ng-model="dt" is-open="popup1.opened" datepicker-options="options1" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
+                                  <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default" ng-click="open1()"><i class="fa fa-calendar" aria-hidden="true"></i></button>
+                                  </span>
+                                </p>
+                              </div>
+                              <p class="help-block" ng-if="form.fechaComparendo.$touched && form.fechaComparendo.$invalid">La fecha de comparendo es obligatoria.</p>
+                        </div>
+                        <div class="form-group col-md-4" ng-class="{'has-error': form.fechaPagoRecibo.$touched && form.fechaPagoRecibo.$invalid}">
+                                <label class="control-label" for="infractor_identificacion">
+                                    Fecha Pago del Recibo
+                                    <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                                </label>
+                                <div>
+                                    <p class="input-group">
+                                      <input type="text" name="fechaPagoRecibo" ng-model="Comparendo.fechaPagoRecibo" class="form-control" uib-datepicker-popup="yyyy-MM-dd" ng-model="dt" is-open="popup2.opened" datepicker-options="options2" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
+                                      <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="open2()"><i class="fa fa-calendar" aria-hidden="true"></i></button>
+                                      </span>
+                                    </p>
+                                  </div>
+                                  <p class="help-block" ng-if="form.fechaPagoRecibo.$touched && form.fechaPagoRecibo.$invalid">La fecha de pago es obligatoria.</p>
+                            </div>
+                    </div>
+                    <!-- INFORMACION DEL PRESUNTO INFRACTOR-->
+                    <h4 class="padding-sm no-padding-t padding-xs-hr">
+                        <i class="fa fa-id-card text-primary"></i>
+                        &nbsp;&nbsp;Información del Infractor
+                    </h4>
+
+                    <div class="row">
+                        <div class="form-group col-md-2" ng-class="{'has-error': form.identificacionInfractor.$touched && form.identificacionInfractor.$invalid}">
+                            <label class="control-label" for="infractor_identificacion">
+                                Número Identificación
+                                <i ng-hide="loadingInfractor" class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                                <i ng-show="loadingInfractor" class="fa fa-spinner fa-spin"></i>
+                            </label>
+                            <input type="text" name="identificacionInfractor" class="form-control input-xlarge" ng-class="{'has-error': validator.usuario}" ng-model="Comparendo.infractor.identificacion" ng-blur="getInfractor(Comparendo.infractor.identificacion)" typeahead-wait-ms="1000" typeahead-on-select="onSelect($item, $model, $label)" typeahead-no-results="noResults" typeahead-loading="loadingInfractor" typeahead-min-length="3" bs-typeahead placeholder="Ingrese su identificación" tooltip="{{validator.usuario}}" required/>
+                            <span ng-if="noResults" uib-dropdown uib-dropdown-toggle auto-close="disabled" is-open="true">
+                                <ul class="uib-dropdown-menu">
+                                    <li>No hay Resultados</li>
+                                </ul>
+                            </span>
+                            <p class="help-block" ng-if="form.identificacionInfractor.$touched && form.identificacionInfractor.$invalid">La identificación es obligatoria.</p>
+                        </div>
+                        <div class="form-group col-md-2" ng-class="{'has-error': form.tipoIdentificacion.$touched && form.tipoIdentificacion.$invalid}">
+                            <label class="control-label" for="infractor_tipoidentificacion">
+                                Tipo de Identificación
+                                <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                            </label>
+                            <select class="form-control" name="tipoIdentificacion" ng-model="Comparendo.infractor.tipoIdentificacion" ng-options="tipoIdentificacion.nombre for tipoIdentificacion in arrayTipoDocIdentificacion" required>
+                            </select>
+                            <p class="help-block" ng-if="form.tipoIdentificacion.$touched && form.tipoIdentificacion.$invalid">El tipo de identificación es obligatorio.</p>
+                        </div>
+                        <div class="form-group col-sm-4"  ng-class="{'has-error': form.nombreInfractor.$touched && form.nombreInfractor.$invalid}">
+                            <label>
+                                Nombre
+                                <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                            </label>
+                            <input type="text" name="nombreInfractor" class="form-control" ng-model="Comparendo.infractor.nombre" placeholder="Ingrese el nombre" required/>
+                            <p class="help-block" ng-if="form.nombreInfractor.$touched && form.nombreInfractor.$invalid">El nombre del infractor es obligatorio.</p>
+                        </div>
+                        <div class="form-group col-sm-4" ng-class="{'has-error': form.apellidoInfractor.$touched && form.apellidoInfractor.$invalid}">
+                            <label>
+                                Apellido
+                                <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                            </label>
+                            <input type="text" name="apellidoInfractor" class="form-control" ng-model="Comparendo.infractor.apellido" placeholder="Ingrese el apellido" required
+                            />
+                            <p class="help-block" ng-if="form.apellidoInfractor.$touched && form.apellidoInfractor.$invalid">La fecha de comparendo es obligatoria.</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <label>
+                                Dirección
+                            </label>
+                            <input type="text" name="direccionInfractor" class="form-control" ng-model="Comparendo.infractor.direccion" placeholder="Ingrese la dirección."/>
+                        </div>
+
+                        <div class="form-group has-feedback simple col-sm-3">
+                            <label>
+                                Teléfono
+                            </label>
+                            <input type="text" name="telefonoInfractor" class="form-control" ng-model="Comparendo.infractor.telefono" ng-class="{'has-error': validator.telefono}" placeholder="Ingrese el teléfono" />
+                        </div>
+                        <div class="form-group has-feedback simple col-sm-4">
+                            <label>
+                                Correo electrónico
+                            </label>
+                            <input type="text" name="emailInfractor" class="form-control" ng-model="Comparendo.infractor.email" placeholder="Ingrese el correo electrónico (Opcional)"
+                            />
+                        </div>
+                    </div>
+
+
+                    <!-- PRUEBAS -->
+                    <h4 class="padding-sm no-padding-t padding-xs-hr">
+                        <i class="fa fa-comments text-primary"></i>
+                        &nbsp;&nbsp;Comportamiento Contrario a a Convivencia
+                    </h4>
+                    <div class="form-group col-sm-12">
+                        <label>
+                            Artículo
+                            <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                            <i ng-show="loadingComportamiento" class="fa fa-spinner fa-spin"></i>
+                            <i ng-show="Comparendo.comportamientoContrario.id" class="fa fa-check text-success"></i>
+                        </label>
+                        <input type="text" class="form-control" ng-model="Comparendo.comportamientoContrario" uib-typeahead="comportamientoContrario as comportamientoContrario.descripcion for comportamientoContrario in getComportamientosContrarios($viewValue, null)" typeahead-wait-ms="1000" typeahead-editable="false" typeahead-loading="loadingComportamiento" typeahead-on-select="onSelect($item, 'nombre', $label)" bs-typeahead placeholder="Ingrese el número del artículo" ng-change="Comparendo.comportamientoContrario2=null;" required/>
+                        </textarea>
+                    </div>
+                    <div class="form-group col-sm-12" ng-if="Comparendo.comportamientoContrario && Comparendo.comportamientoContrario.cantidad>0"  ng-class="{'has-error': form.numeral.$touched && form.numeral.$invalid}">
+                        <label>
+                            Numeral/Literal
+                            <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                            <i ng-show="loadingComportamiento2" class="fa fa-spinner fa-spin"></i>
+                            <i ng-show="Comparendo.comportamientoContrario2.id" class="fa fa-check text-success"></i>
+                        </label>
+                        <input type="hidden" name="numeral" ng-value="Comparendo.comportamientoContrario2.id">
+                        <input type="text" class="form-control" ng-model="Comparendo.comportamientoContrario2" uib-typeahead="comportamientoContrario as comportamientoContrario.descripcion for comportamientoContrario in getComportamientosContrarios($viewValue, Comparendo.comportamientoContrario.id)" typeahead-wait-ms="1000" typeahead-editable="false" typeahead-loading="loadingComportamiento2" typeahead-on-select="onSelect($item, 'nombre', $label)" bs-typeahead placeholder="Ingrese el numeral o literal" ng-change="Comparendo.comportamientoContrario3=null;" required/>
+                        </textarea>
+                        <p class="help-block" ng-if="form.numeral.$touched && form.numeral.$invalid">El numeral obligatorio.</p>
+                    </div>
+                    <div class="row padding-sm text-right-sm">
+                        <input type="submit" ng-disabled="form.$invalid" class="btn btn-primary" ng-click="save()" value="Crear Comparendo" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

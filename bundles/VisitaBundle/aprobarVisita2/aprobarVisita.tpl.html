@@ -1,0 +1,40 @@
+<div ng-controller="AprobarVisitaCtrl">
+    <div id="modalIngresoDireccion" class="modal fade modal-change" role="dialog" aria-hidden="true" style="display: none;"></div>
+    <div ng-show="validator.alert.content">
+        <div class="alert alert-{{validator.alert.type}} alert-dismissable">
+            <i class="fa fa-danger"></i>
+            <button type="button" class="close" aria-hidden="true" ng-click="hideAlert()">×</button>
+            <b>{{validator.alert.title}}</b> <span ng-bind-html="validator.alert.content"></span>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="panel panel-success">
+            <div class="panel-heading ">
+                <span class="panel-title">Aprobación de Visita</span>
+                <div class="panel-heading-controls">
+                </div>
+            </div>
+            <div class="panel-body">                
+                <form name="userForm">                    
+                    <div  class="form-group has-feedback simple" ng-repeat="campo in camposformularioVisita">
+                        <strong>{{campo.itemVisita.nombre}}:</strong>
+                        {{campo.itemVisita.valor}}
+                       
+                        <div ng-if="campo.itemVisita.nombreTipoCampo==='radio'" ng-repeat="opcion in campo.itemVisita.opciones">            
+                            <label class="radio-inline"><input type="radio" value="{{opcion}}" ng-model="campo.itemVisita.valor">{{opcion}}</label>                                                   
+                        </div>
+                    </div>
+                </form>
+            </div>            
+        </div>
+        <div class="row padding-sm text-right-sm">
+            <input type="submit" class="btn btn-primary" ng-click="save('aprobado')" value="Aprobar" />
+            <input type="submit" class="btn btn-warning" ng-click="save('devuelto')" value="Devolver" />
+            ó
+            <a ui-sref="listar-peticion">Cancelar</a>
+        </div>
+        <div class="col-md-12" ng-hide="true">
+            <input type="checkbox" ng-model="requiereVisita" > Requiere de una nueva Visita?
+        </div>
+        <div  ng-include="'../bundles/VisitaBundle/asignarVisita/asignarVisitaForm.tpl.html'" ng-init="idsolicitud=170" ng-if="requiereVisita==true"></div>    </div>
+</div>

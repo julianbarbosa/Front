@@ -1,0 +1,158 @@
+html,
+		body,
+		#viewDiv {
+			padding: 0;
+			margin: 0;
+			height: 100%;
+			width: 100%;
+            overflow:hidden;
+            font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+		}
+
+		.esri-feature {
+			letter-spacing: 0em;
+			font-family: "Avenir Next", "Helvetica Neue", sans-serif;
+			line-height: 1.55rem;
+			font-feature-settings: "liga"1, "calt"0;
+			background: #fff;
+			padding: 1em;
+		}
+
+		
+        .esri-popup__main-container {
+        min-height: 450px;
+        }
+		.mme #main-wrapper,
+		#main-wrapper {
+			padding-left: 0px;
+		}
+
+
+
+		.btn-circle {
+			width: 30px;
+			height: 30px;
+			text-align: center;
+			padding: 6px 0;
+			font-size: 12px;
+			line-height: 1.428571429;
+			border-radius: 15px;
+		}
+
+		.btn-circle.btn-lg {
+			width: 50px;
+			height: 50px;
+			padding: 10px 16px;
+			font-size: 18px;
+			line-height: 1.33;
+			border-radius: 25px;
+		}
+
+		.btn-circle.btn-xl {
+			width: 70px;
+			height: 70px;
+			padding: 10px 16px;
+			font-size: 24px;
+			line-height: 1.33;
+			border-radius: 35px;
+		}
+
+		.floating {
+			z-index: 1090;
+			position: fixed;
+		}
+
+		.center {}
+
+		#btns {
+			left: 50%;
+			margin-left: -45%;
+			width: 90%;
+			transition: all 1s ease;
+			max-height: 100%;
+			overflow-y: auto;
+			overflow-x: hidden;
+		}
+
+		.btn-normal {
+			transition: all .2s ease-in-out;
+		}
+
+		.btn-normal.animate {
+			transform: scale(0.7);
+			transition: all .2s ease-in-out;
+		}
+
+		.btn-normal:hover {
+			transform: scale(1.1);
+		}
+
+		#info_text {
+			background-color: rgba(255, 255, 255, 0.6);
+			margin: 10px;
+			padding: 15px 10px 15px 10px;
+			font-size: 13px;
+			border-radius: 3px;
+		}
+
+		#botones {
+			background-color: rgba(255, 255, 255, 0.6);
+			margin: 10px;
+			border-radius: 3px;
+		}
+
+		#wrapper_esconder {
+			background: #6495ed;
+			float: right;
+			display: none;
+		}
+
+		#wrapper_esconder button {
+			border-radius: 0;
+			border: 0;
+			width: 20px;
+			padding: 1px 8px;
+			background-color: rgba(255, 255, 255, 0);
+			color: white;
+			height: 70px;
+		}
+
+		#botones_container {
+			padding: 0;
+		}
+
+		.wrapper-btn {
+			display: inline-block;
+		}
+
+		.rcorners1 {
+			border-radius: 25px;
+			background: #73AD21;
+			padding: 20px;
+			width: 200px;
+			height: 150px;
+		}
+		.logo-alcaldia{
+    background: url('../images/logo-alcaldia.png') no-repeat;
+    width: 80px;
+    height: 40px;
+    background-size: auto 100% !important;
+}
+.logo-saul{
+    background: url('../images/logo-saul.png') no-repeat;
+    width: 150px;
+    height: 40px;
+    background-size: auto 100% !important;
+}
+.logo-gobierno {
+    background: url('../images/logo-gobierno.png') no-repeat;
+    width: 65px;
+    height: 40px;
+    background-size: auto 100% !important;
+}
+.bar-titulo {
+    height: 49px;
+    float: right;
+    padding-top: 1px;
+    font-size: 25px;
+}

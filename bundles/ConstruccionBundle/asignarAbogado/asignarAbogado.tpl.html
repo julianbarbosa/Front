@@ -1,0 +1,63 @@
+<div ng-controller="AsignarAbogadoCtrl">
+    <div id="modalIngresoDireccion" class="modal fade modal-change" role="dialog" aria-hidden="true" style="display: none;"></div>
+    <div ng-show="validator.alert.content">
+        <div class="alert alert-{{validator.alert.type}} alert-dismissable">
+            <i class="fa fa-danger"></i>
+            <button type="button" class="close" aria-hidden="true" ng-click="hideAlert()">×</button>
+            <b>{{validator.alert.title}}</b> <span ng-bind-html="validator.alert.content"></span>
+        </div>
+    </div>
+    <div  ng-include="'../bundles/ConstruccionBundle/solicitud/solicitud.tpl.html'" ng-init="idsolicitud=proceso.idsolicitud"></div>                
+    <div  ng-include="'../bundles/ConstruccionBundle/visita/visita.tpl.html'" ng-init="idsolicitud=proceso.idsolicitud"></div> 
+    <div class="col-md-12">                
+        <div class="panel panel-success">
+            <div class="panel-heading ">
+                <span class="panel-title">Asignar Abogado - Creación Avoquese</span>
+                <div class="panel-heading-controls">
+                </div>
+            </div>
+            <div class="panel-body">
+                <form name="userForm">    			
+                    <div class="row">
+                        <div class="form-group">
+                            <label class="control-label" for="abogado_asignado">Abogado Asignado</label>
+                            <select class="form-control"
+                                    name="abogado_asignado"
+                                    ng-model="proceso.idabogado"
+                                    ng-options="abogado as abogado.firstName + ' ' + abogado.lastName   for abogado in abogados">
+                                <option value="">Seleccione un abogado</option>
+                            </select>
+                        </div>
+                    </div>  
+                    <div>
+                        <div class="row col-md-12">
+                            <div class="col-md-12">
+                                Observaciones de Visita
+                            </div>
+                            <div class="col-md-12">
+                                <textarea class="form-control input-xlarge" ng-model="proceso.observacion" placeholder="Donde se observó..."></textarea>
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="row">
+                        <div class="form-group">
+                            <label class="control-label" for="comisión">Comisión: </label>
+                            <input type="text"
+                                   id="comision"
+                                   name="comision"
+                                   ng-model="proceso.comision"
+                                   class="form-control input-xlarge"
+                                   autocomplete="off"
+                                   placeholder="Ingrese la comisión."/>
+                        </div>
+                    </div>
+                    <div class="row padding-sm text-right-sm">
+                        <input type="submit" class="btn btn-primary" ng-click="save()" value="Asignar Abogado"/>
+                        ó
+                        <a ui-sref="listar-tareas">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,72 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-success">
+            <div class="panel-heading ">
+                <span class="panel-title">Validar Certificado de Nomenclatura</span>
+                <div class="panel-heading-controls">
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        Para validar la autenticidad de su certificado de nomenclatura interno por favor ingrese el código que aparece en su certificado.
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                		<form name="formConsulta" novalidate ng-submit="consultarCertificadoPorCodigoInterno()">
+	                        <div class="form-group">
+	                            <label class="control-label" >Código: </label>
+	                            <input type="text"
+	                                   ng-model="codigoInterno"
+	                                   class="form-control"
+	                                   placeholder="Código de certificado interno."
+	                                   name="inputCodigoInterno" 
+	                                   required
+	                                   />
+	                            <span class="help-block" ng-show="formConsulta.inputCodigoInterno.$invalid">*Este campo es obligatorio</span>
+	                        </div>
+	                        <div class="form-group">
+	                            <button ng-disabled="formConsulta.inputCodigoInterno.$invalid" class="btn btn-primary">Consultar</button>
+	                        </div>
+	                	</form>
+
+						<div class="alert alert-{{mensajeRespuesta.type}}" ng-show="mensajeRespuesta">
+							<span>{{mensajeRespuesta.msg}}</span>
+						</div>
+
+                        <div class="padding-sm-hr bordered valign-top col-sm-12" ng-if="codigoInternoData.idCertificadoNomenclaturaInterno">
+                            <h4 class="padding-sm no-padding-t padding-xs-hr"><i class="fa fa-check-circle"></i>&nbsp;&nbsp;Detalles</h4>
+                            <ul class="list-group no-margin">
+                                <li class="list-group-item no-border-hr padding-xs-hr no-bg no-border-radius">
+                                    Código: <span class="label label-success pull-right">{{ codigoInternoData.codigo }}</span>
+                                </li>
+                                <li class="list-group-item no-border-hr padding-xs-hr no-bg">
+                                    Fecha de consulta: <span class="label label-success pull-right">{{codigoInternoData.createdAt.timestamp*1000  | date:'yyyy-MM-dd HH:mm:ss'}}</span>
+                                </li>
+                                <li class="list-group-item no-border-hr padding-xs-hr no-bg">
+                                    Número Predial Nacional:  <span class="label label-success pull-right">{{ codigoInternoData.npn }}</span>
+                                </li>
+                                <li class="list-group-item no-border-hr padding-xs-hr no-bg">
+                                    Código Alfanumérico del Predio:  <span class="label label-success pull-right">{{ codigoInternoData.npl?codigoInternoData.npl:'---' }}</span>
+                                </li>
+                                <li class="list-group-item no-border-hr padding-xs-hr no-bg">
+                                    Barrio:  <span class="label label-success pull-right">{{ codigoInternoData.barrio?codigoInternoData.barrio:'---' }}</span>
+                                </li>
+                                <li class="list-group-item no-border-hr no-border-b padding-xs-hr no-bg">
+                                    Direcciones Certificadas: 
+                                    <ol>
+                                        <li ng-repeat="myDir in codigoInternoData.direccionesArray track by $index"> 
+                                            {{ myDir }} 
+                                        </li>
+                                    </ol>
+                                    <!--span class="label pull-right" ng-bind-html="codigoInternoData.direccionesHtml"></span-->
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        </div>
+    </div>
+</div>

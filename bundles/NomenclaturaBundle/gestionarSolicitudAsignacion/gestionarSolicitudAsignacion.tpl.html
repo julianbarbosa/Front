@@ -1,0 +1,210 @@
+<style type="text/css">
+  .css-form input.ng-invalid.ng-touched {
+    background-color: #FA787E;
+  }
+
+  .css-form input.ng-valid.ng-touched {
+    background-color: #78FA89;
+  }
+</style>
+<div id="modalIngresoDireccion" class="modal fade modal-change" role="dialog" aria-hidden="true" ></div>
+<div class="page-header">
+    <div class="row">
+        <!-- Page header, center on small screens -->
+        <h1 class="col-xs-12 col-sm-8 text-center text-left-sm">
+        	<i class="padding-sm-hr fa fa-plus"></i>Gestionar Asignación de Nomenclatura: Solicitud {{ solicitud.idSolicitud }}
+        </h1>
+        <div class="col-xs-12 col-sm-8">
+            <div class="row">
+                <hr class="visible-xs no-grid-gutter-h">
+                <div class="visible-xs clearfix form-group-margin"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-9">
+	<!--Panel de Datos de cliente-->
+    <div class="panel panel-success" >
+        <div class="panel-heading ">
+            <span class="panel-title">Datos de solicitante</span>
+            <div class="panel-heading-controls"></div>
+        </div>
+        <div class="panel-body">
+    		<strong>Nombre: </strong> {{ cliente.firstName }} {{cliente.lastName}}<br>
+    		<strong>Identificacion: </strong> {{ cliente.numidentificacion }} <br>
+    		<strong>Dirección: </strong> {{ cliente.direccion }} <br>
+    		<strong>Teléfono: </strong> {{ cliente.telefono }} <br>
+    		<strong>Razón Social: </strong> {{ cliente.razonsocial }} <br>
+        </div>  
+    </div>
+
+
+    <div class="panel panel-success">
+        <div class="panel-heading ">
+            <span class="panel-title">Datos de solicitud</span>
+            <div class="panel-heading-controls">
+                <i class="fa fa-edit" title="Editar Datos de Solicitud" ng-click="editarSolicitud()" ng-if="modo=='consulta'" ></i>
+            </div>
+        </div>
+        <!-- Body  Consulta -->
+        <div class="panel-body" ng-if="modo=='consulta'">
+            <strong>Fecha de radicado: </strong>{{ solicitud.solicitud.createdAt.timestamp*1000  | date:'yyyy-MM-dd HH:mm:ss' }}<br/>
+            <strong>Registro de Radicación (Orfeo): </strong>{{ solicitud.solicitud.radicado }}<br/>
+            <strong>Numero Predial Nacional: </strong>{{ solicitud.npn }}<br/>
+            <strong>Licencia expedida por:</strong>{{ curadurias[solicitud.curaduria] }}<br/>
+            <strong>Cantidad:</strong>{{ solicitud.cantidad }}<br/>
+            <strong>Licencia de construcción: </strong>{{ solicitud.radicadoCuraduria }}<br/>
+            <strong>Dirección existente del predio: </strong>{{ solicitud.direccion }}<br/>
+            <strong>Tipo información básica: </strong>{{ solicitud.tipoLinea }}<br/>
+            <strong>Número de línea de demarcación: </strong>{{ solicitud.numeroLineaDemarcacion }}<br/>
+            <strong>Fecha de línea de demarcación: </strong>{{ solicitud.fechaLineaDemarcacion.timestamp*1000 | date : 'yyyy-MM-dd' }}<br/>
+        </div>
+        <!-- Body Edicion -->
+        <div class="panel-body" ng-if="modo=='edicion'">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <strong>Fecha de radicado: </strong>{{ solicitudEditada.solicitud.createdAt.timestamp*1000  | date:'yyyy-MM-dd' }} <br/>
+                    <strong>Registro de Radicación (Orfeo): </strong>{{ solicitudEditada.solicitud.radicado }} <br/>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-9">
+                <div class="form-group">
+                     <label class="control-label" >Licencia expedida por</label>
+                     <select class="form-control" ng-model="solicitudEditada.curaduria">
+                        <option value="1" ng-selected="solicitudEditada.curaduria == 1"> {{ curadurias[1] }} </option>
+                        <option value="2" ng-selected="solicitudEditada.curaduria == 2"> {{ curadurias[2] }} </option>
+                        <option value="3" ng-selected="solicitudEditada.curaduria == 3"> {{ curadurias[3] }} </option>
+                        <option value="4" ng-selected="solicitudEditada.curaduria == 4"> {{ curadurias[4] }} </option>
+                     </select>
+                </div>
+                <div class="form-group">
+                     <label class="control-label" >Cantidad</label>
+                     <input required placeholder="Cantidad de asignaciones" class="form-control" type="number" ng-model="solicitudEditada.cantidad" />
+                </div>
+                <div class="form-group">
+                     <label class="control-label" >Licencia de Construcción</label>
+                     <input required placeholder="Radicado de la curaduría" class="form-control" type="text" ng-model="solicitudEditada.radicadoCuraduria" />
+                </div>
+                <div class="form-group">
+                     <label class="control-label" >Tipo información básica</label>
+                     <select required class="form-control" ng-model="solicitudEditada.tipoLinea" name="tipoLinea" ng-disabled="estado=='visualizacion'">
+                        <option value="Esquema básico" ng-selected="solicitudEditada.tipoLinea == 'Esquema básico'"> Esquema básico </option>
+                        <option value="Resolución" ng-selected="solicitudEditada.tipoLinea == 'Resolución'"> Resolución </option>
+                        <option value="Línea de demarcación" ng-selected="solicitudEditada.tipoLinea == 'Línea de demarcación'"> Línea de demarcación </option>
+                     </select>
+                </div>
+                <div class="form-group">
+                     <label class="control-label" >Línea de demarcación/Esquema/Resolución</label>
+                     <input required placeholder="Número de Línea de Demarcación" class="form-control" type="text" ng-model="solicitudEditada.numeroLineaDemarcacion" />
+                </div>
+                <div class="form-group">
+                     <label class="control-label" >Fecha de línea de demarcación/Esquema/Resolución</label>
+                     <input required placeholder="Fecha de Línea de Demarcación" class="form-control" type="text" ng-model="solicitudEditada.fechaLineaDemarcacion" />
+                </div>
+                <div class="form-group">
+                     <label class="control-label" >Número Predial Nacional</label>
+                     <input readonly required placeholder="Identificador de predio a nivel local" class="form-control" type="text" ng-model="solicitudEditada.npn" ng-click="lanzarDialogoDireccionEdicion()" />
+                </div>
+                <div class="form-group" >
+                     <label class="control-label" >Dirección Existente del Predio</label>
+                     <input required readonly="" placeholder="Dirección del predio existente" class="form-control" type="text" ng-model="solicitudEditada.direccion" ng-click="lanzarDialogoDireccionEdicion()" />
+                </div>
+            </div>
+
+            <div class="col-xs-12" ng-if='modo=="edicion"' >
+                    <button class="btn-link" ng-click="cancelarSolicitud()" >Cancelar</button>
+                    ó 
+                    <button class="btn btn-primary" ng-click="guardarSolicitud()" >Guardar</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!--Panel de Datos de cliente-->
+    <div class="panel panel-success" >
+        <div class="panel-heading ">
+            <span class="panel-title">Archivos</span>
+            <div class="panel-heading-controls"></div>
+        </div>
+        <div class="panel-body">
+            <div ng-hide="documentos == null">
+                <label class="control-label" >Archivos cargados({{ documentos.length }}):</label>
+                <a ng-repeat="documento in documentos" ng-href="{{documento.url}}" target="_blank">Archivo{{ $index + 1 }}{{ $last?'.':', ' }}</a>
+            </div>
+            <div ng-show="documentos == null" >
+                <label class="control-label" >Cargando archivos...</label>
+                <span ><i class="fa fa-spinner fa-spin fa-2x fa-fw"></i></span>
+            </div>
+        </div>
+        <div class="panel-footer">
+        </div> 
+    </div>
+
+
+    <!--Panel de Datos de cliente-->
+    <div class="panel panel-success" >
+        <div class="panel-heading ">
+            <span class="panel-title">Validacion</span>
+            <div class="panel-heading-controls"></div>
+        </div>
+        <div class="panel-body">
+            <div class="col-md-9">
+                <div class="form-group">
+                    <label class="control-label" >Coordenada</label>
+                    <input required placeholder="Coordenada " class="form-control" type="text" ng-model="validacion.coordenada" ng-change="interpretarCoordenadas()"/>
+                </div>
+                <div ng-show="validacion.x" class="form-group">
+                    <strong>Latitud:</strong> {{ validacion.x?validacion.x:'0.000' }} <br>
+                    <strong>Longitud:</strong> {{ validacion.y?validacion.y:'0.000' }}
+                </div>
+                <div ng-show="!validacion.x" class="form-group">
+                    * Las coordenadas son obligatorias
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer">
+        </div> 
+    </div>
+
+
+    <div class="panel panel-success" >
+        <div class="panel-heading ">
+            <span class="panel-title">Direcciones</span>
+            <div class="panel-heading-controls">
+                    <i style="cursor: pointer" class="fa fa-plus" title="Adicionar Dirección" ng-click="lanzarDialogoDireccion()" ></i>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="col-sm-12">
+                <div class="table-primary">
+                	<table cellpadding="0" cellspacing="0" border="0" class="table-hover table table-bordered dataTable" width="100%">
+                		<thead>
+                			<tr>
+                				<td>Acción</td>
+                				<td>Número del predio</td>
+                                <td>Dirección</td>
+                			</tr>
+                		</thead>
+                		<tbody>
+                			<tr ng-repeat="direccion in validacion.direcciones track by $index">
+                                <td>
+                                    <i class="fa fa-trash-o" title="Eliminar" ng-click="eliminarDireccion($index)"></i>
+                                    <!--i class="fa fa-edit" title="Editar" ng-click="editarDireccion($index)" ></i--> 
+                                </td>
+                                <td>{{ direccion.npn }}</td>
+                                <td>{{ direccion.direccionVisual }}</td>
+                			</tr>
+                		</tbody>
+                	</table>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <button class="btn-link" ng-click="cancelarValidacion()" >Cancelar</button>
+                ó 
+                <button class="btn btn-primary" ng-click="guardarValidacion()" >Guardar Cambios</button>
+                <button class="btn btn-primary" ng-click="finalizarValidacion()" >Finalizar</button>
+                <button class="btn btn-primary" ng-click="previsualizar()" >Previsualizar</button>
+            </div>
+        </div>
+    </div>
+</div>
