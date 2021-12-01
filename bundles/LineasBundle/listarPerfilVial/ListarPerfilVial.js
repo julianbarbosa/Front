@@ -5,7 +5,7 @@ saul.config(["$stateProvider",
             views: {
                 "main": {
                     controller: "ListarPerfilVialCtrl",
-                    templateUrl: "../bundles/LineasBundle/listarPerfilVial/listarPerfilVial.tpl.html"
+                    templateUrl: "../bundles/LineasBundle/listarPerfilVial/ListarPerfilVial.tpl.html"
                 }
             }
         });
