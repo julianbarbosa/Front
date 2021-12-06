@@ -29,7 +29,7 @@
 	"LineasBundle/devolverLineaEmitida/devolverLineaEmitida.js",
 	"LineasBundle/reporteLineasLadoManzanaXFuncionario/reporteLineasLadoManzanaXFuncionario.js",
 	"LineasBundle/crearPerfilVial/crearPerfilVial.js",
-	"LineasBundle/listarPerfilVial/ListarPerfilVial.js",
+	"LineasBundle/listarPerfilVial/listarPerfilVial.js", 
 	"LineasBundle/aprobarPerfilMapa/aprobarPerfilMapa.js",
 	"LineasBundle/crearSolicitudEsquemas/crearSolicitudEsquemas.js",
 	"LineasBundle/model.js",
