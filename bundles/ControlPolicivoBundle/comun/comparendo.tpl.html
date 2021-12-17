@@ -11,7 +11,7 @@
         <dd>{{comparendo.expediente}}  </dd>
         <dt>Infractor</dt>
         <dd>{{comparendo.infractor.identificacion}} - {{comparendo.infractor.nombre}} {{comparendo.infractor.apellido}}</dd>
-        <dt>Fecha</dt>
+        <dt>Fecha Comparendo</dt>
         <dd>{{comparendo.fechaComparendo.timestamp * 1000| date:'yyyy-MM-dd HH:mm:ss'}}</dd>
         <dt>Inspección</dt>
         <dd>{{comparendo.objInspeccion.nombre}} - {{comparendo.objInspeccion.nombreRnmc}}</dd>
@@ -31,5 +31,8 @@
         <dd>{{comparendo.apelacion}}</dd>
         <dt>Medidas Correctivas</dt>
         <dd><span ng-repeat="medidaCorrectiva in comparendo.medidasCorrectivas">{{medidaCorrectiva.medidaCorrectiva.nombre}}<br></span></dd>
+        <dt>Fecha Creación en SAUL</dt>
+        <dd>{{comparendo.createdAt.timestamp * 1000| date:'yyyy-MM-dd HH:mm:ss'}}</dd>
+        
     </dl>
 </div>
