@@ -79,6 +79,7 @@
     "ControlPolicivoBundle/reporteExpedienteSAP/reporteExpediente.js",
 	"ControlPolicivoBundle/modificarTercero/modificarTercero.js",
     "ControlPolicivoBundle/generadorDeReportes/controller.js",
+    "ControlPolicivoBundle/generadorDeProcesos/controller.js",
     "ControlPolicivoBundle/generadorDeReportesFiltro/controller.js",
 	"ControlPolicivoBundle/model.js",
 	"InformesBundle/diarioPorTipoSolicitud/diarioPorTipoSolicitud.js",
