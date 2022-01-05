@@ -164,6 +164,13 @@
                             ng-click="registrarMovimiento('pendiente', data)" value="Ingresar"
                             ng-if="permisos.controlsanciones_ingresar_expediente" ng-show="expediente=='null'  || expediente.estado.codigo=='cerrado'" />                            
                             <input type="button" ng-disabled="form.$invalid" class="btn btn-primary"
+                                ng-click="registrarMovimiento('pendiente', data)" value="Devolver a Pendiente"
+                                ng-if="permisos.controlsanciones_indicadoresadmin"/>
+                            <input type="button" ng-disabled="form.$invalid" class="btn btn-primary"
+                                ng-click="registrarMovimiento('cerrado', data)" value="Cerrar para reasignar"
+                                ng-if="permisos.controlsanciones_indicadoresadmin" />
+                            <br ng-if="permisos.controlsanciones_indicadoresadmin">
+                            <input type="button" ng-disabled="form.$invalid" class="btn btn-primary"
                                 ng-click="registrarMovimiento('pendiente', data)" value="Reingresar"
                                 ng-if="permisos.controlsanciones_ingresar_expediente"
                                 ng-show="expediente.estado.codigo=='devuelto'" />

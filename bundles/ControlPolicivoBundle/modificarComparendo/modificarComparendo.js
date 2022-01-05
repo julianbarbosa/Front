@@ -82,6 +82,23 @@ saul.config(["$stateProvider",
             
             
         };
+        
+        $scope.getComportamientosContrarios = function (viewValue, idPadre) {
+            $(".overlap_espera").show();
+            $(".overlap_espera_1").show();
+            return ComportamientoContrario.query({"clave": viewValue, 'idPadre': idPadre}).
+                $promise.then(function (response) {
+                    $(".overlap_espera").fadeOut(500, "linear");
+                    $(".overlap_espera_1").fadeOut(500, "linear");
+                    if (response.length == 0) {
+                       console.log("no encontró resultados");
+                    }
+                    return response.map(function (item) {
+                        return item;
+                    });
+                });
+        };
+        
         $scope.limpiar = function() {
             $scope.data = {};
             $scope.comparendo = null;
@@ -93,7 +110,8 @@ saul.config(["$stateProvider",
         }
 		
 		$scope.modificarComparendo = function() {
-			$http.post(root+'controlpolicivo/modificarcomparendo',{'id':$scope.comparendo.id, 'diasProntoPago':$scope.data.diasprontopago}).then(function (result) {                
+            $scope.data.comparendoId = $scope.comparendo.id;
+			$http.post(root+'controlpolicivo/modificarcomparendo',$scope.data).then(function (result) {                
                bootbox.alert({
                     message: result.data.msg,
                     size: 'small'
@@ -120,5 +138,13 @@ saul.config(["$stateProvider",
             $scope.orderBy = name;
             $scope.actualizarDatos();
         }
+        
+        $scope.consultarInspecciones = function () {
+            $http.get(root+'controlpolicivo/inspector/getall',{}).then(function (result) {                                            
+                $scope.inspecciones = result.data.data;
+                console.log($scope.inspectores);
+            });
+        };
+        $scope.consultarInspecciones();
     }
 ]);
