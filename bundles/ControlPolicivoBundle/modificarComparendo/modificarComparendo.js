@@ -1,7 +1,7 @@
 saul.config(["$stateProvider",
     function ($stateProvider) {
         $stateProvider.state("controlpolicivo-modificarcomparendo", {
-            url: "/controlsanciones/modificarcomparendo",
+            url: "/controlpolicivo/modificarcomparendo",
             views: {
                 "main": {
                     controller: "ControlPolicivoModificarComparendoCtrl",
