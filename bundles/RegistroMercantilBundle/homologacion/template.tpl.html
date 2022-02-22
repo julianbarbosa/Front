@@ -1,0 +1,95 @@
+<div>
+    <div ng-show="validator.alert.content">
+        <div class="alert alert-{{validator.alert.type}} alert-dismissable">
+            <i class="fa fa-danger"></i>
+            <button type="button" class="close" aria-hidden="true" ng-click="hideAlert()">×</button>
+            <b>{{validator.alert.title}}</b> <span ng-bind-html="validator.alert.content"></span>
+        </div>
+    </div>
+    <div class="page-header">
+        <h1 class="col-xs-12 col-sm-10 text-center text-left-sm">Completar 
+            <strong class="subtitulo">Registro de Información Tributaria</strong>
+            <br>
+            <small>Para finalizar el Registro de Información Tributaria, deberá completar los siguientes datos y al finalizar le llegará a su correo electrónico el correspondiente Formulario RIT.
+            </small>
+        </h1>
+    </div>
+    <div class="note note-info" ng-show="response.success == true">
+        <p><strong>Almacenamiento Exitoso</strong></p> Su información ha sido guardada exitosamente, a continuación, le llegará un mensaje al correo electrónico con el que se inscribió previamente y en el que podrá descargar su respectivo formulario RIT.
+    </div>
+    <div class="note note-error" ng-show="result.success == false">
+        <p><strong>Error</strong></p> {{result.msg}}
+    </div>
+    <form name="formActualizacion" ng-show="response.success !== true">
+        <div class="col-md-12 col-lg-10">
+            <div class="panel panel-success">
+                <div class="panel-body" ng-if="numeroidentificacion=='0' && tipoidentificacion=='NIT'">
+                    <div class="row">
+                        <div class="col-md-12">
+                            Registre y valide el Número de Identificación Tributaria NIT y el dígito de verificación asignado, por la Dirección de Impuestos y Aduanas Nacionales (DIAN). El cual  deberá realizar en un tiempo no mayor a (30) días calendario.
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5">							
+                            <div class="form-group {{ !formActualizacion.numeroidentificacion.$valid && formActualizacion.numeroidentificacion.$touched ? 'has-error' : '' }}">	
+                                <label class="control-label" >NIT</label>
+                                <input placeholder="Numero de Identificación Tributaria" class="form-control" type="number" ng-model="formData.numeroidentificacion" name="numeroidentificacion" ng-required="numeroidentificacion=='0' && tipoidentificacion=='NIT'"/>
+                                <span  class="help-block" ng-blur="validarDigitoVerificacion()" ng-show="!formActualizacion.numeroidentificacion.$valid && formActualizacion.numeroidentificacion.$touched" >
+                                    Debe colocar un número de NIT válido.
+                                </span>							
+                            </div>						
+                        </div>	
+                        <div class="col-md-2">							
+                            <div class="form-group {{ !formActualizacion.digitoverificacion.$valid && formActualizacion.digitoverificacion.$touched ? 'has-error' : '' }}">	
+                                <label class="control-label">DV</label>
+                                <input placeholder="Dígito Verificación" class="form-control" type="number" min="0" max="9" ng-model="formData.digitoverificacion" name="digitoverificacion" ng-blur="validarDigitoVerificacion()" ng-required="numeroidentificacion=='0' && tipoidentificacion=='NIT'"/>
+                                <span  class="help-block" ng-show="!formActualizacion.digitoverificacion.$valid && formActualizacion.digitoverificacion.$touched" >
+                                    Debe colocar un número de Dígito Verificación válido.
+                                </span>							
+                            </div>						
+                        </div>	
+                    </div>
+                </div>
+                <div class="panel-body" ng-if="data.length>0">
+                    A continuación, podrá visualizar las actividades económicas de su competencia en Santiago de Cali, las cuales podrá elegir en el menú desplegable:
+                    <br><br>
+                    <div class="row">
+                        <div class="col-md-7">
+                            <strong>Nombre Actividad Economica</strong>
+                        </div>
+                        <div class="col-md-5">
+                            <strong>Actividad Economica </strong>
+                        </div>
+                    </div>
+                    <div class="row" ng-repeat="actividad in data track by $index">
+                        <div class="col-md-5">
+                            {{actividad.ciiu_id}} - {{actividad.ciiu_nombre}} 
+                        </div>
+                        <div class="col-md-5">
+                            <select class="form-select form-control input-sm" ng-model="formData.actividad[$index]" ng-options="ica.descripcion for ica in actividad.actividad_ica" ng-required="data.length>0">
+                            </select>
+                        </div>
+                        <div class="col-md-1">
+                            <button class="btn btn-sm btn-primary" ng-click="duplicarFila($index)">
+                                <i class="fa fa-plus"></i>
+                            </button>
+                        </div>
+                        <div class="col-md-1">
+                            <button class="btn btn-sm btn-warning" ng-show="actividad.sePuedeEliminar==true" ng-click="eliminarFila($index)">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="page-footer">
+            <div class="row padding-sm text-right-sm col-md-10">
+                <button class="btn btn-primary" ng-disabled="!formActualizacion.$valid" ng-click="almacenarActividadesEconomicas(formData)" >
+                    Guardar
+                </button>
+            </div>
+        </div>
+    </form>
+    
+</div>
