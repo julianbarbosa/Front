@@ -42,9 +42,62 @@
                     </div>
                     <div class="panel-body">
                         <div class="row">                            
-                            <div class="form-group required col-md-6" >
-                                <label class="control-label" >Días pronto pago</label>
-                                <input type="number" name="diasProntoPago" ng-model="data.diasprontopago" class="form-control" required>
+                            <div class="form-group col-sm-12">
+                                <label class="control-label" for="inspeccion">
+                                    Inspección
+                                </label>
+                                <select class="form-control input-xlarge" ng-model="data.inspeccion"
+                                    ng-options="inspeccion.id as inspeccion.nombre for inspeccion in inspecciones">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">                            
+                            <div class="form-group col-sm-12">
+                                <label class="control-label" for="idInterno">
+                                    Estado
+                                </label>
+                                <select class="form-control input-xlarge" ng-model="data.estado">
+                                    <option value="cerrado">Cerrado</option>
+                                    <option value="cerrado_oculto">Cerrado Oculto</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">																						
+                                <div class="form-group col-sm-12">
+                                    <label>
+                                        Artículo									
+                                        <i ng-show="loadingComportamiento" class="fa fa-spinner fa-spin"></i>
+                                        <i ng-show="data.comportamientoContrario.id" class="fa fa-check text-success"></i>
+                                    </label>
+                                    <input type="text" class="form-control" ng-model="data.comportamientoContrario" uib-typeahead="comportamientoContrario as comportamientoContrario.descripcion for comportamientoContrario in getComportamientosContrarios($viewValue, null)" typeahead-wait-ms="1000" typeahead-editable="false" typeahead-loading="loadingComportamiento" typeahead-on-select="onSelect($item, 'nombre', $label)" bs-typeahead placeholder="Ingrese el número del artículo" ng-change="data.comportamientoContrario2=null;" />
+                                    </textarea>
+                                </div>
+                                <div class="form-group col-sm-12" ng-if="data.comportamientoContrario && data.comportamientoContrario.cantidad>0"  ng-class="{'has-error': form.numeral.$touched && form.numeral.$invalid}">
+                                    <label>
+                                        Numeral/Literal	
+                                        <i ng-show="loadingComportamiento2" class="fa fa-spinner fa-spin"></i>
+                                        <i ng-show="data.comportamientoContrario2.id" class="fa fa-check text-success"></i>
+                                    </label>
+                                    <input type="hidden" name="numeral" ng-value="data.comportamientoContrario2.id">
+                                    <input type="text" class="form-control" ng-model="data.comportamientoContrario2" uib-typeahead="comportamientoContrario as comportamientoContrario.descripcion for comportamientoContrario in getComportamientosContrarios($viewValue, data.comportamientoContrario.id)" typeahead-wait-ms="1000" typeahead-editable="false" typeahead-loading="loadingComportamiento2" typeahead-on-select="onSelect($item, 'nombre', $label)" bs-typeahead placeholder="Ingrese el numeral o literal" ng-change="data.comportamientoContrario3=null;" />
+                                    </textarea>
+                                    <p class="help-block" ng-if="form.numeral.$touched && form.numeral.$invalid">El numeral obligatorio.</p>
+                                </div>
+                            </div>
+                        <div class="row">                            
+                            <div class="form-group col-sm-12">
+                                <label class="control-label" >Porcentaje Incremento</label>
+                                <select class="form-control" ng-model="data.incremento">
+                                    <option value="0">0%</option>
+                                    <option value="50">50%</option>
+                                    <option value="75">75%</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">                            
+                            <div class="form-group  col-sm-12" >
+                                <label class="control-label" >Fecha límite del descuento</label>
+                                <input type="date" name="fechaProntoPago" ng-model="data.fechaProntoPago" class="form-control">
                             </div>
                         </div>                        
                     </form>        

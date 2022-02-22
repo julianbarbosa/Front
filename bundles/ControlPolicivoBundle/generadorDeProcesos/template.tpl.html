@@ -1,0 +1,45 @@
+<style>
+    .stat-panel {
+        height: 200px;
+    }
+    .bg-gray {
+        color: #fff;
+        background-color: #1993B6;
+    }
+    a.bg-gray:hover {
+        background-color: #1993B6;
+    }
+    .zoom:hover {
+        transition: all .3s ease-in-out;
+        transform: scale(1.1);
+    }
+</style><div class="panel">    
+    <div class="panel-body col-md-12 col-lg-10">
+        <div class="page-header">
+            <h1 class="col-xs-12 col-sm-10 text-center text-left-sm">Lista de  
+                <strong class="subtitulo">Procesos CNSCC</strong>
+                <br>
+                <small>Permite la ejecución de procesos de CNSCC</small>
+            </h1>
+        </div>
+       
+        <div class="row">
+            <div class="col-md-4" ng-repeat="reporte in arrayReportes track by $index">
+                <a href="{{reporte.valor}}" target="_blank">
+                    <div class="stat-panel zoom">
+                        <!-- Info background, vertically centered text -->
+                        <div class="stat-cell valign-middle cont-principal" ng-class="{'bg-gray': $index%2==0, 'bg-info': $index%2==1 }">
+                            <!-- Extra large text -->
+                            <span class="text-lg"><span class="text-lg text-slim"></span>
+                            <strong class="cont-valor" val="recibidas">{{reporte.estandar}}</strong></span><br>
+                            <!-- Big text -->
+                            <span class="text-bg">{{reporte.nombre}}</span><br>
+                            <!-- Stat panel bg icon -->
+                            <i class="fa fa-file bg-icon box-bg-icon middle right font-size-52"></i>
+                        </div> <!-- /.stat-cell -->
+                    </div> <!-- /.stat-panel -->
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
