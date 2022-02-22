@@ -48,7 +48,7 @@ saul.config(["$stateProvider", function(a) {
                 },
                 popup: {
                     actionsMenuEnabled: false                    
-                      }
+                }
             });
 
             
@@ -158,12 +158,13 @@ saul.config(["$stateProvider", function(a) {
         
                 var separador=JSON.stringify(response.data[0].dimensionSeparador,null,2);
                 
-                var fuente1=JSON.stringify(response.data[0].urlFuente1,null,2);
-        
-                var fuente2=JSON.stringify(response.data[0].urlFuente2,null,2);
-                if ((fuente2=="null")) {fuente2_url=""}else{var fuente2_url="<a target= blank href="+fuente2+" title='Consultar en SAUL'>Fuente 2 </a>";};
-        
-                
+                var urlFuente1 = JSON.stringify(response.data[0].urlFuente1, null, 2);
+                var urlFuente2 = JSON.stringify(response.data[0].urlFuente2, null, 2);
+
+                var fuente1 = JSON.stringify(response.data[0].fuente1, null, 2);
+                var fuente2 = JSON.stringify(response.data[0].fuente2, null, 2);
+                if ((fuente2 == null || fuente2==0)) { fuente2_url = "" } else { var fuente2_url = "<a target= blank href=" + urlFuente2 + " title='Consulta en SAUL'>Fuente 2 </a>"; };
+
                 var antejardinizq=JSON.stringify(response.data[0].izquierdo.antejardin,null,2);
                 var antejardinizqvar=JSON.stringify(response.data[0].izquierdo.antejardinVariable,null,2);
                 var andenizq=JSON.stringify(response.data[0].izquierdo.anden,null,2);
@@ -427,7 +428,7 @@ saul.config(["$stateProvider", function(a) {
                 
                 view.popup.title =texto_principal+" "+nombreViaPrincipal+" entre "+texto_secundario+" "+nombreViaSecundaria+" y "+texto_terciario+" "+nombreViaTerciaria;
                 view.popup.content = //view.popup.selectedFeature.attributes.id +
-                  "<table border='0' cellpadding='0' cellspacing='0' align=center width=100%><tr><td>Corte 1-1</td><td><a text-decoration: underline; target= blank href='https://planeacion.cali.gov.co/saul/v2/#!/perfilvial/crearperfilvial/"+view.popup.selectedFeature.attributes.id+"' title='Consultar en SAUL'>Consultar en SAUL </a></td><td><a target='_blank' href="+fuente1+" title='Fuente 1'>Fuente 1 </a></td><td>"+fuente2_url+"</td></tr></table>  "+ 
+                  "<table border='0' cellpadding='0' cellspacing='0' align=center width=100%><tr><td>Corte 1-1</td><td><a text-decoration: underline; target= blank href='https://planeacion.cali.gov.co/saul/v2/#!/perfilvial/crearperfilvial/"+view.popup.selectedFeature.attributes.id+"' title='Consultar en SAUL'>Consultar en SAUL </a></td><td><a target='_blank' href="+urlFuente1+" title='Fuente 1'>Fuente 1 ("+fuente1+") </a></td><td>"+fuente2_url+"</td></tr></table>  "+ 
                   "Linea No.  "+view.popup.selectedFeature.attributes.id+"</br><p align='center' style='color:rgba(66,7,7,1)';><b>"+claseVia+"</b></p>"+
                           "<div style='text-align: center; width:100%'><table border='0' cellpadding='0' cellspacing='0' align='center' style='text-align: center;'>"+
                             "<tr>"+fila_1+
