@@ -146,7 +146,7 @@ saul.config(["$stateProvider", function(a) {
 
             function drawThis(target) {
                 $scope.perfilId = view.popup.selectedFeature.attributes.id;
-                var url = "http://planeacion.cali.gov.co/saul2/app_dev.php/perfilvial/"+view.popup.selectedFeature.attributes.id;
+                var url = "http://planeacion.cali.gov.co/saul2/perfilvial/"+view.popup.selectedFeature.attributes.id;
                 esriRequest(url,{responseType: 'json'}).then(function(response) {
                 
                 var via=JSON.stringify(response.data[0].via,null,2);
@@ -478,9 +478,11 @@ saul.config(["$stateProvider", function(a) {
         
                     "</table> "+
                     "Estado: "+ estado + "<br>" +
-                    "<input type='button' style='btn btn-success' ng-click='aprobarPerfil()' onclick=\"if (confirm('Esta seguro que desea aprobar este perfil?')) { \
+                    "<input type='button' style='margin-right: 5px' class='btn btn-primary' ng-click='aprobarPerfil()' onclick=\"if (confirm('Esta seguro que desea aprobar este perfil?')) { \
                         $.ajax({ url: '"+$scope.root+"perfil/aprobarperfilporid/"+$scope.perfilId+"', type: 'POST', data: {  },  success: function (response) { alert(response);actualizarCapa(); } }); }\" value='Aprobar'/>"+
-                    "<input type='button' style='btn btn-danger' onclick=\"window.open('../v2/#!/perfilvial/aprobarperfilvial/"+$scope.perfilId+"/1/revisar')\" value='Corregir'></input>"+
+                        "<input type='button'  style='margin-right: 5px' class='btn btn-success' ng-click='aprobarPerfil()' onclick=\"if (confirm('Esta seguro que desea enviar la linea para visita?')) { \
+                            $.ajax({ url: '"+$scope.root+"perfil/revisarperfilporid/"+$scope.perfilId+"', type: 'POST', data: {  },  success: function (response) { alert(response);actualizarCapa(); } }); }\" value='Visitar'/>"+
+                    "<input type='button' class='btn btn-danger' onclick=\"window.open('../v2/#!/perfilvial/aprobarperfilvial/"+$scope.perfilId+"/1/revisar')\" value='Corregir'></input>"+
                     "</div>";
                 });       
                 return "<img id='loadingImg' src='http://saul.cali.gov.co/images/loader.gif' style='position:relative; left:50%; top:50%; z-index:100;' />"; 
@@ -491,7 +493,7 @@ saul.config(["$stateProvider", function(a) {
             view.popup.content = "Prueba de Perfil";
             esriConfig.request.corsEnabledServers.push("https://planeacion.cali.gov.co/");
             function textcontent(id) {		
-                var url = "https://planeacion.cali.gov.co/saul2/app_dev.php/perfilvial/"+id;
+                var url = "https://planeacion.cali.gov.co/saul2/perfilvial/"+id;
                  esriRequest(url,{responseType: 'json'}).then(function(response) {		
                     antejardin=JSON.stringify(response.data[0].antejardinIzquierdo,null,2);
                     anden=JSON.stringify(response.data[0].andenIzquierdo,null,2);
