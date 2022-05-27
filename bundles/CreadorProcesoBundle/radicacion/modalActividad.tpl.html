@@ -1,0 +1,30 @@
+<div class="modal-header" >
+	<h3 class="modal-title" id="modal-title">Actividad</h3>
+</div>
+<div class="modal-body" id="modal-body">
+    <div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="">
+                    <label class="control-label" >Nombre de la Actividad</label>
+                    <input type="text" placeholder="Nombre" class="form-control" ng-model="item.nombre" name="nombre" required/>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12" ng-show="item.clase=='input'">
+                <div class="">
+                    <label class="control-label" >Tipo de Actividad</label>
+                    <select class="form-control" ng-model="item.tipo" required>
+                        <option value="" hidden>Seleccione</option>
+                        <option value="formulario">Formulario</option>
+                        <option value="numeric">Proceso Automatico</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+<div class="modal-footer modal-change  modal-blur">
+    <button class="btn btn-primary" type="button" ng-click="guardarModal(item)" >Agregar</button>
+	<button class="btn btn-warning" type="button" ng-click="cerrarModal()" >Cerrar</button>
+</div>

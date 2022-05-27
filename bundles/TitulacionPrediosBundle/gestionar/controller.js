@@ -13,14 +13,14 @@ saul.config(["$stateProvider", function(a) {
         
         $scope.root = root;
         $scope.item = {};
+        $scope.item.textoDevolucion='';
         $scope.item.idSolicitud = $stateParams.idsolicitud;
         $scope.respuestaGuardada = false;
-        
         $scope.respuesta = {};
         $scope.solicitud = {};
         $scope.respuesta.success = false;
         $scope.esUsuarioGestion = false;
-        $scope.esUsuarioFirma = false;
+        $scope.permitirDevolver=false;
         LoadingOverlap.show($scope);
         
         $scope.validarPermisos = function() {
@@ -31,27 +31,42 @@ saul.config(["$stateProvider", function(a) {
                         $scope.esUsuarioGestion = true;
                         $scope.titulo = "Gestión de ";
                     } 
+                } else if($scope.item.solicitud.estado.codigo=='pendienterevision') {
+                    if($scope.thisUser.roles.indexOf('revisar-titulacionpredios') !== -1){
+                        $scope.esUsuarioGestion = true;
+                        $scope.permitirDevolver=true;
+                        $scope.titulo = "Revisión de ";  
+                    }
                 } else if($scope.item.solicitud.estado.codigo=='preaprobada') {
                     if($scope.thisUser.roles.indexOf('firmar-titulacionpredios') !== -1){
-                        $scope.esUsuarioFirma = true;
+                        $scope.esUsuarioGestion = true;
+                        $scope.permitirDevolver=true;
                         $scope.titulo = "Firma de ";  
                     }
                 }
             }).finally(function(){
                 LoadingOverlap.hide($scope);
-            });
-            
+            });   
         }
         
         
         $scope.save = function(estado, finalizar) {
             var nombreEstado = estado;
-            if(estado=='preaprobada') {
-                nombreEstado = 'Pendiente por Firmar';
+            if(estado=='continuar') {
+                if($scope.item.solicitud.estado.codigo=='pendiente') {
+                    nombreEstado = 'Pendiente por Revisar';
+                }            
+                if($scope.item.solicitud.estado.codigo=='pendienterevision') {
+                    nombreEstado = 'Pendiente por Firmar';
+                }
+                if($scope.item.solicitud.estado.codigo=='preaprobada') {
+                    nombreEstado = 'Cerrado';
+                }
             }
-            if(estado=='aprobada') {
-                nombreEstado = 'Cerrado';
+            if(estado=='devolver') {
+                nombreEstado = 'devuelto';
             }
+            
             if(finalizar==1) {
                 bootbox.confirm("Confirma que desea cambiar el estado a "+nombreEstado+"?",
                 function (result) {
@@ -124,6 +139,7 @@ saul.config(["$stateProvider", function(a) {
                     $scope.respuesta = response.respuesta;
                     $scope.item.textoRespuesta = $scope.respuesta.respuesta==undefined?'':$scope.respuesta.respuesta.replace(new RegExp('</w:t><w:br/><w:t>', 'g'), '\n');
                     $scope.item.respuestaSeleccionada = $scope.respuesta.tipoRespuesta.id;
+                    $scope.item.textoDevolucion = $scope.respuesta.devolucion;
                 }
                 $scope.item.textoDevolucion = '';
             }, function (error) {

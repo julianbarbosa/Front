@@ -1,56 +1,141 @@
-[    
-    "SIGBundle/model.js"
-    , "IntegracionBundle/model.js"    
-    , "model.js"
-    , "VisitaBundle/listarVisita/listarVisita.js"
-    , "VisitaBundle/listarVisitaTodo/listarVisitaTodo.js"
-    , "VisitaBundle/asignarVisita/asignarVisita.js"
-    , "VisitaBundle/registrarVisita/registrarVisita.js"
-    , "VisitaBundle/aprobarVisita/aprobarVisita.js"    
-    , "SIGBundle/consultarRespuesta/consultarRespuesta.js"
-    , "SIGBundle/busqueda/busqueda.js"
-    , "SolicitudBundle/solicitud/solicitud.js"
-    , "SolicitudBundle/listarTareas/listarTareas.js"
-    , "LineasBundle/crear/crear.js"
-    , "LineasBundle/crearPeticion/crearPeticion.js"
-    , "LineasBundle/crearPeticionCiudadano/crearPeticionCiudadano.js"
-    , "LineasBundle/crearPeticion/modalUsuario.js"
-    , "LineasBundle/gestionar/gestionar.js"
-    , "LineasBundle/firmar/firmar.js"    
-    , "LineasBundle/gestionar/modalInfoCiudadano.js"
-    , "LineasBundle/verDetalle/verDetalle.js"
-    , "LineasBundle/listarLineas/listarLineas.js"
-    , "LineasBundle/crearLineaLadoManzana/crearLineaLadoManzana.js"
-    , "LineasBundle/listarLineaLadoManzana/listarLineaLadoManzana.js"
-    , "LineasBundle/consultaLineaLadoManzanaPorPredio/consultaLineaLadoManzanaPorPredio.js"
-    , "LineasBundle/consultaLineaLadoManzanaPorTramo/consultaLineaLadoManzanaPorTramo.js"
-    , "LineasBundle/cerrar/cerrar.js"
-    , "NomenclaturaBundle/consultar/consultar.js"
-    , "NomenclaturaBundle/crearPeticion/crearPeticion.js"
-    , "NomenclaturaBundle/crearPorCiudadano/crearPorCiudadano.js"
-    , "NomenclaturaBundle/gestionar/gestionar.js"
-    , "NomenclaturaBundle/firmar/firmar.js"
-    , "NomenclaturaBundle/revisar/revisar.js"
-    , "ControlPolicivoBundle/crearPedagogia/crearPedagogia.js"
-    , "ControlPolicivoBundle/crearQuerella/crearQuerella.js"
-    , "ControlPolicivoBundle/asignarCita/asignarCita.js"
-    , "ControlPolicivoBundle/registrarAudiencia/registrarAudiencia.js"
-    , "ControlPolicivoBundle/listarPedagogia/listarPedagogia.js"
-    , "ControlPolicivoBundle/programarPedagogia/programarPedagogia.js"
-    , "ControlPolicivoBundle/listarProgramacionPedagogia/listarProgramacionPedagogia.js"
-    , "ControlPolicivoBundle/registrarAsistenciaPedagogia/registrarAsistenciaPedagogia.js"     
-    , "ControlPolicivoBundle/resolverEnSegundaInstancia/resolverEnSegundaInstancia.js"     
-    , "InformesBundle/diarioPorTipoSolicitud/diarioPorTipoSolicitud.js"
-    , "NomenclaturaBundle/solicitarAsignacion/solicitarAsignacion.js"
-    , "NomenclaturaBundle/solicitarAsignacion/clienteForm.js"
-    , "NomenclaturaBundle/listarSolicitudesAsignacion/listarSolicitudesAsignacion.js"
-    , "NomenclaturaBundle/gestionarSolicitudAsignacion/gestionarSolicitudAsignacion.js"
-    , "NomenclaturaBundle/gestionarSolicitudAsignacion/direccionForm.js"
-    , "VisitaBundle/listarVisita/listarVisita.js"    
-    , "VisitaBundle/asignarVisita/asignarVisita.js"
-    , "VisitaBundle/registrarVisita/registrarVisita.js"
-    , "VisitaBundle/aprobarVisita/aprobarVisita.js"    
-    , "ControlPosteriorBundle/crearPeticion/crearPeticion.js"   
-    
+[
+	"SIGBundle/model.js",
+	"../directives/inputFile/inputFile.js",
+    "../directives/inputFile2/inputFile.js",
+	"IntegracionBundle/model.js",
+	"model.js",
+	"SIGBundle/consultarRespuesta/consultarRespuesta.js",
+	"SIGBundle/busqueda/busqueda.js",
+	"SolicitudBundle/solicitud/solicitud.js",
+	"SolicitudBundle/listarTareas/listarTareas.js",
+    "SolicitudBundle/verHistorial/verHistorial.js",
+    "SolicitudBundle/detalleReporte/controller.js",
+	"LineasBundle/crear/crear.js",
+	"LineasBundle/crearPeticion/crearPeticion.js",
+	"LineasBundle/crearPeticionCiudadano/crearPeticionCiudadano.js",
+	"LineasBundle/crearPeticion/modalUsuario.js",
+	"LineasBundle/gestionar/gestionar.js",
+	"LineasBundle/firmar/firmar.js",
+    "LineasBundle/firmarOficio/firmarOficio.js",
+	"LineasBundle/cerrar/cerrar.js",
+	"LineasBundle/gestionar/modalInfoCiudadano.js",
+	"LineasBundle/verDetalle/verDetalle.js",
+	"LineasBundle/listarLineas/listarLineas.js",
+	"LineasBundle/crearLineaLadoManzana/crearLineaLadoManzana.js",
+	"LineasBundle/verLineaLadoManzana/verLineaLadoManzana.js",
+	"LineasBundle/listarLineaLadoManzana/listarLineaLadoManzana.js",
+	"LineasBundle/consultaLineaLadoManzanaPorPredio/consultaLineaLadoManzanaPorPredio.js",
+	"LineasBundle/consultaLineaLadoManzanaPorTramo/consultaLineaLadoManzanaPorTramo.js",
+	"LineasBundle/devolverLineaEmitida/devolverLineaEmitida.js",
+	"LineasBundle/reporteLineasLadoManzanaXFuncionario/reporteLineasLadoManzanaXFuncionario.js",
+	"LineasBundle/crearPerfilVial/crearPerfilVial.js",
+	"LineasBundle/listarPerfilVial/listarPerfilVial.js", 
+	"LineasBundle/aprobarPerfilMapa/aprobarPerfilMapa.js",
+	"LineasBundle/crearSolicitudEsquemas/crearSolicitudEsquemas.js",
+	"LineasBundle/model.js",
+	"NomenclaturaBundle/consultar/consultar.js",
+	"NomenclaturaBundle/crearPeticion/crearPeticion.js",
+	"NomenclaturaBundle/crearPorCiudadano/crearPorCiudadano.js",
+	"NomenclaturaBundle/gestionar/gestionar.js",
+	"NomenclaturaBundle/firmar/firmar.js",
+	"NomenclaturaBundle/revisar/revisar.js",
+	"NomenclaturaBundle/validarCertificado/validarCertificado.js",
+	"NomenclaturaBundle/integracionCatastro/integracionCatastro.js",
+	"NomenclaturaBundle/integracionCatastro/integracionCambiarEstado.js",
+	"ControlPolicivoBundle/crearPedagogia/crearPedagogia.js",
+	"ControlPolicivoBundle/crearQuerella/crearQuerella.js",
+	"ControlPolicivoBundle/asignarCita/asignarCita.js",
+	"ControlPolicivoBundle/registrarAudiencia/registrarAudiencia.js",
+	"ControlPolicivoBundle/listarPedagogia/listarPedagogia.js",
+	"ControlPolicivoBundle/programarPedagogia/programarPedagogia.js",
+	"ControlPolicivoBundle/listarProgramacionPedagogia/listarProgramacionPedagogia.js",
+	"ControlPolicivoBundle/registrarAsistenciaPedagogia/registrarAsistenciaPedagogia.js",
+	"ControlPolicivoBundle/resolverEnPrimeraInstancia/resolverEnPrimeraInstancia.js",
+	"ControlPolicivoBundle/resolverPedagogia/resolverPedagogia.js",
+	"ControlPolicivoBundle/resolverEnSegundaInstancia/resolverEnSegundaInstancia.js",
+	"ControlPolicivoBundle/listarComparendosPendientesPorVerificar/listarComparendosPendientesPorVerificar.js",
+	"ControlPolicivoBundle/listarComparendosPendientesPrimeraInstancia/listarComparendosPendientesPrimeraInstancia.js",
+	"ControlPolicivoBundle/listarComparendosPendientesSegundaInstancia/listarComparendosPendientesSegundaInstancia.js",
+	"ControlPolicivoBundle/consultarComparendo/consultarComparendo.js",
+	"ControlPolicivoBundle/buscarComparendo/buscarComparendo.js",
+	"ControlPolicivoBundle/actualizarDelRnmc/actualizarDelRnmc.js",
+	"ControlPolicivoBundle/crearComparendo/crearComparendo.js",
+	"ControlPolicivoBundle/ListarPedagogiasRealizadas/ListarPedagogiasRealizadas.js",
+	"ControlPolicivoBundle/crearReciboAcuerdo/crearReciboAcuerdo.js",
+	"ControlPolicivoBundle/crearRecuperacionCelular/crearRecuperacionCelular.js",
+	"ControlPolicivoBundle/buscarRecuperacionCelular/buscarRecuperacionCelular.js",
+	"ControlPolicivoBundle/registrarMovimientoExpediente/registrarMovimientoExpediente.js",
+	"ControlPolicivoBundle/registrarMovimientoExpedienteMultiple/registrarMovimientoExpedienteMultiple.js",
+	"ControlPolicivoBundle/indicadoresControlSancionesPorFuncionario/indicadoresControlSancionesPorFuncionario.js",
+	"ControlPolicivoBundle/cargarExpedienteTesoreria/cargarExpedienteTesoreria.js",
+	"ControlPolicivoBundle/modificarComparendo/modificarComparendo.js",
+	"ControlPolicivoBundle/reportePlantillaBase/reportePlantillaBase.js",
+	"ControlPolicivoBundle/reportePlantillaFUID/reportePlantillaFUID.js",
+	"ControlPolicivoBundle/reporteBasePagos/reporteBasePagos.js",
+	"ControlPolicivoBundle/reporteComparendosPorFecha/reporteComparendosPorFecha.js",
+	"ControlPolicivoBundle/reportePedagogias/reportePedagogias.js",
+    "ControlPolicivoBundle/reporteProgramacionPedagogias/reporteProgramacionPedagogias.js",
+    "ControlPolicivoBundle/reporteExpediente/reporteExpediente.js",
+    "ControlPolicivoBundle/reporteExpedienteSAP/reporteExpediente.js",
+	"ControlPolicivoBundle/modificarTercero/modificarTercero.js",
+    "ControlPolicivoBundle/generadorDeReportes/controller.js",
+    "ControlPolicivoBundle/generadorDeProcesos/controller.js",
+    "ControlPolicivoBundle/generadorDeReportesFiltro/controller.js",
+	"ControlPolicivoBundle/model.js",
+	"InformesBundle/diarioPorTipoSolicitud/diarioPorTipoSolicitud.js",
+	"NomenclaturaBundle/solicitarAsignacion/solicitarAsignacion.js",
+	"NomenclaturaBundle/solicitarAsignacion/clienteForm.js",
+	"NomenclaturaBundle/listarSolicitudesAsignacion/listarSolicitudesAsignacion.js",
+	"NomenclaturaBundle/gestionarSolicitudAsignacion/gestionarSolicitudAsignacion.js",
+	"NomenclaturaBundle/gestionarSolicitudAsignacion/gestionarSolicitudAsignacion2.js",
+	"NomenclaturaBundle/gestionarSolicitudAsignacion/direccionForm.js",
+	"NomenclaturaBundle/consultaSincronizacionPredio/consultaSincronizacionPredio.js",
+	"ControlPosteriorBundle/crearPeticion/crearPeticion.js",
+	"ControlPosteriorBundle/crearVisitaControlPosterior/crearVisitaControlPosterior.js",
+	"EirBundle/model.js",
+	"EirBundle/crearPeticion/crearPeticion.js",
+	"EirBundle/solicitarEir/solicitarEir.js",
+	"EirBundle/gestionarEir/gestionarEir.js",
+	"EirBundle/informacionEir/informacionEir.js",
+	"EirBundle/resolucion/resolucionEir.js",
+	"EirBundle/visitatecnica/visitaTecnicaEir.js",
+	"EirBundle/visitadagma/visitaDagmaEir.js",
+	"EirBundle/visitaseguridadyjusticia/visitaSeguridadyJusticiaEir.js",
+	"EirBundle/pendientegestionapendienteciudadano/pendienteGestionaPendienteCiudadanoEir.js",
+	"EirBundle/pendienteciudadanoapendientegestion/pendienteCiudadanoaPendienteGestionEir.js",
+	"EirBundle/pendientegestionafirma/pendienteGestionaFirmaEir.js",
+	"AdminBundle/listarUsuarios/listarUsuarios.js",
+	"AdminBundle/listarGrupos/listarGrupos.js",
+	"AdminBundle/listarUsuarios/sfUserController.js",
+	"NomenclaturaBundle/solicitarCertificacion/solicitarCertificacion.js",
+	"NomenclaturaBundle/gestionarSolicitudCertificacion/gestionarSolicitudCertificacion.js",
+	"NomenclaturaBundle/actualizarNomenclaturasMasiva/listarLogsCargaMasiva.js",
+	"NomenclaturaBundle/actualizarNomenclaturaIndividual/actualizarNomenclaturaIndividual.js",
+	"NomenclaturaBundle/actualizarNomenclaturaIndividual/nomenclaturaForm.js",
+	"NomenclaturaBundle/actualizarNomenclaturasMasiva/actualizarNomenclaturasMasiva.js",
+	"LicenciaBundle/buscarLicencia/buscarLicencia.js",
+	"LicenciaBundle/gestionarArchivosLicencia/gestionarArchivosLicencia.js",
+	"AyudaBundle/ayuda/ayuda.js",
+	"ArtesEscenicasBundle/crearSolicitud/crearSolicitud.js",
+	"RegistroMercantilBundle/listarRegistroMercantil/listarRegistroMercantil.js",
+	"RegistroMercantilBundle/consultarRegistroMercantil/consultarRegistroMercantil.js",
+    "RegistroMercantilBundle/reporteResumido/reporteResumido.js",
+	"RegistroMercantilBundle/reporteGeneral/reporteGeneral.js",
+    "RegistroMercantilBundle/registrarRit/controller.js",
+    "RegistroMercantilBundle/cancelarRit/controller.js",    
+    "RegistroMercantilBundle/homologacion/controller.js",
+    "RegistroMercantilBundle/copiaCertificadoRIT/controller.js",
+    "VisitaBundle/listarVisita/listarVisita.js",
+	"VisitaBundle/listarVisitaTodo/listarVisitaTodo.js",
+	"VisitaBundle/asignarVisita/asignarVisita.js",
+	"VisitaBundle/registrarVisita/registrarVisita.js",
+	"VisitaBundle/aprobarVisita/aprobarVisita.js",
+    "TitulacionPrediosBundle/crearSolicitud/controller.js",
+    "TitulacionPrediosBundle/gestionar/controller.js",
+    "TitulacionPrediosBundle/verReportes/controller.js",
+    "TitulacionPrediosBundle/detalleReporte/controller.js",
+    "PersonaEnConstruccionBundle/crearSolicitud/controller.js",
+    "PersonaEnConstruccionBundle/gestionar/controller.js",
+    "PersonaEnConstruccionBundle/verReportes/controller.js",
+    "CreadorProcesoBundle/radicacion/controller.js"
 ]
-

@@ -1,0 +1,101 @@
+<div class="modal-header" >
+	<h3 class="modal-title" id="modal-title">Actividad</h3>
+</div>
+<div class="modal-body" id="modal-body">
+    <div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="">
+                    <label class="control-label" >Nombre del Campo</label>
+                    <input type="text" placeholder="Nombre" class="form-control" ng-model="item.nombre" name="nombre" required/>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="">
+                    <label class="control-label" >Descripción</label>
+                    <input type="text" placeholder="Descripción" class="form-control" ng-model="item.descripcion" name="descripcion" required/>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="">
+                    <label class="control-label" >Clase de campo</label>
+                    <select class="form-control" ng-model="item.clase" required>
+                        <option value="" hidden>Seleccione</option>
+                        <option value="input">Caja de Texto</option>
+                        <option value="select-one">Selección única</option>
+                        <option value="select-multiple">Selección múltiple</option>                        
+                        <option value="file">Archivo</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-6" ng-show="item.clase=='input'">
+                <div class="">
+                    <label class="control-label" >Tipo dato</label>
+                    <select class="form-control" ng-model="item.tipo" required>
+                        <option value="" hidden>Seleccione</option>
+                        <option value="text">Texto</option>
+                        <option value="numeric">Numérico</option>
+                        <option value="date">Fecha</option>
+                        <option value="direccion">Dirección</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row" ng-show="item.clase =='input' && item.tipo=='text'">
+            <div class="col-md-6" >
+                <div class="">
+                    <label class="control-label" >Cantidad mínima caracteres</label>
+                    <input type="text"  placeholder="Mínimo" class="form-control" ng-model="item.caracter_minimo" name="minimo" required/>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="">
+                    <label class="control-label" >Cantidad máxima caracteres</label>
+                    <input type="text"  placeholder="Máximo" class="form-control" ng-model="item.caracter_maximo" name="maximo" required/>
+                </div>
+            </div>
+        </div>
+        <div class="row" ng-show="item.clase =='input' && item.tipo=='numeric'">
+            <div class="col-md-6" >
+                <div class="">
+                    <label class="control-label" >Valor mínmo</label>
+                    <input type="text"  placeholder="Mínimo" class="form-control" ng-model="item.valor_minimo" name="minimo" required/>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="">
+                    <label class="control-label" >Valor máximo</label>
+                    <input type="text"  placeholder="Máximo" class="form-control" ng-model="item.valor_maximo" name="maximo" required/>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row" ng-show="item.clase =='select-one' || item.clase =='select-multiple'">
+            <div class="col-md-12">
+                <div class="">
+                    <label class="control-label" >Nombre de Dominio</label>
+                    <input type="text"  placeholder="Dominio" class="form-control" ng-model="item.dominio" name="maximo" required/>
+                </div>
+            </div>
+        </div>    
+        <div class="row">
+            <div class="col-md-6">
+                <div class="">
+                    <label class="control-label" >Tamaño del campo</label>
+                    <select class="form-control" ng-model="item.size" required>
+                        <option value="" hidden>Seleccione</option>
+                        <option value="3">Pequeño</option>
+                        <option value="6">Mediano</option>
+                        <option value="12">Grande</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer modal-change  modal-blur">
+	<button class="btn btn-primary" type="button" ng-click="guardarModal(item)" >Agregar</button>
+	<button class="btn btn-warning" type="button" ng-click="cerrarModal()" >Cerrar</button>
+</div>

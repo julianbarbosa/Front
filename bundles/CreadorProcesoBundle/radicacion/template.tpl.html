@@ -1,0 +1,150 @@
+<div class="panel">    
+    <div class="panel-body col-md-12 col-lg-10">
+        <div class="page-header">
+            <h1 class="col-xs-12 col-sm-10 text-center text-left-sm">Creador de  
+                <strong class="subtitulo">Sistematización de Proceso</strong>
+                <br>
+                <small>Facilita la creación de una proceso
+                </small>
+            </h1>
+        </div>
+        <div ng-if="proceso.id==undefined">
+            <div class="row">    
+                <!-- <div class="input-group">
+                    <input type="text" class="form-control" aria-label="Text input with dropdown button">
+                    <div class="input-group-addon dropdown" style="padding:0px">
+                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                            <i class="fa fa-cogs" aria-hidden="true"></i>
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Mover Arriba</a></li>
+                            <li><a href="#">Mover Abajo</a></li>
+                            <li><a href="#">Editar</a></li>
+                        </ul>
+                    </div>
+                    </div>
+                  </div> -->
+                <div class="col-md-12">
+                    <div class="">
+                        <label class="control-label" >Nombre del Trámite</label>
+                        <input type="text"
+                                    id="BusquedaTramite"
+                                    class="form-control input-xlarge"
+                                    ng-class="{'has-error': validator.usuario}"
+                                    ng-model="procesoSearch"
+                                    uib-typeahead="tramite as tramite.nombre for tramite in getTramites($viewValue) | limitTo:8"
+                                    typeahead-wait-ms="1000"
+                                    uib-typeahead-on-select="onSelect($tramite, 'nombre', $label)"
+                                    uib-typeahead-loading="loadingTramite"
+                                    uib-typeahead-min-length="3"
+                                    bs-typeahead placeholder="Ingrese el nombre del trámite"
+                                    autocomplete="off"
+                                    tooltip="{{validator.usuario}}"
+                                    />
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 20px;" >
+                <div class="col-md-6">
+                    <button class="btn btn-primary" ng-click="seleccionarProceso(procesoSearch)" >Seleccionar trámite</button>
+                </div>
+            </div>
+        </div>
+        <div ng-if="proceso.id!==undefined">
+            <strong>Nombre</strong> {{proceso.nombre}}<br>
+            <strong>Código</strong> {{proceso.codigo}}<br>
+            <strong>Objetivo</strong> {{proceso.objetivo}}<br><br>
+            
+            <div ng-repeat="actividad in proceso.actividad track by $index">            
+                <div class="panel panel-default">
+                    <div class="panel-heading">{{$index+1}} - {{actividad.nombre}}</div>
+                    <div class="panel-body">
+                        <div ng-repeat="campo in actividad.elementos">
+                            <div class="col-md-{{campo.size}}" ng-if="campo.clase=='input'&&campo.tipo=='text'">
+                                <div class="" >
+                                    <label class="control-label" >{{campo.nombre}}</label>
+                                    <div class="input-group">
+                                        <input type="text" placeholder="{{campo.nombre}}" ng-model="data[actividad.nombre][campo.nombre]" class="form-control" placeholder="{{campo.descripcion}}" name="{{campo.nombre}}" required/>
+                                        <div class="input-group-addon dropdown" style="padding:0px">
+                                            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                                                <!-- <i class="fa fa-cogs" aria-hidden="true"></i> -->
+                                                <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="" ng-click="moverCampoArriba(actividad, campo)">Mover Arriba</a></li>
+                                                <li><a href="" ng-click="moverCampoAbajo(actividad, campo)">Mover Abajo</a></li>
+                                                <li><a href="" ng-click="editarCampo(campo)">Editar</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-{{campo.size}}" ng-if="campo.clase=='input'&&campo.tipo=='numeric'">
+                                <div class="">
+                                    <label class="control-label" >{{campo.nombre}}</label>
+                                    <input type="number" placeholder="{{campo.nombre}}" ng-model="data[actividad.nombre][campo.nombre]" class="form-control" placeholder="{{campo.descripcion}}"  name="{{campo.nombre}}" required/>
+                                </div>
+                            </div>
+                            <div class="col-md-{{campo.size}}" ng-if="campo.clase=='input'&&campo.tipo=='date'">
+                                <div class="">
+                                    <label class="control-label" >{{campo.nombre}}</label>
+                                    <input type="date" class="form-control" placeholder="{{campo.descripcion}}" ng-model="data[actividad.nombre][campo.nombre]" name="{{campo.nombre}}" required/>
+                                </div>
+                            </div>
+                            
+                            <!-- file -->
+                            <div class="col-md-{{campo.size}}" ng-if="campo.clase=='file'">
+                                <div class="">
+                                    <label class="control-label" >{{campo.nombre}}</label>
+                                    <input type="file" placeholder="{{campo.nombre}}" class="form-control" placeholder="{{campo.descripcion}}" ng-model="data[actividad.nombre][campo.nombre]"  name="{{campo.nombre}}" base-sixty-four-input required/>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-{{campo.size}}" ng-if="campo.clase=='select-one'">
+                                <div class="">
+                                    <label class="control-label" >{{campo.nombre}}</label>
+                                    <select class="form-control" ng-model="data[actividad.nombre][campo.nombre]" ng-init="getDominio(campo.dominio)" ng-options="dominio.id as dominio.nombre for dominio in arrayDominio[campo.dominio]" required>
+                                        <option value="" hidden>Seleccione</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-{{campo.size}}" ng-if="campo.clase=='select-multiple'">
+                                <div ng-init="getDominio(campo.dominio)" >
+                                    <label class="control-label" >{{campo.nombre}}</label>
+                                    <div class="col-md-12">
+                                        <div class="row" ng-repeat="dominio in arrayDominio[campo.dominio]">
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" ng-model="data[actividad.nombre][campo.nombre]"[dominio.id]"  value="true">{{dominio.nombre}}
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12" style="margin-top: 20px;" >
+                            <div class="col-md-6">
+                                <button class="btn btn-primary" ng-click="mostrarModalCampo($index)" >+ Agregar Campo</button>
+                            </div>
+                        </div>
+                        <div class="col-md-12" style="margin-top: 20px;" >
+                            <div class="col-md-6">
+                                <input type="file" ng-model="actividad.plantilla" base-sixty-four-input>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 20px;" >            
+                <div class="col-md-6">
+                    <button class="btn btn-primary" ng-click="mostrarModalActividad()" >+ Agregar Actividad</button>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 20px;" >
+                <div class="col-md-6">
+                    <button class="btn btn-primary" ng-click="guardar()" >Finalizar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

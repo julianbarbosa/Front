@@ -124,6 +124,7 @@
     "RegistroMercantilBundle/registrarRit/controller.js",
     "RegistroMercantilBundle/cancelarRit/controller.js",    
     "RegistroMercantilBundle/homologacion/controller.js",
+    "RegistroMercantilBundle/copiaCertificadoRIT/controller.js",
     "VisitaBundle/listarVisita/listarVisita.js",
 	"VisitaBundle/listarVisitaTodo/listarVisitaTodo.js",
 	"VisitaBundle/asignarVisita/asignarVisita.js",
@@ -135,5 +136,6 @@
     "TitulacionPrediosBundle/detalleReporte/controller.js",
     "PersonaEnConstruccionBundle/crearSolicitud/controller.js",
     "PersonaEnConstruccionBundle/gestionar/controller.js",
-    "PersonaEnConstruccionBundle/verReportes/controller.js"
+    "PersonaEnConstruccionBundle/verReportes/controller.js",
+    "CreadorProcesoBundle/radicacion/controller.js"
 ]
