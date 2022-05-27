@@ -34,6 +34,7 @@ saul.config(["$stateProvider",
             {type:'text', name: 'nombreViaSecundaria', title: 'Via Secundaria', header_align: 'text-center', body_align: 'text-center', sorting: 'sorting', width:'10%'},
             {type:'text', name: 'nombreEstado', title: 'Estado', header_align: 'text-center', body_align: 'text-center', sorting: 'sorting', width:'10%'},
             {type:'text', name: 'creador', title: 'Creado Por', header_align: 'text-center', body_align: 'text-center', sorting: 'sorting', width:'20%'},
+            {type:'text', name: 'actualizadoPor', title: 'Aprobado Por', header_align: 'text-center', body_align: 'text-center', sorting: 'sorting', width:'20%'},
             {type:'date', name: 'createdAt', title: 'Fecha Creación', header_align: 'text-center', body_align: 'text-center', width:'10%'},
             {type:'date', name: 'updatedAt', title: 'Fecha Actualización', header_align: 'text-center', body_align: 'text-center', width:'10%'},
         ];
