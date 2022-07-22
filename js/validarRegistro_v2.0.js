@@ -45,7 +45,7 @@ $(document).ready(function () {
     });
     $('input[name="sfApplyApply[razonsocial]"]').attr('readonly', true);
 
-    $('#sfaa_idtipodocidentificacion').click(function () {
+    $('#sfaa_idtipodocidentificacion').on("keyup onblur click change", function () {
         $('#sfaa_razonsocial').val('');
 
         if ($(this).val() == '2') {
