@@ -4,7 +4,7 @@ $(document).ready(function () {
 
     // Comportamiento al seleccionar el municipio
     $("#sfaa_municipio").change(function () {
-        if ($('#sfaa_municipio').val().trim() == '132') {
+        if ($('#sfaa_municipio').val().trim() == '153') {
             $(".select2-chosen").text('');
             $('#idmunicipio').hide();
             $('#sfaa_idbarrio').val('');
@@ -45,7 +45,7 @@ $(document).ready(function () {
     });
     $('input[name="sfApplyApply[razonsocial]"]').attr('readonly', true);
 
-    $('#sfaa_idtipodocidentificacion').on("keyup onblur click change", function () {
+    $('#sfaa_idtipodocidentificacion').click(function () {
         $('#sfaa_razonsocial').val('');
 
         if ($(this).val() == '2') {
@@ -58,11 +58,11 @@ $(document).ready(function () {
             $('input[name="sfApplyApply[username]"]').unbind("keyup onblur click change");
             $('#id_div_dv').show();
 
-        } else if ($(this).val() == '1') {
-            $('input[name="sfApplyApply[razonsocial]"]').attr('readonly', true);
-            $('#sfaa_first_name').siblings('label').html('Nombre');
-            $('#sfaa_last_name').siblings('label').html('Apellido');
+        } else if ($(this).val() != '2') {
             $('#sfaa_numidentificacion').siblings('label').html('Número de Identificación ( * )');
+            $('#sfaa_first_name').siblings('label').html('Nombre ( * )');
+            $('#sfaa_last_name').siblings('label').html('Apellido ( * )');
+            $('input[name="sfApplyApply[razonsocial]"]').attr('readonly', true);
             $('#id_div_dv').hide();
         }
     });
@@ -83,7 +83,7 @@ $(document).ready(function () {
             }//End of AJAX Success function  
         });
     }
-    $('#sfaa_numidentificacion').change(function () {
+    $('#sfaa_numidentificacion').on("keyup onblur click change", function () {
         if ($('#sfaa_idtipodocidentificacion').val() == '2') {
             if (($('#sfaa_numidentificacion').val() != '') && ($('#sfaa_digito_verificacion').val() != '')) {
                 // numidentificacion = $('#sfaa_numidentificacion').val();
@@ -94,7 +94,7 @@ $(document).ready(function () {
         }
     })
 
-    $('#sfaa_digito_verificacion').change(function () {
+    $('#sfaa_digito_verificacion').on("keyup onblur click change", function () {
         if ($('#sfaa_idtipodocidentificacion').val() == '2') {
             if (($('#sfaa_numidentificacion').val() != '') && ($('#sfaa_digito_verificacion').val() != '')) {
                 // numidentificacion = $('#sfaa_numidentificacion').val();
@@ -219,7 +219,7 @@ $(document).ready(function () {
             'sfApplyApply[idbarrio]': {
                 required: {
                     depends: function () {
-                        if (($('#sfaa_municipio').val() == "132") && ($('#sfaa_idtipozona').val() == "1")) {
+                        if (($('#sfaa_municipio').val() == "153") && ($('#sfaa_idtipozona').val() == "1")) {
                             return true;
                         } else {
                             return false;
@@ -230,7 +230,7 @@ $(document).ready(function () {
             'sfApplyApply[idvereda]': {
                 required: {
                     depends: function () {
-                        if (($('#sfaa_municipio').val() == "132") && ($('#sfaa_idtipozona').val() == "2")) {
+                        if (($('#sfaa_municipio').val() == "153") && ($('#sfaa_idtipozona').val() == "2")) {
                             return true;
                         } else {
                             return false;
