@@ -51,16 +51,59 @@ $(document).ready(function () {
         if ($(this).val() == '2') {
             $('#sfaa_first_name').siblings('label').html('Nombre Representante Legal');
             $('#sfaa_last_name').siblings('label').html('Apellido Representante Legal');
+            $('#sfaa_numidentificacion').siblings('label').html('NIT (Sin Dígito de Verificación)');
             $('input[name="sfApplyApply[razonsocial]"]').attr('readonly', false);
             $('input[name="sfApplyApply[first_name]"]').unbind("keyup onblur click change");
             $('input[name="sfApplyApply[last_name]"]').unbind("keyup onblur click change");
             $('input[name="sfApplyApply[username]"]').unbind("keyup onblur click change");
+            $('#id_div_dv').show();
+
         } else if ($(this).val() == '1') {
             $('input[name="sfApplyApply[razonsocial]"]').attr('readonly', true);
             $('#sfaa_first_name').siblings('label').html('Nombre');
             $('#sfaa_last_name').siblings('label').html('Apellido');
+            $('#sfaa_numidentificacion').siblings('label').html('Número de Identificación ( * )');
+            $('#id_div_dv').hide();
         }
     });
+
+    function getdv(numidentificacion, dv) {
+        $.ajax({
+            type: "GET",
+            url: "sfApply/Validardv?numidentificacion=" + numidentificacion,
+            dataType: "json",
+            success: function (data) {
+                if (data == dv) {
+                    $('#sfaa_d_v').val(data);
+                    validacion_dv = true;
+                } else {
+                    $('#sfaa_d_v').val('Error en Dígito de Verificación');
+                    validacion_dv = false;
+                }
+            }//End of AJAX Success function  
+        });
+    }
+    $('#sfaa_numidentificacion').change(function () {
+        if ($('#sfaa_idtipodocidentificacion').val() == '2') {
+            if (($('#sfaa_numidentificacion').val() != '') && ($('#sfaa_digito_verificacion').val() != '')) {
+                // numidentificacion = $('#sfaa_numidentificacion').val();
+                getdv($('#sfaa_numidentificacion').val(), $('#sfaa_digito_verificacion').val());
+                //$('#sfaa_d_v').val(dvusuario);
+
+            }
+        }
+    })
+
+    $('#sfaa_digito_verificacion').change(function () {
+        if ($('#sfaa_idtipodocidentificacion').val() == '2') {
+            if (($('#sfaa_numidentificacion').val() != '') && ($('#sfaa_digito_verificacion').val() != '')) {
+                // numidentificacion = $('#sfaa_numidentificacion').val();
+                getdv($('#sfaa_numidentificacion').val(), $('#sfaa_digito_verificacion').val());
+                //$('#sfaa_d_v').val(dvusuario);
+
+            }
+        }
+    })
 
     // Personalización de mensajes del validate
     jQuery.extend(jQuery.validator.messages, {
@@ -110,15 +153,7 @@ $(document).ready(function () {
                         }
                     }
                 },
-                /*remote: {
-                    url: 'sfApply/VerificarNumidentificacion',
-                    type: "post",
-                    data: {
-                        numidentificacion: function () {
-                            return $('#sfaa_numidentificacion').val();
-                        }
-                    }
-                }*/
+
             },
             'sfApplyApply[first_name]': {
                 required: true
@@ -143,6 +178,10 @@ $(document).ready(function () {
             'sfApplyApply[password2]': {
                 required: true,
                 equalTo: '#sfaa_password'
+            },
+            'sfApplyApply[digito_verificacion]': {
+                required: false,
+                equalTo: '#sfaa_d_v'
             },
             'sfApplyApply[email_address]': {
                 required: true,
@@ -219,6 +258,9 @@ $(document).ready(function () {
             },
             'sfApplyApply[password2]': {
                 equalTo: 'Por favor, escriba el mismo valor del campo. "' + $('#sfaa_password').parent().find('label').text() + '"'
+            },
+            'sfApplyApply[digito_verificacion]': {
+                equalTo: 'Por favor, escriba el dígito de verificación correcto.'
             },
             'sfApplyApply[email2]': {
                 equalTo: 'Por favor, escriba el mismo valor del campo. "' + $('#sfaa_email_address').parent().find('label').text() + '"'
