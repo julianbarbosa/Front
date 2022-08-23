@@ -31,7 +31,7 @@ saul.config(["$stateProvider", function(a) {
 
             //Definición del Mapa
             self.map = new Map({
-                basemap: 'streets'
+                basemap: 'hybrid'
             });
 
 
@@ -56,8 +56,8 @@ saul.config(["$stateProvider", function(a) {
 
             //Definición de BasemapToggle
             var toggle = new BasemapToggle({
-                view: $scope.view,
-                nextBasemap: "hybrid"
+                view: view,
+                nextBasemap: "streets-vector"
             });
             view.ui.add(toggle, "bottom-right");
 
