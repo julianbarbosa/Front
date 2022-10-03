@@ -45,7 +45,7 @@
                         <select class="form-control" ng-options="item.id as item.nombre for item in responsables"
                             ng-model="data.asignadoa"><select>
                         <strong>Estado:</strong> {{expediente.estado.nombre}}
-                                                    </div>
+                    </div>
                 </div>
                 <div>
                     <div class="row padding-sm">
@@ -100,7 +100,7 @@
                             </div>
                             <div class="form-group col-md-6"  ng-class="{'has-error': form.fechaNotificacion.$touched && form.fechaNotificacion.$invalid}">                                
                                 <label class="control-label" >Fecha Notificación</label>
-                                <input type="date" name="fechaNotificacion" ng-model="data.fechaNotificacion" class="form-control">
+                                <input type="date" name="fechaNotificacion" ng-model="data.fechaNotificacion" class="form-control" min="{{expediente.comparendo.fechaComparendo.timestamp * 1000| date:'yyyy-MM-dd'}}">
                             </div>
                         </div>
                         <div class="row">
@@ -110,7 +110,7 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label class="control-label" >Fecha Notificación Recursos</label>
-                                <input type="date" name="fechaNotificacionRecursos" ng-model="data.fechaNotificacionRecursos" class="form-control">
+                                <input type="date" name="fechaNotificacionRecursos" ng-model="data.fechaNotificacionRecursos" class="form-control" min="{{expediente.comparendo.fechaComparendo.timestamp * 1000| date:'yyyy-MM-dd'}}">
                             </div>
                         </div>
                         <div class="row">
@@ -125,6 +125,12 @@
                             <div class="form-group required col-md-6" >
                                 <label class="control-label" >Número Folios</label>
                                 <input type="number" name="numeroFolios" ng-model="data.numeroFolios" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="row" ng-if="expediente.comparendo.medidasCorrectivas[0].idMedidaCorrectiva==26 || expediente.comparendo.medidasCorrectivas[0].idMedidaCorrectiva==27 || expediente.comparendo.medidasCorrectivas[0].idMedidaCorrectiva==28">
+                            <div class="form-group required col-md-6" >
+                                <label class="control-label" >Valor Multa Especial</label>
+                                <input type="number" name="valorMultaEspecial" ng-model="data.valorMultaEspecial" class="form-control" required>
                             </div>
                         </div>
                         <!--<div class="row"  ng-show="permisos.controlsanciones_movimiento_expediente_oficina && expediente.estado.codigo=='pendiente' && expediente.responsable.id==userId && pago.success!==true">																						
