@@ -3,80 +3,96 @@
         <div class="page-header">
             <h1 class="col-xs-12 col-sm-10 text-center text-left-sm"><i class="padding-sm-hr fa fa-list-alt"></i>&nbsp;&nbsp;Búsqueda de Licencia</h1>
         </div> 
-        <form name="userForm">             
+        <hr>
+        <form name="userForm"> 
             <div class="row">
-                <div class="form-group col-md-3">
-                    <label class="control-label" for="numeroidentificacion">
-                        Identificación Propietario
-                    </label>
-                    <input type="text"
-                           id="numeroidentificacion"
-                           class="form-control input-xlarge"                            
-                           ng-model="busqueda.identificacionpropietario"
-                           placeholder="Ingrese la identificación"
-                           required/>                    
+                <div ng-repeat="campo in camposBusqueda track by $index">
+                    <div ng-if="campo.type=='date' && campo.estado=='activo'">
+                        <div class="form-group col-xs-6 col-md-3">
+                            <label class="control-label" for="{{campo.name}}">
+                                {{campo.label}}
+                            </label>
+                            <div class="input-group">    
+                                <input type="date"
+                                    id="{{campo.name}}"
+                                    class="form-control input-xlarge"                            
+                                    ng-model="busqueda[campo.name]"
+                                    placeholder="Ingrese el valor"
+                                    required/>
+                                <div class="btn btn-danger input-group-addon"  ng-click="eliminarCampo($index)">
+                                    <i class="fa fa-trash"></i>                                
+                                </div>                      
+                            </div>        
+                        </div> 
+                    </div>                
+                    <div ng-if="campo.type=='integer' && campo.estado=='activo'">
+                        <div class="form-group col-xs-6 col-md-3">
+                            <label class="control-label" for="{{campo.name}}">
+                                {{campo.label}}
+                            </label>
+                            <div class="input-group">    
+                                <input type="number"
+                                    id="{{campo.name}}"
+                                    class="form-control input-xlarge"                            
+                                    ng-model="busqueda[campo.name]"
+                                    placeholder="Ingrese la identificación"
+                                    required/>      
+                                <div class="btn btn-danger input-group-addon"  ng-click="eliminarCampo($index)">
+                                    <i class="fa fa-trash"></i>                                
+                                </div>                            
+                            </div>     
+                        </div>                        
+                    </div>
+                    
+                    <div ng-if="campo.type=='string' && campo.estado=='activo'">
+                        <div class="form-group col-xs-6 col-md-3">
+                            <label class="control-label" for="{{campo.name}}">
+                                {{campo.label}}
+                            </label>
+                            <div class="input-group">    
+                                <input type="text"
+                                    id="{{campo.name}}"
+                                    class="form-control input-xlarge"                            
+                                    ng-model="busqueda[campo.name]"
+                                    placeholder="Ingrese la identificación"
+                                    required/>  
+                                <div class="btn btn-danger input-group-addon"  ng-click="eliminarCampo($index)">
+                                    <i class="fa fa-trash"></i>                                
+                                </div>                            
+                            </div>     
+                        </div> 
+                    </div>
+                    
+                    
+                    <div ng-if="campo.type=='select' && campo.estado=='activo'">
+                        <div class="form-group col-xs-6 col-md-3">
+                            <label class="control-label" for="{{campo.name}}">
+                                {{campo.label}}
+                            </label>
+                            <div class="input-group">    
+                                <select ng-model="busqueda[campo.name]" ng-options="item.nombre as item.nombre for item in getStore(campo.store)" class="form-control">{{campo.name}}
+                                    <option value="">-- Seleccione --</option>
+                                </select>
+                                <div class="btn btn-danger input-group-addon" ng-click="eliminarCampo($index)">
+                                    <i class="fa fa-trash" ></i>                                
+                                </div>                            
+                            </div>     
+                        </div>
+                    </div>
+                    
                 </div>
-                <div class="form-group col-md-3">
-                    <label class="control-label" for="numerocomparendo">
-                        Nombre Propietario                        
-                    </label>
-                    <input type="text"
-                           id="numerocomparendo"
-                           class="form-control input-xlarge"                            
-                           ng-model="busqueda.nombrepropietario"
-                           placeholder="Ingrese nombre propietario"
-                           required/>                    
-                </div>
-                <div class="form-group col-md-3">
-                    <label class="control-label" for="numerocomparendo">
-                        Curaduría
-                    </label>
-                    <select ng-model="busqueda.idusuario" ng-options="curaduria.id as curaduria.curaduria for curaduria in arrayCuradurias" class="form-control">
-                        <option value="">-- Seleccione --</option>
-                    </select>
-                </div>                
-            </div>
-            <div class="row">
-                <div class="form-group col-md-3">
-                    <label class="control-label" for="direccion">
-                        Dirección
-                    </label>
-                    <input type="text"
-                           id="direccion"
-                           class="form-control input-xlarge"                            
-                           ng-model="busqueda.direccion"
-                           placeholder="Ingrese la dirección"
-                           required/>                    
-                </div>
-                <div class="form-group col-md-3">
-                    <label class="control-label" for="npn">
-                        Numero Catastral                       
-                    </label>
-                    <input type="text"
-                           id="numerocomparendo"
-                           class="form-control input-xlarge"                            
-                           ng-model="busqueda.catastral"
-                           placeholder="Ingrese el npn"
-                           required/>                    
-                </div> 
-                <div class="form-group col-md-3">
-                    <label class="control-label" for="numerocomparendo">
-                        Matricula Inmobiliaria
-                    </label>
-                    <input type="text"
-                           id="numerocomparendo"
-                           class="form-control input-xlarge"                            
-                           ng-model="busqueda.matricula"
-                           placeholder="Ingrese la matricula"
-                           required/>                    
-                </div> 
-                <div class="col-md-2 ">   
-                    <br>
-                    <input type="button" class="btn btn-success" value="Buscar" ng-click="actualizarDatos()">
-                </div>
-            </div>
+            </div>        
         </form>
+        <div class="row">  
+            <div class="col-md-12">
+                <button class="btn btn-warning pull-right" ng-click="agregarCampo()">
+                    Agregar campo
+                </button>
+                <input type="button" class="btn btn-success pull-right" value="Buscar" ng-click="actualizarDatos()"  style="margin-right: 10px;">
+            </div>
+        </div>
     </div>
+ 
     <div class="panel-body col-md-12" ng-if="data">       
         <div class="table-primary">            
             <table cellpadding="0" cellspacing="0" class="table-hover table table-bordered" id="listaSolicitudes" width="100%" role="grid" aria-describedby="solicitud_listar_tareas">
@@ -164,7 +180,9 @@
                 </td>
                 </tfoot>
             </table>
-
+            <button class="btn btn-success" ng-click="downloadData()">
+                <i class="fa fa-file-excel-o"></i>
+            </button>
         </div>
     </div>
 </div>
