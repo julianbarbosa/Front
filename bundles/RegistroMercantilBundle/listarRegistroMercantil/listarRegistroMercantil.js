@@ -1,7 +1,16 @@
 saul.config(["$stateProvider",
     function ($stateProvider) {
         $stateProvider.state("registro-mercantil-listar", {
-            url: "/registro-mercantil/listar",
+            url: "/registro-mercantil/listar/:id",
+            views: {
+                "main": {
+                    controller: "RegistroMercantilListarCtrl",
+                    templateUrl: "../bundles/RegistroMercantilBundle/listarRegistroMercantil/listarRegistroMercantil.tpl.html"
+                }
+            }
+        });
+        $stateProvider.state("rit-listar", {
+            url: "/rit/listar/:id",
             views: {
                 "main": {
                     controller: "RegistroMercantilListarCtrl",
@@ -10,13 +19,22 @@ saul.config(["$stateProvider",
             }
         });
     }
-]).controller("RegistroMercantilListarCtrl", ["$scope", "root", "$http", 'DevolverSolicitud',
-    function ($scope, root, $http, DevolverSolicitud) {
+]).controller("RegistroMercantilListarCtrl", ["$scope", "root", "$http", 'DevolverSolicitud', "$stateParams",
+    function ($scope, root, $http, DevolverSolicitud, $stateParams) {
         $scope.currentPage = 1;
         $scope.rowWarning = 'estaEnviado';
         $scope.orderBy = 'idsolicitud';
         $scope.actualizandoDatos = false;
+        $scope.detalleRit = '';
+       
+        console.log("rit",$stateParams.id);
 
+        if( $stateParams.id == 'rm') {
+            $scope.titulo = "Registros Mercantiles";
+        } else if($stateParams.id == 'rit') {
+            $scope.titulo = "Registros de Información Tributaria - RIT";
+            $scope.detalleRit = { 'icon': '<i class="fa fa-file-pdf-o" title="Clic para ver el detalle"></i>', 'link': '../../saul2/app_dev.php/registromercantil/rit/formulario/' };
+        }
         $scope.query = {
             filter: [],
             limit: 10,
@@ -31,9 +49,9 @@ saul.config(["$stateProvider",
                 type: 'action', name: 'acciones', title: 'Acciones', align: 'text-center', input: false,
                 values: [
 
-                    { 'icon': '<i class="fa fa-search" title="Clic para ver el detalle"></i>', 'link': '#!/registro-mercantil/consultar/' }
+                    { 'icon': '<i class="fa fa-search" title="Clic para ver el detalle"></i>', 'link': '#!/registro-mercantil/consultar/' },
+                    $scope.detalleRit
                 ],
-
             },
             { type: 'text', name: 'id', name2: '', title: 'Num Interno', header_align: 'text-center', body_align: 'text-center', sorting: 'sorting', width: '5%' },
             { type: 'text', name: 'identificador', name2: '', title: 'Identificador', header_align: 'text-center', body_align: 'text-center', sorting: 'sorting', width: '5%' },
@@ -46,32 +64,6 @@ saul.config(["$stateProvider",
         $scope.onClickAction = function (item, row) {
             $scope.$eval(item['click']).call([], item, row);
         }
-
-        $scope.toBack = function (item, row) {
-            bootbox.prompt(
-                "¿Desea pasar a estado Pendiente la solicitud de '" + row.nombreTipoSolicitud +
-                "' con número " + row.idsolicitud + "?<br><strong>Observación:</strong>",
-                function (observacion) {
-                    if (observacion) {
-                        $(".overlap_espera").show();
-                        $(".overlap_espera_1").show();
-
-                        DevolverSolicitud.devolver(row.idsolicitud, row.codigoTipoSolicitud, observacion).then(function (rta) {
-                            $(".overlap_espera").fadeOut(500, "linear");
-                            $(".overlap_espera_1").fadeOut(500, "linear", function () {
-                                bootbox.alert(rta.msg, function () {
-                                    $scope.actualizarDatos();
-                                });
-                            });
-                        }, function (error) {
-                            $(".overlap_espera").fadeOut(500, "linear");
-                            $(".overlap_espera_1").fadeOut(500, "linear", function () {
-                                alert(error.msg);
-                            });
-                        });
-                    }
-                });
-        };
 
         $scope.buscar = function (keyCode) {
             if (keyCode == 13) {
@@ -109,7 +101,7 @@ saul.config(["$stateProvider",
 
         $scope.obtenerRegistroMercantil = function (data) {
             console.info("data=>", data);
-            $http.post(root + 'integracion/camaracomercio/registromercantil/listar', data).then(function (response) {
+            $http.post(root + 'integracion/camaracomercio/registromercantil/listar/'+$stateParams.id, data).then(function (response) {
                 $scope.data = response.data.data;
                 $scope.totalItems = response.data.totalItems;
                 $scope.actualizandoDatos = false;

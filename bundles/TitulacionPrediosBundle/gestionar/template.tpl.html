@@ -204,7 +204,7 @@
                                     {{item.devolucion}}
                                 </div>
                             </div> 
-                            <div class="row" ng-show="esUsuarioGestion">
+                            <div class="row" ng-show="permitirDevolver==true">
                                 <label class="control-label">Completar la respuesta:</label>
                                 <select class="form-control" ng-model="item.respuestaSeleccionada" ng-options="tipoRespuesta.id as tipoRespuesta.nombre for tipoRespuesta in tiposDeRespuesta" ng-change="obtenerTextoRespuesta(item.respuestaSeleccionada)" ng-disabled="validator.alert.content==undefined?false:true">
                                 </select>
@@ -213,9 +213,9 @@
                             <div class="row" ng-show="esUsuarioGestion" ng-show="item.respuestaSeleccionada">
                                 <textarea class="form-control"  minlength="10" ng-model="item.textoRespuesta" rows="10" cols="5"></textarea>
                             </div>
-                            <div class="row" ng-show="esUsuarioFirma">
+                            <div class="row" ng-show="permitirDevolver==true">
                                 <label class="control-label">Comentarios de Devolución:</label>
-                                <textarea class="form-control" ng-init="item.textoDevolucion=null" ng-model="item.textoDevolucion" rows="10" cols="5"></textarea>
+                                <textarea class="form-control" ng-model="item.textoDevolucion" rows="10" cols="5"></textarea>
                                 <button class="btn btn-primary btn-sm" ng-click="item.textoDevolucion=null">Limpiar</button>
                             </div>
                             <br>
@@ -223,18 +223,11 @@
                                 <div class="col-md-6 text-right-sm">
                                     <div ng-show="esUsuarioGestion">
                                         <input type="button" class="btn btn-info" ng-click="step = step - 1" value="Anterior" />
-                                        <input type="submit" class="btn btn-primary" ng-click="save('preaprobada', 1)" value="Guardar"  ng-disabled="!formGestion.$valid"/>
-                                        <input type="submit" class="btn btn-danger" ng-click="save('pendiente', 0)" value="Guardar Borrador"  ng-disabled="!formGestion.$valid"/>
+                                        <input type="submit" class="btn btn-primary" ng-click="save('continuar', 1)" value="Guardar"  ng-disabled="!formGestion.$valid"/>
+                                        <input type="submit" class="btn btn-danger" ng-click="save('continuar', 0)" value="Guardar Borrador"  ng-disabled="!formGestion.$valid"/>
                                         <input type="button" class="btn btn-warning" ng-click="previsualizar()" value="Previsualizar Respuesta"  ng-show="respuestaGuardada" />
+                                        <input type="submit" class="btn btn-danger" ng-click="save('devolver', 1)" value="Devolver"  ng-disabled="!formGestion.$valid" ng-show="item.textoDevolucion.length>4 && item.solicitud.estado.codigo!=='pendiente'" />
                                     </div>
-                                    <div ng-show="esUsuarioFirma">
-                                        <input type="button" class="btn btn-info" ng-click="step = step - 1" value="Anterior" />
-                                        <input type="submit" class="btn btn-primary" ng-click="save('aprobada', 1)" value="Firmar"  ng-disabled="!formGestion.$valid" ng-show="item.textoDevolucion.length<=4"/>
-                                        <input type="submit" class="btn btn-danger" ng-click="save('pendiente', 1)" value="Devolver"  ng-disabled="!formGestion.$valid" ng-show="item.textoDevolucion.length>4"/>
-                                        <input type="button" class="btn btn-warning" ng-click="previsualizar()" value="Previsualizar Respuesta"/>
-                                    </div>
-                                    
-                                    
                                     ó                          
                                     <a ui-sref="listar-peticion">Cancelar</a>
                                 </div>

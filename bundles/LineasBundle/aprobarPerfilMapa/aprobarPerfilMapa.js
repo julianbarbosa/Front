@@ -31,7 +31,7 @@ saul.config(["$stateProvider", function(a) {
 
             //Definición del Mapa
             self.map = new Map({
-                basemap: 'streets'
+                basemap: 'hybrid'
             });
 
 
@@ -48,7 +48,7 @@ saul.config(["$stateProvider", function(a) {
                 },
                 popup: {
                     actionsMenuEnabled: false                    
-                      }
+                }
             });
 
             
@@ -56,8 +56,8 @@ saul.config(["$stateProvider", function(a) {
 
             //Definición de BasemapToggle
             var toggle = new BasemapToggle({
-                view: $scope.view,
-                nextBasemap: "hybrid"
+                view: view,
+                nextBasemap: "streets-vector"
             });
             view.ui.add(toggle, "bottom-right");
 
@@ -146,7 +146,7 @@ saul.config(["$stateProvider", function(a) {
 
             function drawThis(target) {
                 $scope.perfilId = view.popup.selectedFeature.attributes.id;
-                var url = "http://planeacion.cali.gov.co/saul2/app_dev.php/perfilvial/"+view.popup.selectedFeature.attributes.id;
+                var url = "http://planeacion.cali.gov.co/saul2/perfilvial/"+view.popup.selectedFeature.attributes.id;
                 esriRequest(url,{responseType: 'json'}).then(function(response) {
                 
                 var via=JSON.stringify(response.data[0].via,null,2);
@@ -158,12 +158,13 @@ saul.config(["$stateProvider", function(a) {
         
                 var separador=JSON.stringify(response.data[0].dimensionSeparador,null,2);
                 
-                var fuente1=JSON.stringify(response.data[0].urlFuente1,null,2);
-        
-                var fuente2=JSON.stringify(response.data[0].urlFuente2,null,2);
-                if ((fuente2=="null")) {fuente2_url=""}else{var fuente2_url="<a target= blank href="+fuente2+" title='Consultar en SAUL'>Fuente 2 </a>";};
-        
-                
+                var urlFuente1 = JSON.stringify(response.data[0].urlFuente1, null, 2);
+                var urlFuente2 = JSON.stringify(response.data[0].urlFuente2, null, 2);
+
+                var fuente1 = JSON.stringify(response.data[0].fuente1, null, 2);
+                var fuente2 = JSON.stringify(response.data[0].fuente2, null, 2);
+                if ((fuente2 == null || fuente2==0)) { fuente2_url = "" } else { var fuente2_url = "<a target= blank href=" + urlFuente2 + " title='Consulta en SAUL'>Fuente 2 </a>"; };
+
                 var antejardinizq=JSON.stringify(response.data[0].izquierdo.antejardin,null,2);
                 var antejardinizqvar=JSON.stringify(response.data[0].izquierdo.antejardinVariable,null,2);
                 var andenizq=JSON.stringify(response.data[0].izquierdo.anden,null,2);
@@ -427,7 +428,7 @@ saul.config(["$stateProvider", function(a) {
                 
                 view.popup.title =texto_principal+" "+nombreViaPrincipal+" entre "+texto_secundario+" "+nombreViaSecundaria+" y "+texto_terciario+" "+nombreViaTerciaria;
                 view.popup.content = //view.popup.selectedFeature.attributes.id +
-                  "<table border='0' cellpadding='0' cellspacing='0' align=center width=100%><tr><td>Corte 1-1</td><td><a text-decoration: underline; target= blank href='https://planeacion.cali.gov.co/saul/v2/#!/perfilvial/crearperfilvial/"+view.popup.selectedFeature.attributes.id+"' title='Consultar en SAUL'>Consultar en SAUL </a></td><td><a target='_blank' href="+fuente1+" title='Fuente 1'>Fuente 1 </a></td><td>"+fuente2_url+"</td></tr></table>  "+ 
+                  "<table border='0' cellpadding='0' cellspacing='0' align=center width=100%><tr><td>Corte 1-1</td><td><a text-decoration: underline; target= blank href='https://planeacion.cali.gov.co/saul/v2/#!/perfilvial/crearperfilvial/"+view.popup.selectedFeature.attributes.id+"' title='Consultar en SAUL'>Consultar en SAUL </a></td><td><a target='_blank' href="+urlFuente1+" title='Fuente 1'>Fuente 1 ("+fuente1+") </a></td><td>"+fuente2_url+"</td></tr></table>  "+ 
                   "Linea No.  "+view.popup.selectedFeature.attributes.id+"</br><p align='center' style='color:rgba(66,7,7,1)';><b>"+claseVia+"</b></p>"+
                           "<div style='text-align: center; width:100%'><table border='0' cellpadding='0' cellspacing='0' align='center' style='text-align: center;'>"+
                             "<tr>"+fila_1+
@@ -477,9 +478,11 @@ saul.config(["$stateProvider", function(a) {
         
                     "</table> "+
                     "Estado: "+ estado + "<br>" +
-                    "<input type='button' style='btn btn-success' ng-click='aprobarPerfil()' onclick=\"if (confirm('Esta seguro que desea aprobar este perfil?')) { \
+                    "<input type='button' style='margin-right: 5px' class='btn btn-primary' ng-click='aprobarPerfil()' onclick=\"if (confirm('Esta seguro que desea aprobar este perfil?')) { \
                         $.ajax({ url: '"+$scope.root+"perfil/aprobarperfilporid/"+$scope.perfilId+"', type: 'POST', data: {  },  success: function (response) { alert(response);actualizarCapa(); } }); }\" value='Aprobar'/>"+
-                    "<input type='button' style='btn btn-danger' onclick=\"window.open('../v2/#!/perfilvial/aprobarperfilvial/"+$scope.perfilId+"/1/revisar')\" value='Corregir'></input>"+
+                        "<input type='button'  style='margin-right: 5px' class='btn btn-success' ng-click='aprobarPerfil()' onclick=\"if (confirm('Esta seguro que desea enviar la linea para visita?')) { \
+                            $.ajax({ url: '"+$scope.root+"perfil/revisarperfilporid/"+$scope.perfilId+"', type: 'POST', data: {  },  success: function (response) { alert(response);actualizarCapa(); } }); }\" value='Visitar'/>"+
+                    "<input type='button' class='btn btn-danger' onclick=\"window.open('../v2/#!/perfilvial/aprobarperfilvial/"+$scope.perfilId+"/1/revisar')\" value='Corregir'></input>"+
                     "</div>";
                 });       
                 return "<img id='loadingImg' src='http://saul.cali.gov.co/images/loader.gif' style='position:relative; left:50%; top:50%; z-index:100;' />"; 
@@ -490,7 +493,7 @@ saul.config(["$stateProvider", function(a) {
             view.popup.content = "Prueba de Perfil";
             esriConfig.request.corsEnabledServers.push("https://planeacion.cali.gov.co/");
             function textcontent(id) {		
-                var url = "https://planeacion.cali.gov.co/saul2/app_dev.php/perfilvial/"+id;
+                var url = "https://planeacion.cali.gov.co/saul2/perfilvial/"+id;
                  esriRequest(url,{responseType: 'json'}).then(function(response) {		
                     antejardin=JSON.stringify(response.data[0].antejardinIzquierdo,null,2);
                     anden=JSON.stringify(response.data[0].andenIzquierdo,null,2);

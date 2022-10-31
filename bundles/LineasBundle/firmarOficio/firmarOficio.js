@@ -54,6 +54,7 @@ saul.config(["$stateProvider",
 
         $scope.firmarOficio = function (certificar)
         {            
+            
             bootbox.confirm("Confirma que desea realizar esta acción?",
                 function (result) {
                     $(this).attr('disabled', true);
@@ -63,10 +64,14 @@ saul.config(["$stateProvider",
                         $('.overlap_espera').show();            
                         $('.overlap_espera_1').show();    
                         dsJqueryUtils.goTop();                
-                        $http.post(root+"linea/oficio/firmar", {"id":$scope.item.idSolicitud}).$promise.then(function (response) {                    
+                        $http.post(root+"linea/oficio/firmar", {"id":$scope.item.idSolicitud}).then(function (response) {  
                             $('.overlap_espera').fadeOut(500, 'linear');
                             $('.overlap_espera_1').fadeOut(500, 'linear');      
-                            callback(response);                            
+                            callback(response.data);                            
+                        }, function(response,status,headers,config) {
+                            $('.overlap_espera').fadeOut(500, 'linear');
+                            $('.overlap_espera_1').fadeOut(500, 'linear');      
+                            callback(response.data);   
                         });
                         $scope.ocultarModal = false;
                     }

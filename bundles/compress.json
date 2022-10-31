@@ -29,7 +29,7 @@
 	"LineasBundle/devolverLineaEmitida/devolverLineaEmitida.js",
 	"LineasBundle/reporteLineasLadoManzanaXFuncionario/reporteLineasLadoManzanaXFuncionario.js",
 	"LineasBundle/crearPerfilVial/crearPerfilVial.js",
-	"LineasBundle/listarPerfilVial/listarPerfilVial.js",
+	"LineasBundle/listarPerfilVial/listarPerfilVial.js", 
 	"LineasBundle/aprobarPerfilMapa/aprobarPerfilMapa.js",
 	"LineasBundle/crearSolicitudEsquemas/crearSolicitudEsquemas.js",
 	"LineasBundle/model.js",
@@ -79,6 +79,7 @@
     "ControlPolicivoBundle/reporteExpedienteSAP/reporteExpediente.js",
 	"ControlPolicivoBundle/modificarTercero/modificarTercero.js",
     "ControlPolicivoBundle/generadorDeReportes/controller.js",
+    "ControlPolicivoBundle/generadorDeProcesos/controller.js",
     "ControlPolicivoBundle/generadorDeReportesFiltro/controller.js",
 	"ControlPolicivoBundle/model.js",
 	"InformesBundle/diarioPorTipoSolicitud/diarioPorTipoSolicitud.js",
@@ -121,7 +122,9 @@
     "RegistroMercantilBundle/reporteResumido/reporteResumido.js",
 	"RegistroMercantilBundle/reporteGeneral/reporteGeneral.js",
     "RegistroMercantilBundle/registrarRit/controller.js",
-    "RegistroMercantilBundle/cancelarRit/controller.js",
+    "RegistroMercantilBundle/cancelarRit/controller.js",    
+    "RegistroMercantilBundle/homologacion/controller.js",
+    "RegistroMercantilBundle/copiaCertificadoRIT/controller.js",
     "VisitaBundle/listarVisita/listarVisita.js",
 	"VisitaBundle/listarVisitaTodo/listarVisitaTodo.js",
 	"VisitaBundle/asignarVisita/asignarVisita.js",
@@ -133,5 +136,6 @@
     "TitulacionPrediosBundle/detalleReporte/controller.js",
     "PersonaEnConstruccionBundle/crearSolicitud/controller.js",
     "PersonaEnConstruccionBundle/gestionar/controller.js",
-    "PersonaEnConstruccionBundle/verReportes/controller.js"
+    "PersonaEnConstruccionBundle/verReportes/controller.js",
+    "CreadorProcesoBundle/radicacion/controller.js"
 ]

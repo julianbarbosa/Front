@@ -1,0 +1,66 @@
+<div>
+    <div ng-show="validator.alert.content">
+        <div class="alert alert-{{validator.alert.type}} alert-dismissable">
+            <i class="fa fa-danger"></i>
+            <button type="button" class="close" aria-hidden="true" ng-click="hideAlert()">×</button>
+            <b>{{validator.alert.title}}</b> <span ng-bind-html="validator.alert.content"></span>
+        </div>
+    </div>
+    <div class="page-header">
+        <h1 class="col-xs-12 col-sm-8 text-center text-left-sm">Consulta en el  
+            <strong class="subtitulo">Registro de Información Tributaria</strong>
+            <br>
+            <small>Solicitud de duplicado de registro mercantil.
+            </small>
+        </h1>
+    </div>
+    <div class="note note-info" ng-show="response.success == true && response.enviado == true ">
+        <p><strong>Envío Exitoso</strong></p> Se ha enviado un mensaje al correo electrónico <strong>{{response.email}}</strong> con un link de confirmación para la consulta.
+    </div>
+    <div class="note note-error" ng-show="response.success == true && response.enviado !== true">
+        <p><strong>Información</strong></p> No se ha encontrado ningún registro asociado al número de identificación y correo consultado en la base de datos oficial del RIT.
+    </div>
+    <form name="formActualizacion" ng-show="response.success !== true">
+        <div class="col-md-8">
+            <div class="panel panel-success">
+                <div class="panel-body">
+                    <div class="row" style="margin-bottom: 20px;">
+                        <div class="col-md-12">
+                            Ingrese los datos que tiene registrado en el Registro de Información Tributaria.
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">							
+                            <div class="form-group {{ !formActualizacion.numeroidentificacion.$valid && formActualizacion.numeroidentificacion.$touched ? 'has-error' : '' }}">	
+                                <label class="control-label" >Identificación</label>
+                                <input placeholder="Identificación registrada" class="form-control" type="number" ng-model="numeroidentificacion" name="numeroidentificacion" required/>
+                                <span  class="help-block" ng-show="!formActualizacion.numeroidentificacion.$valid && formActualizacion.numeroidentificacion.$touched" >
+                                    Debe colocar una Identificación válida.
+                                </span>							
+                            </div>						
+                        </div>		
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">							
+                            <div class="form-group {{ !formActualizacion.email.$valid && formActualizacion.email.$touched ? 'has-error' : '' }}">	
+                                <label class="control-label" >Email</label>
+                                <input placeholder="Email registrado" class="form-control" type="email" ng-model="email" name="email" required/>
+                                <span  class="help-block" ng-show="!formActualizacion.email.$valid && formActualizacion.email.$touched" >
+                                    Debe colocar un email válido.
+                                </span>							
+                            </div>						
+                        </div>		
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="page-footer">
+            <div class="row padding-sm text-right-sm col-md-10">
+                <button class="btn btn-primary" ng-disabled="!formActualizacion.$valid" ng-click="solicitarDuplicadoCertificado()" >
+                    Enviar
+                </button>
+            </div>
+        </div>
+    </form>
+    
+</div>
