@@ -15,7 +15,7 @@
     <form name="form">
         <div class="panel-body">
             <div class="page-header">
-                <h1 class="col-xs-12 col-sm-10 text-center text-left-sm"><i class="padding-sm-hr fa fa-list-alt"></i>&nbsp;&nbsp;Control a Sanciones</h1>
+                <h1 class="col-xs-12 col-sm-10 text-center text-left-sm"><i class="padding-sm-hr fa fa-list-alt"></i>&nbsp;&nbsp;Control a Sanciones .</h1>
             </div>
             <div class="row" ng-show="!comparendo">
                 <div class="form-group col-md-5" ng-show="!busqueda.comparendo">
@@ -45,7 +45,7 @@
                         <select class="form-control" ng-options="item.id as item.nombre for item in responsables"
                             ng-model="data.asignadoa"><select>
                         <strong>Estado:</strong> {{expediente.estado.nombre}}
-                                                    </div>
+                    </div>
                 </div>
                 <div>
                     <div class="row padding-sm">
@@ -83,15 +83,16 @@
                     </div>
                     <div class="panel-body">
                         <div class="row">
-                            <div class="form-group required col-md-6" ng-class="{'has-error': form.fechaDecision.$touched && form.fechaDecision.$invalid}">
+                                <div class="form-group required col-md-6" ng-class="{'has-error': form.fechaDecision.$touched && form.fechaDecision.$invalid}">
                                 <label class="control-label" >Fecha Decisión</label>
-                                <input type="date" name="fechaDecision" ng-model="data.fechaDecision" ng-blur="data.fechaEjecutoria=data.fechaDecision" class="form-control" required>
+                                <input type="date" name="fechaDecision" ng-model="data.fechaDecision" ng-blur="data.fechaEjecutoria=data.fechaDecision" min="{{expediente.comparendo.fechaComparendo.timestamp * 1000| date:'yyyy-MM-dd'}}"  class="form-control" required>
                             </div>
                             <div class="form-group required col-md-6" ng-class="{'has-error': form.fechaEjecutoria.$touched && form.fechaEjecutoria.$invalid}">
                                 <label class="control-label" >Fecha Ejecutoria</label>
-                                <input type="date" name="fechaEjecutoria" ng-model="data.fechaEjecutoria" class="form-control" required>
+                                <input type="date" name="fechaEjecutoria" ng-model="data.fechaEjecutoria" min="{{expediente.comparendo.fechaComparendo.timestamp * 1000| date:'yyyy-MM-dd'}}"  class="form-control" required>
                             </div>
                         </div>
+                       
                         <div class="row">
                             <div class="form-group required col-md-6" ng-class="{'has-error': form.numeroDecision.$touched && form.numeroDecision.$invalid}">
                                 <label class="control-label" >Numero decisión</label>
@@ -99,7 +100,7 @@
                             </div>
                             <div class="form-group col-md-6"  ng-class="{'has-error': form.fechaNotificacion.$touched && form.fechaNotificacion.$invalid}">                                
                                 <label class="control-label" >Fecha Notificación</label>
-                                <input type="date" name="fechaNotificacion" ng-model="data.fechaNotificacion" class="form-control">
+                                <input type="date" name="fechaNotificacion" ng-model="data.fechaNotificacion" class="form-control" min="{{expediente.comparendo.fechaComparendo.timestamp * 1000| date:'yyyy-MM-dd'}}">
                             </div>
                         </div>
                         <div class="row">
@@ -109,7 +110,7 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label class="control-label" >Fecha Notificación Recursos</label>
-                                <input type="date" name="fechaNotificacionRecursos" ng-model="data.fechaNotificacionRecursos" class="form-control">
+                                <input type="date" name="fechaNotificacionRecursos" ng-model="data.fechaNotificacionRecursos" class="form-control" min="{{expediente.comparendo.fechaComparendo.timestamp * 1000| date:'yyyy-MM-dd'}}">
                             </div>
                         </div>
                         <div class="row">
@@ -124,6 +125,12 @@
                             <div class="form-group required col-md-6" >
                                 <label class="control-label" >Número Folios</label>
                                 <input type="number" name="numeroFolios" ng-model="data.numeroFolios" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="row" ng-if="expediente.comparendo.medidasCorrectivas[0].idMedidaCorrectiva==26 || expediente.comparendo.medidasCorrectivas[0].idMedidaCorrectiva==27 || expediente.comparendo.medidasCorrectivas[0].idMedidaCorrectiva==28">
+                            <div class="form-group required col-md-6" >
+                                <label class="control-label" >Valor Multa Especial</label>
+                                <input type="number" name="valorMultaEspecial" ng-model="data.valorMultaEspecial" class="form-control" required>
                             </div>
                         </div>
                         <!--<div class="row"  ng-show="permisos.controlsanciones_movimiento_expediente_oficina && expediente.estado.codigo=='pendiente' && expediente.responsable.id==userId && pago.success!==true">																						
@@ -223,6 +230,8 @@
                             <strong>Numero Folios:</strong>  {{expediente.numeroFolios}}<br>
                             <strong>Fecha Decisión:</strong>  {{expediente.fechaDecision.timestamp * 1000| date:'yyyy-MM-dd HH:mm:ss'}}<br>
                             <strong>Fecha Ejecutoria:</strong>  {{expediente.fechaEjecutoria.timestamp * 1000| date:'yyyy-MM-dd HH:mm:ss'}}<br>
+                            <strong>Porcentaje de incremento:</strong>  {{comparendo.porcentajeIncremento}}<br>
+                        </div>
                     </div>
                 <div class="panel panel-success">
                     <div class="panel-heading ">
