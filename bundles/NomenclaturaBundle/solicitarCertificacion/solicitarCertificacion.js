@@ -77,8 +77,10 @@ saul.config(["$stateProvider", function ($stateProvider) {
 					} else {
 						$scope.requiredEscritura = $stateParams.tipoUsuario == 'ciudadano';
 						$scope.requiredRecibo = $stateParams.tipoUsuario == 'ciudadano';
-						$scope.requiredReciboEstampillaMunicipio = $stateParams.tipoUsuario == 'ciudadano';
-						$scope.requiredReciboEstampillaDepartamento = $stateParams.tipoUsuario == 'ciudadano';
+						// $scope.requiredReciboEstampillaMunicipio = $stateParams.tipoUsuario == 'ciudadano';
+						$scope.requiredReciboEstampillaMunicipio = false;
+						// $scope.requiredReciboEstampillaDepartamento = $stateParams.tipoUsuario == 'ciudadano';
+						$scope.requiredReciboEstampillaDepartamento = false;
 					}
 				};
 
@@ -230,18 +232,18 @@ saul.config(["$stateProvider", function ($stateProvider) {
 							alert('La escritura pública no está adjunta.');
 							return;
 						}
-						if (!$scope.inputFiles.reciboEstampillaMunicipio.file) {
-							$(".overlap_espera").fadeOut(500, "linear");
-							$(".overlap_espera_1").fadeOut(500, "linear");
-							alert('La escritura pública no está adjunta.');
-							return;
-						}
-						if (!$scope.inputFiles.reciboEstampillaDepartamento.file) {
-							$(".overlap_espera").fadeOut(500, "linear");
-							$(".overlap_espera_1").fadeOut(500, "linear");
-							alert('La escritura pública no está adjunta.');
-							return;
-						}
+						// if (!$scope.inputFiles.reciboEstampillaMunicipio.file) {
+						// 	$(".overlap_espera").fadeOut(500, "linear");
+						// 	$(".overlap_espera_1").fadeOut(500, "linear");
+						// 	alert('La escritura pública no está adjunta.');
+						// 	return;
+						// }
+						// if (!$scope.inputFiles.reciboEstampillaDepartamento.file) {
+						// 	$(".overlap_espera").fadeOut(500, "linear");
+						// 	$(".overlap_espera_1").fadeOut(500, "linear");
+						// 	alert('La escritura pública no está adjunta.');
+						// 	return;
+						// }
 					}
 
 					if (typeof $scope.solicitud.npn == 'undefined') {
