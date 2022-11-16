@@ -91,6 +91,7 @@
 	"NomenclaturaBundle/consultaSincronizacionPredio/consultaSincronizacionPredio.js",
 	"ControlPosteriorBundle/crearPeticion/crearPeticion.js",
 	"ControlPosteriorBundle/crearVisitaControlPosterior/crearVisitaControlPosterior.js",
+	"ControlPosteriorBundle/asignarVisitaControlPosterior/asignarVisitaControlPosterior.js",
 	"EirBundle/model.js",
 	"EirBundle/crearPeticion/crearPeticion.js",
 	"EirBundle/solicitarEir/solicitarEir.js",

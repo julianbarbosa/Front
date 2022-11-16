@@ -1,0 +1,90 @@
+<!-- Styles -->
+<style type="text/css">
+	#wizard-credit-card .tooltip {
+		left: auto !important;
+		right: 36px !important;
+		width: 200px !important;
+	}
+
+	.error{
+		color: red;
+	}
+
+	.error_borde{
+		border-color: red;
+	}
+
+	.amplificacion{
+	
+		width: 206px;
+	}
+
+	.titulo_costos{
+		text-align: center;
+
+	}
+
+	[class*="malo"] {
+		width: 26%;
+		padding-top: 9px;
+		color:#e86464;
+	
+	}
+
+	[class*="bueno"] {
+		width: 26%;
+		padding-top: 9px;
+		color:#5bb55b;
+	
+	}
+	@media only screen and (min-width: 768px) {
+	.inputs_lables{
+		width: 70%;   
+	}
+
+	.malo{
+		width: 70%;
+		padding-top: 9px;
+		color:#e86464;
+	}
+
+	.bueno{
+
+		width: 70%;
+		padding-top: 9px;
+		color:#5bb55b;
+	}
+
+	.amplificacion{
+	
+		width: 349px;
+	}
+	}
+
+	/*
+	Coloca el puntero en los números de los wizard
+	*/
+	.wizard-steps.wizard-go-to-number li span{
+		cursor: pointer;
+	}
+
+	.theme-cali .nav-tabs > li.active > a, .theme-cali .nav-tabs > li.active > a:hover, .theme-cali .nav-tabs > li.active > a:focus {
+		background: #215a9a !important;
+		border-bottom: 2px solid #215a9a !important;
+	}
+</style>
+<!-- / Styles -->
+
+<!--Cabecera-->
+<div class="page-header">
+	<h1>
+		<i class="fa fa-th-large page-header-icon"></i>&nbsp;&nbsp;Bienvenido
+	</h1>
+</div> 
+
+<!-- Interfaz para notificar al usuario sobre las respuestas del servidor -->
+<div class="col-md-7" ng-show="notificacion != ''">
+	<div class="alert text-justify" role="alert" style="font-size: 18px;">
+		{{notificacion}}
+	</div>
+</div>
