@@ -106,6 +106,7 @@ saul.config(["$stateProvider",
         $scope.notificacion_radicado_documentos = '';
         $scope.link_pulep = false;
         $scope.uperfil = '';
+        $scope.root = root;
 
         // Realiza la consulta automatica del productor con los datos del usuario
         ArtesEscenicasProductor.query().$promise.then(function(result){
