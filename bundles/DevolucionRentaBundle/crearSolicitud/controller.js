@@ -64,8 +64,10 @@ saul.config(["$stateProvider",
             $http.get(root + "usuario/actual").then(function (response) {
                 $scope.thisUser =  response.data;
                 if($scope.thisUser.funcionario == 1) {
-                    if($scope.thisUser.roles.indexOf('radicar-personaenconstruccion') !== -1) {
+                    if($scope.thisUser.roles.indexOf('radicar-devolucionrenta') !== -1) {
                         $scope.esFuncionario = true;
+                    } else {
+                        alert("Usted no tiene permisos para radicar este tipo de solicitudes");
                     }
                 } else {
                     $scope.esFuncionario = false;

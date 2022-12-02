@@ -114,6 +114,7 @@
 	"NomenclaturaBundle/actualizarNomenclaturaIndividual/actualizarNomenclaturaIndividual.js",
 	"NomenclaturaBundle/actualizarNomenclaturaIndividual/nomenclaturaForm.js",
 	"NomenclaturaBundle/actualizarNomenclaturasMasiva/actualizarNomenclaturasMasiva.js",
+    "LicenciaBundle/crearLicencia/controller.js",
 	"LicenciaBundle/buscarLicencia/buscarLicencia.js",
     "LicenciaBundle/crearLicencia/controller.js",
     "ControlPosteriorBundle/asignarLicencia/controller.js",
@@ -141,5 +142,6 @@
     "PersonaEnConstruccionBundle/gestionar/controller.js",
     "PersonaEnConstruccionBundle/verReportes/controller.js",
     "CreadorProcesoBundle/radicacion/controller.js",
-    "DevolucionRentaBundle/crearSolicitud/controller.js"
+    "DevolucionRentaBundle/crearSolicitud/controller.js",
+    "NomenclaturaBundle/prueba/controller.js"
 ]

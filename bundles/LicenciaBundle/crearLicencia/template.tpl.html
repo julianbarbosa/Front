@@ -1,0 +1,195 @@
+<div class="panel">
+    <div class="panel-body">
+        <div class="page-header">
+            <h1 class="col-xs-12 col-sm-10 text-center text-left-sm"><i class="padding-sm-hr fa fa-list-alt"></i>&nbsp;&nbsp;Crear Licencia</h1>
+        </div> 
+        <div class="note note-info" ng-show="result!==null">
+            <p><strong>Exito</strong></p>
+            <p>{{result.data.msg}}</p>
+            
+        </div>
+        <form name="licenciaForm"  ng-show="result==null">             
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <label class="control-label" for="licencia">
+                        Número de Licencia
+                    </label>
+                    <input type="text"
+                           id="licencia"
+                           class="form-control input-xlarge"                            
+                           ng-model="item.licencia"
+                           placeholder="Ingrese el número de licencia"
+                           required/>                    
+                </div>
+                <div class="form-group col-md-4">
+                    <label class="control-label" for="fechaexpedicion">
+                        Fecha de Expedición
+                    </label>
+                    <input type="date"
+                           id="fechaexpedicion"
+                           class="form-control input-xlarge"                            
+                           ng-model="item.fechaexpedicion"
+                           required/>                    
+                </div>
+                <div class="form-group col-md-4">
+                    <label class="control-label" for="Curaduria">
+                        Curaduría
+                    </label>
+                    <select ng-model="item.curaduria" ng-options="curaduria.id as curaduria.curaduria for curaduria in arrayCuradurias" class="form-control">
+                        <option value="">-- Seleccione --</option>
+                    </select>
+                </div>   
+            </div>
+            <div class="row" style="padding-left:10px">                
+                <div class="col-md-12" >
+                    <div class="row">
+                        <label class="control-label" for="tipolicencia">
+                            Tipo Licencia
+                        </label>
+                    </div>    
+                    
+                    <div class="col-md-4" ng-repeat="tipolicencia in arrayTipoLicencia track by $index">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" ng-model="item.tipolicencia[tipolicencia.nombre]">
+                                {{tipolicencia.nombre}}
+                            </label>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>           
+            <div class="row"  style="padding-left:10px">                
+                <div class="col-md-12">
+                    <div class="row">
+                        <label class="control-label" for="numeroidentificacion">
+                            Modalidad
+                        </label>
+                    </div>    
+                    <div class="col-md-4" ng-repeat="modalidad in arrayModalidad">
+                        <div class="checkbox">
+                            <label>
+                              <input type="checkbox" ng-model="item.modalidad[modalidad.nombre]">
+                              {{modalidad.nombre}}
+                            </label>
+                          </div>                                           
+                    </div>
+                </div>
+            </div>  
+            
+            <div class="row">                    
+                <div class="form-group col-md-3">
+                    <label class="control-label" for="identificacionpropietario">
+                        Identificación Propietario
+                    </label>
+                    <input type="text"
+                           id="identificacionpropietario"
+                           class="form-control input-xlarge"                            
+                           ng-model="item.identificacionpropietario"
+                           placeholder="Ingrese la identificación"
+                           required/>                    
+                </div>
+                <div class="form-group col-md-4">
+                    <label class="control-label" for="nombrepropietario">
+                        Nombre Propietario                        
+                    </label>
+                    <input type="text"
+                           id="nombrepropietario"
+                           class="form-control input-xlarge"                            
+                           ng-model="item.propietario"
+                           placeholder="Ingrese nombre propietario"
+                           required/>                    
+                </div>
+                <div class="form-group col-md-5">
+                    <label class="control-label" for="nombreproyecto">
+                        Nombre del proyecto
+                    </label>
+                    <input type="text"
+                           id="nombreproyecto"
+                           class="form-control input-xlarge"                            
+                           ng-model="item.nombreproyecto"
+                           placeholder="Ingrese el nombre del proyecto"
+                           required/>                    
+                </div> 
+            </div>
+            <div class="row">
+                <div class="form-group col-md-3" ng-class="{'has-error': validator.idbarrio}">
+                    <label class="control-label" for="barrio">Barrio: <i ng-show="loadingBarrio" class="fa fa-spinner fa-spin"></i></label>
+                    <input type="text"
+                        id="BusquedaBarrio"
+                        class="form-control input-xlarge"
+                        ng-model="item.barrio"                                
+                        uib-typeahead="itembarrio as itembarrio.nombre for itembarrio in arrayBarrio | filter: $viewValue | limitTo: 8"
+                        uib-typeahead-wait-ms="1000"                               
+                        uib-typeahead-loading="loadingBarrio"
+                        typeahead-on-select="onSelect($item,  'nombre', $label)"
+                        uib-typeahead-min-length="3"
+                        bs-typeahead placeholder="Ingrese el nombre del barrio"
+                        autocomplete="off"/>      
+                    <p class="help-block">{{validator.idbarrio}}</p>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="control-label" for="direccion">
+                        Dirección
+                    </label>
+                    <input type="text"
+                           id="direccion"
+                           class="form-control input-xlarge"                            
+                           ng-model="item.direccion"
+                           placeholder="Ingrese la dirección"
+                           required/>                    
+                </div>
+                <div class="form-group col-md-3">
+                    <label class="control-label" for="direccion">
+                        Estrato
+                    </label>
+                    <select ng-model="item.estrato" ng-options="estrato for estrato in arrayEstrato" class="form-control">
+                        <option value="">-- Seleccione --</option>
+                    </select>                
+                </div>
+                
+            </div>
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <label class="control-label" for="numerocomparendo">
+                        Número Predial
+                    </label>
+                    <input type="text"
+                           id="numerocomparendo"
+                           class="form-control input-xlarge"                            
+                           ng-model="item.npn"
+                           placeholder="Ingrese la matricula"
+                           required/>                    
+                </div> 
+                <div class="form-group col-md-4">
+                    <label class="control-label" for="npn">
+                        Numero Catastral                       
+                    </label>
+                    <input type="text"
+                           id="numerocomparendo"
+                           class="form-control input-xlarge"                            
+                           ng-model="item.catastral"
+                           placeholder="Ingrese el catastral"
+                           required/>                    
+                </div> 
+                <div class="form-group col-md-4">
+                    <label class="control-label" for="numerocomparendo">
+                        Matricula Inmobiliaria
+                    </label>
+                    <input type="text"
+                           id="numerocomparendo"
+                           class="form-control input-xlarge"                            
+                           ng-model="item.matriculainmobiliaria"
+                           placeholder="Ingrese la matricula"
+                           required/>                    
+                </div> 
+                
+                
+            </div>
+            <div class="col-md-2 pull-right"> 
+                <input type="button" class="btn btn-primary" value="Guardar" ng-disabled="!(licenciaForm.$valid && validForm())" ng-click="almacenar()">
+            </div>
+        </form>
+    </div>
+</div>
+<div class="overlap_espera_2"><i class="fa fa-gear fa-spin fa-2x"></i></div>
