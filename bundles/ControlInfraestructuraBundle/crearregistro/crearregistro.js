@@ -1,16 +1,16 @@
 saul.config(["$stateProvider",
     function ($stateProvider) {
-        $stateProvider.state("controlposterior_crearsolicitud", {
-            url: "/controlposterior/crearsolicitud_old",
+        $stateProvider.state("crearregistro-controlinfraestructura", {
+            url: "/controlinfraestructura/crearregistro",
             views: {
                 "main": {
-                    controller: "CrearSolicitudControlPosteriorCtrl",
-                    templateUrl: "../bundles/ControlPosteriorBundle/crearPeticion/crearPeticion.tpl.html"
+                    controller: "CrearRegistroControlInfraestructuraCtrl",
+                    templateUrl: "../bundles/ControlInfraestructuraBundle/crearregistro/crearregistro.tpl.html"
                 }
             }
         });
     }
-]).controller("CrearSolicitudControlPosteriorCtrl", ["$scope", "root", "urlPlugInNomenclatura","Nomenclatura", "Comuna", "Barrio", "Predio", "Usuario", "dsJqueryUtils", "$uibModal", "Upload",
+]).controller("CrearRegistroControlInfraestructuraCtrl", ["$scope", "root", "urlPlugInNomenclatura","Nomenclatura", "Comuna", "Barrio", "Predio", "Usuario", "dsJqueryUtils", "$uibModal", "Upload",
     function ($scope, root, urlPlugInNomenclatura, Nomenclatura, Comuna, Barrio, Predio, Usuario, dsJqueryUtils, $uibModal, Upload) {        
         $scope.peticion = {};  
         $scope.root = root;

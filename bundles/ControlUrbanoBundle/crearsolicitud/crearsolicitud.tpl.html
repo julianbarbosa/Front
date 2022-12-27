@@ -2,12 +2,12 @@
     <div class="panel-body">
         <div class="page-header">
             <h1 class="col-xs-12 col-sm-10 text-center text-left-sm"><i
-                    class="padding-sm-hr fa fa-list-alt"></i>&nbsp;&nbsp;Busqueda y Registro de Visita a Control Infraestructura
+                    class="padding-sm-hr fa fa-list-alt"></i>&nbsp;&nbsp;Generar Solicitud de Visitas
             </h1>
         </div>
         <form name="userForm">
             <div class="row">
-                <div class="form-group col-md-12">
+                <div class="form-group col-md-4">
                     <label class="control-label" for="numerocomparendo">
                         Funcionario Visitador
                     </label>
@@ -17,20 +17,34 @@
                         <option value="">-- Seleccione --</option>
                     </select>
                 </div>
+                <div class="form-group col-md-4">
+                    <label class="control-label" for="numeroidentificacion">
+                        Fecha de Visita
+                    </label>
+                    <input type="date" id="fechavisita" class="form-control input-xlarge"
+                        ng-model="busqueda.fechavisita" required />
+                </div>
+                <div class="form-group col-md-4">
+                    <label class="control-label" for="numeroidentificacion">
+                        Comentarios Adicionales
+                    </label>
+                    <input type="text" id="comentario" class="form-control input-xlarge"
+                        ng-model="busqueda.identificacionpropietario" placeholder="Comentarios a visitas" />
+                </div>
             </div>
             <div class="panel panel-info">
                 <div class="panel-heading"><strong>Busqueda de Solicitudes / Filtros</strong></div>
                 <div class="panel-body">
                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs 12">
                         <div class="form-group">
-                            <label class="control-label" for="valorpagar">Fecha Inicial Asignacion</label>
+                            <label class="control-label" for="valorpagar">Fecha Inicial Solicitud</label>
                             <input type="date" step="0.01" style="font-size:17px; text-align:right;color:#ff171f"
                                 id="monto" name="monto" required value="{{ old('monto') }}" class="form-control">
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs 12">
                         <div class="form-group">
-                            <label class="control-label" for="valorpagar">Fecha Final Asignacion</label>
+                            <label class="control-label" for="valorpagar">Fecha Final Solicitud</label>
                             <input type="date" step="0.01" style="font-size:17px; text-align:right;color:#ff171f"
                                 id="monto" name="monto" required value="{{ old('monto') }}" class="form-control">
                         </div>
