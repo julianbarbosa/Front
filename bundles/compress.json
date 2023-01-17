@@ -92,6 +92,7 @@
 	"NomenclaturaBundle/consultaSincronizacionPredio/consultaSincronizacionPredio.js",
 	"ControlPosteriorBundle/crearPeticion/crearPeticion.js",
 	"ControlPosteriorBundle/crearVisitaControlPosterior/crearVisitaControlPosterior.js",
+	"ControlPosteriorBundle/asignarVisitaControlPosterior/asignarVisitaControlPosterior.js",
 	"EirBundle/model.js",
 	"EirBundle/crearPeticion/crearPeticion.js",
 	"EirBundle/solicitarEir/solicitarEir.js",
@@ -113,7 +114,10 @@
 	"NomenclaturaBundle/actualizarNomenclaturaIndividual/actualizarNomenclaturaIndividual.js",
 	"NomenclaturaBundle/actualizarNomenclaturaIndividual/nomenclaturaForm.js",
 	"NomenclaturaBundle/actualizarNomenclaturasMasiva/actualizarNomenclaturasMasiva.js",
+    "LicenciaBundle/crearLicencia/controller.js",
 	"LicenciaBundle/buscarLicencia/buscarLicencia.js",
+    "LicenciaBundle/crearLicencia/controller.js",
+    "ControlPosteriorBundle/asignarLicencia/controller.js",
 	"LicenciaBundle/gestionarArchivosLicencia/gestionarArchivosLicencia.js",
 	"AyudaBundle/ayuda/ayuda.js",
 	"ArtesEscenicasBundle/crearSolicitud/crearSolicitud.js",
@@ -137,5 +141,7 @@
     "PersonaEnConstruccionBundle/crearSolicitud/controller.js",
     "PersonaEnConstruccionBundle/gestionar/controller.js",
     "PersonaEnConstruccionBundle/verReportes/controller.js",
-    "CreadorProcesoBundle/radicacion/controller.js"
+    "CreadorProcesoBundle/radicacion/controller.js",
+    "DevolucionRentaBundle/crearSolicitud/controller.js",
+    "NomenclaturaBundle/prueba/controller.js"
 ]

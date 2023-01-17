@@ -31,7 +31,7 @@ saul.config(["$stateProvider",
             {type:'link', name: 'radicado', title: 'Radicado', header_align: 'text-left', body_align: 'text-left', width: '10%', link:'http://www.cali.gov.co/aplicaciones/orweb/orweb/principal.php?id='},
             {type:'text', name: 'nombreTipoSolicitud', title: 'Tipo Solicitud', header_align: 'text-center', body_align: 'text-center', sorting: 'sorting', width:'10%'},
             {type:'text', name: 'nombreEstado', title: 'Estado', header_align: 'text-center', body_align: 'text-center', width:'10%'},    
-            {type:'date', name: 'updatedAt', title: 'Fecha Actualización', header_align: 'text-center', body_align: 'text-center', width:'10%'},
+            {type:'date', name: 'fecha_programacion', title: 'Fecha Actualización', header_align: 'text-center', body_align: 'text-center', width:'10%'},
         ];
 
         $scope.actualizarDatos = function ()

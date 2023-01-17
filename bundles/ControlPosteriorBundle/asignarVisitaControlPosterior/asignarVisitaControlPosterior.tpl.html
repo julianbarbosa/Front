@@ -1,0 +1,132 @@
+<div class="container" >    
+    <div class="row justify-content-md-center" >
+        <!-- <div class="col-md-1"></div> -->
+        <div class="col-md-12">
+            <div class="panel-body">
+                <div class="page-header">
+                    <h1 class="text-center text-left-sm"><i class="padding-sm-hr fa fa-list-alt"></i>&nbsp;&nbsp; Asignación de Visitas Control Posterior</h1>
+                </div>
+                <div>
+                    <h4> Licencias pendientes por asignar: 300 </h4>
+                </div>      
+                <div class="text-center">   
+                    <br>
+                        <input 
+                        type="button" 
+                        class="btn btn-success" 
+                        data-toggle="collapse"
+                        data-target="#collapseExample" 
+                        aria-controls="collapseExample"
+                        value="Asignar ahora" 
+                        ng-hide="formvisibility"
+                        ng-click="actualizarDatos()">
+                </div>
+            </div>
+        </div>
+        <!-- <div class="col-md-1"></div> -->
+    </div>
+
+     <!--sección para seleccionar visitadores e ingresar número de licencias-->
+    <div class="row justify-content-md-center">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <div ng-show="formvisibility" class="wrapper">
+                <div>
+                    <p>Seleccione los visitadores e ingrese el número de licencias a asignar: </p>
+                <div class="form-group row">
+                    <label ng-repeat="user in visitadores" class="col-md-12">
+                
+                        <div class="row">
+                            <div class="col-md-3"></div>
+                            <input class="col-md-1" type="checkbox" ng-model="user.selected"> 
+                            <div class="col-md-4">
+                                {{user.nombres}}
+                            </div>
+                            <input class="col-md-1"placeholder="número de licencias:" type="number" min= "0", id="inputZip" ng-model="user.licencias">                             
+                            <div class="col-md-3"></div>
+                        </div>
+                     </label>        
+                </div>
+                
+                <div class="panel-body text-center">
+                    <button type="button" class="btn btn-primary btn-sm"ng-click="crearAsignacion()">aceptar</button>
+                    <button type="button" class="btn btn-secondary btn-sm"  ng-click="cancelarAsignacion()">cancelar</button>
+                </div>
+                </div>
+            </div>
+            
+                <div class="page-header">
+                    <h1 class="col-xs-12 col-sm-10 text-center text-left-sm"><i class="padding-sm-hr fa fa-list-alt"></i>&nbsp;&nbsp; Asignaciones realizadas: </h1>
+                </div>
+            
+            </div>
+        </div>
+        <div class="col-md-2"></div>
+
+    </div>
+
+    <div class="row justify-content-md-center">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <div class="table-primary">  
+                <table cellpadding="0" cellspacing="0" class="table-hover table table-bordered" width="100%" role="grid" >
+                    <thead>         
+                        <tr role="row">
+                            <th ng-repeat="header in headers track by $index" class="ui-state-default {{header.sorting}} {{header.header_align}}">
+                                {{header.title}}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody >
+                        <tr dir-paginate="row in asignaciones |  orderBy:createdAt:true | itemsPerPage:12 " class="odd" style="font-weight: bold;" ng-class="{'danger': row[rowWarning] === false}">
+
+                            <td ng-repeat="header in headers" class="{{header.body_align}}" >
+
+                                <!--Acciones-->
+                                <span ng-if="header.values" >
+                                    <span ng-if="value['link']" ng-repeat="value in header.values" ng-bind-html="'<a href=\'' + value['link'] + row['id'] + '\' >' + value['icon'] + ' </a>'"></span>
+                                    <button ng-if="value['click']" ng-repeat="value in header.values" class="btn-link" ng-bind-html="value['icon']" ng-click="caller(value, row)" ></button>
+                                </span>
+    
+                                <!-- Valor de Text-->
+                                <span ng-if="header.type === 'text'">
+                                    {{row[header.name]}}
+                                </span>
+                                <!-- Valor de Link-->
+                                <span ng-if="header.type === 'link'">
+                                    <a href="{{header.link}}{{row[header.name]}}" target="_blank">{{row[header.name]}}</a>                                
+                                </span>
+    
+                                <!-- Valor de Objeto Fecha-->
+                                <span ng-if="header.type === 'date'">
+                                    {{row[header.name].timestamp * 1000| date:'yyyy-MM-dd HH:mm:ss'}}
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>    
+                </table>
+                <ul uib-pagination total-items="20" ng-model="search" max-size="noOfPages" class="pagination-sm" boundary-link-numbers="true" rotate="false" num-pages="noOfPages"></ul>
+            </div>
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+
+
+</div>
+
+
+
+<div class="overlap_espera_2"><i class="fa fa-gear fa-spin fa-2x"></i></div>
+
+
+
+
+
+
+
+
+
+<style>
+#element1 {float:left;}
+#element2 {padding-left : 20px;float:left;}
+</style>

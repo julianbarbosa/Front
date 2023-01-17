@@ -76,7 +76,7 @@ saul.config(["$stateProvider",
             request.push({'name': 'direccion', 'value': $scope.busqueda.direccion});
             request.push({'name': 'catastral', 'value': $scope.busqueda.catastral});
             request.push({'name': 'licencia', 'value': $scope.busqueda.licencia});
-            request.push({'name': 'estado', 'value': 'ejecutoriada'});
+           // request.push({'name': 'estado', 'value': 'ejecutoriada'});
             request.push({'name': 'matriculainmobiliaria', 'value': $scope.busqueda.matriculainmobiliaria});
             LicenciaAll.get(request)
             .$promise.then(function (response) {

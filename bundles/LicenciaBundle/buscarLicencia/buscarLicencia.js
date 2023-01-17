@@ -10,16 +10,119 @@ saul.config(["$stateProvider",
             }
         });
     }
-]).controller("LicenciaBuscarLicenciaCtrl", ["$scope", "$http", "Licencia", "$filter", "$stateParams", "root",
-    function ($scope, $http, ComparendoAll, $filter, $stateParams, root) {
+]).controller("LicenciaBuscarLicenciaCtrl", ["$scope", "$http", "Licencia", "$filter", "$stateParams", "root", "UtilForm",
+    function ($scope, $http, ComparendoAll, $filter, $stateParams, root, UtilForm) {
         $scope.idProgramacionPedagogia = $stateParams.idProgramacionPedagogia;
         $scope.currentPage = 1;
         $scope.numPerPage = 10;
         $scope.maxSize = 5;
-        $scope.busqueda = [];
+        $scope.busqueda = {};
         $scope.rowActive = '';
         $scope.rowWarning = 'estaEnviado';
         $scope.orderBy = 'idsolicitud';
+        
+        $scope.camposBusqueda = [
+            { 
+                label: "Fecha Inicial Radicación",
+                name: "fechainicialradicacion",
+                type: "date", 
+                estado: "activo"
+            },
+            { 
+                label: "Fecha Final de Radicación",
+                name: "fechafinalradicacion",
+                type: "date",
+                estado: "activo"
+            },
+            { 
+                label: "Curaduría",
+                type: "select",
+                name: "curaduria",
+                store: "arrayCuradurias",
+                estado: "activo"
+            },
+            { 
+                label: "Identificación Propietario",
+                name: "identificacionpropietario",
+                type: "integer",
+                estado: "activo"
+            },
+            { 
+                label: "Nombre Propietario",
+                name: "propietario",
+                type: "string"
+            },
+            { 
+                label: "Dirección del Predio",
+                name: "direccion",
+                type: "string",
+                estado: "activo"
+            },
+            { 
+                label: "Estado",
+                type: "select",
+                name: "estado",
+                store: "arrayEstados"
+            },
+            { 
+                label: "Licencia",
+                name: "licencia",
+                type: "string"
+            },
+            { 
+                label: "Tipo Licencia",
+                name: "tipolicencia",
+                type: "string"
+            }
+            
+        ];     
+        
+        $scope.getCamposBusquedaInhabilitados = function() {
+            $scope.camposBusquedaInhabilitados = [];
+            $scope.consecutivo=0;
+            $scope.camposBusqueda.forEach(function(item) {                
+                if(item.estado!=='activo') {
+                    $scope.camposBusquedaInhabilitados[$scope.consecutivo] = {text: item.label, value: item.name};
+                    $scope.consecutivo++;
+                }
+            })
+            return $scope.camposBusquedaInhabilitados;
+        }
+        $scope.eliminarCampo = function(index) {
+            $scope.camposBusqueda[index].estado = 'inactivo';
+        }
+        
+        $scope.agregarCampo = function() {
+            bootbox.prompt({
+                title: "Seleccione el campo a agregar",
+                inputType: 'select',
+                inputOptions: $scope.getCamposBusquedaInhabilitados(),
+                callback: function (result) {
+                    $scope.camposBusqueda.forEach(function(item, index) {
+                        if(item.name==result) {
+                            $scope.camposBusqueda[index].estado = 'activo';
+                            $scope.$apply();    
+                        }                        
+                    })
+                }
+            });
+        }
+        
+        $scope.downloadData = function() {
+            $scope.request = [];
+            $scope.camposBusqueda.forEach(function(item) {
+                if(item.estado=='activo') {
+                    $scope.request.push({'name': item.name, 'value': $scope.busqueda[item.name]});    
+                }                
+            });
+            UtilForm.openWith(
+                root + "licencia/descargarcsv",
+                'post', $scope.request);
+        }
+        
+        $scope.arrayEstados = [ {codigo: "expedido", nombre: "Expedida"}, 
+                                {codigo: "ejecutoriada", nombre: "Ejecutoriada"} ];
+        
         $scope.headers = [
             {type: 'action', name: 'acciones', title: 'Acciones', align: 'text-center', input: false, width: '5%',
                 values: [
@@ -30,13 +133,17 @@ saul.config(["$stateProvider",
                     {'value': 0, nameValidate: 'estaEnviado', 'name': 'No Enviado', 'link': '<a href="integracion/crear_licencia/{{licencia.idLicencia}}"><i class="ver-detalle fa fa-refresh pull-left" title="Enviar a DAMP"></i></a>'}
                 ]
             },
-            {type:'text', name: 'id', name2: '', title: 'Identificador', header_align: 'text-center', body_align: 'text-center', sorting: 'sorting',input: false, width: '5%'},
+            {type:'text', name: 'licencia', name2: '', title: 'Licencia', header_align: 'text-center', body_align: 'text-center', sorting: 'sorting',input: false, width: '5%'},
             {type:'text', name: 'identificacionpropietario', name2: '', title: 'Identificación', header_align: 'text-center', body_align: 'text-center',input: false, sorting: 'sorting', width: '5%'},
             {type:'text', name: 'propietario', title: 'Nombre', header_align: 'text-center', body_align: 'text-center',input: false, sorting: 'sorting', width:'40%'},
             {type:'text', name: 'direccion', title: 'Direccion', header_align: 'text-center', body_align: 'text-center',input: false, width:'20%'},       
-            {type:'text', name: 'usuario', subname: 'descripcion', title: 'Curaduria', header_align: 'text-center', body_align: 'text-center',input: false, width:'20%'},       
+            {type:'text', name: 'nombre_curaduria', title: 'Curaduria', header_align: 'text-center', body_align: 'text-center',input: false, width:'20%'},       
         ];
         
+        
+        $scope.getStore = function(nameStore) {
+            return $scope.$eval(nameStore);
+        }
         $scope.esFecha = function(value) {
 			return angular.isDate(value);;
 		}
@@ -48,6 +155,9 @@ saul.config(["$stateProvider",
         $scope.consultarCuradurias = function() {
             $http.get(root+'licencias/curaduria/').then(function(data) {
                 $scope.arrayCuradurias = data.data;
+                $scope.arrayCuradurias.forEach(function(item) {
+                    item['nombre'] = item.curaduria;
+                })
             });          
         };
         $scope.consultarCuradurias();
@@ -81,23 +191,18 @@ saul.config(["$stateProvider",
         $scope.actualizarDatos = function (page)
         {            
             $(".overlap_espera").show();
-            $(".overlap_espera_1").show();                
-//            ComparendoAll.get({identificacionPropietario:$scope.busqueda.identificacionPropietario,
-//                               nombrePropietario:$scope.busqueda.nombrePropietario,
-//                               curaduria:$scope.busqueda.curaduria,
-//                               
-//                             })            
-            var request = [ {'name': 'currentPage', 'value': page}, 
+            $(".overlap_espera_1").show();           
+            $scope.request = [ {'name': 'currentPage', 'value': page}, 
                             {'name': 'numPerPage', 'value': $scope.numPerPage},
                             {'name': 'orderBy', 'value': $scope.orderBy}
                             ];
-            request.push({'name': 'identificacionpropietario', 'value': $scope.busqueda.identificacionpropietario});
-            request.push({'name': 'propietario', 'value': $scope.busqueda.nombrepropietario});
-            request.push({'name': 'idUsuario', 'value': $scope.busqueda.idusuario});
-            request.push({'name': 'direccion', 'value': $scope.busqueda.direccion});
-            request.push({'name': 'catastral', 'value': $scope.busqueda.catastral});
-            request.push({'name': 'matriculainmobiliaria', 'value': $scope.busqueda.matriculainmobiliaria});
-            ComparendoAll.get(request)
+            
+            $scope.camposBusqueda.forEach(function(item) {
+                if(item.estado=='activo') {
+                    $scope.request.push({'name': item.name, 'value': $scope.busqueda[item.name]});    
+                }                
+            });
+            ComparendoAll.get($scope.request)
             .$promise.then(function (response) {
                 $scope.data = response['data'];
                 $scope.totalItems = response['totalItems'];
