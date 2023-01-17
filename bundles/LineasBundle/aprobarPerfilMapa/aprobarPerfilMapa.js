@@ -15,7 +15,7 @@ saul.config(["$stateProvider", function(a) {
         self.viewLoaded = false;
         $scope.root = root;
         $scope.viewLoaded = false;
-        $scope.urlImagenes = "//saul.cali.gov.co/saul2/images/img_lineas/";
+        $scope.urlImagenes = "//saul.cali.gov.co/saul2/images/img_lineas/"; 
         $scope.imageStreetView = ""+$scope.urlImagenes+"street_view.png";
         $scope.urlGeoportal = "https://geoportal.cali.gov.co/agserver/rest/services/Lineas/lineas_auto/MapServer/0";                               
 
