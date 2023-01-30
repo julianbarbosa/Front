@@ -86,7 +86,10 @@
                             <td>
                                 {{item.id}}
                             </td>
-                            <td>
+                            <td ng-if="item.numeroFormato=='002'">
+                                {{item.expediente}}
+                            </td>
+                            <td ng-if="item.numeroFormato!=='002'">
                                 {{item.numeroFormato}}
                             </td>
                             <td>
