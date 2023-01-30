@@ -106,6 +106,7 @@ saul.config(["$stateProvider",
         $scope.notificacion_radicado_documentos = '';
         $scope.link_pulep = false;
         $scope.uperfil = '';
+        $scope.root = root;
 
         // Realiza la consulta automatica del productor con los datos del usuario
         ArtesEscenicasProductor.query().$promise.then(function(result){
@@ -405,7 +406,7 @@ saul.config(["$stateProvider",
                     $scope.animateprogress($idName, 65, 100);
                     
                     $("#documento_requerido_"+$idName).attr("hidden", true);
-                    $("#ver_documento_"+$idName).attr("href", "https://saul-dev.cali.gov.co:2443/saul2/upload/documentos/"+data.nombrearchivo);
+                    $("#ver_documento_"+$idName).attr("href", root+"upload/documentos/"+data.nombrearchivo);
                     $("#ver_documento_"+$idName).removeClass("ng-hide");
                     $("#ver_documento_"+$idName).removeAttr("hidden");
 
