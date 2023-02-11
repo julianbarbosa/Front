@@ -63,7 +63,7 @@
 		border-radius: 2px;
 		webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
 		box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-	}	
+	}
 </style>
 <script>
 	$(document).ready(function () {
@@ -81,6 +81,28 @@
 
 </script>
 <div id="modalIngresoDireccion" class="modal fade modal-change" role="dialog" aria-hidden="true" ></div>
+
+<!-- Modal Esquema convencional -->
+<div id="usoConvencional" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+	<div class="modal-dialog modal-sm" role="document">
+	  <div class="modal-content">
+
+		<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		<h4 class="modal-title" id="myModalLabel">Modal title</h4>
+		</div>
+
+		<div class="modal-body">
+			<p>One fine body&hellip;</p>
+		  </div>
+
+		<div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		  </div>
+	  </div>
+	</div>
+  </div>
+
 <div class="page-header">
     <div class="row">
         <!-- Page header, center on small screens -->
@@ -217,20 +239,25 @@
 
 					<div ng-if="tags.length > 0" class="form-group {{ haveError('areaxactividades', formDatosSolicitud) ? 'has-error' : ''}}">
 						<label class="control-label" >Area Mt<sup>2</sup> destinada a la(s) Actividad(es)</label>
-						<input required placeholder="Ingrese Metros cuadrados" class="form-control" type="number" id="areaxactividades" ng-model="solicitud.areaxactividades" name="areaxactividades" ng-min="1" ng-disabled="estado == 'visualizacion' || solicitud.idSolicitud" ng-change="consultaTipoSolicitud()"							   
+						<input required placeholder="Ingrese Metros cuadrados" class="form-control" type="number" id="areaxactividades" ng-model="solicitud.areaxactividades" name="areaxactividades" ng-min="1" ng-disabled="estado == 'visualizacion' || solicitud.idSolicitud" ng-change="consultaTipoSolicitud()" ng-model-options="{ debounce: 1000 }"							   
 							   min="1"/>
 						<span ng-show="haveError('areaxactividades', formDatosSolicitud)" >
 							Este campo es obligatorio.
 						</span>
 					</div>
-					<div ng-if="areaxactividades > 0">
+					<div ng-if="areaxactividades > 0 && tags.length > 0">
 						<label class="control-label" >Tipo de Solicitud</label>
 						<div ng-if="solicitud.tiposolicitud === 'eircomplejo'">
 							<label class="control-label" >EIR COMPLEJO</label>
 						</div>
 						<div ng-if="solicitud.tiposolicitud === 'eirsimple'">
 							<label class="control-label" >EIR SIMPLE</label>
-						</div>						
+						</div>	
+						
+						<div ng-if="solicitud.tiposolicitud === 'convencional'" class="alert alert-danger" role="alert">
+							La solicitud no corresponde a un uso de alto impacto. Se debe realizar la solicitud
+							manera convencional.
+						</div>
 
 						<!--<input type="hidden" required="" class="form-control ng-valid-min ng-dirty ng-valid ng-valid-required ng-touched" id="tiposolicitud" ng-model="solicitud.tiposolicitud" name="tiposolicitud" ng-disabled="estado == 'visualizacion' || solicitud.idSolicitud">
 						{{ respuesta | json }}-->
