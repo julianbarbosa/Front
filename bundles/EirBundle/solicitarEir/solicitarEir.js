@@ -606,6 +606,7 @@ saul.config(["$stateProvider",
 
 											Nomenclaturax.getInfoPorNpn(data.npn).then(function (data) {
 												$scope.solicitud.areapredio = Math.round(data.predio.area);
+												$scope.solicitud.numeropredial = data.predio.numero;
 												$scope.solicitud.areaLlena = data.predio.area;
 												//console.warn(data);
 											}, function (error) {
@@ -644,9 +645,15 @@ saul.config(["$stateProvider",
 							InformacionEir.consultaTipoSolicitud(DataForm)
 									.then(
 											function (response) {
-												$scope.solicitud.tiposolicitud = response.tiposolicitud;
 												$scope.respuesta = response.respuesta;
-												$scope.areaxactividades = 1;
+												$scope.areaxactividades = 1;												
+												
+												/* if(response.tiposolicitud === 'convencional'){
+													$('#usoConvencional').modal('show');
+												} */
+
+												$scope.solicitud.tiposolicitud = response.tiposolicitud;
+
 												$(".overlap_espera").hide();
 												$(".overlap_espera_1").hide();
 											}, function (response) {
