@@ -1,0 +1,360 @@
+<div class="panel">
+    <div class="panel-body">
+        <div class="page-header">
+            <h1 class="col-xs-12 col-sm-10 text-center text-left-sm"><i
+                    class="padding-sm-hr fa fa-list-alt"></i>&nbsp;&nbsp;Busqueda y Registro de Visita a Control
+                Infraestructura
+            </h1>
+        </div>
+        <form name="userForm">
+
+            <div class="accordion" id="accordionRegistro">
+                <div class="card">
+                    <div class="card-header" id="headingOne">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse"
+                                data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                Datos Generales
+                            </button>
+                        </h2>
+                    </div>
+
+                    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                        data-parent="#accordionExample">
+                        <div class="card-body">
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs 12">
+                                <div class="form-group">
+                                    <label class="control-label" for="nombre">Direccion</label>
+                                    <input type="text" style="font-size:18px; text-align:right;color:#110eff "
+                                        name="notas" required value="{{ old('notas') }}" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs 12">
+                                <div class="form-group">
+                                    <label class="control-label" for="nombre">Coordenada</label>
+                                    <input type="text" style="font-size:18px; text-align:right;color:#110eff "
+                                        name="notas" required value="{{ old('notas') }}" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs 12">
+                                <div class="form-group">
+                                    <label class="control-label" for="nombre">Nombre del Propietario</label>
+                                    <input type="text" style="font-size:18px; text-align:right;color:#110eff "
+                                        name="notas" required value="{{ old('notas') }}" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs 12">
+                                <div class="form-group">
+                                    <label class="control-label" for="nombre">Id</label>
+                                    <input type="text" style="font-size:18px; text-align:right;color:#110eff "
+                                        name="notas" required value="{{ old('notas') }}" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs 12">
+                                <div class="form-group">
+                                    <label class="control-label" for="nombre">Barrio o Urbanizacion</label>
+                                    <input type="text" style="font-size:18px; text-align:right;color:#110eff "
+                                        name="notas" required value="{{ old('notas') }}" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs 12">
+                                <div class="form-group">
+                                    <label class="control-label" for="nombre">Comuna</label>
+                                    <input type="text" style="font-size:18px; text-align:right;color:#110eff "
+                                        name="notas" required value="{{ old('notas') }}" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs 12">
+                                <div class="form-group">
+                                    <label class="control-label" for="nombre">Cod Barrio</label>
+                                    <input type="text" style="font-size:18px; text-align:right;color:#110eff "
+                                        name="notas" required value="{{ old('notas') }}" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs 12">
+                                <div class="form-group">
+                                    <label class="control-label" for="nombre">Corregimiento</label>
+                                    <input type="text" style="font-size:18px; text-align:right;color:#110eff "
+                                        name="notas" required value="{{ old('notas') }}" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs 12">
+                                <div class="form-group">
+                                    <label class="control-label" for="nombre">Solicitado Mediante</label>
+                                    <input type="text" style="font-size:18px; text-align:right;color:#110eff "
+                                        name="notas" required value="{{ old('notas') }}" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs 12">
+                                <div class="form-group">
+                                    <label class="control-label" for="nombre">Numero Radicado</label>
+                                    <input type="text" style="font-size:18px; text-align:right;color:#110eff "
+                                        name="notas" required value="{{ old('notas') }}" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs 12">
+                                <div class="form-group">
+                                    <label class="control-label" for="valorpagar">Fecha Solicitud</label>
+                                    <input type="date" step="0.01"
+                                        style="font-size:17px; text-align:right;color:#ff171f" id="monto" name="monto"
+                                        required value="{{ old('monto') }}" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs 12">
+                                <div class="form-group">
+                                    <label class="control-label" for="nombre">Numero Predial Nacional</label>
+                                    <input type="text" style="font-size:18px; text-align:right;color:#110eff "
+                                        name="notas" required value="{{ old('notas') }}" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs 12">
+                                <div class="form-group">
+                                    <label class="control-label" for="nombre">Estrato</label>
+                                    <input type="text" style="font-size:18px; text-align:right;color:#110eff "
+                                        name="notas" required value="{{ old('notas') }}" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs 12">
+                                <div class="form-group">
+                                    <label class="control-label" for="nombre">Bien Interes Cultural</label>
+                                    <input type="text" style="font-size:18px; text-align:right;color:#110eff "
+                                        name="notas" required value="{{ old('notas') }}" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs 12">
+                                <div class="form-group">
+                                    <label class="control-label" for="nombre">Numero de Predio</label>
+                                    <input type="text" style="font-size:18px; text-align:right;color:#110eff "
+                                        name="notas" required value="{{ old('notas') }}" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs 12">
+                                <div class="form-group">
+                                    <label class="control-label" for="nombre">Matricula Inmobiliaria</label>
+                                    <input type="text" style="font-size:18px; text-align:right;color:#110eff "
+                                        name="notas" required value="{{ old('notas') }}" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header" id="headingTwo">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link btn-block text-left collapsed" type="button"
+                                data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false"
+                                aria-controls="collapseTwo">
+                                Collapsible Group Item #2
+                            </button>
+                        </h2>
+                    </div>
+                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                        <div class="card-body">
+                            Some placeholder content for the second accordion panel. This panel is hidden by default.
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header" id="headingThree">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link btn-block text-left collapsed" type="button"
+                                data-toggle="collapse" data-target="#collapseThree" aria-expanded="false"
+                                aria-controls="collapseThree">
+                                Collapsible Group Item #3
+                            </button>
+                        </h2>
+                    </div>
+                    <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
+                        data-parent="#accordionExample">
+                        <div class="card-body">
+                            And lastly, the placeholder content for the third and final accordion panel. This panel is
+                            hidden by default.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="panel panel-info">
+                <div class="panel-heading"><strong>Busqueda de Solicitudes / Filtros</strong></div>
+                <div class="panel-body">
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs 12">
+                        <div class="form-group">
+                            <label class="control-label" for="valorpagar">Fecha Inicial Asignacion</label>
+                            <input type="date" step="0.01" style="font-size:17px; text-align:right;color:#ff171f"
+                                id="monto" name="monto" required value="{{ old('monto') }}" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs 12">
+                        <div class="form-group">
+                            <label class="control-label" for="valorpagar">Fecha Final Asignacion</label>
+                            <input type="date" step="0.01" style="font-size:17px; text-align:right;color:#ff171f"
+                                id="monto" name="monto" required value="{{ old('monto') }}" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs 12">
+                        <div class="form-group">
+                            <label class="control-label" for="valorpagar">Nro Solicitud</label>
+                            <input type="number" step="0.01" style="font-size:20px; text-align:right;color:#ff171f"
+                                id="monto" name="monto" required value="{{ old('monto') }}" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs 12">
+                        <div class="form-group">
+                            <label class="control-label" for="nombre">Nro Autorizacion</label>
+                            <input type="text" style="font-size:18px; text-align:right;color:#110eff " name="notas"
+                                required value="{{ old('notas') }}" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs 12">
+                        <div class="form-group">
+                            <label class="control-label">Tipo de Infraestructura</label>
+                            <select name="cmb_type_pay" class="form-control">
+                                <option value="">Escoja Un Tipo de Infraestructura.......</option>
+                                <option value="MASTIL">MASTIL</option>
+                                <option value="ANTENA" selected>ANTENA</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs 12">
+                        <div class="form-group">
+                            <label class="control-label" for="nombre">Direccion Infraestructura</label>
+                            <input type="text" style="font-size:18px; text-align:right;color:#110eff " name="notas"
+                                required value="{{ old('notas') }}" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs 12">
+                        <div class="form-group">
+                            <label class="control-label">Barrio</label>
+                            <select name="cmb_type_pay" class="form-control">
+                                <option value="">Escoja Un Barrio.......</option>
+                                <option value="MASTIL">Barrio 1</option>
+                                <option value="ANTENA" selected>Barrio 2</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs 12">
+                        <div class="form-group">
+                            <label class="control-label">Comuna</label>
+                            <select name="cmb_type_pay" class="form-control">
+                                <option value="">Escoja Una Comuna.......</option>
+                                <option value="MASTIL">Comuna 1</option>
+                                <option value="ANTENA" selected>Comuna 2</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs 12">
+                        <div class="form-group">
+                            <button class="btn btn-success" type="submit">Buscar</button>
+                            <button class="btn btn-warning" type="reset">Agregar campo</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+
+    <div class="panel-body col-md-12">
+        <div class="table-primary">
+            <table cellpadding="0" cellspacing="0" border="0" class="table-hover table table-bordered"
+                id="listaSolicitudes" width="100%" role="grid" aria-describedby="solicitud_listar_infraestructura">
+                <thead>
+                    <tr role="row">
+                        <th ng-repeat="header in headers"
+                            class="ui-state-default {{header.sorting}} {{header.header_align}}"
+                            style="width: {{header.width}}" ng-click="ordenarPor(headers[$index].name)">
+                            {{header.title}}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody ng-if="data.length==0">
+                    <tr>
+                        <td colspan="10">No se encontraron datos.</td>
+                    </tr>
+                </tbody>
+                <tbody ng-repeat="row in data" ng-if="data.length>0">
+                    <tr class="odd" style="font-weight: bold;" ng-class="{'danger': row[rowWarning] === false}">
+                        <td ng-repeat="header in headers" class="{{header.body_align}}">
+
+                            <!--Acciones-->
+                            <span ng-if="header.values">
+                                <span width="30%" ng-if="value['link']" ng-repeat="value in header.values"
+                                    ng-bind-html="'<a href=\''+value['link']+row['id']+'\' >'+value['icon']+' </a>'"></span>
+                                <span ng-if="row['ruta'] && !value['link'] && !value['action']"
+                                    ng-repeat="value in header.values"
+                                    ng-bind-html="'<a href=\'#!'+row['ruta']+row['id']+'\' >'+value['icon']+' </a>'"></span>
+                                <span ng-if="value['action'] && !value['permission']"
+                                    ng-repeat="value in header.values">
+                                    <span ng-bind-html="value['icon']" ng-click="caller(value['action'], row)"></span>
+                                </span>
+                                <span ng-if="value['action'] && !value['condition']" ng-repeat="value in header.values">
+                                    <span ng-if="row[value['permission']]=='1'" ng-bind-html="value['icon']"
+                                        ng-click="caller(value['action'], row)"></span>
+                                </span>
+                                <span ng-if="value['action']" ng-repeat="value in header.values">
+                                    <span ng-if="row[value['permission']]=='1' && $eval(value['condition'])"
+                                        ng-bind-html="value['icon']" ng-click="caller(value['action'], row)"></span>
+                                </span>
+
+                            </span>
+
+                            <!--Opciones dependientes de valores-->
+                            <span ng-if="header.options">
+                                <span ng-repeat="option in header.options" ng-bind-html="option['link']"
+                                    ng-if="option['value'] == row[option['nameValidate']]"></span>
+                            </span>
+
+                            <!-- Valor de Text-->
+                            <span ng-if="header.type === 'text'">
+                                {{row[header.name]}} {{row[header.name2]}}
+                            </span>
+
+                            <!-- Valor de Link-->
+                            <span ng-if="header.type === 'link'">
+                                <a href="{{header.link}}{{row[header.name]}}" target="_blank">{{row[header.name]}}</a>
+                            </span>
+
+                            <!-- Valor de Objeto Fecha-->
+                            <span ng-if="header.type === 'date'">
+                                {{row[header.name].timestamp * 1000| date:'yyyy-MM-dd HH:mm:ss'}}
+                            </span>
+
+                            <!-- Valor de Objeto Button-->
+                            <span ng-if="header.type === 'button'">
+                                <button class="btn {{header['style']}}" ng-bind-html="header['title']"
+                                    ng-click="caller(header['action'], row)"></button>
+                            </span>
+                        </td>
+                        <td ng-if="idProgramacionPedagogia">
+                            <input type="button" value="Inscribir a Pedagogía" ng-click="inscribirAPedagogia(row['id'])"
+                                class="btn btn-primary">
+                        </td>
+                    </tr>
+                    <tr class="odd" ng-class="{'danger': row[rowWarning] === false}" ng-if="rowActive == row['id']">
+                        <td colspan="10" class="col-md-12">
+                            <span ng-repeat="(key, value) in row" class="col-md-6">
+                                <span class="col-md-6"><strong>{{key}}:</strong></span>
+                                <span ng-show="!value.timezone" class="col-md-6">{{value}}</span>
+                                <span ng-show="value.timezone" class="col-md-6">{{value.timestamp*1000 | date:
+                                    'yyyy-MM-dd'}}</span>
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <td colspan="10" class="currency">
+                        <uib-pagination ng-model="currentPage" total-items="totalItems" max-size="5"
+                            boundary-links="true" ng-click="actualizarDatos(currentPage)" first-text="Primera"
+                            last-text="Última" next-text="Siguiente" previous-text="Anterior"
+                            boundary-link-numbers="true" rotate="true"></uib-pagination>
+                    </td>
+                </tfoot>
+            </table>
+
+        </div>
+    </div>
+</div>
+<div class="overlap_espera_2"><i class="fa fa-gear fa-spin fa-2x"></i></div>

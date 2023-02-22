@@ -985,15 +985,17 @@ saul.factory("TipoDocIdentificacion", ["$resource", "root", function (a, b) {
 			query: {method: 'GET', isArray: true}
 		});
 	}
-]).factory("FormularioVisita", [
-	"$resource",
-	"root",
-	function ($resource, root) {
-		return $resource(root + "visita/generar/:id", {}, {
-			query: {method: 'GET', isArray: true}
-		});
-	}
-]).factory("EncabezadoVisita", [
+])
+// .factory("FormularioVisita", [
+// 	"$resource",
+// 	"root",
+// 	function ($resource, root) {
+// 		return $resource(root + "visita/generar/:id", {}, {
+// 			query: {method: 'GET', isArray: true}
+// 		});
+// 	}
+// ])
+.factory("EncabezadoVisita", [
 	"$resource",
 	"root",
 	function ($resource, root) {
@@ -2293,7 +2295,9 @@ saul.factory("TipoDocIdentificacion", ["$resource", "root", function (a, b) {
 	"root",
 	function ($resource, root) {
 		return $resource(root + "visita/:id", {}, {
-			find: {method: 'GET', isArray: false},
+			find: {method: 'GET', isArray: false,transformResponse: function (json, headerGetter) { 
+                return angular.fromJson(json);
+            }},
 			query: {method: 'GET', isArray: false},
 			create: {method: 'POST', isArray: true}
 		});
@@ -2328,7 +2332,9 @@ saul.factory("TipoDocIdentificacion", ["$resource", "root", function (a, b) {
 	"root",
 	function ($resource, root) {
 		return $resource(root + "visita/generar/:id", {}, {
-			query: {method: 'GET', isArray: true}
+			query: {method: 'GET', isArray: true, transformResponse: function (json, headerGetter) {
+                return angular.fromJson(json);
+            }}
 		});
 	}
 ]).factory("EncabezadoVisita", [

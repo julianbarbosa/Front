@@ -162,7 +162,7 @@ saul.config(["$stateProvider",
         }
         
         $scope.obtenerClaseSolicitud = function() {
-            $http.get(root+"dominio/tipo-visita-construcciones").then(function(response) {
+            $http.get(root+"dominio/clase-solicitud-devolucion-renta").then(function(response) {
                 $scope.arrayClaseSolicitud = response.data;
             }).finally(function(){
                 LoadingOverlap.hide($scope);

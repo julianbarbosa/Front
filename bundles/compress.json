@@ -143,5 +143,9 @@
     "PersonaEnConstruccionBundle/verReportes/controller.js",
     "CreadorProcesoBundle/radicacion/controller.js",
     "DevolucionRentaBundle/crearSolicitud/controller.js",
-    "NomenclaturaBundle/prueba/controller.js"
+    "NomenclaturaBundle/prueba/controller.js",
+    "ControlInfraestructuraBundle/template/template.js",
+    "ControlInfraestructuraBundle/asignarvisita/asignarvisita.js",
+    "ControlInfraestructuraBundle/crearregistro/crearregistro.js",
+    "ControlUrbanoBundle/crearsolicitud/crearsolicitud.js"
 ]
