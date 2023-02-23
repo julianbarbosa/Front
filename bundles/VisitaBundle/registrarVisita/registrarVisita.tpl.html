@@ -129,7 +129,7 @@ input.ng-dirty.ng-invalid {
                                 <div class="col-md-{{(12 / campo.arrayDescripcion.length) | number:0}}" ng-repeat="input in arrayItem.item.items" ng-if="(campo.arrayDescripcion.length==campo.arrayItems[0].item.items.length && $index>0) || campo.arrayDescripcion.length>campo.arrayItems[0].item.items.length">
                                     <input type="text" name="{{input.valor}}" class="form-control" ng-model="input.valor" value="{{input.valor}}"  ng-if="input.tipoItem === 'texto-min' &&  input.soloLectura==0" ng-blur="saveItem(input)"> 
                                     
-                                    <input type="number" string-to-number step ="0.01" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" class="form-control number-control" ng-model="input.valor" value="{{input.valor}}" ng-if="(input.tipoItem === 'numero' || input.tipoItem === 'decimal')  &&  input.soloLectura==0" >
+                                    <input type="number" string-to-number step ="0.01" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" class="form-control number-control" ng-model="input.valor" value="{{input.valor}}"  ng-blur="saveItem(input)" ng-if="(input.tipoItem === 'numero' || input.tipoItem === 'decimal')  &&  input.soloLectura==0" >
                                     
                                     <select class="form-control input-xlarge" ng-model="input.valor"  value="{{input.valor}}" ng-if="input.tipoItem === 'lista' &&  input.soloLectura==0" ng-blur="saveItem(input)">                                
                                         <option  ng-repeat="opcion in input.parametros.opciones" value="{{opcion}}">{{opcion}}</option>
@@ -262,6 +262,7 @@ input.ng-dirty.ng-invalid {
                                            title="{{input.descripcion}}" 
                                            value="{{input.valor}}"
                                            ng-model="input.valor"
+                                           ng-blur="saveItem(input)"
                                            date-serializer>
                                 </div>
                             </div>
@@ -275,7 +276,7 @@ input.ng-dirty.ng-invalid {
                                     <input type="time" tz="America/Bogota" 
                                            class="form-control input-xlarge" 
                                            title="{{input.descripcion}}" 
-                
+                                           ng-blur="saveItem(input)"
                                            ng-model="input.valor"
                                            ng-init="input.valor=getDateValue(input.valor+'')"
                                            date-serializer>
@@ -286,7 +287,8 @@ input.ng-dirty.ng-invalid {
                             
                             <!-- Archivo -->                            
                             <div class="col-md-6" ng-if="arrayItem.item.items[0].tipoItem == 'archivo' && arrayItem.item.items[0].soloLectura==0">
-                                <input type="file" class="form-control" name="uploadedfile" file-upload multiple>
+                                <input type="file" class="form-control" name="uploadedfile" file-upload multiple >
+                                inputImage1
                                 <table class="table">
                                     <thead>
                                         <tr>
@@ -306,7 +308,7 @@ input.ng-dirty.ng-invalid {
                             <div class="col-md-12"  ng-if="arrayItem.item.items[0].tipoItem == 'texto-largo' && arrayItem.item.items[0].soloLectura==0">
                                 <div class="col-md-12" ng-repeat="input in arrayItem.item.items">
                                     <label class="control-label" >{{ arrayItem.item.nombre }}</label>                 
-                                    <textarea class="form-control input-xlarge" ng-model="input.valor" style="height:150"></textarea>
+                                    <textarea class="form-control input-xlarge" ng-model="input.valor"  ng-blur="saveItem(input)" style="height:150"></textarea>
                                 </div>
                             </div>
                             <!-- Fin texto-largo -->
@@ -315,7 +317,10 @@ input.ng-dirty.ng-invalid {
                             <div class="col-md-6" ng-if="arrayItem.item.items[0].tipoItem == 'imagen' && arrayItem.item.items[0].soloLectura==0">
                                 <div class="col-md-12" >
                                     <div class="col-md-12"  ng-repeat="input in arrayItem.item.items">
-                                        <input-file2 max="4" label="{{input.nombre}}" description="" model="inputFiles[input.codigo]" required="{{requiredLicencia}}"></input-file>
+                                        <!-- ****<input-file2 max="4" label="{{input.nombre}}" description="" model="inputFiles[input.codigo]" 
+                                        required="{{requiredLicencia}}"></input-file>****
+                                        inputImage={{input}} -->
+                                        <input-file2 max="4" label="{{input.nombre}}" model="inputFiles[input.codigo]"></input-file2>
                                         <a href="../../saul2/upload/documentos/{{input.valor}}" target="_blank"><img src="../../saul2/upload/documentos/{{input.valor}}"  width="50px" ng-show="input.valor"></a>
                                     </div>
                                 </div>
