@@ -2,19 +2,19 @@ saul
   .config([
     "$stateProvider",
     function ($stateProvider) {
-      $stateProvider.state("control-urbano-crearsolicitud", {
-        url: "/control-urbano/crearsolicitud/",
+      $stateProvider.state("control-urbano-crearsolicitud-conradicado", {
+        url: "/control-urbano/crearsolicitudconRadicado/",
         views: {
           main: {
-            controller: "ControlUrbanoCrearSolicitudCtrl",
+            controller: "ControlUrbanoCrearSolicitudcrCtrl",
             templateUrl:
-              "../bundles/ControlUrbanoBundle/crearsolicitud/template.tpl.html",
+              "../bundles/ControlUrbanoBundle/crearsolicitudconRadicado/template.tpl.html",
           },
         },
       });
     },
   ])
-  .controller("ControlUrbanoCrearSolicitudCtrl", [
+  .controller("ControlUrbanoCrearSolicitudcrCtrl", [
     "$scope",
     "$http",
     "root",
@@ -35,7 +35,7 @@ saul
       $scope.esFuncionario = false;
       $scope.solicitud = {};
       $scope.solicitud.aplicaGarantia = 1;
-      $scope.solicitud.aplicaConRadicado = 0;
+      $scope.solicitud.aplicaConRadicado = 1;
       $scope.files = [];
       $scope.direccionRequerida = false;
       $scope.seBuscoSolicitante = false;
@@ -44,6 +44,7 @@ saul
       $scope.respuesta.success = false;
       $scope.poderRequerido = false;
       $scope.npnRequerido = false;
+      $scope.norfeoRequerido = true;
 
       $scope.inicializarDatosSolicitante = function () {
         $scope.solicitud.solicitante = [];
