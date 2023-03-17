@@ -69,6 +69,9 @@
                             </th>                            
                             <th>
                                 Nombre Infractor
+                            </th>
+                            <th>
+                                Actualización
                             </th>                           
                             <th>
                                 Acción
@@ -85,6 +88,9 @@
                             </td>                           
                             <td>
                                 {{item.nombre}} 
+                            </td>
+                            <td>
+                                {{item.updatedAt.timestamp*1000 | date:'yyyy-MM-dd HH:mm'}} 
                             </td>                
                             <td ng-if="busqueda.estado=='pendiente'">
                                 <a href="#!/controlsanciones/registrarmovimiento/{{item.id}}"><i class="fa fa-check-circle" aria-hidden="true"></i></a>
