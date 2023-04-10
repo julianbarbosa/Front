@@ -220,4 +220,16 @@ saul.config(["$stateProvider", function(a) {
                     }
                 });
         };
+
+        $scope.cambiarValoresSeparadorIzquierdo = function(){
+            $scope.linea.izquierdo.dimensionSeparador=0;
+            $scope.linea.izquierdo.tipoSeparadorId=null;
+            $scope.linea.izquierdo.calzada=0;
+        }
+
+        $scope.cambiarValoresSeparadorDerecho = function(){
+            $scope.linea.derecho.dimensionSeparador=0;
+            $scope.linea.derecho.tipoSeparadorId=null;
+            $scope.linea.derecho.calzada=0;
+        }
     }]);

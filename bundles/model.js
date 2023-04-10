@@ -3,7 +3,11 @@ saul.
 			"$resource",
 			"root",
 			function ($resource, root) {
-				return $resource(root + "artesescenicas/ver_datos_productor", {}, {
+				
+				$(".overlap_espera").show();
+				$(".overlap_espera_1").show();
+	
+				return $resource(root + "artesescenicas/consultar_datos_productor", {}, {
 					'post': {method: 'POST', isArray: false},
 					'query': {method: 'POST', isArray: false}
 				});
@@ -13,8 +17,8 @@ saul.
 			"$resource",
 			"root",
 			function ($resource, root) {
-				return $resource(root + "artesescenicas/validar_evento", {}, {
-					'query': {method: 'GET', isArray: false, transformResponse: function (json, headerGetter) {
+				return $resource(root + "artes/evento", {}, {
+					'query': {method: 'POST', isArray: false, transformResponse: function (json, headerGetter) {
 							return angular.fromJson(json);
 						}},
 					'post': {method: 'POST'}
@@ -181,6 +185,24 @@ saul.
 			"root",
 			function ($resource, root) {
 				return $resource(root + "licencia/consultar", {
+					'query': {method: 'GET', isArray: false}
+				});
+			}
+		]).
+		factory("AsignacionVisita", [
+			"$resource",
+			"root",
+			function ($resource, root) {
+				return $resource(root + "asignacionvisita/crear",{}, {
+					query: {method: 'POST', isArray: false},
+				});
+			}
+		]).
+		factory("ConsultarAsignacionesControlPosterior", [
+			"$resource",
+			"root",
+			function ($resource, root) {
+				return $resource(root + "asignacionvisita/consultar", {
 					'query': {method: 'GET', isArray: false}
 				});
 			}
@@ -963,15 +985,17 @@ saul.factory("TipoDocIdentificacion", ["$resource", "root", function (a, b) {
 			query: {method: 'GET', isArray: true}
 		});
 	}
-]).factory("FormularioVisita", [
-	"$resource",
-	"root",
-	function ($resource, root) {
-		return $resource(root + "visita/generar/:id", {}, {
-			query: {method: 'GET', isArray: true}
-		});
-	}
-]).factory("EncabezadoVisita", [
+])
+// .factory("FormularioVisita", [
+// 	"$resource",
+// 	"root",
+// 	function ($resource, root) {
+// 		return $resource(root + "visita/generar/:id", {}, {
+// 			query: {method: 'GET', isArray: true}
+// 		});
+// 	}
+// ])
+.factory("EncabezadoVisita", [
 	"$resource",
 	"root",
 	function ($resource, root) {
@@ -1490,6 +1514,24 @@ saul.
 			"root",
 			function ($resource, root) {
 				return $resource(root + "licencia/consultar", {
+					'query': {method: 'GET', isArray: false}
+				});
+			}
+		]).
+		factory("AsignacionVisita", [
+			"$resource",
+			"root",
+			function ($resource, root) {
+				return $resource(root + "asignacionvisita/crear",{}, {
+					query: {method: 'POST', isArray: false},
+				});
+			}
+		]).
+		factory("ConsultarAsignacionesControlPosterior", [
+			"$resource",
+			"root",
+			function ($resource, root) {
+				return $resource(root + "asignacionvisita/consultar", {
 					'query': {method: 'GET', isArray: false}
 				});
 			}
@@ -2253,7 +2295,9 @@ saul.factory("TipoDocIdentificacion", ["$resource", "root", function (a, b) {
 	"root",
 	function ($resource, root) {
 		return $resource(root + "visita/:id", {}, {
-			find: {method: 'GET', isArray: false},
+			find: {method: 'GET', isArray: false,transformResponse: function (json, headerGetter) { 
+                return angular.fromJson(json);
+            }},
 			query: {method: 'GET', isArray: false},
 			create: {method: 'POST', isArray: true}
 		});
@@ -2288,7 +2332,9 @@ saul.factory("TipoDocIdentificacion", ["$resource", "root", function (a, b) {
 	"root",
 	function ($resource, root) {
 		return $resource(root + "visita/generar/:id", {}, {
-			query: {method: 'GET', isArray: true}
+			query: {method: 'GET', isArray: true, transformResponse: function (json, headerGetter) {
+                return angular.fromJson(json);
+            }}
 		});
 	}
 ]).factory("EncabezadoVisita", [
@@ -2652,7 +2698,7 @@ saul.factory("TipoDocIdentificacion", ["$resource", "root", function (a, b) {
 					}
 				};
 			}])
-//Servicio para abrir un formulario en otra ventana. Es útil en caso de previsualización de un pdf
+		//Servicio para abrir un formulario en otra ventana. Es útil en caso de previsualización de un pdf
 		.factory("UtilForm", [function () {
 				return {
 					/**
@@ -2854,7 +2900,6 @@ saul.factory("TipoDocIdentificacion", ["$resource", "root", function (a, b) {
 				};
 
 			}])
-
 		.factory('LoadingOverlap', [function () {
 				function show($scope, callback, dataCallback) {
 					//Iniciamos a mostrar la cortina
@@ -2886,8 +2931,6 @@ saul.factory("TipoDocIdentificacion", ["$resource", "root", function (a, b) {
 					hide: hide
 				};
 			}])
-
-
 
 		.factory('IntegradorCatastro', ['$q', '$http', 'root', 'MyHttp', function ($q, $http, root, MyHttp) {
 

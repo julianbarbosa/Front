@@ -27,7 +27,7 @@
                         <option value="devueltoportesoreria">Devuelto por Tesorería</option>
                     </select>
                 </div>
-                <div class="form-group col-md-5" ng-show="busqueda.estado=='rechazado' || busqueda.estado=='cerrarporpago'">
+                <div class="form-group col-md-5" ng-show="busqueda.estado=='rechazado' || busqueda.estado=='cerrarporpago' || busqueda.estado=='enviadotesoreria'">
                     <label class="control-label" for="inspeccion">
                         Inspección
                     </label>
@@ -66,38 +66,32 @@
                             </th>
                             <th>
                                 Comparendo
-                            </th>
-                            <th>
-                                Identificacion Infractor
-                            </th>
+                            </th>                            
                             <th>
                                 Nombre Infractor
                             </th>
                             <th>
-                                Fecha
-                            </th>
+                                Actualización
+                            </th>                           
                             <th>
                                 Acción
                             </th>
                         </thead>
                         
                         <tr
-                            ng-repeat="item in data | filter: {id: filter, numeroFormato: filterNumeroFormato}">
+                            ng-repeat="item in data | filter: {id: filter, formato: filterNumeroFormato}">
                             <td>
                                 {{item.id}}
                             </td>
+                            <td >
+                                {{item.formato}}
+                            </td>                           
                             <td>
-                                {{item.numeroFormato}}
+                                {{item.nombre}} 
                             </td>
                             <td>
-                                {{item.identificacion}}
-                            </td>
-                            <td>
-                                {{item.nombre}} {{item.apellido}}
-                            </td>
-                            <td>
-                                {{item.updatedAt.timestamp * 1000| date:'yyyy-MM-dd HH:mm:ss'}}
-                            </td>
+                                {{item.updatedAt.timestamp*1000 | date:'yyyy-MM-dd HH:mm'}} 
+                            </td>                
                             <td ng-if="busqueda.estado=='pendiente'">
                                 <a href="#!/controlsanciones/registrarmovimiento/{{item.id}}"><i class="fa fa-check-circle" aria-hidden="true"></i></a>
                             </td>

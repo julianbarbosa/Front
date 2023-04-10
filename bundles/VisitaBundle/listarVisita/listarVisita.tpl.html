@@ -3,7 +3,7 @@
         <div class="table-primary">
             <table cellpadding="0" cellspacing="0" border="0" class="table-hover table table-bordered dataTable" id="listaSolicitudes" width="100%" role="grid" aria-describedby="listaSolicitudes_info">
                 <thead>
-                    <tr>
+                    <tr >
                         <th ng-repeat="header in headers track by $index" class="ui-state-default" style="width: {{header.width}}">
                             <input type="text" ng-change="actualizarDatos()" ng-model="headers[$index].value" class="form-control input-sm" placeholder="{{header.title}}" style="width: 100%;"  ng-if="header.input !== false && !header.options" ng-model-options='{debounce: 2000}'>
                             <select ng-change="actualizarDatos()" ng-model="headers[$index].value" class="form-control input-sm" ng-options="option.value as option.name for option in header.options" ng-if="header.input !== false && header.options">
@@ -18,7 +18,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr  class="odd" style="font-weight: bold;" ng-repeat="row in data" ng-class="{'danger': row[rowWarning] === false}">
+                    <tr  class="odd" style="font-weight: bold;" ng-repeat="row in data" ng-class="{'danger': row['rowWarning'] === '1', 'warning': row['rowWarning'] === '2'}">
                         <td ng-repeat="header in headers" class="{{header.body_align}}">
                             
                             <!--Acciones-->
