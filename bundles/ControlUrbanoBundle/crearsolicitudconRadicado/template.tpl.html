@@ -376,9 +376,9 @@
                             <div class="col-md-6" ng-show="npnRequerido">
                                 <div
                                     class="form-group {{ !formDatosSolicitante.npn.$valid && formDatosSolicitante.npn.$touched ? 'has-error' : '' }}">
-                                    <label class="control-label">Numero Predial Nacional</label>
+                                    <label class="control-label">Numero de Licencia</label>
                                     <input type="text" name="npn" class="form-control"
-                                        placeholder="Numero Predial Nacional" ng-model="solicitud.npn"
+                                        placeholder="Numero de Licencia" ng-model="solicitud.npn"
                                         ng-required="npnRequerido" />
                                     <span class="help-block"
                                         ng-show="!formDatosSolicitante.npn.$valid && formDatosSolicitante.npn.$touched">
@@ -401,7 +401,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 <div
                                     class="form-group {{ !formDatosSolicitante.direccion_queja.$valid && formDatosSolicitante.direccion_queja.$touched ? 'has-error' : '' }}">
                                     <label class="control-label">Direccion / Localizacion de la Queja</label>
@@ -410,6 +410,32 @@
                                         ng-model="solicitud.direccion_queja" ng-required="true" />
                                     <span class="help-block"
                                         ng-show="!formDatosSolicitante.direccion_queja.$valid && formDatosSolicitante.direccion_queja.$touched">
+                                        Este campo es obligatorio.
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div
+                                    class="form-group {{ !formDatosSolicitante.longitud_queja.$valid && formDatosSolicitante.longitud_queja.$touched ? 'has-error' : '' }}">
+                                    <label class="control-label">Longitud de la Queja</label>
+                                    <input type="text" name="longitud_queja" class="form-control"
+                                        placeholder="Longitud Localizacion de la Queja"
+                                        ng-model="solicitud.longitud_queja" ng-required="true" />
+                                    <span class="help-block"
+                                        ng-show="!formDatosSolicitante.longitud_queja.$valid && formDatosSolicitante.longitud_queja.$touched">
+                                        Este campo es obligatorio.
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div
+                                    class="form-group {{ !formDatosSolicitante.latitud_queja.$valid && formDatosSolicitante.latitud_queja.$touched ? 'has-error' : '' }}">
+                                    <label class="control-label">Latitud de la Queja</label>
+                                    <input type="text" name="latitud_queja" class="form-control"
+                                        placeholder="Latitud Localizacion de la Queja"
+                                        ng-model="solicitud.latitud_queja" ng-required="true" />
+                                    <span class="help-block"
+                                        ng-show="!formDatosSolicitante.latitud_queja.$valid && formDatosSolicitante.latitud_queja.$touched">
                                         Este campo es obligatorio.
                                     </span>
                                 </div>
@@ -456,7 +482,7 @@
                 </div>
 
             </div>
-    <!--         {{solicitud}} -->
+         <!-- {{solicitud}} -->
         </div>
 
     </div>
