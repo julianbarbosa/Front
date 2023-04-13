@@ -167,6 +167,7 @@ saul.config(["$stateProvider",
         }
         $scope.limpiar = function() {
             $scope.data = {};
+            $scope.historial = {};
             $scope.comparendo = null;
             $scope.expediente = null;
             $scope.busqueda =null; 

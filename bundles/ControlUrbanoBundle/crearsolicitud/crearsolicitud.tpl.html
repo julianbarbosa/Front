@@ -1,0 +1,217 @@
+<div class="panel">
+    <div class="panel-body">
+        <div class="page-header">
+            <h1 class="col-xs-12 col-sm-10 text-center text-left-sm"><i
+                    class="padding-sm-hr fa fa-list-alt"></i>&nbsp;&nbsp;Generar Solicitud de Visitas
+            </h1>
+        </div>
+        <form name="userForm">
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <label class="control-label" for="numerocomparendo">
+                        Funcionario Visitador
+                    </label>
+                    <select ng-model="busqueda.funcionario"
+                        ng-options="curaduria.id as curaduria.curaduria for curaduria in arrayCuradurias"
+                        class="form-control">
+                        <option value="">-- Seleccione --</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label class="control-label" for="numeroidentificacion">
+                        Fecha de Visita
+                    </label>
+                    <input type="date" id="fechavisita" class="form-control input-xlarge"
+                        ng-model="busqueda.fechavisita" required />
+                </div>
+                <div class="form-group col-md-4">
+                    <label class="control-label" for="numeroidentificacion">
+                        Comentarios Adicionales
+                    </label>
+                    <input type="text" id="comentario" class="form-control input-xlarge"
+                        ng-model="busqueda.identificacionpropietario" placeholder="Comentarios a visitas" />
+                </div>
+            </div>
+            <div class="panel panel-info">
+                <div class="panel-heading"><strong>Busqueda de Solicitudes / Filtros</strong></div>
+                <div class="panel-body">
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs 12">
+                        <div class="form-group">
+                            <label class="control-label" for="valorpagar">Fecha Inicial Solicitud</label>
+                            <input type="date" step="0.01" style="font-size:17px; text-align:right;color:#ff171f"
+                                id="monto" name="monto" required value="{{ old('monto') }}" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs 12">
+                        <div class="form-group">
+                            <label class="control-label" for="valorpagar">Fecha Final Solicitud</label>
+                            <input type="date" step="0.01" style="font-size:17px; text-align:right;color:#ff171f"
+                                id="monto" name="monto" required value="{{ old('monto') }}" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs 12">
+                        <div class="form-group">
+                            <label class="control-label" for="valorpagar">Nro Solicitud</label>
+                            <input type="number" step="0.01" style="font-size:20px; text-align:right;color:#ff171f"
+                                id="monto" name="monto" required value="{{ old('monto') }}" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs 12">
+                        <div class="form-group">
+                            <label class="control-label" for="nombre">Nro Autorizacion</label>
+                            <input type="text" style="font-size:18px; text-align:right;color:#110eff " name="notas"
+                                required value="{{ old('notas') }}" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs 12">
+                        <div class="form-group">
+                            <label class="control-label">Tipo de Infraestructura</label>
+                            <select name="cmb_type_pay" class="form-control">
+                                <option value="">Escoja Un Tipo de Infraestructura.......</option>
+                                <option value="MASTIL">MASTIL</option>
+                                <option value="ANTENA" selected>ANTENA</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs 12">
+                        <div class="form-group">
+                            <label class="control-label" for="nombre">Direccion Infraestructura</label>
+                            <input type="text" style="font-size:18px; text-align:right;color:#110eff " name="notas"
+                                required value="{{ old('notas') }}" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs 12">
+                        <div class="form-group">
+                            <label class="control-label">Barrio</label>
+                            <select name="cmb_type_pay" class="form-control">
+                                <option value="">Escoja Un Barrio.......</option>
+                                <option value="MASTIL">Barrio 1</option>
+                                <option value="ANTENA" selected>Barrio 2</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs 12">
+                        <div class="form-group">
+                            <label class="control-label">Comuna</label>
+                            <select name="cmb_type_pay" class="form-control">
+                                <option value="">Escoja Una Comuna.......</option>
+                                <option value="MASTIL">Comuna 1</option>
+                                <option value="ANTENA" selected>Comuna 2</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs 12">
+                        <div class="form-group">
+                            <button class="btn btn-success" type="submit">Buscar</button>
+                            <button class="btn btn-warning" type="reset">Agregar campo</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+
+    <div class="panel-body col-md-12">
+        <div class="table-primary">
+            <table cellpadding="0" cellspacing="0" border="0" class="table-hover table table-bordered"
+                id="listaSolicitudes" width="100%" role="grid" aria-describedby="solicitud_listar_infraestructura">
+                <thead>
+                    <tr role="row">
+                        <th ng-repeat="header in headers"
+                            class="ui-state-default {{header.sorting}} {{header.header_align}}"
+                            style="width: {{header.width}}" ng-click="ordenarPor(headers[$index].name)">
+                            {{header.title}}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody ng-if="data.length==0">
+                    <tr>
+                        <td colspan="10">No se encontraron datos.</td>
+                    </tr>
+                </tbody>
+                <tbody ng-repeat="row in data" ng-if="data.length>0">
+                    <tr class="odd" style="font-weight: bold;" ng-class="{'danger': row[rowWarning] === false}">
+                        <td ng-repeat="header in headers" class="{{header.body_align}}">
+
+                            <!--Acciones-->
+                            <span ng-if="header.values">
+                                <span width="30%" ng-if="value['link']" ng-repeat="value in header.values"
+                                    ng-bind-html="'<a href=\''+value['link']+row['id']+'\' >'+value['icon']+' </a>'"></span>
+                                <span ng-if="row['ruta'] && !value['link'] && !value['action']"
+                                    ng-repeat="value in header.values"
+                                    ng-bind-html="'<a href=\'#!'+row['ruta']+row['id']+'\' >'+value['icon']+' </a>'"></span>
+                                <span ng-if="value['action'] && !value['permission']"
+                                    ng-repeat="value in header.values">
+                                    <span ng-bind-html="value['icon']" ng-click="caller(value['action'], row)"></span>
+                                </span>
+                                <span ng-if="value['action'] && !value['condition']" ng-repeat="value in header.values">
+                                    <span ng-if="row[value['permission']]=='1'" ng-bind-html="value['icon']"
+                                        ng-click="caller(value['action'], row)"></span>
+                                </span>
+                                <span ng-if="value['action']" ng-repeat="value in header.values">
+                                    <span ng-if="row[value['permission']]=='1' && $eval(value['condition'])"
+                                        ng-bind-html="value['icon']" ng-click="caller(value['action'], row)"></span>
+                                </span>
+
+                            </span>
+
+                            <!--Opciones dependientes de valores-->
+                            <span ng-if="header.options">
+                                <span ng-repeat="option in header.options" ng-bind-html="option['link']"
+                                    ng-if="option['value'] == row[option['nameValidate']]"></span>
+                            </span>
+
+                            <!-- Valor de Text-->
+                            <span ng-if="header.type === 'text'">
+                                {{row[header.name]}} {{row[header.name2]}}
+                            </span>
+
+                            <!-- Valor de Link-->
+                            <span ng-if="header.type === 'link'">
+                                <a href="{{header.link}}{{row[header.name]}}" target="_blank">{{row[header.name]}}</a>
+                            </span>
+
+                            <!-- Valor de Objeto Fecha-->
+                            <span ng-if="header.type === 'date'">
+                                {{row[header.name].timestamp * 1000| date:'yyyy-MM-dd HH:mm:ss'}}
+                            </span>
+
+                            <!-- Valor de Objeto Button-->
+                            <span ng-if="header.type === 'button'">
+                                <button class="btn {{header['style']}}" ng-bind-html="header['title']"
+                                    ng-click="caller(header['action'], row)"></button>
+                            </span>
+                        </td>
+                        <td ng-if="idProgramacionPedagogia">
+                            <input type="button" value="Inscribir a Pedagogía" ng-click="inscribirAPedagogia(row['id'])"
+                                class="btn btn-primary">
+                        </td>
+                    </tr>
+                    <tr class="odd" ng-class="{'danger': row[rowWarning] === false}" ng-if="rowActive == row['id']">
+                        <td colspan="10" class="col-md-12">
+                            <span ng-repeat="(key, value) in row" class="col-md-6">
+                                <span class="col-md-6"><strong>{{key}}:</strong></span>
+                                <span ng-show="!value.timezone" class="col-md-6">{{value}}</span>
+                                <span ng-show="value.timezone" class="col-md-6">{{value.timestamp*1000 | date:
+                                    'yyyy-MM-dd'}}</span>
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <td colspan="10" class="currency">
+                        <uib-pagination ng-model="currentPage" total-items="totalItems" max-size="5"
+                            boundary-links="true" ng-click="actualizarDatos(currentPage)" first-text="Primera"
+                            last-text="Última" next-text="Siguiente" previous-text="Anterior"
+                            boundary-link-numbers="true" rotate="true"></uib-pagination>
+                    </td>
+                </tfoot>
+            </table>
+
+        </div>
+    </div>
+</div>
+<div class="overlap_espera_2"><i class="fa fa-gear fa-spin fa-2x"></i></div>

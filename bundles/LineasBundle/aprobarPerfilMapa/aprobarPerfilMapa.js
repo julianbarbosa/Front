@@ -15,7 +15,7 @@ saul.config(["$stateProvider", function(a) {
         self.viewLoaded = false;
         $scope.root = root;
         $scope.viewLoaded = false;
-        $scope.urlImagenes = "//planeacion.cali.gov.co/saul2/images/img_lineas/";
+        $scope.urlImagenes = "//saul.cali.gov.co/saul2/images/img_lineas/"; 
         $scope.imageStreetView = ""+$scope.urlImagenes+"street_view.png";
         $scope.urlGeoportal = "https://geoportal.cali.gov.co/agserver/rest/services/Lineas/lineas_auto/MapServer/0";                               
 
@@ -146,7 +146,7 @@ saul.config(["$stateProvider", function(a) {
 
             function drawThis(target) {
                 $scope.perfilId = view.popup.selectedFeature.attributes.id;
-                var url = "http://planeacion.cali.gov.co/saul2/perfilvial/"+view.popup.selectedFeature.attributes.id;
+                var url = "http://saul.cali.gov.co/saul2/perfilvial/"+view.popup.selectedFeature.attributes.id;
                 esriRequest(url,{responseType: 'json'}).then(function(response) {
                 
                 var via=JSON.stringify(response.data[0].via,null,2);
@@ -428,7 +428,7 @@ saul.config(["$stateProvider", function(a) {
                 
                 view.popup.title =texto_principal+" "+nombreViaPrincipal+" entre "+texto_secundario+" "+nombreViaSecundaria+" y "+texto_terciario+" "+nombreViaTerciaria;
                 view.popup.content = //view.popup.selectedFeature.attributes.id +
-                  "<table border='0' cellpadding='0' cellspacing='0' align=center width=100%><tr><td>Corte 1-1</td><td><a text-decoration: underline; target= blank href='https://planeacion.cali.gov.co/saul/v2/#!/perfilvial/crearperfilvial/"+view.popup.selectedFeature.attributes.id+"' title='Consultar en SAUL'>Consultar en SAUL </a></td><td><a target='_blank' href="+urlFuente1+" title='Fuente 1'>Fuente 1 ("+fuente1+") </a></td><td>"+fuente2_url+"</td></tr></table>  "+ 
+                  "<table border='0' cellpadding='0' cellspacing='0' align=center width=100%><tr><td>Corte 1-1</td><td><a text-decoration: underline; target= blank href='https://saul.cali.gov.co/saul/v2/#!/perfilvial/crearperfilvial/"+view.popup.selectedFeature.attributes.id+"' title='Consultar en SAUL'>Consultar en SAUL </a></td><td><a target='_blank' href="+urlFuente1+" title='Fuente 1'>Fuente 1 ("+fuente1+") </a></td><td>"+fuente2_url+"</td></tr></table>  "+ 
                   "Linea No.  "+view.popup.selectedFeature.attributes.id+"</br><p align='center' style='color:rgba(66,7,7,1)';><b>"+claseVia+"</b></p>"+
                           "<div style='text-align: center; width:100%'><table border='0' cellpadding='0' cellspacing='0' align='center' style='text-align: center;'>"+
                             "<tr>"+fila_1+
@@ -491,9 +491,9 @@ saul.config(["$stateProvider", function(a) {
             
             view.popup.title = "Este es el texto";
             view.popup.content = "Prueba de Perfil";
-            esriConfig.request.corsEnabledServers.push("https://planeacion.cali.gov.co/");
+            esriConfig.request.corsEnabledServers.push("https://saul.cali.gov.co/");
             function textcontent(id) {		
-                var url = "https://planeacion.cali.gov.co/saul2/perfilvial/"+id;
+                var url = "https://saul.cali.gov.co/saul2/perfilvial/"+id;
                  esriRequest(url,{responseType: 'json'}).then(function(response) {		
                     antejardin=JSON.stringify(response.data[0].antejardinIzquierdo,null,2);
                     anden=JSON.stringify(response.data[0].andenIzquierdo,null,2);

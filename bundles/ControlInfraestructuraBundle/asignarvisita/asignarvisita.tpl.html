@@ -1,0 +1,137 @@
+<div ng-controller="SolicitarVisitaControlEstructuraCtrl">
+    <div class="panel">
+        <div ng-show="validator.alert.content">
+            <div class="alert {{validator.alert.type}} alert-dismissable">
+                <i class="fa fa-danger"></i>
+                <button type="button" class="close" aria-hidden="true" ng-click="hideAlert()">×</button>
+                <b>{{validator.alert.title}}</b> <span ng-bind-html="validator.alert.content"></span>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="page-header">
+                <h1 class="col-xs-12 col-sm-10 text-center text-left-sm"><i
+                        class="padding-sm-hr fa fa-list-alt"></i>&nbsp;&nbsp;Solicitud Asignar Visita de Control
+                    Estructura
+                </h1>
+            </div>
+            <form name="form">
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs 12">
+                        <div class="form-group">
+                            <label class="control-label">Tipo Identificacion</label>
+                            <select name="idtipodocidentificacion" class="form-control"
+                                ng-model="sendsolicitud.solicitante.idtipodocidentificacion">
+                                <option value="">Escoja Un Tipo de Identificacion.......</option>
+                                <option value="1" selected>Cedula Ciudadania</option>
+                                <option value="2">Nit</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs 12">
+                        <div class="form-group required"
+                            ng-class="{'has-error': form.numidentificacion.$touched && form.numidentificacion.$invalid}">
+                            <label class="control-label" for="nombre">Número Identificacion</label>
+                            <input type="text" style="font-size:18px; text-align:right;color:#110eff "
+                                name="numidentificacion" required ng-model="sendsolicitud.solicitante.numidentificacion"
+                                value="{{ old('numidentificacion') }}" class="form-control">
+                            <p class="help-block"
+                                ng-if="form.numidentificacion.$touched && form.numidentificacion.$invalid">El Numero
+                                Identificacion es obligatorio</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs 12">
+                        <div class="form-group">
+                            <label class="control-label" for="nombre">Nombres Completos</label>
+                            <input type="text" style="font-size:18px; text-align:right;color:#110eff " name="firstName"
+                                ng-model="sendsolicitud.solicitante.firstName" required value="{{ old('firstName') }}"
+                                class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs 12">
+                        <div class="form-group">
+                            <label class="control-label" for="nombre">Apellidos Completos</label>
+                            <input type="text" style="font-size:18px; text-align:right;color:#110eff " name="lastName"
+                                ng-model="sendsolicitud.solicitante.lastName" required value="{{ old('lastName') }}"
+                                class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs 12">
+                        <div class="form-group">
+                            <label class="control-label" for="nombre">Direccion Completa</label>
+                            <input type="text" style="font-size:16px; text-align:right;color:#110eff " name="direccion"
+                                ng-model="sendsolicitud.solicitante.direccion" required value="{{ old('direccion') }}"
+                                class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group required col-lg-3 col-md-3 col-sm-3 col-xs 12"
+                        ng-class="{'has-error': form.BusquedaBarrio.$touched && !sendsolicitud.solicitante.barrio.idbarrio}">
+                        <label class="control-label" for="barrio">Barrio: <i ng-show="loadingBarrio"
+                                class="fa fa-spinner fa-spin"></i></label>
+                        <input type="text" id="BusquedaBarrio" name="BusquedaBarrio" class="form-control input-xlarge"
+                            ng-model="sendsolicitud.solicitante.barrio"
+                            uib-typeahead="itembarrio as itembarrio.nombre for itembarrio in getBarrios($viewValue)"
+                            typeahead-wait-ms="1000" typeahead-loading="loadingBarrio"
+                            typeahead-on-select="onSelect($item, 'nombre', $label)" uib-typeahead-min-length="3"
+                            bs-typeahead placeholder="Ingrese el nombre del barrio" autocomplete="off" />
+                        <p class="help-block" ng-if="form.BusquedaBarrio.$touched && !peticion.idbarrio.idbarrio">Por
+                            favor
+                            seleccione un barrio.</p>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs 12">
+                        <div class="form-group">
+                            <label class="control-label" for="nombre">E-mail</label>
+                            <input type="text" style="font-size:16px; text-align:right;color:#110eff "
+                                name="emailAddress" required value="{{ old('emailAddress') }}"
+                                ng-model="sendsolicitud.solicitante.emailAddress" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs 12">
+                        <div class="form-group">
+                            <label class="control-label" for="nombre">Teléfono</label>
+                            <input type="text" style="font-size:16px; text-align:right;color:#110eff " name="telefono"
+                                required value="{{ old('telefono') }}" ng-model="sendsolicitud.solicitante.telefono"
+                                class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs 12">
+                        <div class="form-group"
+                            ng-class="{'has-error': form.tipo_solicitud.$touched && form.tipo_solicitud.$invalid }">
+                            <label class="control-label">Tipo Solicitud</label>
+                            <select name="tipo_solicitud" class="form-control" ng-model="sendsolicitud.tipo_solicitud"
+                                required>
+                                <option value="">Escoja Un Tipo de Solicitud.......</option>
+                                <option value="control_antenas" selected>Control Antenas</option>
+                                <option value="control_preventivo">Control Preventivo</option>
+                                <option value="control_posterior">Control Posterior</option>
+                            </select>
+                            <p class="help-block" ng-if="form.tipo_solicitud.$touched && form.tipo_solicitud.$invalid">
+                                Seleccione tipo de Solicitud.</p>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs 12">
+                        <div class="form-group">
+                            <label class="control-label" for="observaciones">
+                                Observaciones Adicionales
+                            </label>
+                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="4"
+                                ng-model="sendsolicitud.observacion" placeholder="Observaciones a Solicitud"></textarea>
+                        </div>
+                    </div>
+                </div>
+                {{sendsolicitud}}
+                <div class="panel panel-success">
+                    <div class="panel-body">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs 12">
+                            <div class="form-group">
+                                <input type="submit" class="btn btn-primary" ng-click="save()" ng-if="saveButton"
+                                    value="Crear Solicitud" ng-disabled="form.$invalid" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="overlap_espera_2"><i class="fa fa-gear fa-spin fa-2x"></i></div>
+</div>

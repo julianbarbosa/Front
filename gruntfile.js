@@ -65,14 +65,14 @@ module.exports = function(grunt) {
         files: "<%= srcJS %>**/**/**/*.tpl.html",
         tasks: ["js"],
         options: {
-           livereload: 35730
+           livereload: 35731
         }
       },
       scripts: {
         files: jsFiles.concat(["<%= srcJS %>compress.json", "!<%= srcJS %>templates.js"]),
         tasks: ["js"],
         options: {
-           livereload: 35730
+           livereload: 35731
         }
       },
 //      stylesheets: {

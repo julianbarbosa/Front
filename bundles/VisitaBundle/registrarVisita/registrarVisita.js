@@ -27,8 +27,8 @@ saul.config(["$stateProvider",
             convertDateStringsToDates(responseData);
             return responseData;
         });
-    }]).controller("RegistrarVisitaCtrl", ["$scope", "root", "$stateParams", "Visita", "EncabezadoVisita", "TipoSolicitud", "FormularioVisita", "Visitaxdocumento","dsJqueryUtils", "Upload", "$timeout", "$state", "ComportamientoContrario", "esriLoader",
-    function ($scope, root, $stateParams, Visita, EncabezadoVisita, TipoSolicitud, FormularioVisita, Visitaxdocumento, dsJqueryUtils, Upload, $timeout, $state, ComportamientoContrario, esriLoader) {
+    }]).controller("RegistrarVisitaCtrl", ["$scope", "$http","root", "$stateParams", "Visita", "EncabezadoVisita", "TipoSolicitud", "FormularioVisita", "Visitaxdocumento","dsJqueryUtils", "Upload", "$timeout", "$state", "ComportamientoContrario", "esriLoader",
+    function ($scope, $http, root, $stateParams, Visita, EncabezadoVisita, TipoSolicitud, FormularioVisita, Visitaxdocumento, dsJqueryUtils, Upload, $timeout, $state, ComportamientoContrario, esriLoader) {
         var self = this;
         $scope.datavisita = [];
         self.viewLoaded = false;
@@ -54,6 +54,7 @@ saul.config(["$stateProvider",
             $scope.datavisita.longitud = response.longitud;
             $scope.datavisita.latitud = response.latitud;
             $scope.camposformularioVisita = FormularioVisita.query({id: $stateParams.idVisita});
+            console.log($scope.camposformularioVisita);
             EncabezadoVisita.query({id: $stateParams.idVisita}).$promise.then(function(response) {
                 $scope.camposLectura = response;
                 $(".overlap_espera").fadeOut(500, "linear");
@@ -201,20 +202,46 @@ saul.config(["$stateProvider",
         });
         
         $scope.direccion ="";
-        Visitaxdocumento.query({id: $stateParams.idVisita}).$promise.then(function (response) {            
-            $scope.visitasxdocumento = response;
-        });
+        // Visitaxdocumento.query({id: $stateParams.idVisita}).$promise.then(function (response) {            
+        //     $scope.visitasxdocumento = response;
+        // });
         $scope.isReadOnly = false;
         $scope.tiposSolicitud = TipoSolicitud.query();
 
         $scope.tipoSolicitud = {};
         $scope.oculto = true;
         $scope.isSuccess = false;
+        $scope.arrayDominio = [];
 
         $scope.hideAlert = function () {
             $scope.validator = {};
+            
         };
+        
+        $scope.getDateValue = function(dateString) {
+            console.warn(dateString);
+            var date = new Date(dateString);
+            console.warn(dateString);
+            console.error(date);
+            return date;
+        }
 
+        $scope.getDominio = function(nombreDominio, valor) {
+            // LoadingOverlap.show($scope);
+            $http.get(root+"dominio/"+nombreDominio).then(function(response) {
+                $scope.arrayDominio[nombreDominio] = response.data;
+            }).finally(function(){
+                // LoadingOverlap.hide($scope);
+            });
+            
+        }
+        
+        $scope.changeSelect = function(nombreDominio) {
+            alert('changeSelect');
+            return $scope.arrayDominio[nombreDominio][0];
+            // $scope.selectedId = $scope.selectedItem && $scope.selectedItem.id
+         }
+        
         function callback(data) {
             $scope.validator = {};
             $scope.validator.alert = {};
@@ -235,8 +262,24 @@ saul.config(["$stateProvider",
             });
         });
         //files
+        
+        $scope.saveItem = function(input) {
+            $scope.valoresFormulario = [];
+            $scope.valoresFormulario.push({codigo: input.codigo, valor: input.valor, tipoItem: input.tipoItem});
+            Upload.upload({
+                url: root + 'visita',
+                data: {
+                    idVisita: $scope.visita.idVisita,
+                    data: $scope.valoresFormulario
+                }
+            }).then(function (response) {
+                
+            }, function(MessageChannel) {
+                alert("Ha ocurrido un error informe al desarrollador. Gracias.");
+            });
+        }
 
-
+        
         $scope.save = function (finalizar) {
             $scope.valoresFormulario = [];
             angular.forEach($scope.camposformularioVisita, function (campo) {

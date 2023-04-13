@@ -340,7 +340,7 @@
                                                         <label class="control-label" for="antejardin">Separador</label>
                                                         <div class="input-group">
                                                             <div class="input-group-addon" style="width:38px;">
-                                                                <input type="checkbox" ng-model="linea.izquierdo.tieneSeparador" title="Establece si el lado tiene separador" ng-change="linea.izquierdo.dimensionSeparador=null;linea.izquierdo.tipoSeparadorId=null;  linea.izquierdo.calzada=null;">
+                                                                <input type="checkbox" ng-model="linea.izquierdo.tieneSeparador" title="Establece si el lado tiene separador" ng-change="cambiarValoresSeparadorIzquierdo()">
                                                             </div>
                                                             <input type="number" ng-if="linea.izquierdo.tieneSeparador" step="0.01" min="0" id="separadorIzquierdo" name="separadorIzquierdo" class="form-control col-md-5"    ng-model="linea.izquierdo.dimensionSeparador" placeholder="Separador" autocomplete="off" required/>
                                                             <div class="input-group-addon btn-warning" title="Unidad de medida: metro"  ng-if="linea.izquierdo.tieneSeparador">m</div>
@@ -459,7 +459,7 @@
                                                         <div class="input-group">
                                                             <div class="input-group-addon" style="width:38px;">
                                                                 <input type="checkbox" ng-model="linea.derecho.tieneSeparador" title="Establece si el lado tiene separador"
-                                                                ng-change="linea.derecho.dimensionSeparador=null;linea.derecho.tipoSeparadorId=null;linea.derecho.calzada=null;">
+                                                                ng-change="cambiarValoresSeparadorDerecho()">
                                                             </div>
                                                             <input type="number" ng-if="linea.derecho.tieneSeparador" step="0.01" min="0" id="separadorDerecho" name="separadorDerecho" class="form-control col-md-5" ng-model="linea.derecho.dimensionSeparador"  placeholder="Separador" autocomplete="off" required/>
                                                             <div class="input-group-addon" ng-if="linea.derecho.tieneSeparador">&nbsp;Tipo</div>
