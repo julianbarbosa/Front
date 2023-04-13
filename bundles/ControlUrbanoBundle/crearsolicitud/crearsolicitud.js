@@ -35,10 +35,7 @@ saul
       $scope.esFuncionario = false;
       $scope.solicitud = {};
       $scope.solicitud.aplicaGarantia = 1;
-<<<<<<< HEAD
       $scope.solicitud.aplicaConRadicado = 0;
-=======
->>>>>>> origin/main
       $scope.files = [];
       $scope.direccionRequerida = false;
       $scope.seBuscoSolicitante = false;
