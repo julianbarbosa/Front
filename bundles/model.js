@@ -13,164 +13,173 @@ saul.
 				});
 			}
 		]).
-		factory("ArtesEscenicasEvento", [
-			"$resource",
-			"root",
-			function ($resource, root) {
-				return $resource(root + "artes/evento", {}, {
-					'query': {method: 'POST', isArray: false, transformResponse: function (json, headerGetter) {
-							return angular.fromJson(json);
-						}},
-					'post': {method: 'POST'}
-					//'query': {method: 'GET'}
-				});
-			}
-		]).
-		factory("ArtesEscenicasActualizarEvento", [
-			"$resource",
-			"root",
-			function ($resource, root) {
-				return $resource(root + "artesescenicas/actualizar_evento", {}, {
-					'post': {method: 'POST'},
-					'query': {method: 'POST'}
-				});
-			}
-		]).
-		factory("ArtesEscenicasPdf", [
-			"$resource",
-			"root",
-			function ($resource, root) {
-				return $resource(root + "artesescenicas/generar_pdf", {}, {
-					'post': {method: 'POST'},
-					'query': {method: 'POST'}
-				});
-			}
-		]).
-		factory("ArtesEscenicasAforo", [
-			"$resource",
-			"root",
-			function ($resource, root) {
-				return $resource(root + "artesescenicas/ver_datos_aforo", {}, {
-					'post': {method: 'POST'},
-					'query': {method: 'GET', transformResponse: function (json, headerGetter) {
-							return angular.fromJson(json);
-						}}
-				});
-			}
-		]).
-		factory("ArtesEscenicasSolicitud", [
-			"$resource",
-			"root",
-			function ($resource, root) {
-				return $resource(root + "artesescenicas/consultar_solicitud", {}, {
-					'post': {method: 'POST'},
-					'query': {method: 'GET', isArray: false}
-				});
-			}
-		]).
-		factory("ArtesEscenicasArchivosSolicitud", [
-			"$resource",
-			"root",
-			function ($resource, root) {
-				return $resource(root + "tiposolicitud/:idTipoSolicitud/listartiposdocumento", {idTipoSolicitud: '@idTipoSolicitud'}, {
-					'get': {method: 'GET', isArray: true},
-					'query': {method: 'GET'}
-				});
-			}
-		]).
-		factory("ArtesEscenicasConsultarArchivos", [
-			"$resource",
-			"root",
-			function ($resource, root) {
-				return $resource(root + "solicitud/:idSolicitud/listardocs/:idTipoDocumento", {idSolicitud: '@idSolicitud', idTipoDocumento: '@idTipoDocumento'}, {
-					'get': {method: 'GET'},
-					'query': {method: 'GET'}
-				});
-			}
-		]).
-		factory("ArtesEscenicasGuardarArchivos", [
-			"$resource",
-			"root",
-			function ($resource, root) {
-				return $resource(root + "/solicitud/:idSolicitud/adjuntar/:idTipoDocumento", {idsolicitud: '@idSolicitud', idTipoDocumento: '@idTipoDocumento'}, {
-					'post': {method: 'POST'},
-					'query': {method: 'POST'}
-				});
-			}
-		]).
-		factory("ArtesEscenicasEliminarArchivos", [
-			"$resource",
-			"root",
-			function ($resource, root) {
-				return $resource(root + "solicitud/:idSolicitud/eliminardoc/:idSolicitudXDocumento", {idSolicitud: '@idSolicitud', idSolicitudXDocumento: '@idSolicitudXDocumento'}, {
-					'post': {method: 'POST'},
-					'get': {method: 'GET'}
-				});
-			}
-		]).
-		factory("ArtesEscenicasPdfContador", ['root', function (root) {
-				return {
-					openPdfContador: openPdfContador
-				};
+		// factory("ValidarPropiedadHorizontal", [
+		// 	"$resource",
+		// 	"root",
+		// 	function ($resource, root) {
+		// 		return $resource(root + "propiedadhorizontal/validar_propiedad_horizontal", {id: '@id'}, {
+		// 			query: {method: 'POST', isArray: true}
+		// 		});
+		// 	}
+		// ]).
+		// factory("ArtesEscenicasEvento", [
+		// 	"$resource",
+		// 	"root",
+		// 	function ($resource, root) {
+		// 		return $resource(root + "artes/evento", {}, {
+		// 			'query': {method: 'POST', isArray: false, transformResponse: function (json, headerGetter) {
+		// 					return angular.fromJson(json);
+		// 				}},
+		// 			'post': {method: 'POST'}
+		// 			//'query': {method: 'GET'}
+		// 		});
+		// 	}
+		// ]).
+		// factory("ArtesEscenicasActualizarEvento", [
+		// 	"$resource",
+		// 	"root",
+		// 	function ($resource, root) {
+		// 		return $resource(root + "artesescenicas/actualizar_evento", {}, {
+		// 			'post': {method: 'POST'},
+		// 			'query': {method: 'POST'}
+		// 		});
+		// 	}
+		// ]).
+		// factory("ArtesEscenicasPdf", [
+		// 	"$resource",
+		// 	"root",
+		// 	function ($resource, root) {
+		// 		return $resource(root + "artesescenicas/generar_pdf", {}, {
+		// 			'post': {method: 'POST'},
+		// 			'query': {method: 'POST'}
+		// 		});
+		// 	}
+		// ]).
+		// factory("ArtesEscenicasAforo", [
+		// 	"$resource",
+		// 	"root",
+		// 	function ($resource, root) {
+		// 		return $resource(root + "artesescenicas/ver_datos_aforo", {}, {
+		// 			'post': {method: 'POST'},
+		// 			'query': {method: 'GET', transformResponse: function (json, headerGetter) {
+		// 					return angular.fromJson(json);
+		// 				}}
+		// 		});
+		// 	}
+		// ]).
+		// factory("ArtesEscenicasSolicitud", [
+		// 	"$resource",
+		// 	"root",
+		// 	function ($resource, root) {
+		// 		return $resource(root + "artesescenicas/consultar_solicitud", {}, {
+		// 			'post': {method: 'POST'},
+		// 			'query': {method: 'GET', isArray: false}
+		// 		});
+		// 	}
+		// ]).
+		// factory("ArtesEscenicasArchivosSolicitud", [
+		// 	"$resource",
+		// 	"root",
+		// 	function ($resource, root) {
+		// 		return $resource(root + "tiposolicitud/:idTipoSolicitud/listartiposdocumento", {idTipoSolicitud: '@idTipoSolicitud'}, {
+		// 			'get': {method: 'GET', isArray: true},
+		// 			'query': {method: 'GET'}
+		// 		});
+		// 	}
+		// ]).
+		// factory("ArtesEscenicasConsultarArchivos", [
+		// 	"$resource",
+		// 	"root",
+		// 	function ($resource, root) {
+		// 		return $resource(root + "solicitud/:idSolicitud/listardocs/:idTipoDocumento", {idSolicitud: '@idSolicitud', idTipoDocumento: '@idTipoDocumento'}, {
+		// 			'get': {method: 'GET'},
+		// 			'query': {method: 'GET'}
+		// 		});
+		// 	}
+		// ]).
+		// factory("ArtesEscenicasGuardarArchivos", [
+		// 	"$resource",
+		// 	"root",
+		// 	function ($resource, root) {
+		// 		return $resource(root + "/solicitud/:idSolicitud/adjuntar/:idTipoDocumento", {idsolicitud: '@idSolicitud', idTipoDocumento: '@idTipoDocumento'}, {
+		// 			'post': {method: 'POST'},
+		// 			'query': {method: 'POST'}
+		// 		});
+		// 	}
+		// ]).
+		// factory("ArtesEscenicasEliminarArchivos", [
+		// 	"$resource",
+		// 	"root",
+		// 	function ($resource, root) {
+		// 		return $resource(root + "solicitud/:idSolicitud/eliminardoc/:idSolicitudXDocumento", {idSolicitud: '@idSolicitud', idSolicitudXDocumento: '@idSolicitudXDocumento'}, {
+		// 			'post': {method: 'POST'},
+		// 			'get': {method: 'GET'}
+		// 		});
+		// 	}
+		// ]).
+		// factory("ArtesEscenicasPdfContador", ['root', function (root) {
+		// 		return {
+		// 			openPdfContador: openPdfContador
+		// 		};
 
-				function openPdfContador(data) {
-					window.open(root + 'artesescenicas/pdf_contador?datospdf=' + angular.toJson(data));
-				}
-				;
-			}
-		]).
-		factory("ArtesEscenicasPdfRadicado", ['root', function (root) {
-				return {
-					openPdfRadicado: openPdfRadicado
-				};
+		// 		function openPdfContador(data) {
+		// 			window.open(root + 'artesescenicas/pdf_contador?datospdf=' + angular.toJson(data));
+		// 		}
+		// 		;
+		// 	}
+		// ]).
+		// factory("ArtesEscenicasPdfRadicado", ['root', function (root) {
+		// 		return {
+		// 			openPdfRadicado: openPdfRadicado
+		// 		};
 
-				function openPdfRadicado(data) {
-					window.open(root + 'artesescenicas/pdf_radicado?idsolicitud=' + angular.toJson(data.idsolicitud));
-				}
-				;
-			}
-		]).
-		factory("ArtesEscenicasDiasEvento", [
-			"$resource",
-			"root",
-			function ($resource, root) {
-				return $resource(root + "artesescenicas/ver_dias_evento", {}, {
-					'post': {method: 'POST'},
-					'query': {method: 'GET'}
-				});
-			}
-		]).
-		factory("ArtesEscenicasRadicar", [
-			"$resource",
-			"root",
-			function ($resource, root) {
-				return $resource(root + "artesescenicas/radicar", {}, {
-					'post': {method: 'POST'},
-					'query': {method: 'POST'}
-				});
-			}
-		]).
-		factory("ArtesEscenicasVerArchivos", ['root', function (root) {
-				return {
-					openFile: openFile
-				};
+		// 		function openPdfRadicado(data) {
+		// 			window.open(root + 'artesescenicas/pdf_radicado?idsolicitud=' + angular.toJson(data.idsolicitud));
+		// 		}
+		// 		;
+		// 	}
+		// ]).
+		// factory("ArtesEscenicasDiasEvento", [
+		// 	"$resource",
+		// 	"root",
+		// 	function ($resource, root) {
+		// 		return $resource(root + "artesescenicas/ver_dias_evento", {}, {
+		// 			'post': {method: 'POST'},
+		// 			'query': {method: 'GET'}
+		// 		});
+		// 	}
+		// ]).
+		// factory("ArtesEscenicasRadicar", [
+		// 	"$resource",
+		// 	"root",
+		// 	function ($resource, root) {
+		// 		return $resource(root + "artesescenicas/radicar", {}, {
+		// 			'post': {method: 'POST'},
+		// 			'query': {method: 'POST'}
+		// 		});
+		// 	}
+		// ]).
+		// factory("ArtesEscenicasVerArchivos", ['root', function (root) {
+		// 		return {
+		// 			openFile: openFile
+		// 		};
 
-				function openFile(data) {
-					window.open(root + "solicitud/" + data.idSolicitud + "/visualizardoc/" + data.idDocumento + "/" + data.idSolicitudXDocumento);
-				}
-				;
-			}
-		]).
-		factory("ArtesEscenicasActualizarCorreo", [
-			"$resource",
-			"root",
-			function ($resource, root) {
-				return $resource(root + "artesescenicas/actualizar_correo", {}, {
-					'post': {method: 'POST'},
-					'query': {method: 'GET'}
-				});
-			}
-		]).
+		// 		function openFile(data) {
+		// 			window.open(root + "solicitud/" + data.idSolicitud + "/visualizardoc/" + data.idDocumento + "/" + data.idSolicitudXDocumento);
+		// 		}
+		// 		;
+		// 	}
+		// ]).
+		// factory("ArtesEscenicasActualizarCorreo", [
+		// 	"$resource",
+		// 	"root",
+		// 	function ($resource, root) {
+		// 		return $resource(root + "artesescenicas/actualizar_correo", {}, {
+		// 			'post': {method: 'POST'},
+		// 			'query': {method: 'GET'}
+		// 		});
+		// 	}
+		// ]).
 		factory("TipoSolicitud", [
 			"$resource",
 			"root",

@@ -1,0 +1,275 @@
+<!-- Styles -->
+<style type="text/css">
+	#wizard-credit-card .tooltip {
+		left: auto !important;
+		right: 36px !important;
+		width: 200px !important;
+	}
+
+	.error{
+		color: red;
+	}
+
+	.error_borde{
+		border-color: red;
+	}
+
+	.amplificacion{
+		width: 206px;
+	}
+
+	.titulo_costos{
+		text-align: center;
+	}
+
+	.tipo-cursor:hover {
+		cursor: default !important;
+	}
+
+	[class*="malo"] {
+		width: 26%;
+		padding-top: 9px;
+		color:#e86464;
+	}
+
+	[class*="bueno"] {
+		width: 26%;
+		padding-top: 9px;
+		color:#5bb55b;
+	}
+
+	@media only screen and (min-width: 768px) {
+	.inputs_lables{
+		width: 70%;   
+	}
+
+	.malo{
+		width: 70%;
+		padding-top: 9px;
+		color:#e86464;
+	}
+
+	.bueno{
+		width: 70%;
+		padding-top: 9px;
+		color:#5bb55b;
+	}
+
+	.amplificacion{
+		width: 349px;
+	}
+	}
+
+	/*
+	Coloca el puntero en los números de los wizard
+	*/
+	.wizard-steps.wizard-go-to-number li span{
+		cursor: pointer;
+	}
+
+	.theme-cali .nav-tabs > li.active > a, .theme-cali .nav-tabs > li.active > a:hover, .theme-cali .nav-tabs > li.active > a:focus {
+		background: #215a9a !important;
+		border-bottom: 2px solid #215a9a !important;
+	}
+
+	input[type="file"] {
+		margin: 0 0 10px;
+		padding: 5px 1%;
+		border-radius: 3px;
+	}
+
+	.principal {
+		width: 80%;
+		margin: 0 auto;
+		padding: 3% 0 6% 0;
+		clear: both;
+	}
+
+	.clear{clear:both;}
+
+	/* #boton{
+
+		width:120px;
+		height:30px;
+	} */
+
+	.progress[value] {
+		/* Elimino la apariencia por defecto */
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		appearance: none;
+		
+		/* Quito el borde que aparece en Firefox */
+		border: none;
+
+		/* Añado mis propios estilos */
+		/* width: 270px; */
+		height: 30px;
+		
+		
+	/* 	Estos estilos solo se aplicaran al fondo de la barra en mozilla */
+		overflow:hidden;
+		border:1px inset rgb(131, 131, 131);
+		background-color:#D8D8D8;
+		border-radius: 5px;
+	}
+
+	.progress{
+		float:left;
+	}
+
+	.progress span{
+		font-weight:bold;
+	}
+
+	/* Compatibilidad de color en Firefox, Chrome y Safari */
+	.progress::-moz-progress-bar{ 
+		background: rgb(167, 167, 167);
+		background: rgba(79,190,113);
+		background: -moz-linear-gradient(left, rgb(79,190,113) 0%, rgb(39,184,43) 100%);
+		background: -webkit-gradient(left top, right top, color-stop(0%, rgba(79,190,113)), color-stop(100%, rgba(39,184,43)));
+		background: -webkit-linear-gradient(left, rgba(79,190,113) 0%, rgba(39,184,43) 100%);
+		background: -o-linear-gradient(left, rgba(79,190,113) 0%, rgba(39,184,43) 100%);
+		background: -ms-linear-gradient(left, rgba(79,190,113) 0%, rgba(39,184,43) 100%);
+		background: linear-gradient(to right, rgba(79,190,113) 0%, rgba(39,184,43) 100%);
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7AFF4A', endColorstr='#5EFF08', GradientType=1 );	
+		border-radius : 5px; 
+	} 
+
+	.progress::-webkit-progress-value { 
+		background: rgb(167, 167, 167);
+		background: rgba(79,190,113);
+		background: -moz-linear-gradient(left, rgb(79,190,113) 0%, rgb(39,184,43) 100%);
+		background: -webkit-gradient(left top, right top, color-stop(0%, rgba(79,190,113)), color-stop(100%, rgba(39,184,43)));
+		background: -webkit-linear-gradient(left, rgba(79,190,113) 0%, rgba(39,184,43) 100%);
+		background: -o-linear-gradient(left, rgba(79,190,113) 0%, rgba(39,184,43) 100%);
+		background: -ms-linear-gradient(left, rgba(79,190,113) 0%, rgba(39,184,43) 100%);
+		background: linear-gradient(to right, rgba(79,190,113) 0%, rgba(39,184,43) 100%);
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7AFF4A', endColorstr='#5EFF08', GradientType=1 );
+		border-radius : 5px; 	
+
+	}
+	.progress::-webkit-progress-bar { 
+		background-color:#D8D8D8;
+		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25) inset;
+		border-radius : 5px; 
+	}
+    .d-flex {
+        display: flex;
+    }
+    .btn-inscripcion{
+        margin-left: 40px;
+    }
+	.informativo {
+		margin: 5px 0 20px 0;
+	}
+	.btn-cancel {
+		padding-left: 12px;
+	}
+	@media (max-width: 640px) {
+		.btn-solicitud {
+        	display: grid;
+		}
+		.btn-cancel {
+			text-align: center;
+			padding-left: 0;
+			padding-top: 8px;
+		}
+	}
+</style>
+<!-- / Styles -->
+
+<!--Cabecera-->
+<div class="page-header">
+	<h1>
+		<i class="fa fa-th-large page-header-icon"></i>&nbsp;&nbsp;Bienvenido
+	</h1>
+</div> 
+
+<div id="idDivPrincipal" class="col-md-7 col-xs-12" >	
+    <!-- <div id="idDivPrincipal" class="col-xs-6" ng-show="result_producer == true" >	 -->
+    
+	<!-- Interfaz para digitar el predio a consultar-->
+	<div class="panel panel-success">
+        <div class="panel-heading">
+            <span class="panel-title">Trámites de Propiedad Horizontal </span>
+            <div class="panel-heading-controls">
+                <div class="panel-heading-icon">
+                	<i class="fa fa-inbox"></i>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">
+			<div class="form-group col-md-12 col-xs-12">
+				<label for="" class="control-label">Tipo de Trámite</label>
+				<select class="form-control" ng-class="{'error_borde': notificacion_obligatorio == true }" name="tptramite" id="tp_tramite" ng-model="tipoTramite" ng-change="onChange()" required>
+					<option value="">--- Seleccione ---</option>
+					<option value="1">Actualización de Representante Legal</option>
+					<option value="2">Actualización de Revisor Fiscal</option>
+					<option value="3">Inscripción de Propiedad Horizontal</option>
+				</select>
+                <p ng-show="notificacion_obligatorio == true" class="help-block" style="color: #b94a48;">* Este campo es obligatorio.</p>
+			</div>
+
+			<div class="form-group col-md-12 col-xs-12">
+				<label for="" class="control-label">Nombre de la Propiedad</label>
+				<input type="text" ng-class="{'error_borde': notificacion_obligatorio == true }" class="form-control" name="nompropiedad" id="nom_propiedad" ng-model="nombrePropiedad" required>
+                <p ng-show="notificacion_obligatorio == true" class="help-block" style="color: #b94a48;">* Este campo es obligatorio.</p>
+			</div>
+
+			<div class="form-group col-md-6 col-xs-12">
+				<label for="" class="control-label">Dirección del Predio</label>
+				<input type="text" ng-class="{'error_borde': notificacion_obligatorio == true }" class="form-control" name="dirpredio" id="dir_predio" ng-model="direccionPredio" required>
+                <p ng-show="notificacion_obligatorio == true" class="help-block" style="color: #b94a48;">* Este campo es obligatorio.</p>
+			</div>
+
+			<div class="form-group col-md-6 col-xs-12">
+				<label for="" class="control-label">Telefono del Predio</label>
+				<input type="number" ng-class="{'error_borde': notificacion_obligatorio == true }" class="form-control" name="telpredio" id="tel_predio" ng-model="telefonoPredio" required>
+                <p ng-show="notificacion_obligatorio == true" class="help-block" style="color: #b94a48;">* Este campo es obligatorio.</p>
+			</div>
+
+            <div class="form group col-md-12 col-xs-12 informativo">
+				<strong>Documentos necesarios para la solicitud</strong>
+				<span class="mensaje_info">(Tamaño máximo de 2MB)</span>
+			</div>
+
+			<div class="form-group col-md-12 col-xs-12">
+				<label for="" class="control-label">Oficio inscripcion firmado por el administrador</label>
+				<input type="file" ng-class="{'error_borde': notificacion_obligatorio == true }" class="form-control"  name="docs" id="doc_1" ng-model="documento1" required>
+                <p ng-show="notificacion_obligatorio == true" class="help-block" style="color: #b94a48;">* Este campo es obligatorio.</p>
+			</div>
+
+			<div class="form-group col-md-12 col-xs-12">
+				<label for="" class="control-label">Documento del representante</label>
+				<input type="file" ng-class="{'error_borde': notificacion_obligatorio == true }" class="form-control"  name="docs" id="doc_2" ng-model="documento2" required>
+                <p ng-show="notificacion_obligatorio == true" class="help-block" style="color: #b94a48;">* Este campo es obligatorio.</p>
+			</div>
+
+			<div class="form-group col-md-12 col-xs-12">
+				<label for="" class="control-label">Carta Aceptación del cargo</label>
+				<input type="file" ng-class="{'error_borde': notificacion_obligatorio == true }" class="form-control"  name="docs" id="doc_3" ng-model="documento3" required>
+                <p ng-show="notificacion_obligatorio == true" class="help-block" style="color: #b94a48;">* Este campo es obligatorio.</p>
+			</div>
+
+			<div class="form-group col-md-12 col-xs-12">
+				<label for="" class="control-label">Carta Acta de Asamblea general</label>
+				<input type="file" ng-class="{'error_borde': notificacion_obligatorio == true }" class="form-control"  name="docs" id="doc_4" ng-model="documento4" required>
+                <p ng-show="notificacion_obligatorio == true" class="help-block" style="color: #b94a48;">* Este campo es obligatorio.</p>
+			</div>
+
+			<div class="form-group col-md-12 col-xs-12">
+				<label for="" class="control-label">Acta del concejo de Administracion</label>
+				<input type="file" ng-class="{'error_borde': notificacion_obligatorio == true }" class="form-control"  name="docs" id="doc_5" ng-model="documento5" required>
+                <p ng-show="notificacion_obligatorio == true" class="help-block" style="color: #b94a48;">* Este campo es obligatorio.</p>
+			</div>
+	
+			<div class="form-group col-md-6 col-xs-12 btn-solicitud"> 
+			   <input type="button" class="btn btn-primary" forma="#"  value="Radicar Solicitud" ng-click="radicarSolicitud()">
+			   <a class="btn-cancel" href="/saul/solicitud">Cancelar</a>                 
+			</div>
+   
+        </div>
+    </div>
+</div>
+

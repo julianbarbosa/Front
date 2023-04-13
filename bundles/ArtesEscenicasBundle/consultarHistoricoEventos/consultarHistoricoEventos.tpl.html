@@ -1,0 +1,249 @@
+<!-- Styles -->
+<style type="text/css">
+	#wizard-credit-card .tooltip {
+		left: auto !important;
+		right: 36px !important;
+		width: 200px !important;
+	}
+	.error{
+		color: red;
+	}
+	.error_borde{
+		border-color: red;
+	}
+	.amplificacion{
+		width: 206px;
+	}
+	.titulo_costos{
+		text-align: center;
+	}
+	.tipo-cursor:hover {
+		cursor: default !important;
+	}
+	[class*="malo"] {
+		width: 26%;
+		padding-top: 9px;
+		color:#e86464;
+	}
+	[class*="bueno"] {
+		width: 26%;
+		padding-top: 9px;
+		color:#5bb55b;
+	}
+
+	/*
+	Coloca el puntero en los números de los wizard
+	*/
+	.wizard-steps.wizard-go-to-number li span{
+		cursor: pointer;
+	}
+	.theme-cali .nav-tabs > li.active > a, .theme-cali .nav-tabs > li.active > a:hover, .theme-cali .nav-tabs > li.active > a:focus {
+		background: #215a9a !important;
+		border-bottom: 2px solid #215a9a !important;
+	}
+	input[type="file"] {
+		margin: 0 0 10px;
+		padding: 5px 1%;
+		border-radius: 3px;
+	}
+	.principal {
+		width: 80%;
+		margin: 0 auto;
+		padding: 3% 0 6% 0;
+		clear: both;
+	}
+	.clear {
+		clear:both;
+	}
+	.help-block {
+		padding-left: 10px;
+	}
+	.progress[value] {
+		/* Elimino la apariencia por defecto */
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		appearance: none;
+		
+		/* Quito el borde que aparece en Firefox */
+		border: none;
+
+		/* Añado mis propios estilos */
+		/* width: 270px; */
+		height: 30px;
+		
+		
+	/* 	Estos estilos solo se aplicaran al fondo de la barra en mozilla */
+		overflow:hidden;
+		border:1px inset rgb(131, 131, 131);
+		background-color:#D8D8D8;
+		border-radius: 5px;
+	}
+	.progress{
+		float:left;
+	}
+	.progress span{
+		font-weight:bold;
+	}
+	/* Compatibilidad de color en Firefox, Chrome y Safari */
+	.progress::-moz-progress-bar{ 
+		background: rgb(167, 167, 167);
+		background: rgba(79,190,113);
+		background: -moz-linear-gradient(left, rgb(79,190,113) 0%, rgb(39,184,43) 100%);
+		background: -webkit-gradient(left top, right top, color-stop(0%, rgba(79,190,113)), color-stop(100%, rgba(39,184,43)));
+		background: -webkit-linear-gradient(left, rgba(79,190,113) 0%, rgba(39,184,43) 100%);
+		background: -o-linear-gradient(left, rgba(79,190,113) 0%, rgba(39,184,43) 100%);
+		background: -ms-linear-gradient(left, rgba(79,190,113) 0%, rgba(39,184,43) 100%);
+		background: linear-gradient(to right, rgba(79,190,113) 0%, rgba(39,184,43) 100%);
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7AFF4A', endColorstr='#5EFF08', GradientType=1 );	
+		border-radius : 5px; 
+	} 
+	.progress::-webkit-progress-value { 
+		background: rgb(167, 167, 167);
+		background: rgba(79,190,113);
+		background: -moz-linear-gradient(left, rgb(79,190,113) 0%, rgb(39,184,43) 100%);
+		background: -webkit-gradient(left top, right top, color-stop(0%, rgba(79,190,113)), color-stop(100%, rgba(39,184,43)));
+		background: -webkit-linear-gradient(left, rgba(79,190,113) 0%, rgba(39,184,43) 100%);
+		background: -o-linear-gradient(left, rgba(79,190,113) 0%, rgba(39,184,43) 100%);
+		background: -ms-linear-gradient(left, rgba(79,190,113) 0%, rgba(39,184,43) 100%);
+		background: linear-gradient(to right, rgba(79,190,113) 0%, rgba(39,184,43) 100%);
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7AFF4A', endColorstr='#5EFF08', GradientType=1 );
+		border-radius : 5px; 	
+
+	}
+	.progress::-webkit-progress-bar { 
+		background-color:#D8D8D8;
+		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25) inset;
+		border-radius : 5px; 
+	}
+    .form-search {
+        display: grid;
+		grid-template-columns:  0.95fr 0.12fr 0.15fr;
+    }
+    .btn-inscripcion{
+        margin-left: 40px;
+    }
+	.table-responsive {
+		margin-top: 22px;
+	}
+	.table-tbody,
+	.table-tbody td {
+		border: 1px solid #e4e4e4;
+	}
+	.td-text {
+		vertical-align: center;
+	}
+	.td-button {
+		text-align: center;
+		width: 86px;
+	}
+	@media only screen and (min-width: 768px) {
+		.inputs_lables{
+			width: 70%;   
+		}
+
+		.malo{
+			width: 70%;
+			padding-top: 9px;
+			color:#e86464;
+		}
+
+		.bueno{
+			width: 70%;
+			padding-top: 9px;
+			color:#5bb55b;
+		}
+
+		.amplificacion{
+			width: 349px;
+		}
+	}
+	@media (max-width: 640px) {
+		.form-search {
+        	grid-template-columns: none;
+		}
+		.btn-inscripcion {
+			display: none;
+			margin-left: 0;
+		}
+	}
+</style>
+<!-- / Styles -->
+
+<!--Cabecera-->
+<div class="page-header">
+	<h1>
+		<i class="fa fa-th-large page-header-icon"></i>&nbsp;&nbsp;Bienvenido
+	</h1>
+</div> 
+
+<div id="idDivPrincipal" class="col-md-12 col-xs-12" >	
+    
+	<!-- Interfaz para informar al usuario las recomendaciones de uso del modulo -->
+    <div class="alert alert-info text-justify" role="alert" style="font-size: 14px;">
+        <h4><strong>Recomendaciones de Uso</strong></h4>
+        <p class="text-justify">
+            Para mejorar los resultados de la consulta por nombre o fecha, le recomendamos tener en cuenta lo siguiente: <br>  
+            <ul>
+                <li>
+                    Se deben realizar las consultas del nombre de diferentes formas, ya que pueden existir nombres que fonéticamente suenan iguales, pero se escriben en forma diferente, <strong>ejemplo:</strong> Soni, sony, Zoni; casa, Kasa, caza.
+                </li>
+                <li>
+                    Consulte por nombres compuestos, <strong>ejemplo:</strong> casaestrella y casa estrella
+                </li>
+                <li>
+                    Consulte por fecha especifica como año-mes-dia ejemplo: 2023-02-21 <br>
+					Consulte por mes especifico como año-mes ejemplo: 2023-02 <br>
+					Consulte por año especifico como año ejemplo: 2023
+                </li>
+            </ul>
+        </p>
+    </div>
+
+	<!-- Interfaz para digitar el predio a consultar-->
+	<div class="panel panel-success">
+        <div class="panel-heading">
+            <span class="panel-title">Consultar Eventos </span>
+            <div class="panel-heading-controls">
+                <div class="panel-heading-icon">
+                	<i class="fa fa-inbox"></i>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">
+			<form class="form-search col-xs-12" role="search">
+				<input class="form-control me-2 col-xs-12" ng-class="{'error_borde': notificacion_obligatorio == true || notificacion_minimo == true}" minlength="4" type="text" placeholder="Consultar por nombre o dirección" name="datosconsulta" id="datos_consulta" required>
+				<input type="button" class="btn btn-primary col-xs-12" type="button" value="Realizar Consulta" ng-click="consultaHistoricoEventos()">
+			</form>
+			<p ng-show="notificacion_obligatorio == true" class="help-block" style="color: #b94a48;">*Este campo es obligatorio.</p>
+			<p ng-show="notificacion_minimo == true" class="help-block" style="color: #b94a48;">*Debe ingresar como minimo 4 caracteres para continuar con la consulta.</p>
+			<div class="table-responsive table-primary col-md-12 col-xs-12" ng-show="resultadosConsulta != ''">
+				<table class="table">
+					<thead>
+						<th>Fecha Ingreso</th>
+						<th>Nombre del Evento</th>
+						<th>Número de Orfeo</th>
+					</thead>
+					<tbody class="table-tbody" ng-repeat="resultadoConsulta in resultadosConsulta">
+						<td class="td-text">
+							{{ resultadoConsulta.fechaingreso.date.substr(0,10) }}
+						</td>
+						<td class="td-text">
+							{{resultadoConsulta.nombreevento}}
+						</td>
+						<td class="td-text">
+							{{resultadoConsulta.numeroorfeo}}
+						</td>
+					</tbody>
+				</table>
+			</div>
+        </div>
+    </div>
+
+	<!-- Interfaz para notificar al usuario sobre las respuestas del servidor -->
+	<div class="col-md-12 col-xs-12" ng-show="notificacion != ''">
+		<div class="alert text-justify" role="alert" style="font-size: 14px;">
+			{{notificacion}}
+		</div>
+	</div>
+	
+</div>

@@ -143,5 +143,8 @@
     "PersonaEnConstruccionBundle/verReportes/controller.js",
     "CreadorProcesoBundle/radicacion/controller.js",
     "DevolucionRentaBundle/crearSolicitud/controller.js",
-    "NomenclaturaBundle/prueba/controller.js"
+    "NomenclaturaBundle/prueba/controller.js",
+	"PropiedadHorizontalBundle/ConsultarPropiedadHorizontal/consultarPropiedadHorizontal.js",
+	"PropiedadHorizontalBundle/CrearSolicitudPropiedadHorizontal/crearSolicitudPropiedadHorizontal.js",
+	"PropiedadHorizontalBundle/ValidarPropiedadHorizontal/validarPropiedadHorizontal.js"
 ]

@@ -1,0 +1,257 @@
+<!-- Styles -->
+<style type="text/css">
+	#wizard-credit-card .tooltip {
+		left: auto !important;
+		right: 36px !important;
+		width: 200px !important;
+	}
+	#idDivPrincipal {
+		margin-top: 20px;
+	}
+	.error{
+		color: red;
+	}
+	.error_borde{
+		border-color: red;
+	}
+	.amplificacion{
+		width: 206px;
+	}
+	.titulo_costos{
+		text-align: center;
+	}
+	.tipo-cursor:hover {
+		cursor: default !important;
+	}
+	[class*="malo"] {
+		width: 26%;
+		padding-top: 9px;
+		color:#e86464;
+	}
+	[class*="bueno"] {
+		width: 26%;
+		padding-top: 9px;
+		color:#5bb55b;
+	}
+
+	/*
+	Coloca el puntero en los números de los wizard
+	*/
+	.wizard-steps.wizard-go-to-number li span{
+		cursor: pointer;
+	}
+	.theme-cali .nav-tabs > li.active > a, .theme-cali .nav-tabs > li.active > a:hover, .theme-cali .nav-tabs > li.active > a:focus {
+		background: #215a9a !important;
+		border-bottom: 2px solid #215a9a !important;
+	}
+	input[type="file"] {
+		margin: 0 0 10px;
+		padding: 5px 1%;
+		border-radius: 3px;
+	}
+	.principal {
+		width: 80%;
+		margin: 0 auto;
+		padding: 3% 0 6% 0;
+		clear: both;
+	}
+	.clear {
+		clear:both;
+	}
+	.help-block {
+		padding-left: 10px;
+	}
+	.progress[value] {
+		/* Elimino la apariencia por defecto */
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		appearance: none;
+		
+		/* Quito el borde que aparece en Firefox */
+		border: none;
+
+		/* Añado mis propios estilos */
+		/* width: 270px; */
+		height: 30px;
+		
+		
+	/* 	Estos estilos solo se aplicaran al fondo de la barra en mozilla */
+		overflow:hidden;
+		border:1px inset rgb(131, 131, 131);
+		background-color:#D8D8D8;
+		border-radius: 5px;
+	}
+	.progress{
+		float:left;
+	}
+	.progress span{
+		font-weight:bold;
+	}
+	/* Compatibilidad de color en Firefox, Chrome y Safari */
+	.progress::-moz-progress-bar{ 
+		background: rgb(167, 167, 167);
+		background: rgba(79,190,113);
+		background: -moz-linear-gradient(left, rgb(79,190,113) 0%, rgb(39,184,43) 100%);
+		background: -webkit-gradient(left top, right top, color-stop(0%, rgba(79,190,113)), color-stop(100%, rgba(39,184,43)));
+		background: -webkit-linear-gradient(left, rgba(79,190,113) 0%, rgba(39,184,43) 100%);
+		background: -o-linear-gradient(left, rgba(79,190,113) 0%, rgba(39,184,43) 100%);
+		background: -ms-linear-gradient(left, rgba(79,190,113) 0%, rgba(39,184,43) 100%);
+		background: linear-gradient(to right, rgba(79,190,113) 0%, rgba(39,184,43) 100%);
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7AFF4A', endColorstr='#5EFF08', GradientType=1 );	
+		border-radius : 5px; 
+	} 
+	.progress::-webkit-progress-value { 
+		background: rgb(167, 167, 167);
+		background: rgba(79,190,113);
+		background: -moz-linear-gradient(left, rgb(79,190,113) 0%, rgb(39,184,43) 100%);
+		background: -webkit-gradient(left top, right top, color-stop(0%, rgba(79,190,113)), color-stop(100%, rgba(39,184,43)));
+		background: -webkit-linear-gradient(left, rgba(79,190,113) 0%, rgba(39,184,43) 100%);
+		background: -o-linear-gradient(left, rgba(79,190,113) 0%, rgba(39,184,43) 100%);
+		background: -ms-linear-gradient(left, rgba(79,190,113) 0%, rgba(39,184,43) 100%);
+		background: linear-gradient(to right, rgba(79,190,113) 0%, rgba(39,184,43) 100%);
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7AFF4A', endColorstr='#5EFF08', GradientType=1 );
+		border-radius : 5px; 	
+
+	}
+	.progress::-webkit-progress-bar { 
+		background-color:#D8D8D8;
+		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25) inset;
+		border-radius : 5px; 
+	}
+    .form-search {
+        display: grid;
+		grid-template-columns:  0.95fr 0.12fr 0.15fr;
+    }
+    .btn-inscripcion{
+        margin-left: 40px;
+    }
+	.table-responsive {
+		margin-top: 22px;
+	}
+	.table-tbody,
+	.table-tbody td {
+		border: 1px solid #e4e4e4;
+	}
+	.td-text {
+		vertical-align: center;
+	}
+	.td-button {
+		text-align: center;
+		width: 86px;
+	}
+	.validacion-ph {
+		width: 100%;
+		height: 100px;
+		background-position: center;
+	}
+	.bloque-texto-1 {
+		text-align: center; 
+		margin-top: 40px;
+		font-size: 18px;
+	}
+	.bloque-texto-2 {
+		text-align: center; 
+		margin-top: 20px;
+		font-size: 18px;
+	}
+	.bloque-texto-3 {
+		text-align: justify; 
+		margin-top: 20px;
+		font-size: 18px;
+	}
+	.bloque-btn {
+		margin-top: 40px;
+		display: grid;
+		grid-template-columns: 0.2fr 0.2fr;
+		gap: 60px;
+		place-content: center;
+	}
+	@media only screen and (min-width: 768px) {
+		.inputs_lables{
+			width: 70%;   
+		}
+
+		.malo{
+			width: 70%;
+			padding-top: 9px;
+			color:#e86464;
+		}
+
+		.bueno{
+			width: 70%;
+			padding-top: 9px;
+			color:#5bb55b;
+		}
+
+		.amplificacion{
+			width: 349px;
+		}
+	}
+	@media (max-width: 640px) {
+		.form-search {
+        	grid-template-columns: none;
+		}
+		.btn-inscripcion {
+			display: none;
+			margin-left: 0;
+		}
+		.bloque-btn {
+			display: block;
+		}
+	}
+</style>
+<!-- / Styles -->
+
+<div id="idDivPrincipal" class="col-md-10 col-xs-12" >
+
+	<!-- Interfaz para digitar el predio a consultar-->
+	<div class="panel panel-success">
+        <div class="panel-body">
+			<!-- Logo Alcaldía -->
+			<div class="logo-alcaldia validacion-ph col-md-12 col-xs-12"></div>
+
+			<div class="col-md-12 col-xs-12 bloque-texto-1">
+				<span><strong>EL SECRETARIO DE SEGURIDAD Y JUSTICIA DEL MUNICIPIO DE SANTIAGO DE CALI</strong></span>
+				<br>
+				<span>En ejercicio de sus atribuciones legales y en especial las conferidas por el artículo 8º la Ley 675 de 2001, decreto extraordinario No. 0516 de 2016 y decreto  No. 4112.010.20.0032 del 18 de enero de 2017.</span>
+			</div>
+			
+			<div class="col-md-12 col-xs-12 bloque-texto-2">
+				<span><strong>HACE CONSTAR</strong></span>
+			</div>
+
+			<div class="col-md-12 col-xs-12 bloque-texto-3">
+				<span>Que el señor (a) MARIA LUISA OLIVARES GOMEZ identificado (a) con la cédula de ciudadanía No. 1111111111 DE CERRITO mediante Resolución No.4161,0,21,1140,2012  del 06 DE AGOSTO DE 2012, emanada de la SECRETARIA DE GOBIERNO, CONVIVENCIA Y SEGURIDAD  se inscribió en calidad de Administrador (a) y Representante Legal el 06 DE AGOSTO DE 2012  para el periodo comprendido entre CON FECHA DE INICIO DEL CARGO DESDE EL 25 DE FEBRERO DEL 2019 de la persona jurídica denominada {{nombrePropiedadHorizontal}}, ubicado en la {{direccionPropiedadHorizontal}} de la actual nomenclatura urbana de Santiago de Cali.</span>
+			</div>
+
+			<div class="col-md-12 col-xs-12 bloque-texto-3">
+				<span>Que mediante Resolución No. 4161,0,21,0571,2010 DEL 27 DE ABRIL DEL 2010 expedida por la SECRETARIA DE GOBIERNO, CONVIVENCIA Y SEGURIDAD, se registró la Persona Jurídica correspondiente a el {{nombrePropiedadHorizontal}}, con domicilio en la {{direccionPropiedadHorizontal}} de la actual nomenclatura urbana de Santiago de Cali</span>
+			</div>
+
+			<div class="col-md-12 col-xs-12 bloque-texto-3">
+				<span>Que conforme al artículo 33 de la Ley 675 de 2001, la persona jurídica originada en la constitución de la propiedad horizontal es de naturaleza civil, sin ánimo de lucro.</span>
+			</div>
+
+			<div class="col-md-12 col-xs-12 bloque-texto-3">
+				<span>Que conforme con el numeral 1º del artículo 38 de la Ley 675 de 2001, es función de la asamblea general de propietarios, nombrar y remover libremente al administrador y su suplente, cuando fuere el caso, para periodos determinados y fijarle su remuneración. En aquellos casos en los que exista el consejo de administración, el administrador será elegido por dicho órgano, de conformidad con el artículo 50º.  Ibídem.</span>
+			</div>
+
+			<div class="col-md-12 col-xs-12 bloque-texto-3">
+				<span>La Ley 675 de 2001, compiló toda la normatividad existente en materia de propiedad horizontal, y derogó las leyes 182 de 1948, 16 de 1985 y 428 de 1998, así como los decretos reglamentarios de estas.  A partir del 03 de agosto de 2001, los edificios y conjuntos sometidos a estos regímenes, deberán regirse por la Ley 675 de 2001, y deberán adecuar sus reglamentos internos dentro del término legal, (artículo 86 ibídem).</span>
+			</div>
+			
+			<div class="col-md-12 col-xs-12 bloque-btn">
+				<a  class="btn btn-secondary col-xs-12" href="/saul/v2p/#!/propiedadhorizontal/consultar">Nueva Consulta</a>
+				<a  class="btn btn-primary col-xs-12" href="/saul/v2/#!/propiedadhorizontal/crearsolicitud">Solicitar Actualización</a>
+			</div>
+		</div>
+    </div>
+	
+	
+	<!-- Interfaz para notificar al usuario sobre las respuestas del servidor -->
+	<div class="col-md-12 col-xs-12" ng-show="notificacion != ''">
+		<div class="alert text-justify" role="alert" style="font-size: 14px;">
+			{{notificacion}}
+		</div>
+	</div>
+</div>
