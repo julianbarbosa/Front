@@ -1,22 +1,11 @@
 saul.config(["$stateProvider",
     function ($stateProvider) {
-        // $stateProvider.state("crear-artes-escenicas-parametro", {
-        //     url: "/artesescenicas/crear/{idSolicitud}",
-        //     views: {
-        //         "main": {
-        //             controller: "crearSolicitudArtesEscenicasCtrl",
-        //             templateUrl: "../bundles/ArtesEscenicasBundle/crearSolicitud/crearSolicitud.tpl.html",
-        //         }
-        //     },
-        // });
-
         $stateProvider.state("crear-artes-escenicas", {
             url: "/artesescenicas/crear",
             views: {
                 "main": {
                     controller: "crearSolicitudArtesEscenicasCtrl",
                     templateUrl: "../bundles/ArtesEscenicasBundle/crearSolicitud/crearSolicitud.tpl.html",
-                    // templateUrl: "../bundles/EventosyEspectaculosPublicosBundle/crearSolicitud/crearSolicitud.tpl.html",
                 }
             },
         });
@@ -53,60 +42,28 @@ saul.config(["$stateProvider",
                 }
             },
         });
+        
+        $stateProvider.state("historico-eventos", {
+            url: "/historicoeventos/consultar",
+            views: {
+                "main": {
+                    controller: "consultarHistoricoDeEventosCtrl",
+                    templateUrl: "../bundles/ArtesEscenicasBundle/consultarHistoricoEventos/consultarHistoricoEventos.tpl.html",
+                    // templateUrl: "../bundles/EventosyEspectaculosPublicosBundle/crearSolicitud/crearSolicitud.tpl.html",
+                }
+            },
+        });
     }
 ])
-
-// .controller('ModalCtrlArtesEscenicas', ['$scope', '$uibModalInstance',  'FnCtrl',function ($scope, $modalInstance, FnCtrl) {
-//         //fdsfsffds
-
-
-//         //fdsfsf sds
-//         // console.log($scope);
-//         //$scope.mensaje = DataModal.mensaje;
-//         //$scope.titulo = DataModal.titulo;
-//         FnCtrl.init($scope);
-
-//         $scope.home = function () {
-//             $modalInstance.dismiss('cancel');
-//             FnCtrl.afterHome($modalInstance);
-//             //window.location.href = 'http://planeacion.cali.gov.co/saul';
-//         };      
-        
-//         $scope.ok = function () {
-//             $modalInstance.dismiss('cancel');
-//             FnCtrl.afterOk($modalInstance);
-//         };
-
-//         $scope.recargar = function(){
-//             //$modalInstance.dismiss('cancel');
-//             FnCtrl.afterRecargar($modalInstance);
-//         };
-
-//         $scope.cambiar = function(){
-//             $modalInstance.dismiss('cancel');
-//             FnCtrl.afterCambiar($modalInstance);
-//         };
-//          $scope.cerrarSesion = function(){
-//             $modalInstance.dismiss('cancel');
-//             FnCtrl.afterCerrarSesion($modalInstance);
-//         };
-//            $scope.close = function(){         
-//             $modalInstance.dismiss('cancel');
-//             FnCtrl.afterClose($modalInstance);
-//         };
-
-// }])
-
-// .controller("crearSolicitudArtesEscenicasCtrl", ["$scope", "$http", "$state", "root", "ArtesEscenicasProductor","ArtesEscenicasEvento","ArtesEscenicasAforo", "ArtesEscenicasSolicitud", "ArtesEscenicasActualizarEvento", '$uibModal', '$stateParams','$filter', 'ArtesEscenicasArchivosSolicitud', 'ArtesEscenicasDiasEvento','ArtesEscenicasRadicar','ArtesEscenicasPdfContador', 'ArtesEscenicasPdfRadicado', 'ArtesEscenicasActualizarCorreo','rootSaul1',
-//     function (                                   $scope, $http, $state, root, ArtesEscenicasProductor, ArtesEscenicasEvento, ArtesEscenicasAforo, ArtesEscenicasSolicitud, ArtesEscenicasActualizarEvento, $modal, $stateParams, $filter, ArtesEscenicasArchivosSolicitud, ArtesEscenicasDiasEvento,ArtesEscenicasRadicar,ArtesEscenicasPdfContador, ArtesEscenicasPdfRadicado, ArtesEscenicasActualizarCorreo, rootSaul1) {
-    .controller("crearSolicitudArtesEscenicasCtrl", ["$scope", "$http", "$state", "root", "ArtesEscenicasProductor", "Upload",
-    function ($scope, $http, $state, root, ArtesEscenicasProductor, Upload) {
+.controller("crearSolicitudArtesEscenicasCtrl", ["$scope", "$http", "$state", "root", "ArtesEscenicasProductor",
+    function ($scope, $http, $state, root, ArtesEscenicasProductor) {
         $scope.notificacion = '';
         $scope.notificacion_radicado = '';
         $scope.notificacion_radicado_documentos = '';
         $scope.link_pulep = false;
         $scope.uperfil = '';
         $scope.root = root;
+        $scope.radicar_y_notificar = '';
 
         // Realiza la consulta automatica del productor con los datos del usuario
         ArtesEscenicasProductor.query().$promise.then(function(result){
@@ -313,7 +270,7 @@ saul.config(["$stateProvider",
                                         }
                                     }
                                     console.log(cantRequeridos);
-                                    if (cantRequeridos >= 13) {
+                                    if (cantRequeridos >= 14) {
                                         $scope.documentos_completos = true;
                                     }
                                 }    
@@ -323,7 +280,10 @@ saul.config(["$stateProvider",
                                 $scope.documentos_radicados = true;
                                 $scope.notificacion_radicado_documentos = 'y la solicitud No. '+data.idsolicitud2+'.';
                             }
-                            
+
+                            if (data.mesa_eventos != null) {
+                                $scope.radicar_y_notificar = data.mesa_eventos;
+                            }
                         }
     
                         //Desactiva el div de carga 
@@ -350,11 +310,13 @@ saul.config(["$stateProvider",
                 $http.post(root+"artesescenicas/radicar_solicitud", {codigoEvento: $codigoEvento, aforoEvento: $aforoEvento, infoCosto: $infoCosto})
                 .success(function(data){
                     console.log(data);
-                    //Desactiva el div de carga 
-                    $(".overlap_espera").fadeOut(500, "linear");
-                    $(".overlap_espera_1").fadeOut(500, "linear"); 
+                    
                     if (data.data.numRadicado) {
+                        $scope.radicarYnotificarOtrosOrganismos($codigoEvento, $aforoEvento, $infoCosto);
                         $scope.notificacion_radicado = 'Su solicitud ha sido radicada con el número '+data.data.numRadicado;
+                        //Desactiva el div de carga 
+                        // $(".overlap_espera").fadeOut(500, "linear");
+                        // $(".overlap_espera_1").fadeOut(500, "linear"); 
                     }
                 })
                 .error(function(err){
@@ -362,6 +324,42 @@ saul.config(["$stateProvider",
                 });
             }
 
+        };
+
+        // Funcion que inicia la solicitud y notificacion de radicacion
+        $scope.radicarYnotificarOtrosOrganismos = function ($codigoEvento, $aforoEvento, $infoCosto) {
+            var i_true = 0;
+            //Recorremos los datos de la mesa de eventos
+            for (var i = 0; i < $scope.radicar_y_notificar.length; i++) {
+                console.log(i);
+                $(".overlap_espera").show();
+                $(".overlap_espera_1").show();
+                $http.post(root+"artesescenicas/radicar_y_notificar_solicitud", {
+                    codigoEvento: $codigoEvento,
+                    aforoEvento: $aforoEvento, 
+                    infoCosto: $infoCosto,
+                    codigoDependencia: $scope.radicar_y_notificar[i]['codigoDependencia'],
+                    emailRepresentante: $scope.radicar_y_notificar[i]['emailRepresentante'],
+                    nombreRepresentante: $scope.radicar_y_notificar[i]['nombreRepresentante'],
+                    organismo: $scope.radicar_y_notificar[i]['organismo'],
+                    tipoEntidad: $scope.radicar_y_notificar[i]['tipoEntidad'],
+                })
+                .success(function(data){
+                    console.log(data);
+                    console.log("i=> "+i_true+" true");
+                    i_true++;
+                    if (i_true > 22) {
+                        //Desactiva el div de carga 
+                        $(".overlap_espera").fadeOut(500, "linear");
+                        $(".overlap_espera_1").fadeOut(500, "linear");
+                        $scope.validarEvento($codigoEvento);
+                    }
+                })
+                .error(function(err){
+                    console.log(err);
+                    console.log("i=> "+i+" false");
+                });
+            }
         };
 
         //Funcion que guarda los documentos de manera sincronica
@@ -581,6 +579,79 @@ saul.config(["$stateProvider",
 .controller("crearSolicitudMarchasyProtestasPacificasCtrl", ["$scope", "$http", "$state", "root", 
     function ($scope, $http, $state, root) {
         $scope.notificacion = 'Estamos trabajando para brindarte un mejor servicio, espéralo pronto. Marchas / Protestas Pacificas';
+    }
+])
+.controller("consultarHistoricoDeEventosCtrl", ["$scope", "$http", "$state", "root", 
+    function ($scope, $http, $state, root) {
+        
+        //Desactiva el div de carga 
+        $(".overlap_espera").fadeOut(500, "linear");
+        $(".overlap_espera_1").fadeOut(500, "linear");  
+        $scope.notificacion = '';
+        $scope.notificacion_obligatorio = false;
+        $scope.notificacion_minimo = false;
+        $scope.resultadosConsulta = '';
+        $scope.root = root;
+        
+        // Funcion que consulta los datos ingresados
+        $scope.consultaHistoricoEventos = function() {
+            $(".overlap_espera").show();
+            $(".overlap_espera_1").show();
+
+            var datosAConsultar = $("#datos_consulta").val();
+            $scope.notificacion = '';
+                      
+            if (datosAConsultar == undefined || datosAConsultar == '') {
+                $scope.notificacion_obligatorio = true;
+                $scope.notificacion_minimo = false;
+                //Desactiva el div de carga 
+                $(".overlap_espera").fadeOut(200, "linear");
+                $(".overlap_espera_1").fadeOut(200, "linear"); 
+            } 
+            else if (datosAConsultar.length < 4) {
+                $scope.notificacion_obligatorio = false;
+                $scope.notificacion_minimo = true;
+                //Desactiva el div de carga 
+                $(".overlap_espera").fadeOut(200, "linear");
+                $(".overlap_espera_1").fadeOut(200, "linear"); 
+            }
+            else {
+                $scope.notificacion_obligatorio = false;
+                $scope.notificacion_minimo = false;
+                // //Desactiva el div de carga 
+                // $(".overlap_espera").fadeOut(500, "linear");
+                // $(".overlap_espera_1").fadeOut(500, "linear");  
+
+                $http.post(root+"artesescenicas/consultar_historico", {datosconsulta: datosAConsultar})
+                    .success(function(data){
+                        console.log(data);
+
+                        if (data.msg == "Ingreso correctamente") {
+                            $scope.resultadosConsulta = data.resultQuery;
+                            $scope.notificacion = '';
+                        }
+                        else {
+                            $scope.notificacion = data.msg;
+                            $scope.resultadosConsulta = '';
+                        }
+                            
+                        //Desactiva el div de carga 
+                        $(".overlap_espera").fadeOut(500, "linear");
+                        $(".overlap_espera_1").fadeOut(500, "linear");  
+                    })
+                    .error(function(err){
+                        console.log(err);
+                    });
+            }
+        };
+
+        
+        $('#datos_consulta').on('keyup', function (e) {
+            var keycode = e.keyCode || e.which;
+            if (keycode == 13) {
+                $scope.consultaHistoricoEventos();
+            }
+        });
     }
 ]);
 

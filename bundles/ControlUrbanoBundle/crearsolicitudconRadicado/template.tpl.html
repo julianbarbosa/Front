@@ -17,7 +17,7 @@
 <div class="panel">
     <div class="panel-body col-md-12 col-lg-12">
         <div class="page-header">
-            <h1 class="col-xs-12 col-sm-10 text-center text-left-sm">Solicitud de
+            <h1 class="col-xs-12 col-sm-10 text-center text-left-sm">Solicitud con Numero de Radicado de
                 <strong class="subtitulo">Control Urbano
                 </strong>
                 <br>
@@ -113,7 +113,6 @@
                                     </span>
                                 </div>
                             </div>
-
                         </div>
                         <div class="row" ng-show="!esFuncionario">
                             <div class="col-md-6">
@@ -387,9 +386,22 @@
                                     </span>
                                 </div>
                             </div>
+                            <div class="col-md-6" >
+                                <div
+                                    class="form-group {{ !formDatosSolicitante.norfeo.$valid && formDatosSolicitante.norfeo.$touched ? 'has-error' : '' }}">
+                                    <label class="control-label">Numero de Radicado</label>
+                                    <input type="text" name="norfeo" class="form-control"
+                                        placeholder="Numero Radicado Orfeo" ng-model="solicitud.norfeo"
+                                        ng-required="norfeoRequerido" />
+                                    <span class="help-block"
+                                        ng-show="!formDatosSolicitante.norfeo.$valid && formDatosSolicitante.norfeo.$touched">
+                                        Este campo es obligatorio.
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 <div
                                     class="form-group {{ !formDatosSolicitante.direccion_queja.$valid && formDatosSolicitante.direccion_queja.$touched ? 'has-error' : '' }}">
                                     <label class="control-label">Direccion / Localizacion de la Queja</label>
@@ -398,6 +410,32 @@
                                         ng-model="solicitud.direccion_queja" ng-required="true" />
                                     <span class="help-block"
                                         ng-show="!formDatosSolicitante.direccion_queja.$valid && formDatosSolicitante.direccion_queja.$touched">
+                                        Este campo es obligatorio.
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div
+                                    class="form-group {{ !formDatosSolicitante.longitud_queja.$valid && formDatosSolicitante.longitud_queja.$touched ? 'has-error' : '' }}">
+                                    <label class="control-label">Longitud de la Queja</label>
+                                    <input type="text" name="longitud_queja" class="form-control"
+                                        placeholder="Longitud Localizacion de la Queja"
+                                        ng-model="solicitud.longitud_queja" ng-required="true" />
+                                    <span class="help-block"
+                                        ng-show="!formDatosSolicitante.longitud_queja.$valid && formDatosSolicitante.longitud_queja.$touched">
+                                        Este campo es obligatorio.
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div
+                                    class="form-group {{ !formDatosSolicitante.latitud_queja.$valid && formDatosSolicitante.latitud_queja.$touched ? 'has-error' : '' }}">
+                                    <label class="control-label">Latitud de la Queja</label>
+                                    <input type="text" name="latitud_queja" class="form-control"
+                                        placeholder="Latitud Localizacion de la Queja"
+                                        ng-model="solicitud.latitud_queja" ng-required="true" />
+                                    <span class="help-block"
+                                        ng-show="!formDatosSolicitante.latitud_queja.$valid && formDatosSolicitante.latitud_queja.$touched">
                                         Este campo es obligatorio.
                                     </span>
                                 </div>
@@ -444,7 +482,7 @@
                 </div>
 
             </div>
-            <!-- {{solicitud}} -->
+         <!-- {{solicitud}} -->
         </div>
 
     </div>
