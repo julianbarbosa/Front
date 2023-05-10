@@ -232,6 +232,7 @@ saul.config(["$stateProvider",
         $scope.aniosGravables = function() {
             year =  new Date().getFullYear();
             $scope.arrayAniosGravables = [];
+            $scope.arrayAniosGravables.push((year).toString());
             $scope.arrayAniosGravables.push((year-1).toString());
             $scope.arrayAniosGravables.push((year-2).toString());
             $scope.arrayAniosGravables.push((year-3).toString());
