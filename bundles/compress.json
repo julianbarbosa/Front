@@ -294,5 +294,6 @@
     "ControlInfraestructuraBundle/template/template.js",
     "ControlInfraestructuraBundle/asignarvisita/asignarvisita.js",
     "ControlInfraestructuraBundle/crearregistro/crearregistro.js",
-    "ControlUrbanoBundle/crearsolicitud/crearsolicitud.js"
+    "ControlUrbanoBundle/crearsolicitud/crearsolicitud.js",
+    "PersonaBundle/consultar/controller.js"
 ]

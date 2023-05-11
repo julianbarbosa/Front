@@ -1,0 +1,48 @@
+<br>
+<div class="row">
+    <div class="col-sm-12 col-md-8">
+        
+        <div class="panel" >    
+            <div class="page-header">
+                <h1 class="col-xs-12 col-sm-10 text-center text-left-sm">Consulta de 
+                    <strong class="subtitulo">Datos del Ciudadano</strong>
+                    <br>
+                    <small>Mediante la siguiente consulta, es posible obtener los datos de una persona consultando su número de cédula  en el Sistema de la Registraduría Nacional.</a>
+                    </small>
+                </h1>
+            </div>
+            <div class="panel-body" ng-show="!datos">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="control-label" for="identificacion">Número de Identificación</label>
+                            <input  type="text"
+                                    name="identificacion"
+                                    ng-model="identificacion"
+                                    class="form-control input-xlarge"
+                                    autocomplete="off"
+                                    placeholder="Número de cédula"
+                                   />
+                        </div>
+                    </div>
+                </div>   
+            </div>
+            <div class="panel-body" ng-show="datos">
+                <b>NUIP:</b> <span ng-bind="datos.nuip"></span><br>
+                <b>Primer Nombre:</b> <span ng-bind="datos.primerNombre"></span><br>
+                <b>Segundo Nombre:</b> <span ng-bind="datos.segundoNombre"></span><br>
+                <b>Primer Apellido:</b> <span ng-bind="datos.primerApellido"></span><br>
+                <b>Segundo Apellido:</b> <span ng-bind="datos.segundoApellido"></span><br>
+                <b>Municipio Expedicion:</b> <span ng-bind="datos.municipioExpedicion"></span><br>
+                <b>Fecha Expedicion:</b> <span ng-bind="datos.fechaExpedicion"></span><br>
+            </div>
+
+            <div class="panel-footer" >
+                <div class="row padding-sm text-right-sm">
+                    <input type="submit" class="btn btn-primary" ng-click="consultar()" value="Consultar" ng-show="!datos"/>
+                    <a ng-click="limpiar()" style="cursor: pointer;">Limpiar</a>
+                </div>
+            </div>  
+        </div>   
+    </div>
+</div>
