@@ -219,10 +219,14 @@ saul.config(["$stateProvider",
         };
         
         $scope.getDateValue = function(dateString) {
-            console.warn(dateString);
-            var date = new Date(dateString);
-            console.warn(dateString);
-            console.error(date);
+            try {
+                var date = new Date(dateString);
+            } catch (exception) {
+                var date = new Date();
+            }
+            if(date = 'Invalid Date') {
+                date = null
+            }
             return date;
         }
 
@@ -291,6 +295,7 @@ saul.config(["$stateProvider",
                     });
                 });
             });
+            console.log($scope.valoresFormulario);
             if (true) {
                 $(".overlap_espera").show();
                 $(".overlap_espera_1").show();
@@ -304,6 +309,7 @@ saul.config(["$stateProvider",
                         files: $scope.inputFiles
                     }
                 }).then(function (response) {
+                    console.log("aqui no hay error2");
                     $(".overlap_espera").fadeOut(500, "linear");
                     $(".overlap_espera_1").fadeOut(500, "linear"); 
                     $scope.result = response.data;

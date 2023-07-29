@@ -37,7 +37,9 @@ saul.config(["$stateProvider",
         
         $scope.actualizarDatosComparendo = function () { 
             fnMostrarCortina(true);
-            ActualizarComparendosRNMCService.get($scope.actualizacion.tipoidentificacion, $scope.actualizacion.numeroidentificacion).then(function (respuesta) {
+            tipoIdentificacion = $scope.actualizacion.tipoidentificacion.replace('.','');
+            console.log(tipoIdentificacion);
+            ActualizarComparendosRNMCService.get(tipoIdentificacion, $scope.actualizacion.numeroidentificacion).then(function (respuesta) {
                 fnMostrarCortina(false, function(resp) {
                     $scope.alert = resp;                    
 				}, respuesta);

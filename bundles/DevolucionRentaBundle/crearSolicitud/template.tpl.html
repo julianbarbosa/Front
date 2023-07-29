@@ -41,17 +41,30 @@
         <div class="page-body" ng-show="respuesta.success == false">
         <div class="wizard-wrapper  no-padding col-sm-12" style="width: 100% !important" >
             <ul class="wizard-steps col-sm-12">
-                <li data-target="#wizard-account" class="col-md-6" ng-class="{'active': step === 1,'completed':step > 1 }" >
+                <li data-target="#wizard-account" class="col-md-3" ng-class="{'active': step === 1,'completed':step > 1 }" >
                     <span class="wizard-step-number">1</span>
                     <span class="wizard-step-caption">
                         Solicitante
                         <span class="wizard-step-description">Datos personales del solicitante</span>
                     </span>
                 </li>
-                
-                
-                <li data-target="#wizard-credit-card" class="col-md-6"  ng-class="{'active': step === 2,'completed':step > 1 }"   >
+                <li data-target="#wizard-account" class="col-md-3" ng-class="{'active': step === 2,'completed':step > 2 }" >
                     <span class="wizard-step-number">2</span>
+                    <span class="wizard-step-caption">
+                        Solicitud
+                        <span class="wizard-step-description">Datos Solicitud</span>
+                    </span>
+                </li>
+                <li data-target="#wizard-profile" class="col-md-3"  ng-class="{'active': step === 3,'completed':step > 3 }" >
+                    <span class="wizard-step-number">3</span>
+                    <span class="wizard-step-caption">
+                        Garantía
+                        <span class="wizard-step-description">Si aplica</span>
+                    </span>
+                </li>
+                
+                <li data-target="#wizard-credit-card" class="col-md-3"  ng-class="{'active': step === 4,'completed':step > 3 }"   >
+                    <span class="wizard-step-number">4</span>
                     <span class="wizard-step-caption">
                         Radicación
                         <span class="wizard-step-description">Anexos y Radicación</span>
@@ -79,8 +92,6 @@
                                 </span>
                             </div>
                         </div>
-                        
-                        
                         <div class="col-md-6">
                             <div class="form-group {{ !formDatosSolicitante.identificacion.$valid && formDatosSolicitante.identificacion.$touched ? 'has-error' : '' }}">
                                 <label class="control-label" >Número de Identificación (NIT o CC)</label>
@@ -272,25 +283,424 @@
                 </form>	
             </div>
             
-            
             <div ng-show="step == 2">
-                <form class="panel-body" name="form4">
+                <form name="form2">
+                    <!-- <div class="note">
+                        Es importante que tenga en cuenta que con base en los proyectos a desarrollar, el representante legal tenga la capacidad económica para contratar, es decir, que no existan limitaciones estatutarias que no se lo permitan.
+                    </div> -->
                     <!-- <h3>Datos de la solicitud</h3> -->
                     <div class="row">
-                        <div class="col-md-6 required form-group {{ !formDatosSolicitante.direccion.$valid && formDatosSolicitante.direccion.$touched ? 'has-error' : '' }}">			
-                            <label class="control-label" >Seleccione el tipo de solicitud</label>	
-                            <select required class="form-control col-md-3" name="tiposolicitud" ng-model="solicitud.tiposolicitud" ng-options="item.estandar as item.nombre for item in arrayClaseSolicitud" required></select>
-                           
+                        <!-- <div class="col-md-6 form-group required {{ !form2.claseSolicitud.$valid && form2.claseSolicitud.$touched ? 'has-error' : '' }}">			
+                            <label class="control-label" >Tipo de Solicitud</label>	
+                            <select class="form-control col-md-3" name="claseSolicitud" ng-model="solicitud.detalle.claseSolicitud" ng-options="clase.estandar as clase.nombre for clase in arrayClaseSolicitud" ></select>
+                            <span  class="help-block" ng-show="!form2.claseSolicitud.$valid && form2.claseSolicitud.$touched" >		
+                                Este campo es obligatorio.								
+                            </span>
+                        </div> -->
+                        <div class="form-group required col-md-6" ng-class="{'has-error': !form2.valorDevolucion.$valid && form2.valorDevolucion.$touched || form2.valorDevolucion.$error.pattern}">
+                            <label class="control-label">Valor devolución y/o Compensación</label>
+                            <input required placeholder="No ingresar puntos ni comas" 
+                             class="form-control"
+                                type="text"
+                                min="0"
+                                step="1"
+                                ng-pattern="/^[0-9]*$/"
+                                ng-model="solicitud.valorDevolucion" 
+                                name="valorDevolucion"
+                            />
+                            <span  class="help-block" ng-show="!form2.valorDevolucion.$valid && form2.valorDevolucion.$touched" >
+                                Este campo es obligatorio.								
+                            </span>
+                            <span  class="help-block" ng-show="form2.valorDevolucion.$error.pattern">No es un número válido, no ingresar puntos ni comas.</span>
+                        </div>
+                    </div>
+                    <!-- ng-if="solicitud.detalle.claseSolicitud=='compensación'" -->
+                     
+                    
+                    
+                    <div class="row">
+                        <div class="col-md-6 form-group required {{ !form2.tipoImpuesto.$valid && form2.tipoImpuesto.$touched ? 'has-error' : '' }}">
+                            <label class="control-label" >Tipo de impuesto objeto de devolución y/o compensación</label>	
+                            <select class="form-control" name="tipoImpuesto" ng-model="solicitud.compensacion.origen.tipoImpuesto" ng-options="tipoVia.estandar as tipoVia.nombre for tipoVia in arrayDondeDevolucion" ng-change="actualizarArrayCausalCompensacion()" required>
+                                <option value="">-- Seleccione --</option>
+                            </select>
+                            <p  class="help-block" ng-show="!form2.tipoImpuesto.$valid && form2.tipoImpuesto.$touched" style="margin-top:35px;">Este campo es obligatorio.								
+                            </p>
+                        </div>
+
+                        
+                        <div class="form-group required col-md-6" ng-class="{'has-error': !form2.id_predial.$valid && form2.id_predial.$touched }" ng-if="solicitud.compensacion.origen.tipoImpuesto=='predial_unificado' || solicitud.compensacion.origen.tipoImpuesto=='delineacion_urbana'">
+                            <label class="control-label">ID del Predio</label>
+                            <input required placeholder="Valor numérico" class="form-control"
+                                type="number"
+                                min="0"
+                                ng-model="solicitud.compensacion.origen.id_predial" 
+                                name="id_predial"
+                            />
+                            <span  class="help-block" ng-show="!form2.id_predial.$valid && form2.id_predial.$touched" >
+                                Este campo es obligatorio.								
+                            </span>
+                        </div>
+                        <!-- <div class="form-group col-md-6" ng-if="solicitud.compensacion.origen.tipoImpuesto=='predial_unificado'">
+                            <label class="control-label">Año(s) objeto de la devolución y/o compensación</label>
+                            <input required placeholder="Año" class="form-control"
+                                type="text"
+                                ng-model="solicitud.compensacion.origen.anioDevolucion" 
+                                name="anioDevolucion"
+                            />
+                        </div> -->
+                        <div class="form-group required col-md-6 " ng-class="{'has-error': !form2.anioCompensacion.$valid && form2.anioCompensacion.$touched }" ng-if="solicitud.compensacion.origen.tipoImpuesto=='retenciones'">
+                            <label class="control-label">Año</label>
+                            <select required class="form-control col-md-3" name="dondeAnioCompensacion" ng-model="solicitud.compensacion.origen.donde_anio_compensacion" ng-options="item as item for item in arrayAniosGravables" required>
+                                <option value=""hidden>-- Seleccione --</option>
+                            </select>
+                            <span  class="help-block" ng-show="!form2.dondeAnioCompensacion.$valid && form2.dondeAnioCompensacion.$touched" >
+                                Este campo es obligatorio.								
+                            </span>
+                        </div>
+                        <div class="form-group required col-md-6 " ng-class="{'has-error': !form2.bimestreCompensacion.$valid && form2.bimestreCompensacion.$touched }" ng-if="solicitud.compensacion.origen.tipoImpuesto=='retenciones'">
+                            <label class="control-label">Bimestre</label>
+                            <input required placeholder="Valor numérico" class="form-control"
+                                type="number"
+                                min="1"
+                                max="6"
+                                ng-model="solicitud.compensacion.origen.bimestreCompensacion" 
+                                name="bimestreCompensacion"
+                            />
+                            <span  class="help-block" ng-show="!form2.bimestreCompensacion.$valid && form2.bimestreCompensacion.$touched" >
+                                Este campo es obligatorio.								
+                            </span>
+                        </div>
+                        <div class="form-group col-md-6" ng-if="solicitud.compensacion.origen.tipoImpuesto=='industria_comercio'">
+                            <label class="control-label">Año(s) gravables</label>
+                            <select required class="form-control col-md-3" name="aniosGravables" ng-model="solicitud.compensacion.origen.aniosGravables" ng-options="item as item for item in arrayAniosGravables" required>
+                                <option value=""hidden>-- Seleccione --</option>
+                            </select>
+                            <span  class="help-block" ng-show="!form2.aniosGravables.$valid && form2.aniosGravables.$touched" >		
+                                Este campo es obligatorio.								
+                            </span>
+                        </div>
+                        <div class="form-group col-md-6" ng-if="solicitud.compensacion.origen.tipoImpuesto=='industria_comercio'">
+                            <label class="control-label">CC o NIT</label>
+                            <input required placeholder="Identificación" class="form-control"
+                                type="text"
+                                ng-model="solicitud.compensacion.origen.identificacion" 
+                                name="identificacion"
+                            />
+                        </div>
+                        <div class="form-group required col-md-8 {{ !form2.npn.$valid && form2.npn.$touched ? 'has-error' : '' }}" ng-if="solicitud.compensacion.origen.tipoImpuesto=='valorizacion'">
+                            <label class="control-label">Número Predial Nacional</label>
+                            <input required 
+                            placeholder="Numero de 30 dígitos" class="form-control"
+                                type="text"
+                                ng-model="solicitud.compensacion.origen.npn" 
+                                name="npn"
+                                min="0"
+                                maxlength="30"
+                                minlength="30"
+                                ui-mask="760019999999999999999999999999"
+                                ui-mask-placeholder
+                                ui-mask-placeholder-char="_"
+                                ui-mask-use-viewvalue="true"
+                            />
+                            <span  class="help-block" ng-show="!form2.npn.$valid && form2.npn.$touched" >		
+                                Este campo es obligatorio y su longitud es de 30.								
+                            </span>
+                            <div class="note note-info">
+                                Es un código de 30 dígitos que permite identificar un predio.
+                            </div>
+                        </div>
+                        <div class="col-md-8 form-group {{ !form2.tipoEstampilla.$valid && form2.tipoEstampilla.$touched ? 'has-error' : '' }}" ng-if="solicitud.compensacion.origen.tipoImpuesto=='estampilla'">			
+                            <label class="control-label" >Tipo de<br> Estampilla</label>	
+                            <select class="form-control col-md-3" name="tipoEstampilla" ng-model="solicitud.compensacion.origen.tipoEstampilla" ng-options="item.estandar as item.nombre for item in arrayEstampillasDevolucion" ></select>
+                            <span  class="help-block" ng-show="!form2.solicitud.tipoEstampilla.$valid && form2.solicitud.tipoEstampilla.$touched" >		
+                                Este campo es obligatorio.								
+                            </span>
+                        </div>
+                        <div class="form-group col-md-8 {{ form2.descripcionOtro.$touched && diferenciaEnDias(solicitud.descripcionOtro)>30 ? 'has-error' : '' }}" ng-show="solicitud.compensacion.origen.tipoImpuesto=='otro'">	
+                            <label class="control-label" >Descripción Otro<br></label>
+                            <input name="descripcionOtro" type="text" class="form-control" ng-model="solicitud.compensacion.origen.descripcionOtro"/>								
+                            <span  class="help-block" ng-show="!form2.descripcionOtro.$valid && form2.descripcionOtro.$touched" >
+                                Debe ingresar un valor válido
+                            </span>						
+                        </div>
+                    </div>
+                    
+                    <!-- CAUSAL -->
+                    <div class="row" ng-if="solicitud.compensacion.origen.tipoImpuesto=='industria_comercio'">
+                        <div class="col-md-6 form-group required {{ !form2.causalCompensacion.$valid && form2.causalCompensacion.$touched ? 'has-error' : '' }}">			
+                            <label class="control-label" >Indique el causal que genera la compensación</label>	
+                            <select class="form-control col-md-4" name="causalCompensacion" ng-model="solicitud.detalle.causalCompensacion" ng-options="item.estandar as item.nombre for item in arrayCausalCompensacionFull" required>
+                            </select>
+                            <span  class="help-block" ng-show="!form2.causalCompensacion.$valid && form2.causalCompensacion.$touched" style="margin-top:35px;">		
+                                Este campo es obligatorio.								
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row" ng-if="solicitud.compensacion.origen.tipoImpuesto!=='industria_comercio'">
+                        <div class="col-md-6 form-group required {{ !form2.causalCompensacion.$valid && form2.causalCompensacion.$touched ? 'has-error' : '' }}">			
+                            <label class="control-label" >Indique el causal que genera la compensación</label>	
+                            <select class="form-control col-md-4" name="causalCompensacion" ng-model="solicitud.detalle.causalCompensacion" ng-options="item.estandar as item.nombre for item in arrayCausalCompensacion" required>
+                            </select>
+                            <span  class="help-block" ng-show="!form2.causalCompensacion.$valid && form2.causalCompensacion.$touched" style="margin-top:35px;">		
+                                Este campo es obligatorio.								
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <!-- Destino donde se realizará la compensación-->
+                    <div class="form-group has-feedback simple col-md-12"
+                     >
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="control-label" for="esCompensacionMismoPredio">¿La compensación corresponde al mismo Predio y/o NIT objeto del saldo a favor?</label>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="radio-inline"><input type="radio" value="1" ng-model="solicitud.detalle.esCompensacionMismoPredio">Si</label>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="radio-inline"><input type="radio" value="0" ng-model="solicitud.detalle.esCompensacionMismoPredio">No</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-if="solicitud.detalle.esCompensacionMismoPredio=='0'">
+                        <!-- <h3>¿Dónde realizará la compensación?</h3> -->
+                        <div class="row">
+                            <div class="col-md-4 required form-group {{ !form2.dondeRealizaDevolucion.$valid && form2.dondeRealizaDevolucion.$touched ? 'has-error' : '' }}">			
+                                <label class="control-label" >Indique dónde se realizará la compensación</label>	
+                                <select class="form-control col-md-3" name="dondeRealizaDevolucion" ng-model="solicitud.compensacion.destino.dondeRealizaDevolucion" ng-options="item.estandar as item.nombre for item in arrayDondeRealizaCompensacion" required></select>
+                                <span  class="help-block" ng-show="!form2.solicitud.dondeRealizaDevolucion.$valid && form2.solicitud.dondeRealizaDevolucion.$touched" >		
+                                    Este campo es obligatorio.								
+                                </span>
+                            </div>
+                            <div class="form-group required col-md-4" ng-class="{'has-error': !form2.donde_id_predial.$valid && form2.donde_id_predial.$touched }" ng-if="solicitud.compensacion.destino.dondeRealizaDevolucion=='predial_unificado' || solicitud.compensacion.destino.dondeRealizaDevolucion=='delineacion_urbana'">
+                                <label class="control-label">ID del Predio</label>
+                                <input required placeholder="Valor numérico" class="form-control" type="number" min="0" ng-model="solicitud.compensacion.destino.donde_id_predial" name="donde_id_predial"/>
+                                <span  class="help-block" ng-show="!form2.donde_id_predial.$valid && form2.donde_id_predial.$touched" >
+                                    Este campo es obligatorio.								
+                                </span>
+                            </div>
+                            <div class="form-group required col-md-4 " ng-class="{'has-error': !form2.anioCompensacion.$valid && form2.anioCompensacion.$touched }" ng-if="solicitud.compensacion.destino.dondeRealizaDevolucion=='retenciones'">
+                                <label class="control-label">Año</label>
+                                <input required placeholder="Valor numérico" class="form-control"
+                                    type="number"
+                                    min="0"
+                                    ng-model="solicitud.compensacion.destino.donde_anio_compensacion" 
+                                    name="anioCompensacion"
+                                />
+                                <span  class="help-block" ng-show="!form2.anioCompensacion.$valid && form2.anioCompensacion.$touched" >
+                                    Este campo es obligatorio.								
+                                </span>
+                            </div>
+                            <div class="form-group required col-md-4 " ng-class="{'has-error': !form2.bimestreCompensacion.$valid && form2.bimestreCompensacion.$touched }" ng-if="solicitud.compensacion.destino.dondeRealizaDevolucion=='retenciones'" ng-click="">
+                                <label class="control-label">Bimestre</label>
+                                <input required placeholder="Valor numérico" class="form-control"
+                                    type="number"
+                                    min="1"
+                                    max="6"
+                                    ng-model="solicitud.compensacion.destino.bimestreCompensacion" 
+                                    name="bimestreCompensacion"
+                                />
+                                <span  class="help-block" ng-show="!form2.bimestreCompensacion.$valid && form2.bimestreCompensacion.$touched" >
+                                    Este campo es obligatorio.								
+                                </span>
+                            </div>
+                            <div class="form-group col-md-4" ng-if="solicitud.compensacion.destino.dondeRealizaDevolucion=='predial_unificado'">
+                                <label class="control-label">Año(s) objeto de la devolución y/o compensación</label>
+                                <!-- <input required placeholder="Año" class="form-control"
+                                    type="text"
+                                    ng-model="solicitud.compensacion.destino.anioDevolucion" 
+                                    name="anioDevolucion"
+                                /> -->
+                                <select required class="form-control col-md-3" name="dondeAnioCompensacion" ng-model="solicitud.compensacion.destino.anioDevolucion" ng-options="item as item for item in arrayAniosGravables" required>
+                                    <option value=""hidden>-- Seleccione --</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-4" ng-if="solicitud.compensacion.destino.dondeRealizaDevolucion=='industria_comercio'">
+                                <label class="control-label">Año(s) gravables</label>
+                                <input required placeholder="Año" class="form-control"
+                                    type="text"
+                                    ng-model="solicitud.compensacion.destino.aniosGravables" 
+                                    name="dondeAniosGravables"
+                                />
+                            </div>
+                            <div class="form-group col-md-4" ng-if="solicitud.compensacion.destino.dondeRealizaDevolucion=='industria_comercio'">
+                                <label class="control-label">CC o NIT</label>
+                                <input required placeholder="Identificación" class="form-control"
+                                    type="number"
+                                    ng-model="solicitud.compensacion.destino.identificacion" 
+                                    name="identificacion"
+                                />
+                            </div>
+                            <div class="form-group required col-md-4 {{ !form2.npn.$valid && form2.npn.$touched ? 'has-error' : '' }}" ng-if="solicitud.compensacion.destino.dondeRealizaDevolucion=='valorizacion'">
+                                <label class="control-label">Número Predial Nacional</label>
+                                <input required 
+                                placeholder="Numero de 30 dígitos" class="form-control"
+                                    type="text"
+                                    ng-model="solicitud.compensacion.destino.npn" 
+                                    name="npn"
+                                    min="0"
+                                    maxlength="30"
+                                    minlength="30"
+                                    ui-mask="760019999999999999999999999999"
+                                    ui-mask-placeholder
+                                    ui-mask-placeholder-char="_"
+                                    ui-mask-use-viewvalue="true"
+                                />
+                                <span  class="help-block" ng-show="!form2.npn.$valid && form2.npn.$touched" >		
+                                    Este campo es obligatorio y su longitud es de 30.								
+                                </span>
+                                <div class="note note-info">
+                                    Es un código de 30 dígitos que permite identificar un predio.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-8 {{ form2.descripcionOtro.$touched && diferenciaEnDias(solicitud.descripcionOtro)>30 ? 'has-error' : '' }}" ng-show="solicitud.compensacion.destino.dondeRealizaDevolucion=='otro'">	
+                            <label class="control-label" >Descripción Otro<br></label>
+                            <input name="descripcionOtro" type="text" class="form-control" ng-model="solicitud.destino.descripcionOtro"/>								
+                            <span  class="help-block" ng-show="!form2.descripcionOtro.$valid && form2.descripcionOtro.$touched" >
+                                Debe ingresar un valor válido
+                            </span>						
+                        </div>
+                        <!--Fin de Indique dónde se realizará la compensación-->
+                    </div>
+                    <div class="row padding-sm text-right-sm col-md-12" ng-show="solicitud.compensacion.origen.tipoImpuesto!=='industria_comercio'">
+                        <input type="button" class="btn btn-info" ng-click="step = step - 1" value="Anterior" />
+                        <input type="button" class="btn btn-primary" ng-click="step = 4" value="Siguiente" ng-disabled="!form2.$valid"/>
+                       
+                        
+                    </div> 
+                    <div class="row padding-sm text-right-sm col-md-12" ng-show="solicitud.compensacion.origen.tipoImpuesto=='industria_comercio'">
+                        <input type="button" class="btn btn-info" ng-click="step = step - 1" value="Anterior" />
+                        <input type="button" class="btn btn-primary" ng-click="step = 3"  value="Siguiente" ng-disabled="!form2.$valid"/>
+                        
+                    </div>   
+                </form>
+            </div>
+            
+            
+            <div ng-show="step == 3">
+                <div class="note">
+                    Solo aplica para el impuesto de Industria y Comercio y no es obligatorio, en caso de presentarla se deberá cumplir con los requisitos del Artículo 29 del Decreto Extraordinario 41.1.0.20 0139 del 2012.
+                </div>
+                <form class="panel-body col-md-12" name="form3">
+                    <!-- <div class="row">
+                        <div class="form-group has-feedback simple col-md-6">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="control-label" for="aplicaGarantia">¿Aplica la garantía?</label>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="radio-inline"><input type="radio" value="1" ng-model="solicitud.aplicaGarantia" ng-click="limpiarGarantia()">Si</label>
+                                </div>
+                                <div class="col-md-3"> 
+                                    <label class="radio-inline"><input type="radio" value="0" ng-model="solicitud.aplicaGarantia" ng-click="limpiarGarantia()">No</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+                    <div class="row" ng-show="solicitud.aplicaGarantia==1">
+                        <div class="col-md-6">
+                            <div class="form-group">	
+                                <label class="control-label" >Entidad Otorgante</label>
+                                <input name="entidadOtorgante" type="text" class="form-control" ng-model="solicitud.garantia.entidadOtorgante"/>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label" >No. de Garantía</label>
+                                <input name="numeroGarantia" type="text" class="form-control" ng-model="solicitud.garantia.numeroGarantia"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" ng-show="solicitud.aplicaGarantia==1">
+                        <div class="col-md-6">
+                            <div class="form-group ">	
+                                <label class="control-label" >Fecha de la Garantía</label>
+                                <input name="fechaGarantia" type="date" class="form-control"  ng-model="solicitud.garantia.fechaGarantia" />
+                            </div>					
+                        </div>
+                        <div class="form-group col-md-6" >
+                            <label class="control-label">Valor de la Garantía</label>
+                            <input placeholder="Valor numérico" class="form-control"
+                                type="number" name="valorGarantia" min="0"
+                                ng-model="solicitud.garantia.valorGarantia"/>
+                        </div>
+                    </div>
+                    
+                
+                    <div class="row padding-sm text-right-sm col-md-12">
+                        <input type="button" class="btn btn-info" ng-show="solicitud.compensacion.origen.tipoImpuesto=='industria_comercio'" ng-click="step = step - 1" value="Anterior" />
+                        <input type="button" class="btn btn-info" ng-show="solicitud.compensacion.origen.tipoImpuesto!=='industria_comercio'" ng-click="step = step - 2" value="Anterior" />
+                        
+                        <input type="button" class="btn btn-primary" ng-click="step = step + 1"  value="Siguiente"/>
+                    </div>
+                </form>
+                
+            </div>
+            
+            <div ng-show="step == 4">
+                <div class="note">
+                    Adjunte los documentos solicitados en formato PDF o JPG. Tenga en cuenta que si uno de los documentos consta de varias páginas estas deberán estar unidas en un solo archivo.
+                </div>
+                <form class="form-group" name="form4" class="form-group {{ (solicitud.npn == '' || solicitud.npn == null)?'has-error':'' }}" >
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input-file2 label="Fotocopia documento de identificación" model="files.documentoIdentificacion" name="documentoIdentificacion" shadow="true" required="false">
+                            </input-file2>
+                        </div>
+                        <div class="col-md-6">
+                            <input-file2 label="Fotocopia de actos administrativos, sentencias u otros" model="files.actosAdministrativos" name="actosAdministrativos" shadow="true" required="false">
+                            </input-file2>
                         </div>
                     </div>
                     
                     <div class="row">
-                        <div class="form-group col-md-12 ">
-                            <label class="control-label">Observaciones de la queja</label>
-                            <textarea class="form-control" ng-model="solicitud.observacion" name="observaciones"></textarea>
+                        <div class="col-md-6">
+                            <input-file2 label="Fotocopia del RUT" model="files.documentoRUT" name="documentoRUT" shadow="true" required="false" description="Vigencia de un mes">
+                            </input-file2>
                         </div>
-                    </div> 
-                   
+                        <div class="col-md-6">
+                            <input-file2 label="Fotocopia de los soportes de pago" model="files.soportesPago" name="soportesPago" shadow="true" required="false">
+                            </input-file2>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input-file2 label="Certificación bancaria del propietario" model="files.certificacionBancaria" name="certificacionBancaria" description="Vigencia de un mes. A nombre del propietario que aporta el RUT donde se consignara el dinero en caso de solicitar devolución" shadow="true" required="false">
+                            </input-file2>
+                        </div>
+                        
+                    </div>
+                    <!-- <h3>Datos de la solicitud</h3> -->
+                    <div class="row">
+                        <div class="col-md-6 required form-group {{ !formDatosSolicitante.direccion.$valid && formDatosSolicitante.direccion.$touched ? 'has-error' : '' }}">			
+                            <label class="control-label" >Bajo mi responsabilidad certifico que los datos aquí consignados en calidad de</label>	
+                            <select required class="form-control col-md-3" name="dondeRealizaDevolucion" ng-model="solicitud.responsable.calidad" ng-options="item.estandar as item.nombre for item in arrayCalidadResponsable" ng-change="poderRequerido = solicitud.responsable.calidad=='apoderado' || solicitud.responsable.calidad=='agente-oficioso'?true:false" required></select>
+                            <span  class="help-block" ng-show="!formDatosSolicitante.direccion.$valid && formDatosSolicitante.direccion_complemento.$touched" >		
+                                Este campo es obligatorio.								
+                            </span>
+                        </div>
+                        <div class="form-group required col-md-6 " ng-class="{'has-error': !form4.nombreResponsable.$valid && form4.nombreResponsable.$touched }">
+                            <label class="control-label">Nombres y Apellidos</label>
+                            <input required placeholder="" class="form-control"
+                                type="text"
+                                ng-model="solicitud.responsable.nombre" 
+                                name="nombreResponsable"
+                                
+                            />
+                            <span  class="help-block" ng-show="!form4.nombreResponsable.$valid && form4.nombreResponsable.$touched" >
+                                Este campo es obligatorio.								
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row" ng-show="poderRequerido">
+                        <div class="col-md-6">
+                            <input-file2 model="files.poder" label="Carta de Poder" name="poder" shadow="true" required="{{poderRequerido}}">
+                            </input-file2>
+                        </div>
+                    </div>
                  
                     <div class="col-sm-12 note">
                         <div class="checkbox">
@@ -309,7 +719,7 @@
                     <div class="row padding-sm text-right-sm col-md-12">
                         <input type="button" ng-show="solicitud.compensacion.origen.tipoImpuesto=='industria_comercio'" class="btn btn-info" ng-click="step = step - 1"  value="Anterior" />
                         <input type="button" class="btn btn-info" ng-show="solicitud.compensacion.origen.tipoImpuesto!=='industria_comercio'" ng-click="step = step - 2" value="Anterior" />
-                        <input type="button" class="btn btn-primary" ng-click="saveSolicitud(solicitud)" ng-disabled="!form4.$valid" value="Radicar Solicitud"/>
+                        <input type="button" class="btn btn-primary" ng-click="saveSolicitud(solicitud)" ng-disabled="!form4.$valid || solicitud.autorizacion!=true || solicitud.declaracion!=true || !files.documentoIdentificacion.$valid || !files.documentoRUT.$valid || !files.soportesPago.$valid || (!files.poder.$valid && poderRequerido)" value="Radicar Solicitud"/>
                     </div> 
                 </form>    
             </div>
