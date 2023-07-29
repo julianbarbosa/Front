@@ -145,9 +145,9 @@
 		background-position: center;
 	}
 	.bloque-texto-1 {
-		text-align: center; 
+		text-align: justify; 
 		margin-top: 40px;
-		font-size: 18px;
+		font-size: 16px;
 	}
 	.bloque-texto-2 {
 		text-align: center; 
@@ -162,7 +162,7 @@
 	.bloque-btn {
 		margin-top: 40px;
 		display: grid;
-		grid-template-columns: 0.2fr 0.2fr;
+		grid-template-columns: 0.2fr 0.2fr 0.2fr;
 		gap: 60px;
 		place-content: center;
 	}
@@ -205,53 +205,66 @@
 <div id="idDivPrincipal" class="col-md-10 col-xs-12" >
 
 	<!-- Interfaz para digitar el predio a consultar-->
-	<div class="panel panel-success">
+	<div class="panel panel-success" ng-show="nombrePropiedadHorizontal != '' && notificacion_radicado == ''">
         <div class="panel-body">
 			<!-- Logo Alcaldía -->
-			<div class="logo-alcaldia validacion-ph col-md-12 col-xs-12"></div>
+			<!-- <div class="logo-alcaldia validacion-ph col-md-12 col-xs-12"></div>
 
 			<div class="col-md-12 col-xs-12 bloque-texto-1">
 				<span><strong>EL SECRETARIO DE SEGURIDAD Y JUSTICIA DEL MUNICIPIO DE SANTIAGO DE CALI</strong></span>
 				<br>
 				<span>En ejercicio de sus atribuciones legales y en especial las conferidas por el artículo 8º la Ley 675 de 2001, decreto extraordinario No. 0516 de 2016 y decreto  No. 4112.010.20.0032 del 18 de enero de 2017.</span>
-			</div>
+			</div> -->
 			
 			<div class="col-md-12 col-xs-12 bloque-texto-2">
-				<span><strong>HACE CONSTAR</strong></span>
+				<span><strong>DATOS DE CONSULTA</strong></span>
 			</div>
-
-			<div class="col-md-12 col-xs-12 bloque-texto-3">
-				<span>Que el señor (a) MARIA LUISA OLIVARES GOMEZ identificado (a) con la cédula de ciudadanía No. 1111111111 DE CERRITO mediante Resolución No.4161,0,21,1140,2012  del 06 DE AGOSTO DE 2012, emanada de la SECRETARIA DE GOBIERNO, CONVIVENCIA Y SEGURIDAD  se inscribió en calidad de Administrador (a) y Representante Legal el 06 DE AGOSTO DE 2012  para el periodo comprendido entre CON FECHA DE INICIO DEL CARGO DESDE EL 25 DE FEBRERO DEL 2019 de la persona jurídica denominada {{nombrePropiedadHorizontal}}, ubicado en la {{direccionPropiedadHorizontal}} de la actual nomenclatura urbana de Santiago de Cali.</span>
-			</div>
-
-			<div class="col-md-12 col-xs-12 bloque-texto-3">
-				<span>Que mediante Resolución No. 4161,0,21,0571,2010 DEL 27 DE ABRIL DEL 2010 expedida por la SECRETARIA DE GOBIERNO, CONVIVENCIA Y SEGURIDAD, se registró la Persona Jurídica correspondiente a el {{nombrePropiedadHorizontal}}, con domicilio en la {{direccionPropiedadHorizontal}} de la actual nomenclatura urbana de Santiago de Cali</span>
-			</div>
-
-			<div class="col-md-12 col-xs-12 bloque-texto-3">
-				<span>Que conforme al artículo 33 de la Ley 675 de 2001, la persona jurídica originada en la constitución de la propiedad horizontal es de naturaleza civil, sin ánimo de lucro.</span>
-			</div>
-
-			<div class="col-md-12 col-xs-12 bloque-texto-3">
-				<span>Que conforme con el numeral 1º del artículo 38 de la Ley 675 de 2001, es función de la asamblea general de propietarios, nombrar y remover libremente al administrador y su suplente, cuando fuere el caso, para periodos determinados y fijarle su remuneración. En aquellos casos en los que exista el consejo de administración, el administrador será elegido por dicho órgano, de conformidad con el artículo 50º.  Ibídem.</span>
-			</div>
-
-			<div class="col-md-12 col-xs-12 bloque-texto-3">
-				<span>La Ley 675 de 2001, compiló toda la normatividad existente en materia de propiedad horizontal, y derogó las leyes 182 de 1948, 16 de 1985 y 428 de 1998, así como los decretos reglamentarios de estas.  A partir del 03 de agosto de 2001, los edificios y conjuntos sometidos a estos regímenes, deberán regirse por la Ley 675 de 2001, y deberán adecuar sus reglamentos internos dentro del término legal, (artículo 86 ibídem).</span>
-			</div>
+			<table class="table col-md-12 col-xs-12 bloque-texto-1">
+				<tr>
+					<td><strong>Propiedad Horizontal</strong></td>
+					<td>{{nombrePropiedadHorizontal}}</td>
+				</tr>
+				<tr>
+					<td><strong>Dirección</strong></td>
+					<td>{{direccionPropiedadHorizontal}}</td>
+				</tr>
+				<tr>
+					<td><strong>Representante Legal</strong></td>
+					<td>{{nombreRepresentanteLegal}}</td>
+				</tr>
+				<tr>
+					<td ng-show="tipoPersona == 'N' && nitEmpresaAdministradora == ''"><strong>Cédula</strong></td>
+					<td ng-show="tipoPersona == 'N' && nitEmpresaAdministradora != '' && representanteLegalFirma != ''"><strong>NIT</strong></td>
+					<td ng-show="tipoPersona == 'J'"><strong>NIT</strong></td>
+					<td ng-show="tipoPersona == 'N' && nitEmpresaAdministradora == ''">{{cedulaRepresentanteLegal}} DE {{expedidaRepresentanteLegal}}</td>
+					<td ng-show="tipoPersona == 'J' && nitEmpresaAdministradora != '' || tipoPersona == 'N' && nitEmpresaAdministradora != ''">{{nitEmpresaAdministradora}}</td>
+					<td ng-show="tipoPersona == 'J' && nitEmpresaAdministradora == ''">{{cedulaRepresentanteLegal}}</td>
+				</tr>
+				<tr>
+					<td><strong>Número de Resolución</strong></td>
+					<td>{{resolucionPersoneriaJuridica}}</td>
+				</tr>
+				<tr>
+					<td><strong>Fecha de Resolución</strong></td>
+					<td>{{fechaResolucionPersoneriaJuridica}}</td>
+				</tr>
+			</table>
+			
 			
 			<div class="col-md-12 col-xs-12 bloque-btn">
-				<a  class="btn btn-secondary col-xs-12" href="/saul/v2p/#!/propiedadhorizontal/consultar">Nueva Consulta</a>
 				<a  class="btn btn-primary col-xs-12" href="/saul/v2/#!/propiedadhorizontal/crearsolicitud">Solicitar Actualización</a>
+				<a  class="btn btn-secondary col-xs-12" href="/saul/v2p/#!/propiedadhorizontal/consultar">Nueva Consulta</a>
+				<a  class="btn btn-primary col-xs-12" ng-click="solicitarCertificado(numeroIdent,4)">Solicitar Certificación</a>
 			</div>
 		</div>
     </div>
 	
 	
 	<!-- Interfaz para notificar al usuario sobre las respuestas del servidor -->
-	<div class="col-md-12 col-xs-12" ng-show="notificacion != ''">
+	<div class="col-md-12 col-xs-12" ng-show="notificacion_radicado != ''">
 		<div class="alert text-justify" role="alert" style="font-size: 14px;">
-			{{notificacion}}
+			{{notificacion_radicado}}
+			<br>Para mayor información <a href="/saul/solicitud">Ir a Mis Solicitudes</a>
 		</div>
 	</div>
 </div>
