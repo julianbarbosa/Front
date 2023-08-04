@@ -25,6 +25,8 @@ saul.config(["$stateProvider",
         $scope.respuesta.success = false;
         $scope.familiarIndex = 0;
         $scope.agregarFamiliar=false;
+        $scope.solicitud.esSolicitanteRepresentanteLegal = -1;
+        $scope.solicitud.esSolicitudDeEntidadJuridica= -1;
         
         $scope.inicializarDatosSolicitante = function () {
             $scope.solicitud.solicitante = [];
@@ -45,7 +47,6 @@ saul.config(["$stateProvider",
             $http.get(root+"funciones/fecha_actual/").then(function(response) {
                 $scope.fechaActual = new Date();
                 $scope.fechaActual.setTime(Date.parse(response.data.fecha_actual_str));
-                console.log("fechaActual:",$scope.fechaActual);
             });
         }
         $scope.obtenerFechaActual();
@@ -83,6 +84,9 @@ saul.config(["$stateProvider",
                 if($scope.thisUser.funcionario == 1) {
                     if($scope.thisUser.roles.indexOf('radicar-personaenconstruccion') !== -1) {
                         $scope.esFuncionario = true;
+                    } else {
+                        $scope.esFuncionario = false;
+                        $scope.solicitud.solicitante = angular.fromJson($scope.thisUser);        
                     }
                 } else {
                     $scope.esFuncionario = false;
