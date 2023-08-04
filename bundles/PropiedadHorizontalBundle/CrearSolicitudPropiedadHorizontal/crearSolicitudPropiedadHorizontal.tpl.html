@@ -190,7 +190,7 @@
     <!-- <div id="idDivPrincipal" class="col-xs-6" ng-show="result_producer == true" >	 -->
     
 	<!-- Interfaz para digitar el predio a consultar-->
-	<div class="panel panel-success">
+	<div class="panel panel-success" ng-hide="notificacion_radicado != ''">
         <div class="panel-heading">
             <span class="panel-title">Trámites de Propiedad Horizontal </span>
             <div class="panel-heading-controls">
@@ -202,7 +202,7 @@
         <div class="panel-body">
 			<div class="form-group col-md-12 col-xs-12">
 				<label for="" class="control-label">Tipo de Trámite</label>
-				<select class="form-control" ng-class="{'error_borde': notificacion_obligatorio == true }" name="tptramite" id="tp_tramite" ng-model="tipoTramite" ng-change="onChange()" required>
+				<select class="form-control" ng-class="{'error_borde': notificacion_obligatorio == true }" name="tptramite" id="tp_tramite" ng-model="tipoTramite" ng-change="onChangeTtramite()" required>
 					<option value="">--- Seleccione ---</option>
 					<option value="1">Actualización de Representante Legal</option>
 					<option value="2">Actualización de Revisor Fiscal</option>
@@ -236,32 +236,58 @@
 
 			<div class="form-group col-md-12 col-xs-12">
 				<label for="" class="control-label">Oficio inscripcion firmado por el administrador</label>
-				<input type="file" ng-class="{'error_borde': notificacion_obligatorio == true }" class="form-control"  name="docs" id="doc_1" ng-model="documento1" required>
+				<input type="file" ng-class="{'error_borde': notificacion_obligatorio == true }" class="form-control document"  name="docs[]" id="doc_1" ng-model="documento1" required>
                 <p ng-show="notificacion_obligatorio == true" class="help-block" style="color: #b94a48;">* Este campo es obligatorio.</p>
+				<input hidden class="validate" name="namesDocs[]" type="checkbox" value="Oficio inscripcion firmado por el administrador">
 			</div>
 
 			<div class="form-group col-md-12 col-xs-12">
 				<label for="" class="control-label">Documento del representante</label>
-				<input type="file" ng-class="{'error_borde': notificacion_obligatorio == true }" class="form-control"  name="docs" id="doc_2" ng-model="documento2" required>
+				<input type="file" ng-class="{'error_borde': notificacion_obligatorio == true }" class="form-control document"  name="docs[]" id="doc_2" ng-model="documento2" required>
                 <p ng-show="notificacion_obligatorio == true" class="help-block" style="color: #b94a48;">* Este campo es obligatorio.</p>
+				<input hidden class="validate" name="namesDocs[]" type="checkbox" value="Documento del representante">
+			</div>
+
+			<div class="form-group col-md-12 col-xs-12">
+				<label for="" class="control-label">Nit del Representante</label>
+				<input type="file" ng-class="{'error_borde': notificacion_obligatorio == true }" class="form-control document"  name="docs[]" id="doc_3" ng-model="documento3" required>
+                <p ng-show="notificacion_obligatorio == true" class="help-block" style="color: #b94a48;">* Este campo es obligatorio.</p>
+				<input hidden class="validate" name="namesDocs[]" type="checkbox" value="Nit del Representante">
+			</div>
+
+			<div id="divDoc4" hidden class="form-group col-md-12 col-xs-12">
+				<label for="" class="control-label">Copia del reglamento de Propiedad Horizontal</label>
+				<input type="file" ng-class="{'error_borde': notificacion_obligatorio == true }" class="form-control document" id="doc_4" ng-model="documento4">
+                <p ng-show="notificacion_obligatorio == true" class="help-block" style="color: #b94a48;">* Este campo es obligatorio.</p>
+				<input hidden class="validate" name="namesDocs[]" type="checkbox" value="Copia del reglamento de Propiedad Horizontal">
+			</div>
+
+			<div id="divDoc5" hidden class="form-group col-md-12 col-xs-12">
+				<label for="" class="control-label">Certificado de Tradición del Inmueble</label>
+				<input type="file" ng-class="{'error_borde': notificacion_obligatorio == true }" class="form-control document" id="doc_5" ng-model="documento5">
+                <p ng-show="notificacion_obligatorio == true" class="help-block" style="color: #b94a48;">* Este campo es obligatorio.</p>
+				<input hidden class="validate" name="namesDocs[]" type="checkbox" value="Certificado de Tradición del Inmueble">
 			</div>
 
 			<div class="form-group col-md-12 col-xs-12">
 				<label for="" class="control-label">Carta Aceptación del cargo</label>
-				<input type="file" ng-class="{'error_borde': notificacion_obligatorio == true }" class="form-control"  name="docs" id="doc_3" ng-model="documento3" required>
+				<input type="file" ng-class="{'error_borde': notificacion_obligatorio == true }" class="form-control document"  name="docs[]" id="doc_6" ng-model="documento6" required>
                 <p ng-show="notificacion_obligatorio == true" class="help-block" style="color: #b94a48;">* Este campo es obligatorio.</p>
+				<input hidden class="validate" name="namesDocs[]" type="checkbox" value="Carta Aceptación del cargo">
 			</div>
 
 			<div class="form-group col-md-12 col-xs-12">
 				<label for="" class="control-label">Carta Acta de Asamblea general</label>
-				<input type="file" ng-class="{'error_borde': notificacion_obligatorio == true }" class="form-control"  name="docs" id="doc_4" ng-model="documento4" required>
+				<input type="file" ng-class="{'error_borde': notificacion_obligatorio == true }" class="form-control document"  name="docs[]" id="doc_7" ng-model="documento7" required>
                 <p ng-show="notificacion_obligatorio == true" class="help-block" style="color: #b94a48;">* Este campo es obligatorio.</p>
+				<input hidden class="validate" name="namesDocs[]" type="checkbox" value="Carta Acta de Asamblea general">
 			</div>
 
 			<div class="form-group col-md-12 col-xs-12">
 				<label for="" class="control-label">Acta del concejo de Administracion</label>
-				<input type="file" ng-class="{'error_borde': notificacion_obligatorio == true }" class="form-control"  name="docs" id="doc_5" ng-model="documento5" required>
+				<input type="file" ng-class="{'error_borde': notificacion_obligatorio == true }" class="form-control document"  name="docs[]" id="doc_8" ng-model="documento8" required>
                 <p ng-show="notificacion_obligatorio == true" class="help-block" style="color: #b94a48;">* Este campo es obligatorio.</p>
+				<input hidden class="validate" name="namesDocs[]" type="checkbox" value="Acta del concejo de Administracion">
 			</div>
 	
 			<div class="form-group col-md-6 col-xs-12 btn-solicitud"> 
@@ -271,5 +297,13 @@
    
         </div>
     </div>
+	
+	<!-- Interfaz para notificar al usuario sobre las respuestas del servidor -->
+	<div class="col-xs-12" ng-show="notificacion_radicado != ''">
+		<div class="alert text-justify" role="alert" style="font-size: 16px; margin-top: 10px;">
+			{{notificacion_radicado}} 
+			<br>Para mayor información <a href="/saul/solicitud">Ir a Mis Solicitudes</a>
+		</div>
+	</div>
 </div>
 
