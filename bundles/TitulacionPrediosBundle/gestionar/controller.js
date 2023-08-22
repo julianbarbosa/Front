@@ -54,13 +54,16 @@ saul.config(["$stateProvider", function(a) {
             var nombreEstado = estado;
             if(estado=='continuar') {
                 if($scope.item.solicitud.estado.codigo=='pendiente') {
-                    nombreEstado = 'Pendiente por Revisar';
+                    nombreEstado = 'Pendiente por Firmar';
+                    estado = 'preaprobada';
                 }            
                 if($scope.item.solicitud.estado.codigo=='pendienterevision') {
                     nombreEstado = 'Pendiente por Firmar';
+                    estado = 'aprobada';
                 }
                 if($scope.item.solicitud.estado.codigo=='preaprobada') {
                     nombreEstado = 'Cerrado';
+                    estado = 'aprobada';
                 }
             }
             if(estado=='devolver') {

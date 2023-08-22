@@ -119,6 +119,13 @@ saul.config(["$stateProvider",
                 root + "licencia/descargarcsv",
                 'post', $scope.request);
         }
+
+        $scope.downloadAllData = function() {
+            $scope.request = [];
+            UtilForm.openWith(
+                root + "licencia/descargarcsv",
+                'post', $scope.request);
+        }
         
         $scope.arrayEstados = [ {codigo: "expedido", nombre: "Expedida"}, 
                                 {codigo: "ejecutoriada", nombre: "Ejecutoriada"} ];
