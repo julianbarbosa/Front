@@ -73,6 +73,16 @@ saul.config(["$stateProvider",
                 label: "Tipo Licencia",
                 name: "tipolicencia",
                 type: "string"
+            },
+            { 
+                label: "Número Predial Nacional",
+                name: "numeropredialnacional",
+                type: "string"
+            },
+            { 
+                label: "Número Catastral",
+                name: "catastral",
+                type: "string"
             }
             
         ];     
