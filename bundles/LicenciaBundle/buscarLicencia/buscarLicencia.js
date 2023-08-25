@@ -77,7 +77,7 @@ saul.config(["$stateProvider",
             { 
                 label: "Número Predial Nacional",
                 name: "numeropredialnacional",
-                type: "string"
+                type: "string" 
             },
             { 
                 label: "Número Catastral",
