@@ -200,7 +200,7 @@
                                     <div
                                         class="form-group {{ !formDatosSolicitante.emailAddress.$valid && formDatosSolicitante.emailAddress.$touched ? 'has-error' : '' }}">
                                         <label class="control-label">Email</label>
-                                        <input required placeholder="Email del usuario (Opcional)" class="form-control"
+                                        <input placeholder="Email del usuario (Opcional)" class="form-control"
                                             type="email" ng-model="solicitud.solicitante.emailAddress"
                                             name="emailAddress" ng-minlength="4" ng-disabled="seEncontroSolicitante" />
                                         <span class="help-block"
@@ -214,7 +214,7 @@
                                     <div
                                         class="form-group {{ !formDatosSolicitante.direccion.$valid && formDatosSolicitante.direccion.$touched ? 'has-error' : '' }}">
                                         <label class="control-label">Dirección</label>
-                                        <input required placeholder="Dirección de la residencia" class="form-control"
+                                        <input  placeholder="Dirección de la residencia" class="form-control"
                                             type="text" ng-click="obtenerModalIngresoDireccion()" readonly="readonly"
                                             ng-model="solicitud.solicitante.direccion" name="direccion" minlength="6" />
                                         <span class="help-block"
