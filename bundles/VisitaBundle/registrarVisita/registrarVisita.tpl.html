@@ -266,7 +266,7 @@ input.ng-dirty.ng-invalid {
                             <div class="col-md-6" ng-if="arrayItem.item.items[0].tipoItem == 'fecha' && arrayItem.item.items[0].soloLectura==0">
                                 <div class="col-md-12" ng-repeat="input in arrayItem.item.items">
                                     <label class="control-label" >{{ arrayItem.item.nombre }}</label>        
-                                    <input type="date" 
+                                    <input type="date" date-input
                                            class="form-control input-xlarge" 
                                            title="{{input.descripcion}}" 
                                            value="{{input.valor}}"

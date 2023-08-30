@@ -10,7 +10,17 @@ saul.config(["$stateProvider",
             }
         });
     }
-]).directive('stringToNumber', function () {
+]).directive('dateInput', function(){
+    return {
+        restrict : 'A',
+        scope : {
+            ngModel : '='
+        },
+        link: function (scope) {
+            if (scope.ngModel) scope.ngModel = new Date(scope.ngModel);
+        }
+    }
+}).directive('stringToNumber', function () {
     return {
         require: 'ngModel',
         link: function (scope, element, attrs, ngModel) {
@@ -53,8 +63,8 @@ saul.config(["$stateProvider",
             $scope.visita = response;
             $scope.datavisita.longitud = response.longitud;
             $scope.datavisita.latitud = response.latitud;
+            // $scope.agregarLocalizacion($scope.datavisita.longitud,$scope.datavisita.latitud);
             $scope.camposformularioVisita = FormularioVisita.query({id: $stateParams.idVisita});
-            console.log($scope.camposformularioVisita);
             EncabezadoVisita.query({id: $stateParams.idVisita}).$promise.then(function(response) {
                 $scope.camposLectura = response;
                 $(".overlap_espera").fadeOut(500, "linear");
@@ -63,143 +73,146 @@ saul.config(["$stateProvider",
             $scope.expediente = "";
         });
         
-        esriLoader.require([
-            'esri/Map',
-            'esri/views/MapView',
-            'esri/layers/FeatureLayer',
-            'esri/widgets/BasemapToggle',
-            'esri/widgets/Search',
-            'esri/config',
-            'esri/request',
-            "esri/Graphic","esri/geometry/Point",
-            "esri/symbols/SimpleMarkerSymbol", "esri/Color", "dojo/dom", "dojo/domReady!",
-        ],function(Map, MapView, FeatureLayer, BasemapToggle, Search, esriConfig, esriRequest,  Graphic, Point, SimpleMarkerSymbol,
-            Color, dom){
+        // esriLoader.require([
+        //     'esri/Map',
+        //     'esri/views/MapView',
+        //     'esri/layers/FeatureLayer',
+        //     'esri/widgets/BasemapToggle',
+        //     'esri/widgets/Search',
+        //     'esri/config',
+        //     'esri/request',
+        //     "esri/Graphic","esri/geometry/Point",
+        //     "esri/symbols/SimpleMarkerSymbol", "esri/Color", "dojo/dom", "dojo/domReady!",
+        // ],function(Map, MapView, FeatureLayer, BasemapToggle, Search, esriConfig, esriRequest,  Graphic, Point, SimpleMarkerSymbol,
+        //     Color, dom){
 
-            //Definición del Mapa
-            self.map = new Map({
-                basemap: 'streets',
-                basemap: "topo"
-            });
+        //     //Definición del Mapa
+        //     self.map = new Map({
+        //         basemap: 'streets',
+        //         basemap: "topo"
+        //     });
 
-            //Definición del MapView
-            view = new MapView({
-                container: "viewDiv",
-                map: self.map,
-                zoom: 13,
-                center: [-76.52,3.435],
-                highlightOptions: {
-                    color: [255,241,58],
-                    fillOpacity:0.4
-                },
-                popup: {
-                    actionsMenuEnabled: false                    
-                      }
-            });
+        //     //Definición del MapView
+        //     view = new MapView({
+        //         container: "viewDiv",
+        //         map: self.map,
+        //         zoom: 13,
+        //         center: [-76.52,3.435],
+        //         highlightOptions: {
+        //             color: [255,241,58],
+        //             fillOpacity:0.4
+        //         },
+        //         popup: {
+        //             actionsMenuEnabled: false                    
+        //               }
+        //     });
                
 
-            //Definición de BasemapToggle
-            var toggle = new BasemapToggle({
-                view: $scope.view,
-                nextBasemap: "hybrid"
-            });
-            view.ui.add(toggle, "bottom-right");
+        //     //Definición de BasemapToggle
+        //     var toggle = new BasemapToggle({
+        //         view: $scope.view,
+        //         nextBasemap: "hybrid"
+        //     });
+        //     view.ui.add(toggle, "bottom-right");
             
             
-            //Búsqueda por dirección y prediales
-			var predios_urbanos = new FeatureLayer({
-                url: "https://geoportal.cali.gov.co/agserver/rest/services/Lineas/predial_idesc/FeatureServer/0",
-                title: "predios",
-                minScale: 1,
-                outFields: ["*"]
-            });
-            var predios_rurales = new FeatureLayer({
-                url: "https://geoportal.cali.gov.co/agserver/rest/services/Lineas/predial_idesc/FeatureServer/1",
-                title: "predios",
-                minScale: 1,
-                outFields: ["*"]
+        //     //Búsqueda por dirección y prediales
+		// 	var predios_urbanos = new FeatureLayer({
+        //         url: "https://geoportal.cali.gov.co/agserver/rest/services/Lineas/predial_idesc/FeatureServer/0",
+        //         title: "predios",
+        //         minScale: 1,
+        //         outFields: ["*"]
+        //     });
+        //     var predios_rurales = new FeatureLayer({
+        //         url: "https://geoportal.cali.gov.co/agserver/rest/services/Lineas/predial_idesc/FeatureServer/1",
+        //         title: "predios",
+        //         minScale: 1,
+        //         outFields: ["*"]
                 
-            });
-            var searchWidget = new Search({
-                view: view,
-                allPlaceholder: "Todos los criterios",
-                sources: [
-                    {
-                    layer: predios_urbanos,
-                    searchFields: ["numepred","npn"],
-                    displayField: "numepred",
-                    exactMatch: false,
-                    outFields: ["*"],
-                    name: "Número predial urbano",
-                    zoomScale: 100000,
-                    placeholder: "F038600080000"
-                    },
-                    {
-                    layer: predios_rurales,
-                    name: "Número predial rural",
-                    zoomScale: 100000,
-                    displayField: "numepred",
-                    searchFields: ["numepred", "npn"],
-                    exactMatch: false,
-                    outFields: ["*"],
-                    placeholder: "Y000700820001"
-                    }
-                ]
-            });
-            view.ui.add(searchWidget, {
-               position: "top-left"
-            });
+        //     });
+        //     var searchWidget = new Search({
+        //         view: view,
+        //         allPlaceholder: "Todos los criterios",
+        //         sources: [
+        //             {
+        //             layer: predios_urbanos,
+        //             searchFields: ["numepred","npn"],
+        //             displayField: "numepred",
+        //             exactMatch: false,
+        //             outFields: ["*"],
+        //             name: "Número predial urbano",
+        //             zoomScale: 100000,
+        //             placeholder: "F038600080000"
+        //             },
+        //             {
+        //             layer: predios_rurales,
+        //             name: "Número predial rural",
+        //             zoomScale: 100000,
+        //             displayField: "numepred",
+        //             searchFields: ["numepred", "npn"],
+        //             exactMatch: false,
+        //             outFields: ["*"],
+        //             placeholder: "Y000700820001"
+        //             }
+        //         ]
+        //     });
+        //     view.ui.add(searchWidget, {
+        //        position: "top-left"
+        //     });
             
               
-            //when the map is clicked create a buffer around the click point of the specified distance.
-            view.on("click", function(evt){
-                $scope.datavisita.longitud = evt.mapPoint.longitude.toString();
-                $scope.datavisita.latitud = evt.mapPoint.latitude.toString();
-                view.graphics.removeAll();
-                agregarLocalizacion(evt.mapPoint.longitude.toString(),evt.mapPoint.latitude.toString());
-            });
+        //     //when the map is clicked create a buffer around the click point of the specified distance.
+        //     view.on("click", function(evt){
+        //         $scope.datavisita.longitud = evt.mapPoint.longitude.toString();
+        //         $scope.datavisita.latitud = evt.mapPoint.latitude.toString();
+        //         view.graphics.removeAll();
+        //         $scope.agregarLocalizacion(evt.mapPoint.longitude.toString(),evt.mapPoint.latitude.toString());
+        //     });
             
             
-            function agregarLocalizacion(longitud, latitud) {
-                console.log(longitud);
-                view.graphics.removeAll();
-                var pt = new Point({
-                    latitude: latitud,
-                    longitude: longitud 
-                });
-                //point for address popup information
-                var ptAtt = {
-                    Title: "Home",
-                    Name: "The Seifert's",
-                    Owner: "Christine Seifert"
-                };
-                // symbol for point 
-                var sym = new SimpleMarkerSymbol({
-                    color: [0,108,153],
-                    style: "circle",
-                    size: 12
-                });
-                
-                var ptGraphic = new Graphic({
-                    geometry: pt,
-                    symbol: sym,
-                    attributes: ptAtt,
-                    popupTemplate:{
-                      title: "{Title}",
-                      content: [{
-                        type:"fields",
-                        fieldInfos:[{
-                          fieldName: "Name"
-                        },{
-                          fieldName: "Owner"
-                        }]
-                      }]
-                  }
-                });
-                view.graphics.add(ptGraphic);
-            }
-            agregarLocalizacion($scope.datavisita.longitud,$scope.datavisita.latitud);
-        });
+        //     $scope.agregarLocalizacion = function(longitud, latitud) {
+        //         if(longitud && latitud) {
+        //             console.log(longitud);
+        //             view.graphics.removeAll();
+        //             var pt = new Point({
+        //                 latitude: latitud,
+        //                 longitude: longitud 
+        //             });
+        //             //point for address popup information
+        //             var ptAtt = {
+        //                 Title: "Home",
+        //                 Name: "The Seifert's",
+        //                 Owner: "Christine Seifert"
+        //             };
+        //             // symbol for point 
+        //             var sym = new SimpleMarkerSymbol({
+        //                 color: [0,108,153],
+        //                 style: "circle",
+        //                 size: 12
+        //             });
+                    
+        //             var ptGraphic = new Graphic({
+        //                 geometry: pt,
+        //                 symbol: sym,
+        //                 attributes: ptAtt,
+        //                 popupTemplate:{
+        //                   title: "{Title}",
+        //                   content: [{
+        //                     type:"fields",
+        //                     fieldInfos:[{
+        //                       fieldName: "Name"
+        //                     },{
+        //                       fieldName: "Owner"
+        //                     }]
+        //                   }]
+        //               }
+        //             });
+        //             view.graphics.add(ptGraphic);    
+        //         }
+        //     }
+
+        //     // $scope.agregarLocalizacion($scope.datavisita.longitud,$scope.datavisita.latitud);
+        // });
         
         $scope.direccion ="";
         // Visitaxdocumento.query({id: $stateParams.idVisita}).$promise.then(function (response) {            
@@ -268,19 +281,21 @@ saul.config(["$stateProvider",
         //files
         
         $scope.saveItem = function(input) {
-            $scope.valoresFormulario = [];
-            $scope.valoresFormulario.push({codigo: input.codigo, valor: input.valor, tipoItem: input.tipoItem});
-            Upload.upload({
-                url: root + 'visita',
-                data: {
-                    idVisita: $scope.visita.idVisita,
-                    data: $scope.valoresFormulario
-                }
-            }).then(function (response) {
-                
-            }, function(MessageChannel) {
-                alert("Ha ocurrido un error informe al desarrollador. Gracias.");
-            });
+            if(input !== undefined) {
+                $scope.valoresFormulario = [];
+                $scope.valoresFormulario.push({codigo: input.codigo, valor: input.valor, tipoItem: input.tipoItem});
+                Upload.upload({
+                    url: root + 'visita',
+                    data: {
+                        idVisita: $scope.visita.idVisita,
+                        data: $scope.valoresFormulario
+                    }
+                }).then(function (response) {
+                    
+                }, function(MessageChannel) {
+                    alert("Ha ocurrido un error informe al desarrollador. Gracias.");
+                });
+            }
         }
 
         
