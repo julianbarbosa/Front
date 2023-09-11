@@ -291,6 +291,8 @@
 	"PropiedadHorizontalBundle/ConsultarPropiedadHorizontal/consultarPropiedadHorizontal.js",
 	"PropiedadHorizontalBundle/CrearSolicitudPropiedadHorizontal/crearSolicitudPropiedadHorizontal.js",
 	"PropiedadHorizontalBundle/ValidarPropiedadHorizontal/validarPropiedadHorizontal.js",
+	"PropiedadHorizontalBundle/EditarPropiedadHorizontal/editarPropiedadHorizontal.js",
+	"PropiedadHorizontalBundle/CrearPropiedadHorizontal/crearPropiedadHorizontal.js",
     "ControlInfraestructuraBundle/template/template.js",
     "ControlInfraestructuraBundle/asignarvisita/asignarvisita.js",
     "ControlInfraestructuraBundle/crearregistro/crearregistro.js",

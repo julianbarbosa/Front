@@ -186,10 +186,11 @@
 	</h1>
 </div> 
 
-<div id="idDivPrincipal" class="col-md-7 col-xs-12">	
+<div id="idDivPrincipal" class="col-md-12 col-xs-12">	
+    <!-- <div id="idDivPrincipal" class="col-xs-6" ng-show="result_producer == true" >	 -->
     
 	<!-- Interfaz para digitar el predio a consultar-->
-	<div class="panel panel-success" ng-show="notificacion_radicado == ''">
+	<div class="panel panel-success"  ng-show="notificacion_radicado == ''">
         <div class="panel-heading">
             <span class="panel-title">Crear Propiedad Horizontal </span>
             <div class="panel-heading-controls">
@@ -199,7 +200,6 @@
             </div>
         </div>
         <div class="panel-body">
-
 			<div class="form-group offset-md-10 col-md-2">
 				<label for="expediente">Expediente</label>
 				<input type="text" class="form-control" id="expediente" name="expediente">
@@ -213,53 +213,53 @@
 			
 			<div class="form-group col-md-2">
 				<label for="nit">NIT</label>
-				<input type="text" class="form-control" id="nit" name="nit">
+				<input type="text" class="form-control" id="nit" name="nit" >
 			</div>
 		
 			<div class="form-group col-md-5">
 				<label for="nombre">Nombre</label>
-				<input type="text" class="form-control" id="nombre" name="nombre">
+				<input type="text" class="form-control" id="nombre" name="nombre" >
 			</div>
 		
 			<div class="form-group col-md-5">
 				<label for="direccion">Dirección</label>
-				<input class="form-control" id="direccion" name="direccion">
+				<input type="text" class="form-control" id="direccion" name="direccion" >
 			</div>
 				
-			<div class="form-group col-md-3">
-				<label for="numero_escritura_publica">Número de Escritura Pública</label>
-				<input type="text" class="form-control" id="numero_escritura_publica" name="numero_escritura_publica">
+			<div class="form-group col-md-2">
+				<label for="numero_escritura_publica">Número Escritura Pública</label>
+				<input type="text" class="form-control" id="numero_escritura_publica" name="numero_escritura_publica" >
 			</div>
 		
-			<div class="form-group col-md-2">
-				<label for="fecha_escritura_publica">Fecha de Escritura Pública</label>
-				<input type="text" class="form-control" id="fecha_escritura_publica" name="fecha_escritura_publica">
+			<div class="form-group col-md-3">
+				<label for="fecha_escritura_publica">Fecha Escritura Pública</label>
+				<input type="text" class="form-control" id="fecha_escritura_publica" name="fecha_escritura_publica" >
 			</div>
 
 			<div class="form-group col-md-2">
 				<label for="numero_matricula">Número de Matrícula</label>
-				<input type="text" class="form-control" id="numero_matricula" name="numero_matricula">
+				<input type="text" class="form-control" id="numero_matricula" name="numero_matricula" >
 			</div>
 		
 			<div class="form-group col-md-3">
 				<label for="fecha_certificado_tradicion">Fecha de Certificado de Tradición</label>
-				<input type="text" class="form-control" id="fecha_certificado_tradicion" name="fecha_certificado_tradicion">
+				<input type="text" class="form-control" id="fecha_certificado_tradicion" name="fecha_certificado_tradicion" >
 			</div>
 		
 			<div class="form-group col-md-2">
 				<label for="notaria">Notaría</label>
-				<input type="text" class="form-control" id="notaria" name="notaria">
+				<input type="text" class="form-control" id="notaria" name="notaria" >
 			</div>
 		
-		
-			<div class="form-group col-md-3">
-				<label for="numero_anotacion">Número de Anotación</label>
-				<input type="text" class="form-control" id="numero_anotacion" name="numero_anotacion">
-			</div>
 		
 			<div class="form-group col-md-2">
+				<label for="numero_anotacion">Número de Anotación</label>
+				<input type="text" class="form-control" id="numero_anotacion" name="numero_anotacion" >
+			</div>
+		
+			<div class="form-group col-md-3">
 				<label for="fecha_anotacion">Fecha de Anotación</label>
-				<input type="text" class="form-control" id="fecha_anotacion" name="fecha_anotacion">
+				<input type="text" class="form-control" id="fecha_anotacion" name="fecha_anotacion" >
 			</div>
 		
 			
@@ -269,19 +269,19 @@
 				</span>
 			</div>
 
-			<div class="form-group col-md-4">
+			<div class="form-group col-md-3">
 				<label for="resolucion_personeria_juridica">Resolución </label>
-				<input type="text" class="form-control" id="resolucion_personeria_juridica" name="resolucion_personeria_juridica">
+				<input type="text" class="form-control" id="resolucion_personeria_juridica" name="resolucion_personeria_juridica" >
 			</div>
 		
-			<div class="form-group col-md-4">
+			<div class="form-group col-md-3">
 				<label for="fecha_resolucion_personeria_juridica">Fecha Resolución </label>
-				<input type="text" class="form-control" id="fecha_resolucion_personeria_juridica" name="fecha_resolucion_personeria_juridica">
+				<input type="text" class="form-control" id="fecha_resolucion_personeria_juridica" name="fecha_resolucion_personeria_juridica" >
 			</div>
 		
-			<div class="form-group col-md-4">
+			<div class="form-group col-md-6">
 				<label for="personeria_juridica_expedida_por">Expedida Por</label>
-				<input class="form-control" id="personeria_juridica_expedida_por" name="personeria_juridica_expedida_por">
+				<input type="text" class="form-control" id="personeria_juridica_expedida_por" name="personeria_juridica_expedida_por" >
 			</div>
 
 			
@@ -291,59 +291,59 @@
 				</span>
 			</div>
 		
-			<div class="form-group col-md-4">
+			<div class="form-group col-md-3">
 				<label for="nit_empresa_administradora">NIT Empresa Administradora</label>
-				<input type="text" class="form-control" id="nit_empresa_administradora" name="nit_empresa_administradora">
+				<input type="text" class="form-control" id="nit_empresa_administradora" name="nit_empresa_administradora" >
 			</div>
 		
-			<div class="form-group col-md-4">
+			<div class="form-group col-md-2">
 				<label for="cedula_representante_legal">Cédula</label>
-				<input type="text" class="form-control" id="cedula_representante_legal" name="cedula_representante_legal">
+				<input type="text" class="form-control" id="cedula_representante_legal" name="cedula_representante_legal" >
 			</div>
 		
-			<div class="form-group col-md-4">
+			<div class="form-group col-md-2">
 				<label for="expedida_representante_legal">Expedida en</label>
-				<input type="text" class="form-control" id="expedida_representante_legal" name="expedida_representante_legal" placeholder="Ciudad">
+				<input type="text" class="form-control" id="expedida_representante_legal" name="expedida_representante_legal" placeholder="Ciudad" >
 			</div>
 			
-			<div class="form-group col-md-4">
+			<div class="form-group col-md-5">
 				<label for="nombre_representante_legal">Nombre</label>
-				<input type="text" class="form-control" id="nombre_representante_legal" name="nombre_representante_legal">
-			</div>
-
-			<div class="form-group col-md-4">
-				<label for="periodo_representante_legal">Período</label>
-				<input class="form-control" id="periodo_representante_legal" name="periodo_representante_legal">
+				<input type="text" class="form-control" id="nombre_representante_legal" name="nombre_representante_legal" >
 			</div>
 		
-			<div class="form-group col-md-4">
+			<div class="form-group col-md-3">
 				<label for="representante_legal_firma">Firma</label>
-				<input type="text" class="form-control" id="representante_legal_firma" name="representante_legal_firma">
+				<input type="text" class="form-control" id="representante_legal_firma" name="representante_legal_firma" >
 			</div>
 
-			<div class="form-group col-md-4">
+			<div class="form-group col-md-9">
+				<label for="periodo_representante_legal">Período</label>
+				<input type="text" class="form-control" id="periodo_representante_legal" name="periodo_representante_legal" >
+			</div>
+
+			<div class="form-group col-md-3">
 				<label for="resolucion_representante_legal">Resolución</label>
-				<input type="text" class="form-control" id="resolucion_representante_legal" name="resolucion_representante_legal">
+				<input type="text" class="form-control" id="resolucion_representante_legal" name="resolucion_representante_legal" >
 			</div>
 		
-			<div class="form-group col-md-4">
+			<div class="form-group col-md-3">
 				<label for="fecha_resolucion_representante_legal">Fecha Resolución</label>
-				<input type="text" class="form-control" id="fecha_resolucion_representante_legal" name="fecha_resolucion_representante_legal">
+				<input type="text" class="form-control" id="fecha_resolucion_representante_legal" name="fecha_resolucion_representante_legal" >
 			</div>
 		
-			<div class="form-group col-md-4">
+			<div class="form-group col-md-6">
 				<label for="resolucion_expedida_por">Resolución Expedida Por</label>
-				<input class="form-control" id="resolucion_expedida_por" name="resolucion_expedida_por">
+				<input type="text" class="form-control" id="resolucion_expedida_por" name="resolucion_expedida_por" >
 			</div>
 		
-			<div class="form-group col-md-4">
+			<div class="form-group col-md-3">
 				<label for="numero_acta">Número de Acta</label>
-				<input type="text" class="form-control" id="numero_acta" name="numero_acta">
+				<input type="text" class="form-control" id="numero_acta" name="numero_acta" >
 			</div>
 
-			<div class="form-group col-md-4">
+			<div class="form-group col-md-6">
 				<label for="acta_expedida_por">Acta Expedida Por</label>
-				<input class="form-control" id="acta_expedida_por" name="acta_expedida_por">
+				<input type="text" class="form-control" id="acta_expedida_por" name="acta_expedida_por" >
 			</div>
 			
 			<!-- <div class="form-group col-md-4 col-xs-12">
@@ -356,21 +356,19 @@
                 <p ng-show="notificacion_obligatorio == true" class="help-block" style="color: #b94a48;">* Este campo es obligatorio.</p>
 			</div> -->
 
-			<div class="form-group col-md-6 col-xs-12 btn-solicitud"> 
-			   <input type="button" class="btn btn-primary" forma="#"  value="Actualizar Propiedad Horizontal" ng-click="radicarSolicitud()">
+			<div class="form-group col-md-12 col-xs-12 btn-solicitud" style="text-align: center;margin-top: 25px;"> 
+			   <input type="button" class="btn btn-primary" forma="#"  value="Crear Propiedad Horizontal" ng-click="crearPH()">
 			   <a class="btn-cancel" href="/saul/v2p/?url=\/propiedadhorizontal\/consultar">Cancelar</a>
 			</div>
    
         </div>
     </div>
 	
-	
 	<!-- Interfaz para notificar al usuario sobre las respuestas del servidor -->
 	<div class="col-xs-12" ng-show="notificacion_radicado != ''">
 		<div class="alert text-justify" role="alert" style="font-size: 16px; margin-top: 10px;">
-			{{notificacion_radicado}} 
-			<br>Para mayor información <a href="/saul/solicitud">Ir a Mis Solicitudes</a>
+			{{notificacion_radicado}} <br>
+			<a class="btn-cancel" href="/saul/v2p/?url=\/propiedadhorizontal\/consultar">Nueva Consulta</a>
 		</div>
 	</div>
 </div>
-

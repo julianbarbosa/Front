@@ -224,6 +224,7 @@
 						<th>Nombre</th>
 						<th>Dirección</th>
 						<th>Acción</th>
+						<th ng-show="accessEditPH">Configuración</th>
 					</thead>
 					<tbody class="table-tbody" ng-repeat="resultadoConsulta in resultadosConsulta">
 						<td class="td-text">
@@ -234,6 +235,9 @@
 						</td>
 						<td class="td-button">
 							<a  class="btn btn-info btn-sm" href="/saul/v2p/#!/propiedadhorizontal/validar/{{resultadoConsulta.id}}">Consultar</a>
+						</td>
+						<td ng-show="accessEditPH" class="td-button">
+							<a  class="btn btn-info btn-sm" href="/saul/v2/#!/propiedadhorizontal/editar/{{resultadoConsulta.id}}">Actualizar</a>
 						</td>
 					</tbody>
 				</table>
