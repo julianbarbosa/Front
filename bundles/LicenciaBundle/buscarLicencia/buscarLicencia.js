@@ -73,6 +73,16 @@ saul.config(["$stateProvider",
                 label: "Tipo Licencia",
                 name: "tipolicencia",
                 type: "string"
+            },
+            { 
+                label: "Número Predial Nacional",
+                name: "numeropredialnacional",
+                type: "string" 
+            },
+            { 
+                label: "Número Catastral",
+                name: "catastral",
+                type: "string"
             }
             
         ];     
@@ -115,6 +125,13 @@ saul.config(["$stateProvider",
                     $scope.request.push({'name': item.name, 'value': $scope.busqueda[item.name]});    
                 }                
             });
+            UtilForm.openWith(
+                root + "licencia/descargarcsv",
+                'post', $scope.request);
+        }
+
+        $scope.downloadAllData = function() {
+            $scope.request = [];
             UtilForm.openWith(
                 root + "licencia/descargarcsv",
                 'post', $scope.request);

@@ -162,6 +162,7 @@
 	"LineasBundle/firmar/firmar.js",
     "LineasBundle/firmarOficio/firmarOficio.js",
 	"LineasBundle/cerrar/cerrar.js",
+    "LineasBundle/cerrarConArchivo/cerrar.js",    
 	"LineasBundle/gestionar/modalInfoCiudadano.js",
 	"LineasBundle/verDetalle/verDetalle.js",
 	"LineasBundle/listarLineas/listarLineas.js",

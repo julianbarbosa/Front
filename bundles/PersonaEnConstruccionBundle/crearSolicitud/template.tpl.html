@@ -74,7 +74,7 @@
                     <div class="note">
                         Por favor ingrese los datos personales del solictante. 
                     </div>
-                    <div class="row" ng-show="esFuncionario">
+                    <div class="row" ng-if="esFuncionario">
                         <div class="col-md-6">
                             <div class="form-group {{ !formDatosSolicitante.idtipodocidentificac.$valid && formDatosSolicitante.idtipodocidentificac.$touched ? 'has-error' : '' }}">
                                 <label class="control-label" >Tipo de identificación</label>
@@ -100,7 +100,7 @@
                         </div>
                         
                     </div>	
-                    <div class="row" ng-show="!esFuncionario">
+                    <div class="row" ng-if="!esFuncionario">
                         <div class="col-md-6">
                             <div class="form-group {{ !formDatosSolicitante.idtipodocidentificac.$valid && formDatosSolicitante.idtipodocidentificac.$touched ? 'has-error' : '' }}">
                                 <label class="control-label" >Tipo de identificación</label>
@@ -124,19 +124,19 @@
                         
                     </div>	
                     <div ng-show="(seBuscoSolicitante && esFuncionario) || !esFuncionario">
-                        <div class="row" ng-show="solicitud.solicitante.idtipodocidentificacion == 2">
+                        <div class="row" ng-if="solicitud.solicitante.idtipodocidentificacion == 2">
                             <div class="col-md-12">
-                                <div class="form-group {{ !formDatosSolicitante.razonSocial.$valid && formDatosSolicitante.razonSocial.$touched ? 'has-error' : '' }}">
+                                <div class="form-group {{ !formDatosSolicitante.razonsocial.$valid && formDatosSolicitante.razonsocial.$touched ? 'has-error' : '' }}">
                                     <label class="control-label" >Razón Social</label>
-                                    <input name="razonSocial" type="text" class="form-control" placeholder="Razón Social" ng-model="solicitud.solicitante.razonSocial" ng-required="solicitud.solicitante.idtipodocidentificacion == 2" ng-minlength="4" />
-                                    <span  class="help-block" ng-show="!formDatosSolicitante.razonSocial.$valid && formDatosSolicitante.razonSocial.$touched" >
+                                    <input name="razonsocial" type="text" class="form-control" placeholder="Razón Social" ng-model="solicitud.solicitante.razonsocial" ng-required="solicitud.solicitante.idtipodocidentificacion == 2" ng-minlength="4" />
+                                    <span  class="help-block" ng-show="!formDatosSolicitante.razonsocial.$valid && formDatosSolicitante.razonsocial.$touched" >
                                         Este campo es obligatorio y su longitud mínima es de 4.
                                     </span>
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="row" ng-show="solicitud.solicitante.idtipodocidentificacion !== 2">
+                        <div class="row" ng-if="solicitud.solicitante.idtipodocidentificacion !== 2">
                             <div class="col-md-6">
                                 <div class="form-group {{ !formDatosSolicitante.firstName.$valid && formDatosSolicitante.firstName.$touched ? 'has-error' : '' }}">
                                     <label class="control-label" >Nombre</label>
@@ -156,7 +156,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row"  ng-show="esFuncionario">
+                        <div class="row"  ng-if="esFuncionario">
                             <div class="col-md-6">
                                 <div class="form-group {{ !formDatosSolicitante.emailAddress.$valid && formDatosSolicitante.emailAddress.$touched ? 'has-error' : '' }}">
                                     <label class="control-label" >Email</label>
@@ -224,10 +224,10 @@
                         </div>
                         <div class="row">     
                             <div class="col-md-6">							
-                                <div class="form-group {{ !formDatosSolicitante.telefono.$valid && formDatosSolicitante.telefono.$touched ? 'has-error' : '' }}">	
+                                <div class="form-group {{ !formDatosSolicitante.tel_solicitante.$valid && formDatosSolicitante.tel_solicitante.$touched ? 'has-error' : '' }}">	
                                     <label class="control-label" >Teléfono</label>
-                                    <input  ng-required="direccionRequerida" placeholder="Teléfono" class="form-control" type="text" ng-model="solicitud.solicitante.telefono" name="telefono"/>								
-                                    <span  class="help-block" ng-show="!formDatosSolicitante.telefono.$valid && formDatosSolicitante.telefono.$touched" >
+                                    <input  ng-required="direccionRequerida" placeholder="Teléfono" class="form-control" type="text" ng-model="solicitud.solicitante.telefono" name="tel_solicitante"/>								
+                                    <span  class="help-block" ng-show="!formDatosSolicitante.tel_solicitante.$valid && formDatosSolicitante.tel_solicitante.$touched" >
                                         Debe colocar un número de teléfono válido.
                                     </span>							
                                 </div>						
@@ -249,31 +249,38 @@
                             </div>
                         </div>
                         <hr>
-                        <div class="row" ng-show="solicitud.solicitante.idtipodocidentificacion == 2">
-                            <div class="col-md-6">
-                                <div class="form-group {{ !formDatosSolicitante.firstNameRepresentante.$valid && formDatosSolicitante.firstNameRepresentante.$touched ? 'has-error' : '' }}">
-                                    <label class="control-label" >Nombre Representante</label>
-                                    <input type="text" name="firstNameRepresentante" class="form-control" placeholder="Nombre del usuario" ng-model="solicitud.solicitante.firstNameRepresentante" ng-required="solicitud.solicitante.idtipodocidentificacion == 2" ng-minlength="4"   />
-                                    <span  class="help-block" ng-show="!formDatosSolicitante.firstNameRepresentante.$valid && formDatosSolicitante.firstNameRepresentante.$touched" >
-                                        Este campo es obligatorio y su longitud mínima es de 4. 
-                                    </span>
+                        <div class="row"  ng-show="solicitud.solicitante.idtipodocidentificacion !== 2">
+                            <div class="form-group has-feedback simple col-md-12" >
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label class="control-label" for="esSolicitudDeEntidadJuridica">¿Está usted realizando el trámite en en representación de una persona Jurídica?</label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="radio-inline"><input type="radio" value="1" ng-model="solicitud.esSolicitudDeEntidadJuridica">Si</label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="radio-inline"><input type="radio" value="0" ng-model="solicitud.esSolicitudDeEntidadJuridica">No</label>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group {{ !formDatosSolicitante.lastNameRepresentante.$valid && formDatosSolicitante.lastNameRepresentante.$touched ? 'has-error' : '' }}">
-                                    <label class="control-label" >Apellido Representante</label>
-                                    <input type="text" name="lastNameRepresentante" class="form-control" placeholder="Apellido del usuario" ng-model="solicitud.solicitante.lastNameRepresentante" ng-required="solicitud.solicitante.idtipodocidentificacion == 2" ng-minlength="4"/>
-                                    <span  class="help-block" ng-show="!formDatosSolicitante.lastNameRepresentante.$valid && formDatosSolicitante.lastNameRepresentante.$touched" >
-                                        Este campo es obligatorio y su longitud mínima es de 4.
-                                    </span>
-                                </div>
+                        </div>
+                        <div ng-if="solicitud.esSolicitudDeEntidadJuridica==1 && solicitud.solicitante.idtipodocidentificacion !== 2">
+                            <div class="note note-danger">
+                                Usted se ha registrado en nuestro sistema como persona natural , recuerde que si el tramite que esta adelantando es a nombre de persona Jurica, le recomendamos que se registre como la persona jurídica para continuar con el trámite.
                             </div>
                         </div>
                         <div class="row padding-sm text-right-sm col-md-12">
                             <input type="button" class="btn btn-warning" ng-click="inicializarDatosSolicitante()" ng-show="esFuncionario" value="Limpiar Datos"/>
-                            <input type="button" class="btn btn-primary" ng-disabled="!formDatosSolicitante.$valid || !solicitud.solicitante.barrio.idbarrio" ng-click="step = step + 1" value="Siguiente"/>
+                            <input type="button" class="btn btn-primary" 
+                            ng-disabled="!formDatosSolicitante.$valid || !solicitud.solicitante.barrio.idbarrio || (solicitud.solicitante.idtipodocidentificacion == 2 && solicitud.esSolicitanteRepresentanteLegal!==-1) ||  (solicitud.solicitante.idtipodocidentificacion !== 2 && solicitud.esSolicitudDeEntidadJuridica==-1)"
+                            ng-click="step = step + 1" value="Siguiente"/>
+                            <!-- 1-{{!formDatosSolicitante.$valid}}<br>
+                            2-{{ !solicitud.solicitante.barrio.idbarrio }}<br>
+                            3-{{ (solicitud.solicitante.idtipodocidentificacion == 2 && solicitud.esSolicitanteRepresentanteLegal!==-1) }}<br>
+                            4-{{ (solicitud.solicitante.idtipodocidentificacion !== 2 && solicitud.esSolicitudDeEntidadJuridica==-1)}}<br> -->
                         </div>		
                     </div>	
+                    
                 </form>	
             </div>
             
@@ -282,7 +289,7 @@
                     <div class="note">
                         Es importante que tenga en cuenta que con base en los proyectos a desarrollar, el representante legal tenga la capacidad económica para contratar, es decir, que no existan limitaciones estatutarias que no se lo permitan.
                     </div>
-                    <div class="row">
+                    <div class="row" ng-if="solicitud.solicitante.idtipodocidentificacion == 2">
                         <div class="form-group required col-md-12 " ng-class="{'has-error': !formFinanciera.objetoSocial.$valid && formFinanciera.objetoSocial.$touched }">
                             <label class="control-label">Objeto Social</label>
                             <input required placeholder="Objeto Social" class="form-control"
@@ -484,7 +491,7 @@
                                     Debe ingresar una fecha válida.
                                 </span>	
                                 <span  class="help-block" ng-show="diferenciaEnDias(solicitud.fechaCorteFinanciera)>60 && formAdjuntosSolicitud.fechaCorteFinanciera.$touched">
-                                    El Estado de situación financiera debe ser con corte menor a 60 días con relación a la fecha de radicación de la solicitud.
+                                    Teniendo en cuenta que dentro de los requisitos que contempla el Formato Solicitud de Registro de Personas Dedicadas a la Actividad de Construcción y/o Enajenación de Inmuebles Destinados a Vivienda MMCS03.02.03.P011.F003, aprobado por la Subdirección de Trámites, Servicios y Gestión Documental del Distrito de Santiago de Cali - Función Pública, se solicitan los Estados Financieros con fecha de elaboración no superior a 60 días con relación a la fecha de la solicitud.<br>Es importante conocer que, aunque las NIIF para las Pymes no contemplan ni requieren en ninguna de sus secciones, la presentación de Estados de Información Financiera Intermedia, si por razones legales o de otra índole sea necesario presentarlos, puede hacer uso de la NIC 34. (Concepto Nº.720 de 2017 CTCP).
                                 </span>						
                             </div>						
                         </div>

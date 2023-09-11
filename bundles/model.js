@@ -483,7 +483,7 @@ saul.factory("TipoDocIdentificacion", ["$resource", "root", function (a, b) {
 			}
 		})
 	}]).factory("ComparendoAll", ["$resource", "root", function ($resource, root) {
-		return $resource(root + "controlpolicivo/comparendo/all/:id/:numeroFormato", {}, {
+		return $resource(root + "controlpolicivo/comparendoall/:id/:numeroFormato", {}, {
 			find: {
 				method: "GET",
 				isArray: false
@@ -1812,7 +1812,7 @@ saul.factory("TipoDocIdentificacion", ["$resource", "root", function (a, b) {
 			}
 		})
 	}]).factory("ComparendoAll", ["$resource", "root", function ($resource, root) {
-		return $resource(root + "controlpolicivo/comparendo/all/:id/:numeroFormato", {}, {
+		return $resource(root + "controlpolicivo/comparendoall/:id/:numeroFormato", {}, {
 			find: {
 				method: "GET",
 				isArray: false

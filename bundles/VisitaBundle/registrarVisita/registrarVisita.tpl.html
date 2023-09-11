@@ -112,16 +112,23 @@ input.ng-dirty.ng-invalid {
                                     <span ng-if="campo.arrayDescripcion.length>campo.arrayItems[0].item.items.length">
                                         {{arrayItem.item.nombre}}
                                     </span> 
-                                    <!-- <input type="text" class="form-control" ng-if="campo.arrayItems[$index].item.items[0].tipoItem=='texto' && campo.arrayDescripcion.length==campo.arrayItems[0].item.items.length"  ng-model="campo.arrayItems[$index].item.items[0].valor" value="{{campo.arrayItems[$index].item.items[0].valor}}" ng-blur="saveItem(input)"> -->
+                                    <!-- //ng-if="campo.arrayItems[$index].item.items[0].tipoItem=='texto' && campo.arrayDescripcion.length==campo.arrayItems[0].item.items.length"   -->
+                                    <input type="text" class="form-control"
+                                     ng-if="campo.arrayDescripcion.length<=campo.arrayItems[0].item.items.length && campo.arrayItems[$index].item.items[0].tipoItem!=='select-one'"
+                                     
+                                     ng-model="campo.arrayItems[$index].item.items[0].valor" value="{{campo.arrayItems[$index].item.items[0].valor}}" ng-blur="saveItem(campo.arrayItems[$index].item.items[0])">
                                     
                                     
                                     <select class="form-control input-xlarge" ng-model="campo.arrayItems[$index].item.items[0].valor" ng-if="campo.arrayItems[$index].item.items[0].tipoItem=='lista'" ng-blur="saveItem(input)">           
-                                        <option value="" hidden>Seleccione</option>                     
+                                        <option value="" hidden>Seleccione1</option>                     
                                         <option  ng-repeat="opcion in campo.arrayItems[$index].item.items[0].parametros.opciones" value="{{opcion}}">{{opcion}}</option>
                                     </select>
                                  
                                   
-                                    <select class="form-control" ng-model="arrayItem.item.items[0].valor" ng-init="arrayItem.item.items[0].valor=arrayItem.item.items[0].valor*1;getDominio(campo.arrayItems[$index].item.items[0].parametros['domino'])" ng-if="campo.arrayItems[$index].item.items[0].tipoItem=='select-one'" ng-options="dominio.id as dominio.nombre for dominio in arrayDominio[campo.arrayItems[$index].item.items[0].parametros['domino']]" ng-blur="saveItem(input)">
+                                    <select class="form-control" ng-model="arrayItem.item.items[0].valor" 
+                                    ng-init="arrayItem.item.items[0].valor=arrayItem.item.items[0].valor*1;getDominio(campo.arrayItems[$index].item.items[0].parametros['dominio'])" 
+                                    ng-if="campo.arrayItems[$index].item.items[0].tipoItem=='select-one'"
+                                     ng-options="dominio.id as dominio.nombre for dominio in arrayDominio[campo.arrayItems[$index].item.items[0].parametros['dominio']]" ng-blur="saveItem(input)">
                                         <option value="" hidden>Seleccione</option>
                                     </select>
                                    
@@ -231,7 +238,9 @@ input.ng-dirty.ng-invalid {
                                            title="{{input.descripcion}}" 
                                            
                                            ng-model="input.valor"> -->
-                                    <select class="form-control" ng-model="input.valor" ng-init="input.valor=arrayItem.item.items[0].valor*1;getDominio(arrayItem.item.items[0].parametros['dominio'])" value="{{input.valor}}" ng-options="dominio.id as dominio.nombre for dominio in arrayDominio[arrayItem.item.items[0].parametros['dominio']]" ng-blur="saveItem(input)">
+                                    <select class="form-control" ng-model="input.valor" 
+                                        ng-init="input.valor=arrayItem.item.items[0].valor*1;getDominio(arrayItem.item.items[0].parametros['dominio'])" 
+                                        value="{{input.valor}}" ng-options="dominio.id as dominio.nombre for dominio in arrayDominio[arrayItem.item.items[0].parametros['dominio']]" ng-blur="saveItem(input)">
                                         <option value="" hidden>Seleccione</option>
                                     </select>
                                 </div>
@@ -257,7 +266,7 @@ input.ng-dirty.ng-invalid {
                             <div class="col-md-6" ng-if="arrayItem.item.items[0].tipoItem == 'fecha' && arrayItem.item.items[0].soloLectura==0">
                                 <div class="col-md-12" ng-repeat="input in arrayItem.item.items">
                                     <label class="control-label" >{{ arrayItem.item.nombre }}</label>        
-                                    <input type="date" 
+                                    <input type="date" date-input
                                            class="form-control input-xlarge" 
                                            title="{{input.descripcion}}" 
                                            value="{{input.valor}}"

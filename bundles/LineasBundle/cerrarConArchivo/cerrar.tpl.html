@@ -1,0 +1,51 @@
+<script>
+    function cerrarModal() {
+        $('#modalIngresoDireccion').modal('toggle');
+    }
+</script>
+<style>
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+</style>
+<div>
+    <div id="modalIngresoDireccion" class="modal fade modal-change" role="dialog" aria-hidden="true" ></div>
+    <div class="col-md-12">
+        <div ng-show="validator.alert.content">
+            <div class="alert {{validator.alert.type}} alert-dismissable">
+                <i class="fa fa-danger"></i>
+                <button type="button" class="close" aria-hidden="true" ng-click="hideAlert()">×</button>
+                <b>{{validator.alert.title}}</b> <span ng-bind-html="validator.alert.content"></span>
+            </div>
+        </div>
+	
+        <div class="panel panel-success">
+            <div class="panel-heading ">
+                <span class="panel-title">Cerrar con Archivo - Solicitud Linea de Demarcación No. <strong>{{item.idSolicitud}}</strong></span>
+                <div class="panel-heading-controls">
+                </div>
+            </div>
+            <br>
+            <div class="note note-info">
+                A continuación podrá cerrar una solicitud en SAUL y ORFEO con archivo en PDF.
+            </div>
+            <div class="panel-body">
+                <form name="userForm"> 
+                    <div class="col-md-6">
+                        <input-file2 label="Cargar respuesta a solicitud" model="files.respuesta"  name="respuesta" shadow="true" required="false">
+                        </input-file2>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 text-right-sm">
+                            <input type="submit" class="btn btn-primary" ng-click="save()" value="Guardar" ng-disabled="validator.alert.content==undefined?false:true"/>                            
+                            ó                          
+                            <a ui-sref="listar-peticion">Cancelar</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
