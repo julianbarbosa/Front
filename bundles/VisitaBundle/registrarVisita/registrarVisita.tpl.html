@@ -63,7 +63,7 @@ input.ng-dirty.ng-invalid {
     <div class="col-md-12">
         <div class="panel panel-success">
             <div class="panel-heading ">
-                <span class="panel-title">Creación de Visita</span>
+                <span class="panel-title">Registro de Visita</span>
                 <div class="panel-heading-controls">
                 </div>
             </div>
@@ -282,14 +282,16 @@ input.ng-dirty.ng-invalid {
                             <div class="col-md-6" ng-if="arrayItem.item.items[0].tipoItem == 'hora' && arrayItem.item.items[0].soloLectura==0">
                                 <div class="col-md-12" ng-repeat="input in arrayItem.item.items">
                                     <label class="control-label" >{{ arrayItem.item.nombre }}</label>        
-                                    <input type="time" tz="America/Bogota" 
+                                    <input type="time"  
+                                           ng-model-options="{timezone:'-0500'}"
                                            class="form-control input-xlarge" 
                                            title="{{input.descripcion}}" 
-                                           ng-blur="saveItem(input)"
+                                           ng-blur="saveItemTime(input)"
                                            ng-model="input.valor"
-                                           ng-init="input.valor=getDateValue(input.valor+'')"
+                                           ng-blur="saveItem(input)"
                                            date-serializer>
                                 </div>
+                                
                             </div>
                             <!-- Fin Hora -->
                             
@@ -345,11 +347,52 @@ input.ng-dirty.ng-invalid {
                             <a href="{{root}}../upload/documentos/{{visitaxdocumento.archivo}}" target="blank">Adjunto {{$index+1}}</a>
                         </li>
                     </ul>
-                    <div class="row padding-sm text-right-sm">
+                    <div class="row padding-sm text-right-sm" ng-if="accion=='generar'">
                         <input type="submit" class="btn btn-primary" ng-click="save(0)" value="Guardar en Borrador" />
                         <input type="submit" class="btn btn-primary" ng-click="save(1)" ng-disabled="form.$invalid"value="Registrar Visita" />
                         ó
                         <a ui-sref="listar-peticion">Cancelar</a>
+                    </div>
+                    <div  ng-if="accion=='revisar'">
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4>Revisión de la Visita</h4>
+                            </div>
+                        </div>    
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="control-label">Comentarios</label>                 
+                                <textarea class="form-control input-xlarge" ng-model="comentario" style="height:150"></textarea>
+                            </div>
+                        </div>                   
+                        <div class="row padding-sm text-right-sm">
+                            <input type="submit" class="btn btn-warning" ng-click="save('devuelto')" ng-disabled="form.$invalid" value="Devolver" />
+                            <input type="submit" class="btn btn-primary" ng-click="save('revisado')" ng-disabled="form.$invalid" value="Pasar a firma" />
+                            ó
+                            <a ui-sref="listar-peticion">Cancelar</a>
+                        </div>
+                    </div>
+
+                    <div  ng-if="accion=='firmar'">
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4>Firma de Visita</h4>
+                            </div>
+                        </div>    
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="control-label">Comentarios</label>                 
+                                <textarea class="form-control input-xlarge" ng-model="comentario" style="height:150"></textarea>
+                            </div>
+                        </div>                   
+                        <div class="row padding-sm text-right-sm">
+                            <input type="submit" class="btn btn-warning" ng-click="save('devuelto')" ng-disabled="form.$invalid" value="Devolver" />
+                            <input type="submit" class="btn btn-primary" ng-click="save('firmado')" ng-disabled="form.$invalid" value="Firmar" />
+                            ó
+                            <a ui-sref="listar-peticion">Cancelar</a>
+                        </div>
                     </div>
                 </form>
             </div>

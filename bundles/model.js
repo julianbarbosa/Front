@@ -959,17 +959,9 @@ saul.factory("TipoDocIdentificacion", ["$resource", "root", function (a, b) {
 			query: {method: 'GET', isArray: true}
 		});
 	}
-]).factory("Visita", [
-	"$resource",
-	"root",
-	function ($resource, root) {
-		return $resource(root + "visita/:id", {}, {
-			find: {method: 'GET', isArray: false},
-			query: {method: 'GET', isArray: false},
-			create: {method: 'POST', isArray: true}
-		});
-	}
-]).factory("VisitaTodo", [
+])
+
+.factory("VisitaTodo", [
 	"$resource",
 	"root",
 	function ($resource, root) {
@@ -2299,19 +2291,20 @@ saul.factory("TipoDocIdentificacion", ["$resource", "root", function (a, b) {
 			query: {method: 'GET', isArray: true}
 		});
 	}
-]).factory("Visita", [
+])
+.factory("Visita", [
 	"$resource",
 	"root",
 	function ($resource, root) {
+		
 		return $resource(root + "visita/:id", {}, {
-			find: {method: 'GET', isArray: false,transformResponse: function (json, headerGetter) { 
-                return angular.fromJson(json);
-            }},
+			find: {method: 'GET', isArray: false},
 			query: {method: 'GET', isArray: false},
 			create: {method: 'POST', isArray: true}
 		});
 	}
-]).factory("VisitaTodo", [
+])
+.factory("VisitaTodo", [
 	"$resource",
 	"root",
 	function ($resource, root) {
@@ -2340,9 +2333,25 @@ saul.factory("TipoDocIdentificacion", ["$resource", "root", function (a, b) {
 	"$resource",
 	"root",
 	function ($resource, root) {
+		function dateStringsToDates(input) {
+			// Ignore things that aren't objects.
+			if (typeof input !== "object"){
+				return input;
+			} else if(input && typeof input == "object" && input['tipoItem'] === 'hora') {
+				input['valor'] = new Date.parse(input['valor']);
+			} else {
+				for (var key in input) {
+					if(typeof  input[key] === "object") {
+						dateStringsToDates( input[key]);
+					}	
+				}
+			}
+			return input;
+		}
 		return $resource(root + "visita/generar/:id", {}, {
 			query: {method: 'GET', isArray: true, transformResponse: function (json, headerGetter) {
-                return angular.fromJson(json);
+                //return angular.fromJson(json);//  //
+				return dateStringsToDates(JSON.parse(json));
             }}
 		});
 	}
@@ -3031,6 +3040,7 @@ saul.factory("TipoDocIdentificacion", ["$resource", "root", function (a, b) {
 					}
 				}
 
+
 				function myHttp(ruta, method, params) {
 					var defered = $q.defer();
 					//var ruta = root + 'fnomenclatura/buscarnpn';
@@ -3066,5 +3076,8 @@ saul.factory("TipoDocIdentificacion", ["$resource", "root", function (a, b) {
 					myHttp: myHttp
 				}
 
-			}])
+			}
+		
+		])
 
+		

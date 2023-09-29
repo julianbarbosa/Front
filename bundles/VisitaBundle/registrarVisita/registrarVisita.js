@@ -1,7 +1,7 @@
 saul.config(["$stateProvider",
     function ($stateProvider) {
         $stateProvider.state("registrar-visita", {
-            url: "/visita/generar/:idVisita",
+            url: "/visita/:accion/:idVisita",
             views: {
                 "main": {
                     controller: "RegistrarVisitaCtrl",
@@ -32,12 +32,8 @@ saul.config(["$stateProvider",
             });
         }
     };
-}).config(["$httpProvider", function ($httpProvider) {
-        $httpProvider.defaults.transformResponse.push(function (responseData) {
-            convertDateStringsToDates(responseData);
-            return responseData;
-        });
-    }]).controller("RegistrarVisitaCtrl", ["$scope", "$http","root", "$stateParams", "Visita", "EncabezadoVisita", "TipoSolicitud", "FormularioVisita", "Visitaxdocumento","dsJqueryUtils", "Upload", "$timeout", "$state", "ComportamientoContrario", "esriLoader",
+}) 
+.controller("RegistrarVisitaCtrl", ["$scope", "$http","root", "$stateParams", "Visita", "EncabezadoVisita", "TipoSolicitud", "FormularioVisita", "Visitaxdocumento","dsJqueryUtils", "Upload", "$timeout", "$state", "ComportamientoContrario", "esriLoader",
     function ($scope, $http, root, $stateParams, Visita, EncabezadoVisita, TipoSolicitud, FormularioVisita, Visitaxdocumento, dsJqueryUtils, Upload, $timeout, $state, ComportamientoContrario, esriLoader) {
         var self = this;
         $scope.datavisita = [];
@@ -49,11 +45,13 @@ saul.config(["$stateProvider",
         $scope.urlGeoportal = "https://geoportal.cali.gov.co/agserver/rest/services/Lineas/lineas_auto/MapServer/0";                               
         $scope.visita = {};
         $scope.files = {};
+        $scope.comentario = 'N/A';
         
         $scope.inputFiles = {}; 
         
         $scope.root = root;
         $scope.visita.idVisita = $stateParams.idVisita;
+        $scope.accion = $stateParams.accion;
         $scope.ocultarModal = true;
         $(".overlap_espera").show();
         $(".overlap_espera_1").show();
@@ -61,15 +59,21 @@ saul.config(["$stateProvider",
         //Búsqueda de la visita
         Visita.find({id: $stateParams.idVisita}).$promise.then(function (response) {
             $scope.visita = response;
+            $scope.comentario = response.observaciones;
             $scope.datavisita.longitud = response.longitud;
             $scope.datavisita.latitud = response.latitud;
             // $scope.agregarLocalizacion($scope.datavisita.longitud,$scope.datavisita.latitud);
-            $scope.camposformularioVisita = FormularioVisita.query({id: $stateParams.idVisita});
-            EncabezadoVisita.query({id: $stateParams.idVisita}).$promise.then(function(response) {
-                $scope.camposLectura = response;
-                $(".overlap_espera").fadeOut(500, "linear");
-                $(".overlap_espera_1").fadeOut(500, "linear"); 
-            });
+            if($scope.accion=='revisar' || $scope.accion=='generar'|| $scope.accion=='firmar') {
+                $scope.camposformularioVisita = FormularioVisita.query({id: $stateParams.idVisita});
+                EncabezadoVisita.query({id: $stateParams.idVisita}).$promise.then(function(response) {
+                    $scope.camposLectura = response;
+                    $(".overlap_espera").fadeOut(500, "linear");
+                    $(".overlap_espera_1").fadeOut(500, "linear"); 
+                });
+            } else {
+                alert("Error acción inválida");
+            }
+            
             $scope.expediente = "";
         });
         
@@ -228,7 +232,6 @@ saul.config(["$stateProvider",
 
         $scope.hideAlert = function () {
             $scope.validator = {};
-            
         };
         
         $scope.getDateValue = function(dateString) {
@@ -254,7 +257,6 @@ saul.config(["$stateProvider",
         }
         
         $scope.changeSelect = function(nombreDominio) {
-            alert('changeSelect');
             return $scope.arrayDominio[nombreDominio][0];
             // $scope.selectedId = $scope.selectedItem && $scope.selectedItem.id
          }
@@ -310,7 +312,6 @@ saul.config(["$stateProvider",
                     });
                 });
             });
-            console.log($scope.valoresFormulario);
             if (true) {
                 $(".overlap_espera").show();
                 $(".overlap_espera_1").show();
@@ -321,10 +322,10 @@ saul.config(["$stateProvider",
                         data: $scope.valoresFormulario,
                         visita: $scope.datavisita,
                         finalizar: finalizar,
+                        comentario: $scope.comentario,
                         files: $scope.inputFiles
                     }
                 }).then(function (response) {
-                    console.log("aqui no hay error2");
                     $(".overlap_espera").fadeOut(500, "linear");
                     $(".overlap_espera_1").fadeOut(500, "linear"); 
                     $scope.result = response.data;
@@ -333,9 +334,6 @@ saul.config(["$stateProvider",
                         $scope.asignacion = {};
                     }
                     $scope.isSuccess = true;
-//                    $timeout(function () {
-//                        $state.go('listar-visita');
-//                    }, 3000);
                 });
             } else {
                 dsJqueryUtils.goTop();
@@ -348,32 +346,7 @@ saul.config(["$stateProvider",
     }
 ]);
 
+  
 
-var regexIso8601 = /^(\d{4}|\+\d{6})(?:-(\d{2})(?:-(\d{2})(?:T(\d{2}):(\d{2}):(\d{2})\.(\d{1,})(Z|([\-+])(\d{2}):(\d{2}))?)?)?)?$/;
 
-function convertDateStringsToDates(input) {
-    // Ignore things that aren't objects.
-    if (typeof input !== "object")
-        return input;
-
-    for (var key in input) {
-        if (!input.hasOwnProperty(key))
-            continue;
-
-        var value = input[key];
-        var match;
-        // Check for string properties which look like dates.
-        // TODO: Improve this regex to better match ISO 8601 date strings.
-        if (typeof value === "string" && (match = value.match(regexIso8601))) {
-            // Assume that Date.parse can parse ISO 8601 strings, or has been shimmed in older browsers to do so.
-            var milliseconds = Date.parse(match[0]);
-            if (!isNaN(milliseconds)) {
-                input[key] = new Date(milliseconds);
-            }
-        } else if (typeof value === "object") {
-            // Recurse into object
-            convertDateStringsToDates(value);
-        }
-    }
-}
 
