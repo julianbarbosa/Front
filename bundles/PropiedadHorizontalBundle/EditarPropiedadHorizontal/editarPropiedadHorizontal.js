@@ -55,6 +55,7 @@ function ($scope, root, $http, $stateParams, $window) {
                     $scope.tipoPersona = data.propiedadHorizontal['tipoPersona'];
                     console.log(data.propiedadHorizontal);
                     $scope.notificacion = '';
+                    $('#estado').val(data.propiedadHorizontal['estado']);
                     
                 }
                 else {
@@ -75,6 +76,7 @@ function ($scope, root, $http, $stateParams, $window) {
         $scope.actualizarPH = function () {
             var id = $('#id').val();
             var expediente = $('#expediente').val();
+            var estado = $('#estado').val();
             var nit = $('#nit').val();
             var nombre = $('#nombre').val();
             var direccion = $('#direccion').val();
@@ -131,6 +133,7 @@ function ($scope, root, $http, $stateParams, $window) {
                     {   modulo: 1,
                         id: id, 
                         expediente: expediente, 
+                        estado: estado,
                         nit: nit, 
                         nombre: nombre, 
                         direccion: direccion, 

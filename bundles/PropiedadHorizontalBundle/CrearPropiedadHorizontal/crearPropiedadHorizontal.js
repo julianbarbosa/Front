@@ -18,6 +18,7 @@ function ($scope, root, $http, $stateParams, $window) {
         // Funcion que inicia la solicitud de radicacion
         $scope.crearPH = function () {
             var expediente = $('#expediente').val();
+            var estado = $('#estado').val();
             var nit = $('#nit').val();
             var nombre = $('#nombre').val();
             var direccion = $('#direccion').val();
@@ -74,6 +75,7 @@ function ($scope, root, $http, $stateParams, $window) {
                     {   modulo: 2,
                         id: null,
                         expediente: expediente, 
+                        estado: estado,
                         nit: nit, 
                         nombre: nombre, 
                         direccion: direccion, 

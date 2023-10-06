@@ -27,6 +27,7 @@ saul.config(["$stateProvider",
                 if (data.msg == "Ingreso correctamente") {
                     $scope.numeroIdent = data.propiedadHorizontal['id'];
                     $scope.tipoPersona = data.propiedadHorizontal['tipoPersona'];
+                    $scope.estado = data.propiedadHorizontal['estado'];
                     $scope.nombrePropiedadHorizontal = data.propiedadHorizontal['nombre'];
                     $scope.direccionPropiedadHorizontal = data.propiedadHorizontal['direccion'];
                     $scope.nombreRepresentanteLegal = data.propiedadHorizontal['nombreRepresentanteLegal'];
