@@ -367,6 +367,7 @@ input.ng-dirty.ng-invalid {
                             </div>
                         </div>                   
                         <div class="row padding-sm text-right-sm">
+                            <a class="btn btn-primary" value="Ver informe" target="_blank" href="{{root}}ver_visita/{{visita.idVisita}}">Ver informe</a>
                             <input type="submit" class="btn btn-warning" ng-click="save('devuelto')" ng-disabled="form.$invalid" value="Devolver" />
                             <input type="submit" class="btn btn-primary" ng-click="save('revisado')" ng-disabled="form.$invalid" value="Pasar a firma" />
                             ó
