@@ -22,7 +22,6 @@ saul.config(["$stateProvider",
         $scope.orderBy = 'idsolicitud';
         $scope.cantidadCheckeado = 0;
         
-        
 		$scope.consultarCantidadCheckeado = function(dataForm) {
 			$scope.cantidadCheckeado = 0;
 			angular.forEach(dataForm, function(value, key) {
@@ -32,7 +31,19 @@ saul.config(["$stateProvider",
             });
 		}
         
-        
+        // Obtenemos una referencia al formulario
+        var formRegistrarMovimiento = document.getElementById("formRegistrarMovimiento");
+
+        // Agregamos un escucha de eventos al formulario
+        formRegistrarMovimiento.addEventListener("keydown", function(event) {
+            // Verificamos si se presionó la tecla "Enter" (código de tecla 13)
+            if (event.key === "Enter") {
+                // Prevenimos el envío del formulario predeterminado
+                event.preventDefault();
+                // Realizamos alguna acción cuando se presiona "Enter"
+                console.log("Se presionó la tecla Enter (Código de tecla: " + event.key+ ")");
+            }
+        });
        
 
         $scope.actualizarDatos = function (estado, inspeccion)
@@ -82,6 +93,7 @@ saul.config(["$stateProvider",
             $scope.data = null
             $scope.busqueda = []; 
         }
+
         $scope.consultarPermisos = function () {
             $scope.permisos = [];            
             $http.get(root+'usuario/permisos',{}).then(function (result) {                
@@ -92,6 +104,7 @@ saul.config(["$stateProvider",
                 $scope.userId = result.data.id;
             });
         };
+
         $scope.consultarPermisos();
 
         $scope.consultarInspecciones = function () {
@@ -100,6 +113,7 @@ saul.config(["$stateProvider",
                 console.log($scope.inspectores);
             });
         };
+
         $scope.consultarInspecciones();
 
         $scope.verExpediente = function (comparendo)
