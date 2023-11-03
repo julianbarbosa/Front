@@ -112,14 +112,35 @@ function ($scope, root, $http, $stateParams, $window) {
             else if (direccion == undefined || direccion == '') {
                 alert("¡Debe ingresar la direccion de la propiedad para continuar!");
             }
-            else if (numero_escritura_publica == undefined || numero_escritura_publica == '') {
+            else if (resolucion_personeria_juridica == undefined || resolucion_personeria_juridica == '') {
                 alert("¡Debe ingresar el número de la escritura pública de la propiedad para continuar!");
             }
-            else if (fecha_escritura_publica == undefined || fecha_escritura_publica == '') {
+            else if (fecha_resolucion_personeria_juridica == undefined || fecha_resolucion_personeria_juridica == '') {
                 alert("¡Debe ingresar la fecha de la escritura pública de la propiedad para continuar!");
             }
-            else if (numero_matricula == undefined || numero_matricula == '') {
+            else if (personeria_juridica_expedida_por == undefined || personeria_juridica_expedida_por == '') {
                 alert("¡Debe ingresar el numero de matricula de la propiedad para continuar!");
+            }
+            else if (cedula_representante_legal == undefined || cedula_representante_legal == '') {
+                alert("¡Debe ingresar la cedula representante legal para continuar!");
+            }
+            else if (expedida_representante_legal == undefined || expedida_representante_legal == '') {
+                alert("¡Debe ingresar la ciudad de expedicion del documento del representante legal para continuar!");
+            }
+            else if (nombre_representante_legal == undefined || nombre_representante_legal == '') {
+                alert("¡Debe ingresar el nombre del representante legal para continuar!");
+            }
+            else if (periodo_representante_legal == undefined || periodo_representante_legal == '') {
+                alert("¡Debe ingresar el periodo del representante legal para continuar!");
+            }
+            else if (resolucion_expedida_por == undefined || resolucion_expedida_por == '') {
+                alert("¡Debe ingresar por quien fue expedida la resolucion para continuar!");
+            }
+            else if (numero_acta == undefined || numero_acta == '') {
+                alert("¡Debe ingresar el numero de acta para continuar!");
+            }
+            else if (acta_expedida_por == undefined || acta_expedida_por == '') {
+                alert("¡Debe ingresar donde fue expedida el acta para continuar!");
             }
             else {
                 var confirmacion = confirm("¿Desea actualizar la propiedad horizontal "+nombre+"?");
