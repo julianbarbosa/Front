@@ -298,5 +298,10 @@
     "ControlInfraestructuraBundle/asignarvisita/asignarvisita.js",
     "ControlInfraestructuraBundle/crearregistro/crearregistro.js",
     "ControlUrbanoBundle/crearsolicitud/crearsolicitud.js",
-    "PersonaBundle/consultar/controller.js"
+    "PersonaBundle/consultar/controller.js",
+    "ControlUrbanoReportsBundle/report-a/report-a.js",
+    "ControlUrbanoReportsBundle/report-b/report-b.js",
+    "ControlUrbanoReportsBundle/report-c/report-c.js",
+    "ControlUrbanoReportsBundle/report-d/report-d.js",
+    "ControlUrbanoReportsBundle/report-e/report-e.js"
 ]
