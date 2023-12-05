@@ -142,6 +142,9 @@ function ($scope, root, $http, $stateParams, $window) {
             else if (acta_expedida_por == undefined || acta_expedida_por == '') {
                 alert("¡Debe ingresar donde fue expedida el acta para continuar!");
             }
+            else if (tipo_persona == undefined || tipo_persona == '') {
+                alert("¡Debe seleccionar el tipo de Plantilla para continuar!");
+            }
             else {
                 var confirmacion = confirm("¿Desea actualizar la propiedad horizontal "+nombre+"?");
 
@@ -178,7 +181,8 @@ function ($scope, root, $http, $stateParams, $window) {
                         fecha_resolucion_representante_legal: fecha_resolucion_representante_legal, 
                         resolucion_expedida_por: resolucion_expedida_por, 
                         numero_acta: numero_acta, 
-                        acta_expedida_por: acta_expedida_por
+                        acta_expedida_por: acta_expedida_por,
+                        tipo_persona: tipo_persona
                     })
                     .success(function(data){
                         console.log(data);
