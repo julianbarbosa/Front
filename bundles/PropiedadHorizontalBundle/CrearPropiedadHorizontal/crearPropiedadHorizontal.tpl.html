@@ -200,7 +200,25 @@
             </div>
         </div>
         <div class="panel-body">
-			<div class="form-group offset-md-10 col-md-2">
+			<div class="form-group offset-md-8 col-md-2">
+				<label for="" class="control-label">Estado</label>
+				<select class="form-control" name="estado" id="estado" required>
+					<option value="1">Activo</option>
+					<option value="0">Inactivo</option>
+				</select>
+			</div>
+						
+			<div class="form-group col-md-4 col-xs-12">
+				<label for="" class="control-label">Tipo de Plantilla</label>
+				<select class="form-control" ng-class="{'error_borde': notificacion_obligatorio == true }" name="tipopersona" id="tipo_persona" ng-model="tipoPersona" required>
+					<option value="">--- Seleccione ---</option>
+					<option value="N">Para Persona Natural</option>
+					<option value="J">Para Persona Juridica</option>
+				</select>
+                <p ng-show="notificacion_obligatorio == true" class="help-block" style="color: #b94a48;">* Este campo es obligatorio.</p>
+			</div>
+
+			<div class="form-group col-md-2">
 				<label for="expediente">Expediente</label>
 				<input type="text" class="form-control" id="expediente" name="expediente">
 			</div>
@@ -345,16 +363,6 @@
 				<label for="acta_expedida_por">Acta Expedida Por</label>
 				<input type="text" class="form-control" id="acta_expedida_por" name="acta_expedida_por" >
 			</div>
-			
-			<!-- <div class="form-group col-md-4 col-xs-12">
-				<label for="" class="control-label">Tipo de Persona</label>
-				<select class="form-control" ng-class="{'error_borde': notificacion_obligatorio == true }" name="tipopersona" id="tipo_persona" ng-model="tipoPersona" required>
-					<option value="">--- Seleccione ---</option>
-					<option value="N">Natural</option>
-					<option value="J">Juridica</option>
-				</select>
-                <p ng-show="notificacion_obligatorio == true" class="help-block" style="color: #b94a48;">* Este campo es obligatorio.</p>
-			</div> -->
 
 			<div class="form-group col-md-12 col-xs-12 btn-solicitud" style="text-align: center;margin-top: 25px;"> 
 			   <input type="button" class="btn btn-primary" forma="#"  value="Crear Propiedad Horizontal" ng-click="crearPH()">

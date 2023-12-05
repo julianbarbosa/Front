@@ -248,13 +248,16 @@
 					<td><strong>Fecha de Resolución</strong></td>
 					<td>{{fechaResolucionPersoneriaJuridica}}</td>
 				</tr>
+				<tr>
+					<td ng-show="estado == 0" colspan="2" style="padding-top: 20px;font-style: italic;">Para solicitar un certificado relacionado con esta propiedad, es necesario actualizar sus datos. Por favor, proceda con la solicitud de actualización</td>
+				</tr>
 			</table>
 			
 			
 			<div class="col-md-12 col-xs-12 bloque-btn">
 				<a  class="btn btn-primary col-xs-12" href="/saul/v2/#!/propiedadhorizontal/crearsolicitud">Solicitar Actualización</a>
 				<a  class="btn btn-secondary col-xs-12" href="/saul/v2p/#!/propiedadhorizontal/consultar">Nueva Consulta</a>
-				<a  class="btn btn-primary col-xs-12" ng-click="solicitarCertificado(numeroIdent,4)">Solicitar Certificación</a>
+				<a ng-show="estado == 1" class="btn btn-primary col-xs-12" ng-click="solicitarCertificado(numeroIdent,4)">Solicitar Certificación</a>
 			</div>
 		</div>
     </div>

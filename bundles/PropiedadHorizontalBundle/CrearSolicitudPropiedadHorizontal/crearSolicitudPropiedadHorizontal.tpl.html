@@ -186,12 +186,13 @@
 	</h1>
 </div> 
 
-<div id="idDivPrincipal" class="col-md-7 col-xs-12">	
+<div id="idDivPrincipal" class="col-md-7 col-xs-12" >	
+    <!-- <div id="idDivPrincipal" class="col-xs-6" ng-show="result_producer == true" >	 -->
     
 	<!-- Interfaz para digitar el predio a consultar-->
-	<div class="panel panel-success" ng-show="notificacion_radicado == ''">
+	<div class="panel panel-success" ng-hide="notificacion_radicado != ''">
         <div class="panel-heading">
-            <span class="panel-title">Crear Propiedad Horizontal </span>
+            <span class="panel-title">Trámites de Propiedad Horizontal </span>
             <div class="panel-heading-controls">
                 <div class="panel-heading-icon">
                 	<i class="fa fa-inbox"></i>
@@ -199,171 +200,103 @@
             </div>
         </div>
         <div class="panel-body">
-
-			<div class="form-group offset-md-10 col-md-2">
-				<label for="expediente">Expediente</label>
-				<input type="text" class="form-control" id="expediente" name="expediente">
-			</div>
-
-            <div class="col-lg-12 col-md-12 col-12" style="margin-top: 4px; margin-bottom: 20px; border-bottom: 1px solid #00408a;">
-				<span class="col-lg-12 col-md-12 col-12" style="font-weight: 600; font-style: italic; font-size: 12px; color: #00408a; padding-left: 0px; margin-bottom: 2px;">
-				  DATOS DE LA PROPIEDAD
-				</span>
-			</div>
-			
-			<div class="form-group col-md-2">
-				<label for="nit">NIT</label>
-				<input type="text" class="form-control" id="nit" name="nit">
-			</div>
-		
-			<div class="form-group col-md-5">
-				<label for="nombre">Nombre</label>
-				<input type="text" class="form-control" id="nombre" name="nombre">
-			</div>
-		
-			<div class="form-group col-md-5">
-				<label for="direccion">Dirección</label>
-				<input class="form-control" id="direccion" name="direccion">
-			</div>
-				
-			<div class="form-group col-md-3">
-				<label for="numero_escritura_publica">Número de Escritura Pública</label>
-				<input type="text" class="form-control" id="numero_escritura_publica" name="numero_escritura_publica">
-			</div>
-		
-			<div class="form-group col-md-2">
-				<label for="fecha_escritura_publica">Fecha de Escritura Pública</label>
-				<input type="text" class="form-control" id="fecha_escritura_publica" name="fecha_escritura_publica">
-			</div>
-
-			<div class="form-group col-md-2">
-				<label for="numero_matricula">Número de Matrícula</label>
-				<input type="text" class="form-control" id="numero_matricula" name="numero_matricula">
-			</div>
-		
-			<div class="form-group col-md-3">
-				<label for="fecha_certificado_tradicion">Fecha de Certificado de Tradición</label>
-				<input type="text" class="form-control" id="fecha_certificado_tradicion" name="fecha_certificado_tradicion">
-			</div>
-		
-			<div class="form-group col-md-2">
-				<label for="notaria">Notaría</label>
-				<input type="text" class="form-control" id="notaria" name="notaria">
-			</div>
-		
-		
-			<div class="form-group col-md-3">
-				<label for="numero_anotacion">Número de Anotación</label>
-				<input type="text" class="form-control" id="numero_anotacion" name="numero_anotacion">
-			</div>
-		
-			<div class="form-group col-md-2">
-				<label for="fecha_anotacion">Fecha de Anotación</label>
-				<input type="text" class="form-control" id="fecha_anotacion" name="fecha_anotacion">
-			</div>
-		
-			
-            <div class="col-lg-12 col-md-12 col-12" style="margin-top: 4px; margin-bottom: 20px; border-bottom: 1px solid #00408a;">
-				<span class="col-lg-12 col-md-12 col-12" style="font-weight: 600; font-style: italic; font-size: 12px; color: #00408a; padding-left: 0px; margin-bottom: 2px;">
-				  PERSONERÍA JURÍDICA
-				</span>
-			</div>
-
-			<div class="form-group col-md-4">
-				<label for="resolucion_personeria_juridica">Resolución </label>
-				<input type="text" class="form-control" id="resolucion_personeria_juridica" name="resolucion_personeria_juridica">
-			</div>
-		
-			<div class="form-group col-md-4">
-				<label for="fecha_resolucion_personeria_juridica">Fecha Resolución </label>
-				<input type="text" class="form-control" id="fecha_resolucion_personeria_juridica" name="fecha_resolucion_personeria_juridica">
-			</div>
-		
-			<div class="form-group col-md-4">
-				<label for="personeria_juridica_expedida_por">Expedida Por</label>
-				<input class="form-control" id="personeria_juridica_expedida_por" name="personeria_juridica_expedida_por">
-			</div>
-
-			
-            <div class="col-lg-12 col-md-12 col-12" style="margin-top: 4px; margin-bottom: 20px; border-bottom: 1px solid #00408a;">
-				<span class="col-lg-12 col-md-12 col-12" style="font-weight: 600; font-style: italic; font-size: 12px; color: #00408a; padding-left: 0px; margin-bottom: 2px;">
-				  REPRESENTANTE LEGAL
-				</span>
-			</div>
-		
-			<div class="form-group col-md-4">
-				<label for="nit_empresa_administradora">NIT Empresa Administradora</label>
-				<input type="text" class="form-control" id="nit_empresa_administradora" name="nit_empresa_administradora">
-			</div>
-		
-			<div class="form-group col-md-4">
-				<label for="cedula_representante_legal">Cédula</label>
-				<input type="text" class="form-control" id="cedula_representante_legal" name="cedula_representante_legal">
-			</div>
-		
-			<div class="form-group col-md-4">
-				<label for="expedida_representante_legal">Expedida en</label>
-				<input type="text" class="form-control" id="expedida_representante_legal" name="expedida_representante_legal" placeholder="Ciudad">
-			</div>
-			
-			<div class="form-group col-md-4">
-				<label for="nombre_representante_legal">Nombre</label>
-				<input type="text" class="form-control" id="nombre_representante_legal" name="nombre_representante_legal">
-			</div>
-
-			<div class="form-group col-md-4">
-				<label for="periodo_representante_legal">Período</label>
-				<input class="form-control" id="periodo_representante_legal" name="periodo_representante_legal">
-			</div>
-		
-			<div class="form-group col-md-4">
-				<label for="representante_legal_firma">Firma</label>
-				<input type="text" class="form-control" id="representante_legal_firma" name="representante_legal_firma">
-			</div>
-
-			<div class="form-group col-md-4">
-				<label for="resolucion_representante_legal">Resolución</label>
-				<input type="text" class="form-control" id="resolucion_representante_legal" name="resolucion_representante_legal">
-			</div>
-		
-			<div class="form-group col-md-4">
-				<label for="fecha_resolucion_representante_legal">Fecha Resolución</label>
-				<input type="text" class="form-control" id="fecha_resolucion_representante_legal" name="fecha_resolucion_representante_legal">
-			</div>
-		
-			<div class="form-group col-md-4">
-				<label for="resolucion_expedida_por">Resolución Expedida Por</label>
-				<input class="form-control" id="resolucion_expedida_por" name="resolucion_expedida_por">
-			</div>
-		
-			<div class="form-group col-md-4">
-				<label for="numero_acta">Número de Acta</label>
-				<input type="text" class="form-control" id="numero_acta" name="numero_acta">
-			</div>
-
-			<div class="form-group col-md-4">
-				<label for="acta_expedida_por">Acta Expedida Por</label>
-				<input class="form-control" id="acta_expedida_por" name="acta_expedida_por">
-			</div>
-			
-			<!-- <div class="form-group col-md-4 col-xs-12">
-				<label for="" class="control-label">Tipo de Persona</label>
-				<select class="form-control" ng-class="{'error_borde': notificacion_obligatorio == true }" name="tipopersona" id="tipo_persona" ng-model="tipoPersona" required>
+			<div class="form-group col-md-12 col-xs-12">
+				<label for="" class="control-label">Tipo de Trámite</label>
+				<select class="form-control" ng-class="{'error_borde': notificacion_obligatorio == true }" name="tptramite" id="tp_tramite" ng-model="tipoTramite" ng-change="onChangeTtramite()" required>
 					<option value="">--- Seleccione ---</option>
-					<option value="N">Natural</option>
-					<option value="J">Juridica</option>
+					<option value="1">Actualización de Representante Legal</option>
+					<option value="2">Actualización de Revisor Fiscal</option>
+					<option value="3">Inscripción de Propiedad Horizontal</option>
 				</select>
                 <p ng-show="notificacion_obligatorio == true" class="help-block" style="color: #b94a48;">* Este campo es obligatorio.</p>
-			</div> -->
+			</div>
 
+			<div class="form-group col-md-12 col-xs-12">
+				<label for="" class="control-label">Nombre de la Propiedad</label>
+				<input type="text" ng-class="{'error_borde': notificacion_obligatorio == true }" class="form-control" name="nompropiedad" id="nom_propiedad" ng-model="nombrePropiedad" required>
+                <p ng-show="notificacion_obligatorio == true" class="help-block" style="color: #b94a48;">* Este campo es obligatorio.</p>
+			</div>
+
+			<div class="form-group col-md-6 col-xs-12">
+				<label for="" class="control-label">Dirección del Predio</label>
+				<input type="text" ng-class="{'error_borde': notificacion_obligatorio == true }" class="form-control" name="dirpredio" id="dir_predio" ng-model="direccionPredio" required>
+                <p ng-show="notificacion_obligatorio == true" class="help-block" style="color: #b94a48;">* Este campo es obligatorio.</p>
+			</div>
+
+			<div class="form-group col-md-6 col-xs-12">
+				<label for="" class="control-label">Telefono del Predio</label>
+				<input type="number" ng-class="{'error_borde': notificacion_obligatorio == true }" class="form-control" name="telpredio" id="tel_predio" ng-model="telefonoPredio" required>
+                <p ng-show="notificacion_obligatorio == true" class="help-block" style="color: #b94a48;">* Este campo es obligatorio.</p>
+			</div>
+
+            <div class="form group col-md-12 col-xs-12 informativo">
+				<strong>Documentos necesarios para la solicitud</strong>
+				<span class="mensaje_info">(Tamaño máximo de 2MB)</span>
+			</div>
+
+			<div class="form-group col-md-12 col-xs-12">
+				<label for="" class="control-label">Oficio inscripcion firmado por el administrador</label>
+				<input type="file" ng-class="{'error_borde': notificacion_obligatorio == true }" class="form-control document"  name="docs[]" id="doc_1" ng-model="documento1" required>
+                <p ng-show="notificacion_obligatorio == true" class="help-block" style="color: #b94a48;">* Este campo es obligatorio.</p>
+				<input hidden class="validate" name="namesDocs[]" type="checkbox" value="Oficio inscripcion firmado por el administrador">
+			</div>
+
+			<div class="form-group col-md-12 col-xs-12">
+				<label for="" class="control-label">Documento del representante</label>
+				<input type="file" ng-class="{'error_borde': notificacion_obligatorio == true }" class="form-control document"  name="docs[]" id="doc_2" ng-model="documento2" required>
+                <p ng-show="notificacion_obligatorio == true" class="help-block" style="color: #b94a48;">* Este campo es obligatorio.</p>
+				<input hidden class="validate" name="namesDocs[]" type="checkbox" value="Documento del representante">
+			</div>
+
+			<div class="form-group col-md-12 col-xs-12">
+				<label for="" class="control-label">Nit del Representante</label>
+				<input type="file" ng-class="{'error_borde': notificacion_obligatorio == true }" class="form-control document"  name="docs[]" id="doc_3" ng-model="documento3" required>
+                <p ng-show="notificacion_obligatorio == true" class="help-block" style="color: #b94a48;">* Este campo es obligatorio.</p>
+				<input hidden class="validate" name="namesDocs[]" type="checkbox" value="Nit del Representante">
+			</div>
+
+			<div id="divDoc4" hidden class="form-group col-md-12 col-xs-12">
+				<label for="" class="control-label">Copia del reglamento de Propiedad Horizontal</label>
+				<input type="file" ng-class="{'error_borde': notificacion_obligatorio == true }" class="form-control document" id="doc_4" ng-model="documento4">
+                <p ng-show="notificacion_obligatorio == true" class="help-block" style="color: #b94a48;">* Este campo es obligatorio.</p>
+				<input hidden class="validate" name="namesDocs[]" type="checkbox" value="Copia del reglamento de Propiedad Horizontal">
+			</div>
+
+			<div id="divDoc5" hidden class="form-group col-md-12 col-xs-12">
+				<label for="" class="control-label">Certificado de Tradición del Inmueble</label>
+				<input type="file" ng-class="{'error_borde': notificacion_obligatorio == true }" class="form-control document" id="doc_5" ng-model="documento5">
+                <p ng-show="notificacion_obligatorio == true" class="help-block" style="color: #b94a48;">* Este campo es obligatorio.</p>
+				<input hidden class="validate" name="namesDocs[]" type="checkbox" value="Certificado de Tradición del Inmueble">
+			</div>
+
+			<div class="form-group col-md-12 col-xs-12">
+				<label for="" class="control-label">Carta Aceptación del cargo</label>
+				<input type="file" ng-class="{'error_borde': notificacion_obligatorio == true }" class="form-control document"  name="docs[]" id="doc_6" ng-model="documento6" required>
+                <p ng-show="notificacion_obligatorio == true" class="help-block" style="color: #b94a48;">* Este campo es obligatorio.</p>
+				<input hidden class="validate" name="namesDocs[]" type="checkbox" value="Carta Aceptación del cargo">
+			</div>
+
+			<div class="form-group col-md-12 col-xs-12">
+				<label for="" class="control-label">Carta Acta de Asamblea general</label>
+				<input type="file" ng-class="{'error_borde': notificacion_obligatorio == true }" class="form-control document"  name="docs[]" id="doc_7" ng-model="documento7" required>
+                <p ng-show="notificacion_obligatorio == true" class="help-block" style="color: #b94a48;">* Este campo es obligatorio.</p>
+				<input hidden class="validate" name="namesDocs[]" type="checkbox" value="Carta Acta de Asamblea general">
+			</div>
+
+			<div class="form-group col-md-12 col-xs-12">
+				<label for="" class="control-label">Acta del concejo de Administracion</label>
+				<input type="file" ng-class="{'error_borde': notificacion_obligatorio == true }" class="form-control document"  name="docs[]" id="doc_8" ng-model="documento8" required>
+                <p ng-show="notificacion_obligatorio == true" class="help-block" style="color: #b94a48;">* Este campo es obligatorio.</p>
+				<input hidden class="validate" name="namesDocs[]" type="checkbox" value="Acta del concejo de Administracion">
+			</div>
+	
 			<div class="form-group col-md-6 col-xs-12 btn-solicitud"> 
-			   <input type="button" class="btn btn-primary" forma="#"  value="Actualizar Propiedad Horizontal" ng-click="radicarSolicitud()">
-			   <a class="btn-cancel" href="/saul/v2p/?url=\/propiedadhorizontal\/consultar">Cancelar</a>
+			   <input type="button" class="btn btn-primary" forma="#"  value="Radicar Solicitud" ng-click="radicarSolicitud()">
+			   <a class="btn-cancel" href="/saul/solicitud">Cancelar</a>                 
 			</div>
    
         </div>
     </div>
-	
 	
 	<!-- Interfaz para notificar al usuario sobre las respuestas del servidor -->
 	<div class="col-xs-12" ng-show="notificacion_radicado != ''">
