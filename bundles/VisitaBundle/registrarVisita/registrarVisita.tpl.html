@@ -286,9 +286,8 @@ input.ng-dirty.ng-invalid {
                                            ng-model-options="{timezone:'-0500'}"
                                            class="form-control input-xlarge" 
                                            title="{{input.descripcion}}" 
-                                           ng-blur="saveItemTime(input)"
+                                           ng-change="saveItem(input)"
                                            ng-model="input.valor"
-                                           ng-blur="saveItem(input)"
                                            date-serializer>
                                 </div>
                                 

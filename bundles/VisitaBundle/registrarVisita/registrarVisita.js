@@ -285,7 +285,14 @@ saul.config(["$stateProvider",
         $scope.saveItem = function(input) {
             if(input !== undefined) {
                 $scope.valoresFormulario = [];
-                $scope.valoresFormulario.push({codigo: input.codigo, valor: input.valor, tipoItem: input.tipoItem});
+                if(input.tipoItem == 'hora') {
+                    const dateObject = new Date(input.valor);
+                    const options = { timeZone: 'America/Bogota' };
+                    const formattedDate = dateObject.toLocaleString('en-US', options);
+                    $scope.valoresFormulario.push({codigo: input.codigo, valor: formattedDate, tipoItem: input.tipoItem});
+                } else {
+                    $scope.valoresFormulario.push({codigo: input.codigo, valor: input.valor, tipoItem: input.tipoItem});
+                }
                 Upload.upload({
                     url: root + 'visita',
                     data: {
@@ -307,7 +314,14 @@ saul.config(["$stateProvider",
                 angular.forEach(campo.arrayItems, function (arrayItem) {
                     angular.forEach(arrayItem.item.items, function (item) {
                         if (item.valor !== null && item.valor !== '' && item.valor !== 'null' && item.soloLectura === 0) {
-                            $scope.valoresFormulario.push({codigo: item.codigo, valor: item.valor, tipoItem: item.tipoItem});
+                            if(item.tipoItem == 'hora') {
+                                const dateObject = new Date(item.valor);
+                                const options = { timeZone: 'America/Bogota' };
+                                const formattedDate = dateObject.toLocaleString('en-US', options);
+                                $scope.valoresFormulario.push({codigo: item.codigo, valor: formattedDate, tipoItem: item.tipoItem});
+                            } else {
+                                $scope.valoresFormulario.push({codigo: item.codigo, valor: item.valor, tipoItem: item.tipoItem});
+                            }
                         }
                     });
                 });
