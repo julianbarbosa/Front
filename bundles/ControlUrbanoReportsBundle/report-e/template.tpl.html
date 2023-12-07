@@ -1,0 +1,165 @@
+<div class="panel">
+    <div class="panel-body">
+        <div class="page-header">
+            <h1 class="col-xs-12 col-sm-10 text-center text-left-sm"><i
+                    class="padding-sm-hr fa fa-list-alt"></i>&nbsp;&nbsp;Areas(m2) de infraccion</h1>
+        </div>
+        <hr>
+        <form name="userForm">
+            <div class="row">
+                <div ng-repeat="campo in camposBusqueda track by $index">
+                    <div ng-if="campo.type=='date' && campo.estado=='activo'">
+                        <div class="form-group col-xs-6 col-md-3">
+                            <label class="control-label" for="{{campo.name}}">
+                                {{campo.label}}
+                            </label>
+                            <div class="input-group">
+                                <input type="date" id="{{campo.name}}" class="form-control input-xlarge"
+                                    ng-model="busqueda[campo.name]" placeholder="Ingrese el valor" required />
+                                <div class="btn btn-danger input-group-addon" ng-click="eliminarCampo($index)">
+                                    <i class="fa fa-trash"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-if="campo.type=='integer' && campo.estado=='activo'">
+                        <div class="form-group col-xs-6 col-md-3">
+                            <label class="control-label" for="{{campo.name}}">
+                                {{campo.label}}
+                            </label>
+                            <div class="input-group">
+                                <input type="number" id="{{campo.name}}" class="form-control input-xlarge"
+                                    ng-model="busqueda[campo.name]" placeholder="Ingrese la identificación" required />
+                                <div class="btn btn-danger input-group-addon" ng-click="eliminarCampo($index)">
+                                    <i class="fa fa-trash"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div ng-if="campo.type=='string' && campo.estado=='activo'">
+                        <div class="form-group col-xs-6 col-md-3">
+                            <label class="control-label" for="{{campo.name}}">
+                                {{campo.label}}
+                            </label>
+                            <div class="input-group">
+                                <input type="text" id="{{campo.name}}" class="form-control input-xlarge"
+                                    ng-model="busqueda[campo.name]" placeholder="Ingrese la identificación" required />
+                                <div class="btn btn-danger input-group-addon" ng-click="eliminarCampo($index)">
+                                    <i class="fa fa-trash"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div ng-if="campo.type=='select' && campo.estado=='activo'">
+                        <div class="form-group col-xs-6 col-md-3">
+                            <label class="control-label" for="{{campo.name}}">
+                                {{campo.label}}
+                            </label>
+                            <div class="input-group">
+                                <select ng-model="busqueda[campo.name]"
+                                    ng-options="item.value as item.nombre for item in getStore(campo.store)"
+                                    class="form-control">
+                                    <option value="">-- Seleccione --</option>
+                                </select>
+                                <div class="btn btn-danger input-group-addon" ng-click="eliminarCampo($index)">
+                                    <i class="fa fa-trash"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+        </form>
+
+        <div class="row">
+            <div class="col-md-12">
+                <!-- <button class="btn btn-warning pull-right" ng-click="agregarCampo()">
+                    Agregar campo
+                </button> -->
+                <input type="button" class="btn btn-success pull-right" value="Descargar" ng-click="downloadAllData()"
+                    style="margin-right: 10px;">
+                <input type="button" class="btn btn-success pull-right" value="Buscar" ng-click="actualizarDatos()"
+                    style="margin-right: 10px;">
+            </div>
+        </div>
+        <p>Total de Visitas Asignadas: {{ data.total_visitas_asignadas }}</p>
+        <p>Total de Visitas Realizadas: {{ data.total_visitas_realizadas }}</p>
+        <p>Total de Número de Infracciones: {{ data.total_numero_de_infracciones }}</p>
+        <p>Total Area en m2 de Infracciones: {{ data.total_area_de_infracciones }}</p>
+
+    </div>
+
+    <div class="panel-body col-md-12">
+        <div class="table-primary">
+            <table cellpadding="0" cellspacing="0" class="table-hover table table-bordered" id="listaEstadisticas"
+                width="100%" role="grid" aria-describedby="solicitud_listar_tareas">
+                <thead>
+                    <tr role="row">
+                        <th ng-repeat="header in headers"
+                            class="ui-state-default {{header.sorting}} {{header.header_align}}"
+                            style="width: {{header.width}}" ng-click="ordenarPor(headers[$index].name)">
+                            {{header.title}}
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody ng-repeat="row in data.data">
+                    <tr class="odd" style="font-weight: bold;" ng-class="{'danger': row[rowWarning] === false}">
+                        <td ng-repeat="header in headers" class="{{header.body_align}}">
+                            <!--Opciones dependientes de valores-->
+                            <span ng-if="header.options">
+                                <span ng-repeat="option in header.options" ng-bind-html="option['link']"
+                                    ng-if="option['value'] == row[option['nameValidate']]"></span>
+                            </span>
+
+                            <!-- Valor de Text-->
+                            <span ng-if="header.type === 'text' && header.subname==null">
+                                {{row[header.name]}} {{row[header.name2]}}
+                            </span>
+
+                            <!-- Valor de Text-->
+                            <span ng-if="header.type === 'text' && header.subname!==null">
+                                {{row[header.name][header.subname]}}
+                            </span>
+
+                            <!-- Valor de Link-->
+                            <span ng-if="header.type === 'link'">
+                                <a href="{{header.link}}{{row[header.name]}}" target="_blank">{{row[header.name]}}</a>
+                            </span>
+
+                            <!-- Valor de Objeto Fecha-->
+                            <span ng-if="header.type === 'date'">
+                                {{row[header.name].timestamp * 1000| date:'yyyy-MM-dd HH:mm:ss'}}
+                            </span>
+
+                            <!-- Valor de Objeto Button-->
+                            <span ng-if="header.type === 'button'">
+                                <button class="btn {{header['style']}}" ng-bind-html="header['title']"
+                                    ng-click="caller(header['action'], row)"></button>
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <td colspan="10" class="currency">
+                        <uib-pagination ng-model="currentPage" total-items="totalItems" max-size="5"
+                            boundary-links="true" ng-click="actualizarDatos(currentPage)" first-text="Primera"
+                            last-text="Última" next-text="Siguiente" previous-text="Anterior"
+                            boundary-link-numbers="true" rotate="true"></uib-pagination>
+                    </td>
+                </tfoot>
+            </table>
+            <button class="btn btn-success" ng-click="downloadData()">
+                <i class="fa fa-file-excel-o"></i>
+            </button>
+        </div>
+
+    </div>
+</div>
+<div class="overlap_espera_2"><i class="fa fa-gear fa-spin fa-2x"></i></div>
