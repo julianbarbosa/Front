@@ -135,6 +135,9 @@ saul.config(["$stateProvider",
       $scope.request.push({
         'name': 'numberPageAll',
         'value': '0'
+      }, {
+        'name': 'typeReport',
+        'value': 'F'
       });
       $scope.camposBusqueda.forEach(function (item) {
         if (item.estado == 'activo' && $scope.busqueda[item.name] !== undefined) {
@@ -166,6 +169,9 @@ saul.config(["$stateProvider",
         $scope.request.push({
           'name': 'numberPageAll',
           'value': '1'
+        }, {
+          'name': 'typeReport',
+          'value': 'F'
         });
       }
       $scope.camposBusqueda.forEach(function (item) {
@@ -228,19 +234,6 @@ saul.config(["$stateProvider",
         });
 
       console.log("data is:", $scope.data);
-
-
-      $scope.downloadDataWithParams = function () {
-        // $scope.request = [];
-        // $scope.camposBusqueda.forEach(function (item) {
-        //   if (item.estado == 'activo') {
-        //     $scope.request.push({ 'name': item.name, 'value': $scope.busqueda[item.name] });
-        //   }
-        // });
-        UtilForm.openWith(
-          $http.post(root + 'controlurbano/reports/descargarcsvcontrolurbano', { params: params })
-        );
-      }
 
     };
 
