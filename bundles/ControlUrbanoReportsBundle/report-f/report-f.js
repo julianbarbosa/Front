@@ -10,8 +10,8 @@ saul.config(["$stateProvider",
       }
     });
   }
-]).controller("ControlUrbanoReportFCtrl", ["$scope", "$http", "root",
-  function ($scope, $http, root) {
+]).controller("ControlUrbanoReportFCtrl", ["$scope", "$http", "root", "UtilForm", "$filter",
+  function ($scope, $http, root, UtilForm, $filter) {
     $scope.currentPage = 1;
     $scope.numPerPage = 20;
     $scope.busqueda = {};
@@ -129,6 +129,63 @@ saul.config(["$stateProvider",
         }
       });
     }
+
+    $scope.downloadData = function () {
+      $scope.request = [];
+      $scope.request.push({
+        'name': 'numberPageAll',
+        'value': '0'
+      });
+      $scope.camposBusqueda.forEach(function (item) {
+        if (item.estado == 'activo' && $scope.busqueda[item.name] !== undefined) {
+          var requestItem = {
+            'name': item.name,
+            'value': item.name.startsWith('fecha')
+              ? $scope.convertirFecha($scope.busqueda[item.name]) // Formatear la fecha
+              : $scope.busqueda[item.name]
+          };
+
+          $scope.request.push(requestItem);
+        }
+      });
+      UtilForm.openWith(
+        root + "controlurbano/reports/descargarcsvcontrolurbano",
+        'post', $scope.request
+      );
+    };
+
+    $scope.convertirFecha = function (fechaOriginal) {
+      var fechaObj = new Date(fechaOriginal);
+      return $filter('date')(fechaObj, 'yyyy-MM-ddTHH:mm:ss.SSSZ');
+    };
+
+    $scope.downloadAllData = function (changeNumberPage) {
+      $scope.request = [];
+      // Agregar el número de página al request si es necesario
+      if (changeNumberPage) {
+        $scope.request.push({
+          'name': 'numberPageAll',
+          'value': '1'
+        });
+      }
+      $scope.camposBusqueda.forEach(function (item) {
+        if (item.estado == 'activo' && $scope.busqueda[item.name] !== undefined) {
+          var requestItem = {
+            'name': item.name,
+            'value': item.name.startsWith('fecha')
+              ? $scope.convertirFecha($scope.busqueda[item.name]) // Formatear la fecha
+              : $scope.busqueda[item.name]
+          };
+
+          $scope.request.push(requestItem);
+        }
+      });
+
+      UtilForm.openWith(
+        root + "controlurbano/reports/descargarcsvcontrolurbano",
+        'post', $scope.request);
+    }
+
     $scope.headers = [
       { type: 'text', name: 'nombreCompleto', title: 'Funcionario Visitador', header_align: 'text-center', body_align: 'text-center', input: false, sorting: 'sorting', width: '12%' },
       { type: 'text', name: 'emailAddress', title: 'E-mail Visitador', header_align: 'text-center', body_align: 'text-center', input: false, sorting: 'sorting', width: '10%' },
@@ -156,7 +213,7 @@ saul.config(["$stateProvider",
       // Realiza la solicitud HTTP al endpoint de consulta
       $http.get(root + 'controlurbano/reports/produccionxfuncionariovisitador', { params: params })
         .then(function (response) {
-          console.log("la respuesta:",response)
+          console.log("la respuesta:", response)
           if (typeof response.data === 'object') {
             // Si la respuesta es un objeto JSON válido
             $scope.data = response.data;
@@ -170,7 +227,21 @@ saul.config(["$stateProvider",
           console.error('Error al obtener los datos:', error);
         });
 
-      console.log("data is:",$scope.data);
+      console.log("data is:", $scope.data);
+
+
+      $scope.downloadDataWithParams = function () {
+        // $scope.request = [];
+        // $scope.camposBusqueda.forEach(function (item) {
+        //   if (item.estado == 'activo') {
+        //     $scope.request.push({ 'name': item.name, 'value': $scope.busqueda[item.name] });
+        //   }
+        // });
+        UtilForm.openWith(
+          $http.post(root + 'controlurbano/reports/descargarcsvcontrolurbano', { params: params })
+        );
+      }
+
     };
 
     $scope.getStore = function (nameStore) {
