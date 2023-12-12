@@ -378,9 +378,8 @@
                                 <div
                                     class="form-group {{ !formDatosSolicitante.npn.$valid && formDatosSolicitante.npn.$touched ? 'has-error' : '' }}">
                                     <label class="control-label">Numero de Licencia</label>
-                                    <input type="text" name="npn" class="form-control"
-                                        placeholder="Numero de Licencia" ng-model="solicitud.npn"
-                                        ng-required="npnRequerido" />
+                                    <input type="text" name="npn" class="form-control" placeholder="Numero de Licencia"
+                                        ng-model="solicitud.npn" ng-required="npnRequerido" />
                                     <span class="help-block"
                                         ng-show="!formDatosSolicitante.npn.$valid && formDatosSolicitante.npn.$touched">
                                         Este campo es obligatorio.
@@ -409,6 +408,16 @@
                                 <label class="control-label">Observaciones de la Queja</label>
                                 <textarea class="form-control" ng-model="solicitud.observacion" ng-required="true"
                                     name="observaciones"></textarea>
+                            </div>
+                        </div>
+                        <div class="note">
+                            Adjunte los documentos solicitados en formato PDF o JPG. Tenga en cuenta que si uno de los documentos consta de varias páginas estas deberán estar unidas en un solo archivo.
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <input-file2 label="Documento Anexo" model="files.documentoAnexo" name="documentoAnexo"
+                                    shadow="true" required="false  accept=".pdf">
+                                </input-file2>
                             </div>
                         </div>
 
