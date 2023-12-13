@@ -295,25 +295,7 @@ input.ng-dirty.ng-invalid {
                             <!-- Fin Hora -->
                             
                             
-                            <!-- Archivo -->                            
-                            <div class="col-md-6" ng-if="arrayItem.item.items[0].tipoItem == 'archivo' && arrayItem.item.items[0].soloLectura==0">
-                                <input type="file" class="form-control" name="uploadedfile" file-upload multiple >
-                                inputImage1
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th width="50%">Nombre</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr ng-repeat="item in files">
-                                            <td><strong>{{ item.name}}</strong></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <!-- Fin Archivo -->
-                            
+                          
                             <!-- texto-largo -->
                             <div class="col-md-12"  ng-if="arrayItem.item.items[0].tipoItem == 'texto-largo' && arrayItem.item.items[0].soloLectura==0">
                                 <div class="col-md-12" ng-repeat="input in arrayItem.item.items">
@@ -341,12 +323,36 @@ input.ng-dirty.ng-invalid {
                         
                         
                     </div>    
-                    <ul>
-                        <li ng-repeat="visitaxdocumento in visitasxdocumento track by $index">
-                            <a href="{{root}}../upload/documentos/{{visitaxdocumento.archivo}}" target="blank">Adjunto {{$index+1}}</a>
-                        </li>
-                    </ul>
+                    
+                    <!-- Archivos Adjuntos -->       
+
+
+                    <div class="col-md-12">
+                        <h4>Archivos Adjuntos</h4>
+                        <table class="table table-striped">
+                            <tr ng-repeat="visitaxdocumento in visitasxdocumento track by $index" ng-if="visitaxdocumento.documento.nombre=='Adjunto Visita'">
+                                <td class="col-md-6">Adjunto {{visitaxdocumento.idVisitaXDocumento}}</td>
+                                <td class="col-md-3"><a class="btn btn-primary" href="{{root}}../upload/documentos/{{visitaxdocumento.archivo}}" target="blank">Descargar</a></td>
+                                <td class="col-md-3"><button class="btn btn-warning" ng-click="removeFileAdjunto(visitaxdocumento.idVisitaXDocumento)">Eliminar</button></td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">
+                                    <input type="file" class="form-control" name="uploadedfile" file-upload>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <!-- Fin Archivos Adjuntos -->
+                    
+                    
                     <div class="row padding-sm text-right-sm" ng-if="accion=='generar'">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="control-label">Comentarios internos del proceso</label>                 
+                                <textarea class="form-control input-xlarge" ng-model="comentario" style="height:150"></textarea>
+                            </div>
+                        </div>
+                        <a class="btn btn-primary" value="Ver informe" target="_blank" href="{{root}}ver_visita/{{visita.idVisita}}">Ver informe</a>
                         <input type="submit" class="btn btn-primary" ng-click="save(0)" value="Guardar en Borrador" />
                         <input type="submit" class="btn btn-primary" ng-click="save(1)" ng-disabled="form.$invalid"value="Registrar Visita" />
                         ó
@@ -358,15 +364,16 @@ input.ng-dirty.ng-invalid {
                             <div class="col-md-12">
                                 <h4>Revisión de la Visita</h4>
                             </div>
-                        </div>    
-                        <div class="row">
-                            <div class="col-md-12">
-                                <label class="control-label">Comentarios</label>                 
-                                <textarea class="form-control input-xlarge" ng-model="comentario" style="height:150"></textarea>
-                            </div>
-                        </div>                   
+                        </div>                      
                         <div class="row padding-sm text-right-sm">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label class="control-label">Comentarios internos del proceso</label>                 
+                                    <textarea class="form-control input-xlarge" ng-model="comentario" style="height:150"></textarea>
+                                </div>
+                            </div>
                             <a class="btn btn-primary" value="Ver informe" target="_blank" href="{{root}}ver_visita/{{visita.idVisita}}">Ver informe</a>
+                            <input type="submit" class="btn btn-primary" ng-click="save(0)" value="Guardar" />
                             <input type="submit" class="btn btn-warning" ng-click="save('devuelto')" ng-disabled="form.$invalid" value="Devolver" />
                             <input type="submit" class="btn btn-primary" ng-click="save('revisado')" ng-disabled="form.$invalid" value="Pasar a firma" />
                             ó
@@ -383,17 +390,20 @@ input.ng-dirty.ng-invalid {
                         </div>    
                         <div class="row">
                             <div class="col-md-12">
-                                <label class="control-label">Comentarios</label>                 
+                                <label class="control-label">Comentarios internos del proceso</label>                 
                                 <textarea class="form-control input-xlarge" ng-model="comentario" style="height:150"></textarea>
                             </div>
-                        </div>                   
+                        </div>  
                         <div class="row padding-sm text-right-sm">
+                            <a class="btn btn-primary" value="Ver informe" target="_blank" href="{{root}}ver_visita/{{visita.idVisita}}">Ver informe</a>
+                            <input type="submit" class="btn btn-primary" ng-click="save(0)" value="Guardar" />
                             <input type="submit" class="btn btn-warning" ng-click="save('devuelto')" ng-disabled="form.$invalid" value="Devolver" />
                             <input type="submit" class="btn btn-primary" ng-click="save('firmado')" ng-disabled="form.$invalid" value="Firmar" />
                             ó
                             <a ui-sref="listar-peticion">Cancelar</a>
                         </div>
                     </div>
+                    
                 </form>
             </div>
         </div>

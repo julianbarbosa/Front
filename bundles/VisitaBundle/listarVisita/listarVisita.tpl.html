@@ -5,8 +5,8 @@
                 <thead>
                     <tr >
                         <th ng-repeat="header in headers track by $index" class="ui-state-default" style="width: {{header.width}}">
-                            <input type="text" ng-change="actualizarDatos()" ng-model="headers[$index].value" class="form-control input-sm" placeholder="{{header.title}}" style="width: 100%;"  ng-if="header.input !== false && !header.options" ng-model-options='{debounce: 2000}'>
-                            <select ng-change="actualizarDatos()" ng-model="headers[$index].value" class="form-control input-sm" ng-options="option.value as option.name for option in header.options" ng-if="header.input !== false && header.options">
+                            <input type="text" ng-change="actualizarDatos(true)" ng-model="headers[$index].value" class="form-control input-sm" placeholder="{{header.title}}" style="width: 100%;"  ng-if="header.input !== false && !header.options" ng-model-options='{debounce: 2000}'>
+                            <select ng-change="actualizarDatos(true)" ng-model="headers[$index].value" class="form-control input-sm" ng-options="option.value as option.name for option in header.options" ng-if="header.input !== false && header.options">
                                 <option value=""></option>
                             </select>
                         </th>
@@ -51,7 +51,7 @@
                 </tbody>
                 <tfoot>
                 <td colspan="10" class="currency">
-                    <uib-pagination ng-model="currentPage" total-items="totalItems" max-size="5" boundary-links="true" ng-click="actualizarDatos()"></uib-pagination>
+                    <uib-pagination first-text="Primero" previous-text="Anterior" next-text="Siguiente" last-text="Último" ng-model="currentPage" total-items="totalItems" max-size="5" boundary-links="true" ng-click="actualizarDatos()"></uib-pagination>
                 </td>
                 </tfoot>
             </table>

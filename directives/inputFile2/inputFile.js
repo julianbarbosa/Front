@@ -13,7 +13,8 @@ saul.directive('inputFile2', function(){
 			accept: '@',//Por defecto PDF e imágenes. Debe ser 
 			min: '@',//Min en Kb (0 kb por defecto)
 			max:'@',//Max en Kb (2048 Kb por defecto)
-			fn: '='
+			fn: '=',
+			// callbackFunction: '@'
 		},
 		templateUrl: '../directives/inputFile2/inputFile.tpl.html',
 		link: function ($scope, element, attrs, ngModel) {
@@ -122,6 +123,7 @@ saul.directive('inputFile2', function(){
 	        	//Impedimos que el evento se propague al controlador
 	        	event.stopPropagation();
 	        	$scope.model.file = args.file;
+				// $scope.callbackFunction();
 	        	//Actualizamos el front
 	        	$scope.$apply(function () {updateValid();});
 	        });
