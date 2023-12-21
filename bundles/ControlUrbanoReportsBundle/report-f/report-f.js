@@ -195,9 +195,6 @@ saul.config(["$stateProvider",
     $scope.headers = [
       { type: 'text', name: 'nombreCompleto', title: 'Funcionario Visitador', header_align: 'text-center', body_align: 'text-center', input: false, sorting: 'sorting', width: '12%' },
       { type: 'text', name: 'emailAddress', title: 'E-mail Visitador', header_align: 'text-center', body_align: 'text-center', input: false, sorting: 'sorting', width: '10%' },
-      { type: 'text', name: 'v5_comuna', title: 'Comuna', header_align: 'text-center', body_align: 'text-center', sorting: 'sorting', input: false, width: '7%' },
-      { type: 'text', name: 'nombre', title: 'Barrio', header_align: 'text-center', body_align: 'text-center', sorting: 'sorting', input: false, width: '10%' },
-      { type: 'text', name: 'nombre_corregimiento', title: 'Corregimiento', header_align: 'text-center', body_align: 'text-center', sorting: 'sorting', input: false, width: '10%' },
       { type: 'text', name: 'visitas_realizadas', title: 'Visitas Realizadas', header_align: 'text-center', body_align: 'text-center', input: false, sorting: 'sorting', width: '7%' },
     ];
 
