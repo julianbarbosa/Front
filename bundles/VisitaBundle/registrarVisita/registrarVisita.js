@@ -219,9 +219,8 @@ saul.config(["$stateProvider",
         // });
         
         $scope.direccion ="";
-        // Visitaxdocumento.query({id: $stateParams.idVisita}).$promise.then(function (response) {            
-        //     $scope.visitasxdocumento = response;
-        // });
+
+        
         $scope.isReadOnly = false;
         $scope.tiposSolicitud = TipoSolicitud.query();
 
@@ -233,6 +232,13 @@ saul.config(["$stateProvider",
         $scope.hideAlert = function () {
             $scope.validator = {};
         };
+
+        $scope.getVisitaXDocumento = function() {
+            Visitaxdocumento.query({id: $stateParams.idVisita}).$promise.then(function (response) {            
+                $scope.visitasxdocumento = response;
+            });
+        }
+        $scope.getVisitaXDocumento();
         
         $scope.getDateValue = function(dateString) {
             try {
@@ -273,14 +279,42 @@ saul.config(["$stateProvider",
         }
         ;
 
-        //files
-        $scope.files = [];
+        //files adjuntos
         $scope.$on("fileSelected", function (event, args) {
+            $scope.files = [];
             $scope.$apply(function () {
                 $scope.files.push(args.file);
+                $(".overlap_espera").show();
+                $(".overlap_espera_1").show();
+                Upload.upload({
+                    url: root + 'visita',
+                    data: {
+                        idVisita: $scope.visita.idVisita,
+                        filesAdjuntos: $scope.files
+                    }
+                }).then(function (response) {
+                    $scope.getVisitaXDocumento();
+                    $(".overlap_espera").hide();
+                    $(".overlap_espera_1").hide();
+                }, function(MessageChannel) {
+                    alert("Ha ocurrido un error informe al desarrollador. Gracias.");
+                });
             });
         });
         //files
+
+        $scope.removeFileAdjunto = function(id) {
+            $(".overlap_espera").show();
+            $(".overlap_espera_1").show();
+            Upload.upload({
+                url: root + 'visitaxdocumento/'+id
+            }).then(function (response) {
+                $scope.getVisitaXDocumento();
+                $(".overlap_espera").hide();
+                $(".overlap_espera_1").hide();
+            });
+        }
+
         
         $scope.saveItem = function(input) {
             if(input !== undefined) {
@@ -307,6 +341,10 @@ saul.config(["$stateProvider",
             }
         }
 
+        $scope.alerta = function() {
+            alert("La alerta con callback funciona");
+        }
+
         
         $scope.save = function (finalizar) {
             $scope.valoresFormulario = [];
@@ -326,7 +364,38 @@ saul.config(["$stateProvider",
                     });
                 });
             });
-            if (true) {
+            if (finalizar!==0) {
+                bootbox.confirm("Confirma que finalizó el proceso?",
+                function (result) {
+                    if (result) {
+                        $(".overlap_espera").show();
+                        $(".overlap_espera_1").show();
+                        Upload.upload({
+                            url: root + 'visita',
+                            data: {
+                                idVisita: $scope.visita.idVisita,
+                                data: $scope.valoresFormulario,
+                                visita: $scope.datavisita,
+                                finalizar: finalizar,
+                                comentario: $scope.comentario,
+                                files: $scope.inputFiles,
+                                filesAdjuntos: []
+                            }
+                        }).then(function (response) {
+                            $(".overlap_espera").fadeOut(500, "linear");
+                            $(".overlap_espera_1").fadeOut(500, "linear"); 
+                            $scope.result = response.data;
+                            callback(response.data);
+                            if (response.data.success) {
+                                $scope.asignacion = {};
+                            }
+                            $scope.isSuccess = true;
+                        });
+                    } else {
+                        dsJqueryUtils.goTop();
+                    }
+                });
+            } else {
                 $(".overlap_espera").show();
                 $(".overlap_espera_1").show();
                 Upload.upload({
@@ -337,7 +406,8 @@ saul.config(["$stateProvider",
                         visita: $scope.datavisita,
                         finalizar: finalizar,
                         comentario: $scope.comentario,
-                        files: $scope.inputFiles
+                        files: $scope.inputFiles,
+                        filesAdjuntos: []
                     }
                 }).then(function (response) {
                     $(".overlap_espera").fadeOut(500, "linear");
@@ -349,8 +419,6 @@ saul.config(["$stateProvider",
                     }
                     $scope.isSuccess = true;
                 });
-            } else {
-                dsJqueryUtils.goTop();
             }
         };
         
