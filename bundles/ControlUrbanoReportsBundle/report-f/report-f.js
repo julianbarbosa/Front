@@ -1,16 +1,16 @@
 saul.config(["$stateProvider",
   function ($stateProvider) {
-    $stateProvider.state("control-urbano-report-b", {
-      url: "/reportes/report-b/",
+    $stateProvider.state("control-urbano-report-f", {
+      url: "/reportes/report-f/",
       views: {
         "main": {
-          controller: "ControlUrbanoReportBCtrl",
-          templateUrl: "../bundles/ControlUrbanoReportsBundle/report-b/template.tpl.html"
+          controller: "ControlUrbanoReportFCtrl",
+          templateUrl: "../bundles/ControlUrbanoReportsBundle/report-f/template.tpl.html"
         }
       }
     });
   }
-]).controller("ControlUrbanoReportBCtrl", ["$scope", "$http", "root", "UtilForm", "$filter",
+]).controller("ControlUrbanoReportFCtrl", ["$scope", "$http", "root", "UtilForm", "$filter",
   function ($scope, $http, root, UtilForm, $filter) {
     $scope.currentPage = 1;
     $scope.numPerPage = 20;
@@ -137,7 +137,7 @@ saul.config(["$stateProvider",
         'value': '0'
       }, {
         'name': 'typeReport',
-        'value': 'B'
+        'value': 'F'
       });
       $scope.camposBusqueda.forEach(function (item) {
         if (item.estado == 'activo' && $scope.busqueda[item.name] !== undefined) {
@@ -171,7 +171,7 @@ saul.config(["$stateProvider",
           'value': '1'
         }, {
           'name': 'typeReport',
-          'value': 'B'
+          'value': 'F'
         });
       }
       $scope.camposBusqueda.forEach(function (item) {
@@ -193,10 +193,8 @@ saul.config(["$stateProvider",
     }
 
     $scope.headers = [
-      { type: 'text', name: 'v5_comuna', title: 'Comuna', header_align: 'text-center', body_align: 'text-center', sorting: 'sorting', input: false, width: '7%' },
-      { type: 'text', name: 'nombre', title: 'Barrio', header_align: 'text-center', body_align: 'text-center', sorting: 'sorting', input: false, width: '10%' },
-      { type: 'text', name: 'nombre_corregimiento', title: 'Corregimiento', header_align: 'text-center', body_align: 'text-center', sorting: 'sorting', input: false, width: '10%' },
-      { type: 'text', name: 'total_visitas', title: 'Visitas Asignadas', header_align: 'text-center', body_align: 'text-center', sorting: 'sorting', input: false, width: '7%' },
+      { type: 'text', name: 'nombreCompleto', title: 'Funcionario Visitador', header_align: 'text-center', body_align: 'text-center', input: false, sorting: 'sorting', width: '12%' },
+      { type: 'text', name: 'emailAddress', title: 'E-mail Visitador', header_align: 'text-center', body_align: 'text-center', input: false, sorting: 'sorting', width: '10%' },
       { type: 'text', name: 'visitas_realizadas', title: 'Visitas Realizadas', header_align: 'text-center', body_align: 'text-center', input: false, sorting: 'sorting', width: '7%' },
     ];
 
@@ -216,7 +214,7 @@ saul.config(["$stateProvider",
       });
 
       // Realiza la solicitud HTTP al endpoint de consulta
-      $http.get(root + 'controlurbano/reports/visitasxprocedimientos', { params: params })
+      $http.get(root + 'controlurbano/reports/produccionxfuncionariovisitador', { params: params })
         .then(function (response) {
           console.log("la respuesta:", response)
           if (typeof response.data === 'object') {
@@ -233,6 +231,7 @@ saul.config(["$stateProvider",
         });
 
       console.log("data is:", $scope.data);
+
     };
 
     $scope.getStore = function (nameStore) {
