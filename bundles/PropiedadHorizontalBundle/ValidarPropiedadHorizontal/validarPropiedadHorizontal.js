@@ -93,7 +93,7 @@ saul.config(["$stateProvider",
 
         // Funcion que notifica al usuario que el servicio esta temporalmene
         $scope.solicitarCertificadoTemporal = function () {
-            alert("Estimado ciudadano, este servicio estará activo a partir del 15 de enero del 2024.");
+            alert("Estimado ciudadano, \n\nEste servicio estará activo a partir del 15 de enero del 2024.");
         };
     }
 ]);
