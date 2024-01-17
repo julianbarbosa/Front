@@ -19,10 +19,9 @@ saul.config(["$stateProvider",
         $scope.orderBy = 'idsolicitud';
         $scope.headers = [
             {type: 'action', name: 'acciones', title: 'Acciones', align: 'text-center', input: false, width: '5%',
-                values: [  {'icon': '<i class="ver-detalle fa fa-external-link" title="Clic para ver la información completa del expediente"></i>'} ],
-                options: [
-                    {'value': 0, nameValidate: 'estaEnviado', 'name': 'No Enviado', 'link': '<a href="integracion/crear_licencia/{{licencia.idLicencia}}"><i class="ver-detalle fa fa-refresh pull-left" title="Enviar a DAMP"></i></a>'}
-                ]
+                values: [  {'icon': '<i class="ver-detalle fa fa-external-link" title="Clic para ver la información completa de la visita"></i>'} ,
+                           {'icon': '<i class="ver-detalle fa fa-history" title="Clic para ver el historial"></i>','link': '#!/solicitud/verhistorial/', 'idname':'idsolicitud', 'target': '_blank'}             
+                        ]  
             },
             {type:'text', name: 'idvisita', name2: '', title: 'No Visita', header_align: 'text-center', body_align: 'text-center', sorting: 'sorting', width: '5%'},            
             {type:'text', name: 'direccion', title: 'Dirección', header_align: 'text-center', body_align: 'text-center', sorting: 'sorting', width:'20%'},

@@ -23,7 +23,7 @@
                             
                             <!--Acciones-->
                             <span ng-if="header.values" >
-                                <span ng-if="value['link']" ng-repeat="value in header.values" ng-bind-html="'<a href=\''+value['link']+row['idvisita']+'\' >'+value['icon']+' </a>'"></span>
+                                <span ng-if="value['link']" ng-repeat="value in header.values" ng-bind-html="'<a href=\''+value['link']+row[value['idname']]+'\'  target=\''+value['target']+'\'>'+value['icon']+' </a>'"></span>
                                 <span ng-if="row['ruta'] && !value['link']" ng-repeat="value in header.values" ng-bind-html="'<a href=\'#!'+row['ruta']+row['idvisita']+'\' >'+value['icon']+' </a>'"></span>                                                                
                             </span>
                             

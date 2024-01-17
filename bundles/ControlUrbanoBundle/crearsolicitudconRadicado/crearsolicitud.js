@@ -83,22 +83,17 @@ saul
           .get(root + "usuario/actual")
           .then(function (response) {
             $scope.thisUser = response.data;
-
             if ($scope.thisUser.funcionario == 1) {
-              if (
-                $scope.thisUser.roles.indexOf("radicar_solicitudes") !== -1
-              ) {
-                $scope.esFuncionario = true;
-              } else {
+              $scope.esFuncionario = true;
+            } else {
                 alert(
                   "Usted NO tiene permisos, para radicar este tipo de solicitudes"
                 );
+                $scope.esFuncionario = false;
+                $scope.solicitud.solicitante = angular.fromJson($scope.thisUser);
               }
-            } else {
-              $scope.esFuncionario = false;
-              $scope.solicitud.solicitante = angular.fromJson($scope.thisUser);
-            }
-          })
+            } 
+          )
           .finally(function () {
             LoadingOverlap.hide($scope);
           });

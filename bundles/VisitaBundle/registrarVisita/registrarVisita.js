@@ -378,6 +378,7 @@ saul.config(["$stateProvider",
                                 visita: $scope.datavisita,
                                 finalizar: finalizar,
                                 comentario: $scope.comentario,
+                                comentariointerno: $scope.comentariointerno,
                                 files: $scope.inputFiles,
                                 filesAdjuntos: []
                             }
@@ -406,6 +407,7 @@ saul.config(["$stateProvider",
                         visita: $scope.datavisita,
                         finalizar: finalizar,
                         comentario: $scope.comentario,
+                        comentariointerno: $scope.comentariointerno,
                         files: $scope.inputFiles,
                         filesAdjuntos: []
                     }

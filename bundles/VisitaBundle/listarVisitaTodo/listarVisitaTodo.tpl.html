@@ -1,12 +1,15 @@
-<div class="panel" ng-controller="ListarVisitaTodoCtrl"> 
+<div class="panel"> 
     <div class="panel-body">
+        <div class="page-header">
+            <h1 class="col-xs-12 col-sm-10 text-center text-left-sm"><i class="padding-sm-hr page-header-icon fa fa-tasks"></i>&nbsp;&nbsp;Listado de Vistas de Construcciones</h1>
+        </div>
         <div class="table-primary">
             <table cellpadding="0" cellspacing="0" border="0" class="table-hover table table-bordered dataTable" id="listaSolicitudes" width="100%" role="grid" aria-describedby="listaSolicitudes_info">
                 <thead>
-                    <tr>
+                    <tr >
                         <th ng-repeat="header in headers track by $index" class="ui-state-default" style="width: {{header.width}}">
-                            <input type="text" ng-change="actualizarDatos()" ng-model="headers[$index].value" class="form-control input-sm" placeholder="{{header.title}}" style="width: 100%;"  ng-if="header.input !== false && !header.options" ng-model-options='{debounce: 2000}'>
-                            <select ng-change="actualizarDatos()" ng-model="headers[$index].value" class="form-control input-sm" ng-options="option.value as option.name for option in header.options" ng-if="header.input !== false && header.options">
+                            <input type="text" ng-change="actualizarDatos(true)" ng-model="headers[$index].value" class="form-control input-sm" placeholder="{{header.title}}" style="width: 100%;"  ng-if="header.input !== false && !header.options" ng-model-options='{debounce: 2000}'>
+                            <select ng-change="actualizarDatos(true)" ng-model="headers[$index].value" class="form-control input-sm" ng-options="option.value as option.name for option in header.options" ng-if="header.input !== false && header.options">
                                 <option value=""></option>
                             </select>
                         </th>
@@ -18,12 +21,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr  class="odd" style="font-weight: bold;" ng-repeat="row in data" ng-class="{'danger': row[rowWarning] === false}">
+                    <tr  class="odd" style="font-weight: bold;" ng-repeat="row in data" ng-class="{'danger': row['rowWarning'] === '1', 'warning': row['rowWarning'] === '2'}">
                         <td ng-repeat="header in headers" class="{{header.body_align}}">
                             
                             <!--Acciones-->
                             <span ng-if="header.values" >
-                                <span ng-if="value['link']" ng-repeat="value in header.values" ng-bind-html="'<a href=\''+value['link']+row['idvisita']+'\' >'+value['icon']+' </a>'"></span>
                                 <span ng-if="row['ruta'] && !value['link']" ng-repeat="value in header.values" ng-bind-html="'<a href=\'#!'+row['ruta']+row['idvisita']+'\' >'+value['icon']+' </a>'"></span>                                                                
                             </span>
                             
@@ -51,7 +53,7 @@
                 </tbody>
                 <tfoot>
                 <td colspan="10" class="currency">
-                    <uib-pagination ng-model="currentPage" total-items="totalItems" max-size="5" boundary-links="true" ng-click="actualizarDatos()"></uib-pagination>
+                    <uib-pagination first-text="Primero" previous-text="Anterior" next-text="Siguiente" last-text="Último" ng-model="currentPage" total-items="totalItems" max-size="5" boundary-links="true" ng-click="actualizarDatos()"></uib-pagination>
                 </td>
                 </tfoot>
             </table>

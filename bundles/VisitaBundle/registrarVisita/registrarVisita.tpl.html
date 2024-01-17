@@ -344,14 +344,15 @@ input.ng-dirty.ng-invalid {
                     </div>
                     <!-- Fin Archivos Adjuntos -->
                     
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="control-label">Comentarios internos del proceso</label>                 
+                            <textarea class="form-control input-xlarge" ng-model="comentariointerno" style="height:150"></textarea>
+                        </div>
+                    </div> 
                     
                     <div class="row padding-sm text-right-sm" ng-if="accion=='generar'">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <label class="control-label">Comentarios internos del proceso</label>                 
-                                <textarea class="form-control input-xlarge" ng-model="comentario" style="height:150"></textarea>
-                            </div>
-                        </div>
+                        
                         <a class="btn btn-primary" value="Ver informe" target="_blank" href="{{root}}ver_visita/{{visita.idVisita}}">Ver informe</a>
                         <input type="submit" class="btn btn-primary" ng-click="save(0)" value="Guardar en Borrador" />
                         <input type="submit" class="btn btn-primary" ng-click="save(1)" ng-disabled="form.$invalid"value="Registrar Visita" />
@@ -366,12 +367,8 @@ input.ng-dirty.ng-invalid {
                             </div>
                         </div>                      
                         <div class="row padding-sm text-right-sm">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <label class="control-label">Comentarios internos del proceso</label>                 
-                                    <textarea class="form-control input-xlarge" ng-model="comentario" style="height:150"></textarea>
-                                </div>
-                            </div>
+                           
+                            
                             <a class="btn btn-primary" value="Ver informe" target="_blank" href="{{root}}ver_visita/{{visita.idVisita}}">Ver informe</a>
                             <input type="submit" class="btn btn-primary" ng-click="save(0)" value="Guardar" />
                             <input type="submit" class="btn btn-warning" ng-click="save('devuelto')" ng-disabled="form.$invalid" value="Devolver" />
@@ -388,12 +385,7 @@ input.ng-dirty.ng-invalid {
                                 <h4>Firma de Visita</h4>
                             </div>
                         </div>    
-                        <div class="row">
-                            <div class="col-md-12">
-                                <label class="control-label">Comentarios internos del proceso</label>                 
-                                <textarea class="form-control input-xlarge" ng-model="comentario" style="height:150"></textarea>
-                            </div>
-                        </div>  
+                        
                         <div class="row padding-sm text-right-sm">
                             <a class="btn btn-primary" value="Ver informe" target="_blank" href="{{root}}ver_visita/{{visita.idVisita}}">Ver informe</a>
                             <input type="submit" class="btn btn-primary" ng-click="save(0)" value="Guardar" />
