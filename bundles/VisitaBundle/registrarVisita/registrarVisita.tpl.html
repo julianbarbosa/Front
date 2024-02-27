@@ -313,7 +313,14 @@ input.ng-dirty.ng-invalid {
                                         required="{{requiredLicencia}}"></input-file>****
                                         inputImage={{input}} -->
                                         <input-file2 max="4" label="{{input.nombre}}" model="inputFiles[input.codigo]"></input-file2>
-                                        <a href="../../saul2/upload/documentos/{{input.valor}}" target="_blank"><img src="../../saul2/upload/documentos/{{input.valor}}"  width="50px" ng-show="input.valor"></a>
+                                        <a  href="../../saul2/upload/documentos/{{input.valor}}" 
+                                            target="_blank"><img src="../../saul2/upload/documentos/{{input.valor}}"  
+                                            width="50px" ng-show="input.valor"></a>                                        
+                                        <button class="btn btn-sm btn-primary" 
+                                                ng-click="eliminarImagen(input)"
+                                                ng-show="input.valor">
+                                                Eliminar imagen
+                                        </button>
                                     </div>
                                 </div>
                             </div> 
@@ -337,7 +344,7 @@ input.ng-dirty.ng-invalid {
                             </tr>
                             <tr>
                                 <td colspan="3">
-                                    <input type="file" class="form-control" name="uploadedfile" file-upload>
+                                    <input type="file" class="form-control" name="uploadedfile" ng-model="adjuntos" file-upload>
                                 </td>
                             </tr>
                         </table>
@@ -352,13 +359,20 @@ input.ng-dirty.ng-invalid {
                     </div> 
                     
                     <div class="row padding-sm text-right-sm" ng-if="accion=='generar'">
-                        
+                        <button class="btn btn-primary" ng-click="setCargarXls(true)">Cargar XLS</button>
                         <a class="btn btn-primary" value="Ver informe" target="_blank" href="{{root}}ver_visita/{{visita.idVisita}}">Ver informe</a>
                         <input type="submit" class="btn btn-primary" ng-click="save(0)" value="Guardar en Borrador" />
                         <input type="submit" class="btn btn-primary" ng-click="save(1)" ng-disabled="form.$invalid"value="Registrar Visita" />
                         ó
                         <a ui-sref="listar-peticion">Cancelar</a>
                     </div>
+                    <div class="row" ng-if="cargarXls!==false">
+                        <h4>Ingrese el archivo excel para cargar información a la visita.</h4>
+                        {{dataPlantillaXls}}
+                        <input-file2 max="4" label="Plantilla Excel" model="dataPlantillaXls"></input-file2>
+                        <button class="btn btn-warning" ng-click="cargarXlsVisita()">Cargar</button>
+                    </div>
+                    
                     <div  ng-if="accion=='revisar'">
                         <hr>
                         <div class="row">

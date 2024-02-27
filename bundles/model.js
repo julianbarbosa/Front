@@ -2298,7 +2298,9 @@ saul.factory("TipoDocIdentificacion", ["$resource", "root", function (a, b) {
 	function ($resource, root) {
 		
 		return $resource(root + "visita/:id", {}, {
-			find: {method: 'GET', isArray: false},
+			find: {method: 'GET', isArray: false, transformResponse: function (json, headerGetter) {
+				return angular.fromJson(json);
+			}},
 			query: {method: 'GET', isArray: false},
 			create: {method: 'POST', isArray: true}
 		});

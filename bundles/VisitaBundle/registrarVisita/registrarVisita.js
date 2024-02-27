@@ -11,23 +11,29 @@ saul.config(["$stateProvider",
         });
     }
 ]).directive('dateInput', function(){
+    
     return {
         restrict : 'A',
         scope : {
             ngModel : '='
         },
         link: function (scope) {
-            if (scope.ngModel) scope.ngModel = new Date(scope.ngModel);
+            if (scope.ngModel) {                
+                scope.ngModel = Date.parse(scope.ngModel);
+            }
         }
     }
 }).directive('stringToNumber', function () {
+    
     return {
         require: 'ngModel',
         link: function (scope, element, attrs, ngModel) {
             ngModel.$parsers.push(function (value) {
+                console.log("entro a stringToNumber1 "+scope.ngModel);
                 return '' + value;
             });
             ngModel.$formatters.push(function (value) {
+                console.log("entro a stringToNumber2 "+scope.ngModel);
                 return parseFloat(value);
             });
         }
@@ -40,6 +46,7 @@ saul.config(["$stateProvider",
         self.viewLoaded = false;
         $scope.root = root;
         $scope.viewLoaded = false;
+        $scope.cargarXls = false;
         $scope.urlImagenes = "//planeacion.cali.gov.co/saul2/images/img_lineas/";
         $scope.imageStreetView = ""+$scope.urlImagenes+"street_view.png";
         $scope.urlGeoportal = "https://geoportal.cali.gov.co/agserver/rest/services/Lineas/lineas_auto/MapServer/0";                               
@@ -48,7 +55,7 @@ saul.config(["$stateProvider",
         $scope.comentario = 'N/A';
         
         $scope.inputFiles = {}; 
-        
+        $scope.dataPlantillaXls;
         $scope.root = root;
         $scope.visita.idVisita = $stateParams.idVisita;
         $scope.accion = $stateParams.accion;
@@ -241,6 +248,7 @@ saul.config(["$stateProvider",
         $scope.getVisitaXDocumento();
         
         $scope.getDateValue = function(dateString) {
+            console.log("entro a getDateValue");
             try {
                 var date = new Date(dateString);
             } catch (exception) {
@@ -315,7 +323,22 @@ saul.config(["$stateProvider",
             });
         }
 
-        
+        $scope.eliminarImagen = function(input) {
+            $scope.valoresFormulario = [];
+            $scope.valoresFormulario.push({codigo: input.codigo, valor: null, tipoItem: input.tipoItem});
+            Upload.upload({
+                url: root + 'visita',
+                data: {
+                    idVisita: $scope.visita.idVisita,
+                    data: $scope.valoresFormulario
+                }
+            }).then(function (response) {
+                
+            }, function(MessageChannel) {
+                alert("Ha ocurrido un error informe al desarrollador. Gracias.");
+            });            
+        }
+
         $scope.saveItem = function(input) {
             if(input !== undefined) {
                 $scope.valoresFormulario = [];
@@ -324,7 +347,13 @@ saul.config(["$stateProvider",
                     const options = { timeZone: 'America/Bogota' };
                     const formattedDate = dateObject.toLocaleString('en-US', options);
                     $scope.valoresFormulario.push({codigo: input.codigo, valor: formattedDate, tipoItem: input.tipoItem});
-                } else {
+                } if(input.tipoItem == 'fecha') {
+                    const dateObject = new Date(input.valor);
+                    const options = { timeZone: 'America/Bogota', year: 'numeric', month: 'numeric', day: 'numeric' };
+                    const formattedDate = dateObject.toLocaleString('en-US', options);
+                    $scope.valoresFormulario.push({codigo: input.codigo, valor: formattedDate, tipoItem: input.tipoItem});
+                }
+                 else {
                     $scope.valoresFormulario.push({codigo: input.codigo, valor: input.valor, tipoItem: input.tipoItem});
                 }
                 Upload.upload({
@@ -345,6 +374,25 @@ saul.config(["$stateProvider",
             alert("La alerta con callback funciona");
         }
 
+        $scope.setCargarXls = function(value) {
+            console.log("entor a set cargar xls");
+            $scope.cargarXls = true;
+        }
+
+        $scope.cargarXlsVisita = function() {
+            
+            Upload.upload({
+                url: root + 'constructorvisita/leercampos',
+                data: {
+                    idVisita: $scope.visita.idVisita,
+                    fileXls: $scope.dataPlantillaXls
+                }
+            }).then(function (response) {
+                
+            }, function(MessageChannel) {
+                alert("Ha ocurrido un error informe al desarrollador. Gracias.");
+            });
+        }
         
         $scope.save = function (finalizar) {
             $scope.valoresFormulario = [];
@@ -429,8 +477,3 @@ saul.config(["$stateProvider",
         };
     }
 ]);
-
-  
-
-
-
