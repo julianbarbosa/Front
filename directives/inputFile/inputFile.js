@@ -21,7 +21,7 @@ saul.directive('inputFile', function(){
 			options.label || (options.label='');
 			options.min = $scope.min?$scope.min*1024:0;//Por defecto 0
 			options.max = $scope.max?$scope.max*1024:2097152;//Por defecto 2M
-			options.allowedExtensions = $scope.accept?$scope.accept:'pdf,png,jpeg,jpg';//Por defecto imágenes y pdf
+			options.allowedExtensions = $scope.accept?$scope.accept:'pdf,png,jpeg,jpg,xls,xlsx';//Por defecto imágenes y pdf
 			options.regex = new RegExp("(.*?)\.(" + options.allowedExtensions.replace(/,/g,"|") + ")$");
 			options.description = $scope.description?$scope.description:'';//Por defecto vacía
 			options.required = $scope.required=='true';//Por defecto False

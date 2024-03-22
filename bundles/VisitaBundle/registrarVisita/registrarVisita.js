@@ -261,13 +261,16 @@ saul.config(["$stateProvider",
         }
 
         $scope.getDominio = function(nombreDominio, valor) {
-            // LoadingOverlap.show($scope);
-            $http.get(root+"dominio/"+nombreDominio).then(function(response) {
-                $scope.arrayDominio[nombreDominio] = response.data;
-            }).finally(function(){
-                // LoadingOverlap.hide($scope);
-            });
-            
+            if($scope.arrayDominio[nombreDominio] == undefined) {
+                // LoadingOverlap.show($scope);
+                $scope.arrayDominio[nombreDominio] = [];
+                $http.get(root+"dominio/"+nombreDominio).then(function(response) {
+                    $scope.arrayDominio[nombreDominio] = response.data;
+                    $scope.arrayDominio[nombreDominio].unshift({"id":"", "nombre":"- Seleccione -"});
+                }).finally(function(){
+                    // LoadingOverlap.hide($scope);
+                });
+            }
         }
         
         $scope.changeSelect = function(nombreDominio) {
@@ -323,6 +326,24 @@ saul.config(["$stateProvider",
             });
         }
 
+        // Función recursiva para buscar un atributo con un valor específico
+        function actualizarPorAtributo(atributo, nuevoValor) {
+            Object.keys($scope.camposformularioVisita).forEach(function(key1) {
+                if($scope.camposformularioVisita[key1]!==null) {
+                    if(Array.isArray($scope.camposformularioVisita[key1].arrayItems)) {
+                        Object.keys($scope.camposformularioVisita[key1].arrayItems).forEach(function(key2) {
+                            if(atributo == $scope.camposformularioVisita[key1].arrayItems[key2].item.items[0].codigo) {
+                                console.error($scope.camposformularioVisita[key1].arrayItems[key2].item.items[0].valor);
+                                $scope.camposformularioVisita[key1].arrayItems[key2].item.items[0].valor = nuevoValor;
+                                console.log($scope.camposformularioVisita[key1].arrayItems[key2].item.items[0].valor);
+                            } 
+                        });
+                    }
+                }
+            });
+            
+        }
+
         $scope.eliminarImagen = function(input) {
             $scope.valoresFormulario = [];
             $scope.valoresFormulario.push({codigo: input.codigo, valor: null, tipoItem: input.tipoItem});
@@ -333,13 +354,14 @@ saul.config(["$stateProvider",
                     data: $scope.valoresFormulario
                 }
             }).then(function (response) {
-                
+                actualizarPorAtributo(input.codigo, null);                
             }, function(MessageChannel) {
                 alert("Ha ocurrido un error informe al desarrollador. Gracias.");
             });            
         }
 
         $scope.saveItem = function(input) {
+            console.log("entro a saveItem",input )
             if(input !== undefined) {
                 $scope.valoresFormulario = [];
                 if(input.tipoItem == 'hora') {
