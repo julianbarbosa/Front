@@ -383,6 +383,29 @@ input.ng-dirty.ng-invalid {
                         <input-file2 max="4" label="Plantilla Excel" model="dataPlantillaXls"></input-file2>
                         <button class="btn btn-warning" ng-click="cargarXlsVisita()">Cargar</button>
                     </div>
+                    {{accion}}
+                    <div ng-if="accion=='firmar'">
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4>Envío de notificaciones</h4>
+                            </div>
+                        </div>  
+                        <div class="row padding-sm text-left-sm">
+                            <table class="table table-striped">
+                                <tr>
+                                    <td>Seleccionar</td>
+                                    <td>Nombre</td>
+                                    <td>Email</td>
+                                </tr>
+                                <tr ng-repeat="notificacion in notificaciones track by $index">
+                                    <td><input type="checkbox" ng-value="true"  ng-model="notificaciones[$index]['enviar']"></td>
+                                    <td>{{notificacion.nombre}}</td>
+                                    <td>{{notificacion.valor}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
                     
                     <div  ng-if="accion=='revisar'">
                         <hr>

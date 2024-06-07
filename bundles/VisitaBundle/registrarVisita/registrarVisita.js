@@ -60,6 +60,7 @@ saul.config(["$stateProvider",
         $scope.visita.idVisita = $stateParams.idVisita;
         $scope.accion = $stateParams.accion;
         $scope.ocultarModal = true;
+        $scope.notificaciones = [];
         $(".overlap_espera").show();
         $(".overlap_espera_1").show();
         
@@ -272,6 +273,13 @@ saul.config(["$stateProvider",
                 });
             }
         }
+
+        $scope.getNotificaciones = function() {
+            $http.get(root+"dominio/notificacion-construcciones").then(function(response) {
+                $scope.notificaciones = response.data;                    
+            });
+        }
+        $scope.getNotificaciones();
         
         $scope.changeSelect = function(nombreDominio) {
             return $scope.arrayDominio[nombreDominio][0];
@@ -450,7 +458,8 @@ saul.config(["$stateProvider",
                                 comentario: $scope.comentario,
                                 comentariointerno: $scope.comentariointerno,
                                 files: $scope.inputFiles,
-                                filesAdjuntos: []
+                                filesAdjuntos: [],
+                                notificaciones: $scope.notificaciones
                             }
                         }).then(function (response) {
                             $(".overlap_espera").fadeOut(500, "linear");
@@ -479,7 +488,8 @@ saul.config(["$stateProvider",
                         comentario: $scope.comentario,
                         comentariointerno: $scope.comentariointerno,
                         files: $scope.inputFiles,
-                        filesAdjuntos: []
+                        filesAdjuntos: [],
+                        notificaciones: $scope.notificaciones
                     }
                 }).then(function (response) {
                     $(".overlap_espera").fadeOut(500, "linear");
@@ -497,5 +507,6 @@ saul.config(["$stateProvider",
 
         $scope.cancel = function () {
         };
+
     }
 ]);
