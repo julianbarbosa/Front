@@ -24,7 +24,7 @@ saul.config(["$stateProvider",
                         ]  
             },
             {type:'text', name: 'idvisita', name2: '', title: 'No Visita', header_align: 'text-center', body_align: 'text-center', sorting: 'sorting', width: '5%'},            
-            {type:'text', name: 'direccion', title: 'Dirección', header_align: 'text-center', body_align: 'text-center', sorting: 'sorting', width:'20%'},
+            {type:'text', name: 'direccion', title: 'Dirección', header_align: 'text-center', body_align: 'text-center', sorting: 'sorting', width:'15%'},
             {type:'link', name: 'radicado', title: 'Radicado', header_align: 'text-left', body_align: 'text-left', width: '10%', link:'http://www.cali.gov.co/aplicaciones/orweb/orweb/principal.php?id='},
             {type:'text', name: 'nombreTipoSolicitud', title: 'Tipo Solicitud', options: 
                 [
@@ -36,8 +36,9 @@ saul.config(["$stateProvider",
                 ], header_align: 'text-center', body_align: 'text-center', sorting: 'sorting', width:'15%'},
             {type:'text', name: 'nombreEstado', title: 'Estado', header_align: 'text-center', body_align: 'text-center', width:'10%'},    
             {type:'text', name: 'visitador', title: 'Visitador', header_align: 'text-center', body_align: 'text-center', width:'10%'},
-            {type:'text', name: 'supervisor', title: 'Revisor', header_align: 'text-center', body_align: 'text-center', width:'10%'},
-            {type:'date', name: 'fecha_programacion', title: 'Fecha Actualización', header_align: 'text-center', body_align: 'text-center', width:'10%'},
+            {type:'date', name: 'fechaVisita', title: 'Fecha Visita', header_align: 'text-center', body_align: 'text-center', width:'10%'},
+            {type:'text', name: 'supervisor', title: 'Revisor', header_align: 'text-center', body_align: 'text-center', width:'10%'},            
+            {type:'date', name: 'fechaRevision', title: 'Fecha Revisión', header_align: 'text-center', body_align: 'text-center', width:'10%'},
         ];
 
         $scope.actualizarDatos = function (inicializarPaginador)
