@@ -120,7 +120,6 @@ input.ng-dirty.ng-invalid {
                                     
                                     
                                     <select class="form-control input-xlarge" 
-                                            style="color: blue !important;"
                                             ng-model="campo.arrayItems[$index].item.items[0].valor" 
                                             ng-if="campo.arrayItems[$index].item.items[0].tipoItem=='lista'" 
                                             ng-options="opcion in campo.arrayItems[$index].item.items[0].parametros.opciones"
@@ -128,7 +127,6 @@ input.ng-dirty.ng-invalid {
                                     </select>
                                  
                                     <select class="form-control"
-                                        style="color: blueviolet !important;"
                                         ng-model="arrayItem.item.items[0].valor" 
                                         ng-init="arrayItem.item.items[0].valor=arrayItem.item.items[0].valor*1;getDominio(campo.arrayItems[$index].item.items[0].parametros['dominio'])" 
                                         ng-if="campo.arrayItems[$index].item.items[0].tipoItem=='select-one'"
@@ -143,7 +141,6 @@ input.ng-dirty.ng-invalid {
                                     <input type="number" string-to-number step ="0.01" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" class="form-control number-control" ng-model="input.valor" value="{{input.valor}}"  ng-blur="saveItem(input)" ng-if="(input.tipoItem === 'numero' || input.tipoItem === 'decimal')  &&  input.soloLectura==0" >
                                     
                                     <select class="form-control input-xlarge"
-                                            style="color: chocolate !important;" 
                                             ng-model="input.valor"  
                                             value="{{input.valor}}"
                                             ng-init="input.valor=''" 
@@ -203,7 +200,30 @@ input.ng-dirty.ng-invalid {
                             </div>
                             <!-- Fin Texto Mediano -->
                             
-                            
+                            <!-- Texto Mediano -->
+                            <div class="col-md-6" ng-if="(arrayItem.item.items[0].tipoItem === 'texto-min' || arrayItem.item.items[0].tipoItem === 'texto-corto' ) && arrayItem.item.items[0].soloLectura==0" >  
+                               
+                                <div class="col-md-12" ng-repeat="input in arrayItem.item.items">
+                                    <label class="control-label" ng-if="!arrayItem.item.items[0].parametros.label">{{ arrayItem.item.items[0].nombre }}</label>
+                                    <label class="control-label" ng-if="arrayItem.item.items[0].parametros.label">{{ arrayItem.item.items[0].parametros.label }}</label>
+                                    <div ng-show="!(form[input.codigo].$pristine && form[input.codigo].$untouched && input.valor) && !(form[input.codigo].$dirty || !input.valor)" >
+                                        Error de visualización
+                                    </div>
+                                    
+                                    <div class="input-group" ng-show="form[input.codigo].$pristine && form[input.codigo].$untouched && input.valor">
+                                        <input type="text" name="{{input.codigo}}"
+                                            class="form-control"
+                                            ng-model="input.valor"
+                                            title="{{input.descripcion}}" 
+                                            ng-readonly="form[input.codigo].$untouched && input.codigo">
+                                        <div class="input-group-addon" >
+                                            <i class="fa fa-lock" aria-hidden="true" ng-click="form[input.codigo].$setTouched();form[input.codigo].$setDirty()" style="cursor: pointer; "></i>
+                                        </div>
+                                    </div>
+                                    <input type="text" name="{{input.codigo}}" class="form-control" ng-model="input.valor" title="{{input.descripcion}}" ng-show="form[input.codigo].$dirty || !input.valor" ng-change="form[input.codigo].$setTouched()" ng-blur="saveItem(input)">
+                                </div>
+                            </div>
+                            <!-- Fin Texto Mediano -->
                            
                             <!-- texto corto -->
                             <div class="col-md-6" ng-if="arrayItem.item.items[0].tipoItem === 'texto' && arrayItem.item.items[0].soloLectura==0" >
@@ -250,7 +270,7 @@ input.ng-dirty.ng-invalid {
                                            title="{{input.descripcion}}" 
                                            
                                            ng-model="input.valor"> -->
-                                    <select class="form-control" style="color: red !important;" ng-model="input.valor" 
+                                    <select class="form-control" ng-model="input.valor" 
                                         ng-init="input.valor=arrayItem.item.items[0].valor*1;getDominio(arrayItem.item.items[0].parametros['dominio'])" 
                                         value="{{input.valor}}" ng-options="dominio.id as dominio.nombre for dominio in arrayDominio[arrayItem.item.items[0].parametros['dominio']]" ng-blur="saveItem(input)">
                                     </select>
@@ -259,18 +279,36 @@ input.ng-dirty.ng-invalid {
                             <!-- select-one -->
 
                       
-                            <!-- Número -->
-                            <div class="col-md-6" ng-if="(arrayItem.item.items[0].tipoItem == 'numero' || arrayItem.item.items[0].tipoItem == 'decimal') && arrayItem.item.items[0].soloLectura==0">
-                                 <div class="col-md-12" ng-repeat="input in arrayItem.item.items">
-                                    <label class="control-label" >{{ arrayItem.item.nombre }}</label>        
-                                    <input type="number" number-mask=""  class="form-control input-xlarge" 
-                                           title="{{input.descripcion}}" 
-                                           value="{{input.valor}}"
-                                           ng-model="input.valor"
-                                           ng-blur="saveItem(input)">
+                            <!-- Porcentaje -->
+                            <div class="col-md-6" ng-if="(arrayItem.item.items[0].tipoItem == 'porcentaje') && arrayItem.item.items[0].soloLectura==0">
+                                <div class="col-md-12" ng-repeat="input in arrayItem.item.items">
+                                    <label class="control-label" >{{ arrayItem.item.nombre }}</label>   
+                                    <div class="input-group">
+                                        <input type="number" number-mask=""  class="form-control input-xlarge" 
+                                            title="{{input.descripcion}}" 
+                                            value="{{input.valor}}"
+                                            ng-model="input.valor"
+                                            ng-blur="saveItem(input)">
+                                        <div class="input-group-addon" >
+                                            <i class="fa fa-percent" aria-hidden="true" ></i>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <!-- Fin Número -->
+                            <!-- Fin Porcentaje -->
+
+                            <!-- Número -->
+                            <div class="col-md-6" ng-if="(arrayItem.item.items[0].tipoItem == 'numero' || arrayItem.item.items[0].tipoItem == 'decimal') && arrayItem.item.items[0].soloLectura==0">
+                                <div class="col-md-12" ng-repeat="input in arrayItem.item.items">
+                                   <label class="control-label" >{{ arrayItem.item.nombre }}</label>        
+                                   <input type="number" number-mask=""  class="form-control input-xlarge" 
+                                          title="{{input.descripcion}}" 
+                                          value="{{input.valor}}"
+                                          ng-model="input.valor"
+                                          ng-blur="saveItem(input)">
+                               </div>
+                           </div>
+                           <!-- Fin Número -->
 
                             
                             <!-- Fecha -->
@@ -323,7 +361,7 @@ input.ng-dirty.ng-invalid {
                                         <!-- ****<input-file2 max="4" label="{{input.nombre}}" description="" model="inputFiles[input.codigo]" 
                                         required="{{requiredLicencia}}"></input-file>****
                                         inputImage={{input}} -->
-                                        <input-file2 max="4" label="{{input.nombre}}" model="inputFiles[input.codigo]"></input-file2>
+                                        <input-file2 max="4" label="{{input.nombre}}" codigo="input.codigo" model="inputFiles[input.codigo]" callback-function="saveItem(input)"></input-file2>
                                         <a  href="../../saul2/upload/documentos/{{input.valor}}" 
                                             target="_blank"><img src="../../saul2/upload/documentos/{{input.valor}}"  
                                             width="50px" ng-show="input.valor"></a>                                        
@@ -432,7 +470,23 @@ input.ng-dirty.ng-invalid {
                             <div class="col-md-12">
                                 <h4>Firma de Visita</h4>
                             </div>
-                        </div>    
+                        </div>  
+                        <div class="row">
+                            <div class="col-md-3">
+                                <input type="checkbox" ng-model="nuevaVisita.requiereVisita" > Requiere de una nueva Visita?
+                            </div>             
+                            <div class="row col-md-3" ng-if="nuevaVisita.requiereVisita==true">
+                                <div>
+                                  <p class="input-group">
+                                    <input type="text" ng-model="nuevaVisita.fecha_visita" class="form-control" uib-datepicker-popup="yyyy-MM-dd" ng-model="dt" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
+                                    <span class="input-group-btn">
+                                      <button type="button" class="btn btn-default" ng-click="open1()"><i class="fa fa-calendar" aria-hidden="true"></i></button>
+                                    </span>
+                                  </p>
+                                </div>
+                            </div>
+                        </div>
+                          
                         
                         <div class="row padding-sm text-right-sm">
                             <a class="btn btn-primary" value="Ver informe" target="_blank" href="{{root}}ver_visita/{{visita.idVisita}}">Ver informe</a>

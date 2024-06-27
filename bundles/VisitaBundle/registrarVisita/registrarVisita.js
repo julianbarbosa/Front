@@ -295,8 +295,7 @@ saul.config(["$stateProvider",
             $("html, body").animate({
                 scrollTop: 0
             }, "slow", "swing");
-        }
-        ;
+        };
 
         //files adjuntos
         $scope.$on("fileSelected", function (event, args) {
@@ -353,39 +352,10 @@ saul.config(["$stateProvider",
         }
 
         $scope.eliminarImagen = function(input) {
-            $scope.valoresFormulario = [];
-            $scope.valoresFormulario.push({codigo: input.codigo, valor: null, tipoItem: input.tipoItem});
-            Upload.upload({
-                url: root + 'visita',
-                data: {
-                    idVisita: $scope.visita.idVisita,
-                    data: $scope.valoresFormulario
-                }
-            }).then(function (response) {
-                actualizarPorAtributo(input.codigo, null);                
-            }, function(MessageChannel) {
-                alert("Ha ocurrido un error informe al desarrollador. Gracias.");
-            });            
-        }
-
-        $scope.saveItem = function(input) {
-            console.log("entro a saveItem",input )
-            if(input !== undefined) {
+            bootbox.confirm("Confirma que desea elimar la imagen?",
+            function (result) {
                 $scope.valoresFormulario = [];
-                if(input.tipoItem == 'hora') {
-                    const dateObject = new Date(input.valor);
-                    const options = { timeZone: 'America/Bogota' };
-                    const formattedDate = dateObject.toLocaleString('en-US', options);
-                    $scope.valoresFormulario.push({codigo: input.codigo, valor: formattedDate, tipoItem: input.tipoItem});
-                } if(input.tipoItem == 'fecha') {
-                    const dateObject = new Date(input.valor);
-                    const options = { timeZone: 'America/Bogota', year: 'numeric', month: 'numeric', day: 'numeric' };
-                    const formattedDate = dateObject.toLocaleString('en-US', options);
-                    $scope.valoresFormulario.push({codigo: input.codigo, valor: formattedDate, tipoItem: input.tipoItem});
-                }
-                 else {
-                    $scope.valoresFormulario.push({codigo: input.codigo, valor: input.valor, tipoItem: input.tipoItem});
-                }
+                $scope.valoresFormulario.push({codigo: input.codigo, valor: null, tipoItem: input.tipoItem});
                 Upload.upload({
                     url: root + 'visita',
                     data: {
@@ -393,7 +363,47 @@ saul.config(["$stateProvider",
                         data: $scope.valoresFormulario
                     }
                 }).then(function (response) {
+                    actualizarPorAtributo(input.codigo, null);                
+                }, function(MessageChannel) {
+                    alert("Ha ocurrido un error informe al desarrollador. Gracias.");
+                });       
+            })     
+        }
+
+        $scope.saveItem = function(input) {
+            if(input !== undefined) {
+                $scope.valoresFormulario = [];
+                filesToSend = [];
+                if(input.tipoItem == 'hora') {
+                    const dateObject = new Date(input.valor);
+                    const options = { timeZone: 'America/Bogota' };
+                    const formattedDate = dateObject.toLocaleString('en-US', options);
+                    $scope.valoresFormulario.push({codigo: input.codigo, valor: formattedDate, tipoItem: input.tipoItem});
+                } else if(input.tipoItem == 'fecha') {
+                    const dateObject = new Date(input.valor);
+                    const options = { timeZone: 'America/Bogota', year: 'numeric', month: 'numeric', day: 'numeric' };
+                    const formattedDate = dateObject.toLocaleString('en-US', options);
+                    $scope.valoresFormulario.push({codigo: input.codigo, valor: formattedDate, tipoItem: input.tipoItem});
+                } else if(input.tipoItem == 'imagen') {
+                    console.log($scope.inputFiles);
+                    filesToSend[input.codigo] = $scope.inputFiles[input.codigo];
+                    $scope.valoresFormulario.push({codigo: input.codigo, valor: input.valor, tipoItem: input.tipoItem});
                     
+
+                } else {
+                    $scope.valoresFormulario.push({codigo: input.codigo, valor: input.valor, tipoItem: input.tipoItem});
+                }
+                Upload.upload({
+                    url: root + 'visita',
+                    data: {
+                        idVisita: $scope.visita.idVisita,
+                        data: $scope.valoresFormulario,
+                        files: filesToSend,
+                    }
+                }).then(function (response) {
+                    if(response.data.value!=='') {
+                        actualizarPorAtributo(input.codigo, response.data.value); 
+                    }
                 }, function(MessageChannel) {
                     alert("Ha ocurrido un error informe al desarrollador. Gracias.");
                 });
@@ -452,13 +462,10 @@ saul.config(["$stateProvider",
                             url: root + 'visita',
                             data: {
                                 idVisita: $scope.visita.idVisita,
-                                data: $scope.valoresFormulario,
                                 visita: $scope.datavisita,
                                 finalizar: finalizar,
                                 comentario: $scope.comentario,
                                 comentariointerno: $scope.comentariointerno,
-                                files: $scope.inputFiles,
-                                filesAdjuntos: [],
                                 notificaciones: $scope.notificaciones
                             }
                         }).then(function (response) {
@@ -482,13 +489,10 @@ saul.config(["$stateProvider",
                     url: root + 'visita',
                     data: {
                         idVisita: $scope.visita.idVisita,
-                        data: $scope.valoresFormulario,
                         visita: $scope.datavisita,
                         finalizar: finalizar,
                         comentario: $scope.comentario,
                         comentariointerno: $scope.comentariointerno,
-                        files: $scope.inputFiles,
-                        filesAdjuntos: [],
                         notificaciones: $scope.notificaciones
                     }
                 }).then(function (response) {

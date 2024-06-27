@@ -4,6 +4,7 @@ saul.directive('inputFile2', function(){
 		require: '?model',
 		scope:{
 			label: '@',
+			codigo: '@',
 			description: '@',
 			placeholder: '@',
 			required: '@',//Por defecto no requerida (false)
@@ -14,7 +15,7 @@ saul.directive('inputFile2', function(){
 			min: '@',//Min en Kb (0 kb por defecto)
 			max:'@',//Max en Kb (2048 Kb por defecto)
 			fn: '=',
-			// callbackFunction: '@'
+			callbackFunction: '&',
 		},
 		templateUrl: '../directives/inputFile2/inputFile.tpl.html',
 		link: function ($scope, element, attrs, ngModel) {
@@ -105,7 +106,7 @@ saul.directive('inputFile2', function(){
 				element.find('.clear_btn_dom')[0].addEventListener('click', function(e){
 					e.preventDefault();
 					$scope.model.file = null;
-					$scope.$apply(function () {updateValid();});
+					$scope.$apply(function () {updateValid();});				
 				});
 				element.find('.pfi-choose')[0].addEventListener('click', function(e){
 					e.preventDefault();
@@ -123,7 +124,8 @@ saul.directive('inputFile2', function(){
 	        	//Impedimos que el evento se propague al controlador
 	        	event.stopPropagation();
 	        	$scope.model.file = args.file;
-				// $scope.callbackFunction();
+				console.log(args.file);
+				$scope.callbackFunction({'codigo':$scope.codigo, 'tipoItem': 'imagen'});
 	        	//Actualizamos el front
 	        	$scope.$apply(function () {updateValid();});
 	        });
