@@ -174,31 +174,6 @@ input.ng-dirty.ng-invalid {
                                 </div>
                             </div>
                             <!-- Fin Solo Lectura -->
-
-                            <!-- Texto Mediano -->
-                            <div class="col-md-6" ng-if="(arrayItem.item.items[0].tipoItem === 'texto-min' || arrayItem.item.items[0].tipoItem === 'texto-corto' ) && arrayItem.item.items[0].soloLectura==0" >  
-                               
-                                <div class="col-md-12" ng-repeat="input in arrayItem.item.items">
-                                    <label class="control-label" ng-if="!arrayItem.item.items[0].parametros.label">{{ arrayItem.item.items[0].nombre }}</label>
-                                    <label class="control-label" ng-if="arrayItem.item.items[0].parametros.label">{{ arrayItem.item.items[0].parametros.label }}</label>
-                                    <div ng-show="!(form[input.codigo].$pristine && form[input.codigo].$untouched && input.valor) && !(form[input.codigo].$dirty || !input.valor)" >
-                                        Error de visualización
-                                    </div>
-                                    
-                                    <div class="input-group" ng-show="form[input.codigo].$pristine && form[input.codigo].$untouched && input.valor">
-                                        <input type="text" name="{{input.codigo}}"
-                                            class="form-control"
-                                            ng-model="input.valor"
-                                            title="{{input.descripcion}}" 
-                                            ng-readonly="form[input.codigo].$untouched && input.codigo">
-                                        <div class="input-group-addon" >
-                                            <i class="fa fa-lock" aria-hidden="true" ng-click="form[input.codigo].$setTouched();form[input.codigo].$setDirty()" style="cursor: pointer; "></i>
-                                        </div>
-                                    </div>
-                                    <input type="text" name="{{input.codigo}}" class="form-control" ng-model="input.valor" title="{{input.descripcion}}" ng-show="form[input.codigo].$dirty || !input.valor" ng-change="form[input.codigo].$setTouched()" ng-blur="saveItem(input)">
-                                </div>
-                            </div>
-                            <!-- Fin Texto Mediano -->
                             
                             <!-- Texto Mediano -->
                             <div class="col-md-6" ng-if="(arrayItem.item.items[0].tipoItem === 'texto-min' || arrayItem.item.items[0].tipoItem === 'texto-corto' ) && arrayItem.item.items[0].soloLectura==0" >  
