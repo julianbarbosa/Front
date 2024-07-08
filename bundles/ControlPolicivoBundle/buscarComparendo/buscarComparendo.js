@@ -26,7 +26,7 @@ saul.config(["$stateProvider",
                     {'icon': '<i class="fa fa-cloud-upload text-success" title="Subir Expediente"></i>', 'style':'text-danger', action: 'openModalSubirExpediente', permission: 'subirarchivos_controlpolicivo', condition: "row['documentoExpediente']=='null' || row['documentoExpediente']==null"},
                     {'icon': '<i class="fa fa-eye text-warning" title="Ver Expediente"></i>', 'style':'text-warning', action: 'verExpediente', permission: 'subirarchivos_controlpolicivo', condition: "row['documentoExpediente']!=='null' && row['documentoExpediente']!==null"},
                     {'icon': '<i class="fa fa-times text-secondary" title="Eliminar Expediente"></i>', 'style':'text-warning', action: 'eliminarExpediente', permission: 'subirarchivos_controlpolicivo', condition: "row['documentoExpediente']!=='null' && row['documentoExpediente']!==null"},
-                    {'icon': '<i class="fa fa-money text-success" title="Crear Recibo Acuerdo Pago"></i>', style:'text-danger', action: 'openModalAcuerdoPago', permission: 'subirarchivos_controlpolicivo', condition: "row['documentoExpediente']=='null' || row['documentoExpediente']==null"},
+                    {'icon': '<i class="fa fa-money text-success" title="Crear Recibo Pago"></i>', style:'text-danger', action: 'openModalAcuerdoPago', permission: 'subirarchivos_controlpolicivo', condition: "row['documentoExpediente']=='null' || row['documentoExpediente']==null"},
 					{'icon': '<i class="fa fa-calendar text-warning" title="Aumentar días ProntoPago"></i>', style:'text-danger', action: 'openModalProntoPago', permission: 'subirarchivos_controlpolicivo', condition: "row['documentoExpediente']=='null' || row['documentoExpediente']==null"},
 					{'icon': '<i class="fa fa-user text-secondary" title="Modificar Infractor"></i>', style:'text-danger', action: 'openModalModificarInfractor', permission: 'subirarchivos_controlpolicivo'}
                 ],
@@ -246,7 +246,7 @@ saul.config(["$stateProvider",
 		}
 		
         $scope.openModalAcuerdoPago = function (comparendo) {
-            window.open('#!/controlpolicivo/crearreciboacuerdo/'+comparendo.id);
+            window.open('#!/controlpolicivo/crearrecibopago/'+comparendo.id);
         };
 
 

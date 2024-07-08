@@ -61,7 +61,7 @@
   "ControlPolicivoBundle/actualizarDelRnmc/actualizarDelRnmc.js",
   "ControlPolicivoBundle/crearComparendo/crearComparendo.js",
   "ControlPolicivoBundle/ListarPedagogiasRealizadas/ListarPedagogiasRealizadas.js",
-  "ControlPolicivoBundle/crearReciboAcuerdo/crearReciboAcuerdo.js",
+  "ControlPolicivoBundle/crearReciboPago/crearReciboPago.js",
   "ControlPolicivoBundle/crearRecuperacionCelular/crearRecuperacionCelular.js",
   "ControlPolicivoBundle/buscarRecuperacionCelular/buscarRecuperacionCelular.js",
   "ControlPolicivoBundle/registrarMovimientoExpediente/registrarMovimientoExpediente.js",
