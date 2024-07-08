@@ -401,7 +401,11 @@ saul.config(["$stateProvider",
                         files: filesToSend,
                     }
                 }).then(function (response) {
-                    if(response.data.value!=='') {
+                    console.log(response);
+                    if(!response.data.success || response.data.success!==true) {
+                        alert("Ha ocurrido un error en response informe al desarrollador. Gracias. "+response);
+                    }
+                    if(response.data.value && response.data.value!=='') {
                         actualizarPorAtributo(input.codigo, response.data.value); 
                     }
                 }, function(MessageChannel) {
