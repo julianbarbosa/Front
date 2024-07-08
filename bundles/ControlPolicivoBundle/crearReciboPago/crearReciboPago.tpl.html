@@ -1,0 +1,121 @@
+
+<div class="col-xs-12 col-md-10 col-lg-8">
+    <div class="row">
+        <div ng-show="validator.alert.content">
+            <div class="alert {{validator.alert.type}} alert-dismissable">
+                <i class="fa fa-danger"></i>
+                <button type="button" class="close" aria-hidden="true" ng-click="hideAlert()">×</button>
+                <b>{{validator.alert.title}}</b>
+                <span ng-bind-html="validator.alert.content"></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 col-lg-12" style="margin-top:20px">
+        <div class="row">
+            
+                    <form name="form" id="form" class="" autocomplete="off" novalidate>
+                        <!-- INFORMACION DEL PRESUNTO INFRACTOR-->
+                        <h4 class="padding-sm no-padding-t padding-xs-hr">
+                            <i class="fa fa-id-card text-primary"></i>
+                            &nbsp;&nbsp;Información del recibo de pago de comparendo
+                        </h4>
+    
+                        <div class="row">
+                            <div class="form-group col-xs-12 col-md-8" ng-class="{'has-error': form.fechaPresentacion.$touched && form.fechaPresentacion.$invalid}">
+                                <label class="control-label" for="infractor_identificacion">
+                                    Fecha de Pago 
+                                    <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                                </label>                                
+                                <div class="input-group">
+                                    <input type="text" name="fechaPresentacion" ng-model="recibo.fechaPresentacion" class="form-control" uib-datepicker-popup="yyyy-MM-dd" ng-model="dt" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" placeholder="Fecha en recibo de pago"/>
+                                    
+                                    <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default" ng-click="open1()"><i class="fa fa-calendar" aria-hidden="true"></i></button>
+                                    </span>
+                                </div>
+                                <p class="help-block" ng-if="form.fechaPresentacion.$touched && form.fechaPresentacion.$invalid">La fecha de pago es obligatoria.</p>
+                            </div>
+                            
+                        </div>
+                        <div class="row">    
+                            <div class="form-group col-xs-12 col-md-8" ng-class="{'has-error': form.nroFormulario.$touched && form.nroFormulario.$invalid}">
+                                <label class="control-label" for="infractor_identificacion">
+                                    Número de Recibo
+                                    <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                                </label>                                
+                                <input type="number" name="nroFormulario" ng-model="recibo.nroFormulario" class="form-control" placeholder="Número recibo. " required/>   
+                                <p class="help-block" ng-if="form.nroFormulario.$touched && form.nroFormulario.$invalid">El número de recibo es obligatorio.</p> 
+                                <p class="text-warning">Recibos no iniciados en 4444</p>                          
+                            </div>
+                            
+                            
+                        </div>
+                        <hr>
+                        <h5 class="padding-sm no-padding-t padding-xs-hr"><i class="fa fa-usd text-primary" aria-hidden="true"></i> Valores en recibo</h5>
+                        <div class="row">
+                            <div class="form-group col-xs-12 col-md-8"  ng-class="{'has-error': form.valorNeto.$touched && form.valorNeto.$invalid}">
+                                <label class="control-label">
+                                    Valor Pagado
+                                    <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                                </label>
+                                <input type="number" min="10000" name="valorNeto" class="form-control" ng-model="recibo.valorNeto" placeholder="Ingrese el valor pagado" required/>
+                                <p class="help-block" ng-if="form.valorNeto.$touched && form.valorNeto.$invalid">El valor del pago es obligatorio.</p>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-xs-12 col-md-8"  ng-class="{'has-error': form.valorMulta.$touched && form.valorMulta.$invalid}">
+                                <label class="control-label">
+                                    Valor Multa
+                                    <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                                </label>
+                                <input type="number" min="10000" name="valorMulta" class="form-control" ng-model="recibo.valorMulta" placeholder="Ingrese el valor pagado" required/>
+                                <p class="help-block" ng-if="form.valorMulta.$touched && form.valorMulta.$invalid">El valor de la multa es obligatorio.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="form-group col-xs-12 col-md-8"  ng-class="{'has-error': form.valorInteres.$touched && form.valorInteres.$invalid}">
+                                <label class="control-label">
+                                    Valor Interes
+                                    <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                                </label>
+                                <input type="number" min="0" name="valorInteres" class="form-control" ng-model="recibo.valorIntereses" placeholder="Ingrese el valor pagado" required/>
+                                <p class="help-block" ng-if="form.valorInteres.$touched && form.valorInteres.$invalid">El valor del interes es obligatorio.</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-xs-12 col-md-8"  ng-class="{'has-error': form.valorDescuentos.$touched && form.valorDescuentos.$invalid}">
+                                <label class="control-label">
+                                    Valor Descuentos
+                                    <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                                </label>
+                                <input type="number" min="0" name="valorDescuentos" class="form-control" ng-model="recibo.valorDescuentos" placeholder="Ingrese el valor descuento" required/>
+                                <p class="help-block" ng-if="form.valorDescuentos.$touched && form.valorDescuentos.$invalid">El valor del descuento es obligatorio.</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="alert alert-error" ng-if="getDiferencia()!==0" role="alert">
+                                Diferencia: {{getDiferencia()}}
+                            </div>                            
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="form-group col-xs-12 col-md-8"  ng-class="{'has-error': form.comentario.$touched && form.comentario.$invalid}">
+                                <label class="control-label">
+                                    Comentario
+                                    <i class="fa fa-asterisk text-danger" aria-hidden="true"></i>
+                                </label>
+                                <input type="text" name="comentario" class="form-control" ng-model="recibo.comentario" placeholder="Justificación del ingreso manual" required/>
+                                <p class="help-block" ng-if="form.comentario.$touched && form.comentario.$invalid">El comentario es obligatorio.</p>
+                            </div>
+                        </div>
+                        <div class="row padding-sm text-right-sm">
+                            <input type="submit" ng-disabled="form.$invalid || getDiferencia()!==0" class="btn btn-primary" ng-click="save()" value="Crear Recibo Pago" />
+                        </div>
+                    </form>
+                
+        </div>
+        
+    </div>
+</div>
