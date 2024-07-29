@@ -305,5 +305,6 @@
     "ControlUrbanoReportsBundle/report-d/report-d.js",
     "ControlUrbanoReportsBundle/report-e/report-e.js",
     "ControlUrbanoReportsBundle/report-f/report-f.js",
-    "ControlUrbanoReportsBundle/report-general/report-general.js"
+    "ControlUrbanoReportsBundle/report-general/report-general.js",
+    "ControlUrbanoReportsBundle/reporte-base/reporte-base.js"
 ]

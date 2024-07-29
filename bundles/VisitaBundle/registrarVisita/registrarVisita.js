@@ -61,6 +61,7 @@ saul.config(["$stateProvider",
         $scope.accion = $stateParams.accion;
         $scope.ocultarModal = true;
         $scope.notificaciones = [];
+        $scope.estadoFinalVisita = [];
         $(".overlap_espera").show();
         $(".overlap_espera_1").show();
         
@@ -76,7 +77,8 @@ saul.config(["$stateProvider",
                 EncabezadoVisita.query({id: $stateParams.idVisita}).$promise.then(function(response) {
                     $scope.camposLectura = response;
                     $(".overlap_espera").fadeOut(500, "linear");
-                    $(".overlap_espera_1").fadeOut(500, "linear"); 
+                    $(".overlap_espera_1").fadeOut(500, "linear");
+                    $scope.getEstadoFinalVisita(); 
                 });
             } else {
                 alert("Error acción inválida");
@@ -280,6 +282,13 @@ saul.config(["$stateProvider",
             });
         }
         $scope.getNotificaciones();
+
+        $scope.getEstadoFinalVisita = function() {
+            $http.get(root+"dominio/estado-final-visita").then(function(response) {
+                $scope.estadoFinalVisita = response.data;                    
+            });
+        }
+        
         
         $scope.changeSelect = function(nombreDominio) {
             return $scope.arrayDominio[nombreDominio][0];

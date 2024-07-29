@@ -446,23 +446,35 @@ input.ng-dirty.ng-invalid {
                                 <h4>Firma de Visita</h4>
                             </div>
                         </div>  
+                        
+                          
                         <div class="row">
-                            <div class="col-md-3">
-                                <input type="checkbox" ng-model="nuevaVisita.requiereVisita" > Requiere de una nueva Visita?
-                            </div>             
-                            <div class="row col-md-3" ng-if="nuevaVisita.requiereVisita==true">
-                                <div>
-                                  <p class="input-group">
-                                    <input type="text" ng-model="nuevaVisita.fecha_visita" class="form-control" uib-datepicker-popup="yyyy-MM-dd" ng-model="dt" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
-                                    <span class="input-group-btn">
-                                      <button type="button" class="btn btn-default" ng-click="open1()"><i class="fa fa-calendar" aria-hidden="true"></i></button>
-                                    </span>
-                                  </p>
+
+                            <div class="col-md-4">
+                                <label class="control-label">Estado final de visita</label>     
+                                <select class="form-control input-xlarge" 
+                                        ng-model="nuevaVisita.estadoFinalVisita"                                         
+                                        ng-options="opcion.id as opcion.nombre for opcion in estadoFinalVisita">
+                                </select>
+                            </div>
+                            
+                            <div class="col-md-8">
+                                <div class="col-md-6">
+                                    <input type="checkbox" ng-model="nuevaVisita.requiereVisita" > Requiere de una nueva Visita?
+                                </div>             
+                                <div class="row col-md-6" ng-if="nuevaVisita.requiereVisita==true">
+                                    <div>
+                                      <p class="input-group">
+                                        <input type="text" ng-model="nuevaVisita.fecha_visita" class="form-control" uib-datepicker-popup="yyyy-MM-dd" ng-model="dt" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
+                                        <span class="input-group-btn">
+                                          <button type="button" class="btn btn-default" ng-click="open1()"><i class="fa fa-calendar" aria-hidden="true"></i></button>
+                                        </span>
+                                      </p>
+                                    </div>
                                 </div>
                             </div>
+
                         </div>
-                          
-                        
                         <div class="row padding-sm text-right-sm">
                             <a class="btn btn-primary" value="Ver informe" target="_blank" href="{{root}}ver_visita/{{visita.idVisita}}">Ver informe</a>
                             <input type="submit" class="btn btn-primary" ng-click="save(0)" value="Guardar" />
