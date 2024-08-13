@@ -108,7 +108,8 @@ input.ng-dirty.ng-invalid {
                         <div class="row" ng-repeat="arrayItem in campo.arrayItems track by $index" ng-if="campo.arrayItems[0].item.items.length > 1" style="margin-top:3px;">
                             <div class="col-md-12">
                                 <!-- -->
-                                <div class="col-md-{{12-((12 / campo.arrayDescripcion.length) | number:0)*(campo.arrayDescripcion.length-1)}}">
+                                <hr style="margin-top: 5px !important; margin-bottom: 5px !important;">
+                                <div class="col-md-{{12-((12 / campo.arrayDescripcion.length) | number:0)*(campo.arrayDescripcion.length-1)}}" style="margin-top:5px !important">
                                     <span ng-if="campo.arrayDescripcion.length>campo.arrayItems[0].item.items.length">
                                         {{arrayItem.item.nombre}}
                                     </span> 
