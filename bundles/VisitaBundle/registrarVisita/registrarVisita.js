@@ -61,7 +61,7 @@ saul.config(["$stateProvider",
         $scope.accion = $stateParams.accion;
         $scope.ocultarModal = true;
         $scope.notificaciones = [];
-        $scope.estadoFinalVisita = [];
+        $scope.arrayEstadoFinalVisita = [];
         $(".overlap_espera").show();
         $(".overlap_espera_1").show();
         
@@ -77,8 +77,7 @@ saul.config(["$stateProvider",
                 EncabezadoVisita.query({id: $stateParams.idVisita}).$promise.then(function(response) {
                     $scope.camposLectura = response;
                     $(".overlap_espera").fadeOut(500, "linear");
-                    $(".overlap_espera_1").fadeOut(500, "linear");
-                    $scope.getEstadoFinalVisita(); 
+                    $(".overlap_espera_1").fadeOut(500, "linear");                    
                 });
             } else {
                 alert("Error acción inválida");
@@ -285,9 +284,10 @@ saul.config(["$stateProvider",
 
         $scope.getEstadoFinalVisita = function() {
             $http.get(root+"dominio/estado-final-visita").then(function(response) {
-                $scope.estadoFinalVisita = response.data;                    
+                $scope.arrayEstadoFinalVisita = response.data;                    
             });
         }
+        $scope.getEstadoFinalVisita(); 
         
         
         $scope.changeSelect = function(nombreDominio) {
@@ -448,56 +448,66 @@ saul.config(["$stateProvider",
         }
         
         $scope.save = function (finalizar) {
-            $scope.valoresFormulario = [];
-            angular.forEach($scope.camposformularioVisita, function (campo) {
-                angular.forEach(campo.arrayItems, function (arrayItem) {
-                    angular.forEach(arrayItem.item.items, function (item) {
-                        if (item.valor !== null && item.valor !== '' && item.valor !== 'null' && item.soloLectura === 0) {
-                            if(item.tipoItem == 'hora') {
-                                const dateObject = new Date(item.valor);
-                                const options = { timeZone: 'America/Bogota' };
-                                const formattedDate = dateObject.toLocaleString('en-US', options);
-                                $scope.valoresFormulario.push({codigo: item.codigo, valor: formattedDate, tipoItem: item.tipoItem});
-                            } else {
-                                $scope.valoresFormulario.push({codigo: item.codigo, valor: item.valor, tipoItem: item.tipoItem});
-                            }
+            // $scope.valoresFormulario = [];
+            // angular.forEach($scope.camposformularioVisita, function (campo) {
+            //     angular.forEach(campo.arrayItems, function (arrayItem) {
+            //         angular.forEach(arrayItem.item.items, function (item) {
+            //             if (item.valor !== null && item.valor !== '' && item.valor !== 'null' && item.soloLectura === 0) {
+            //                 if(item.tipoItem == 'hora') {
+            //                     const dateObject = new Date(item.valor);
+            //                     const options = { timeZone: 'America/Bogota' };
+            //                     const formattedDate = dateObject.toLocaleString('en-US', options);
+            //                     $scope.valoresFormulario.push({codigo: item.codigo, valor: formattedDate, tipoItem: item.tipoItem});
+            //                 } else {
+            //                     $scope.valoresFormulario.push({codigo: item.codigo, valor: item.valor, tipoItem: item.tipoItem});
+            //                 }
+            //             }
+            //         });
+            //     });
+            // });
+            if (finalizar!==0) {
+                if($scope.estadoFinalVisita == undefined) {
+                    bootbox.alert("El estado final de la visita es obligatorio.");
+                }
+                else if($scope.nuevaVisita.requiereVisita==true && $scope.nuevaVisita.fecha_visita== undefined) {
+                    bootbox.alert("La fecha de nueva visita es obligatoria.");
+                } else {
+                    bootbox.confirm("Confirma que finalizó el proceso?",
+                    function (result) {
+                        if (result) {
+                            $(".overlap_espera").show();
+                            $(".overlap_espera_1").show();
+                            Upload.upload({
+                                url: root + 'visita',
+                                data: {
+                                    idVisita: $scope.visita.idVisita,
+                                    visita: $scope.datavisita,
+                                    finalizar: finalizar,
+                                    comentario: $scope.comentario,
+                                    comentariointerno: $scope.comentariointerno,
+                                    notificaciones: $scope.notificaciones,
+                                    estadoFinal: $scope.estadoFinalVisita,
+                                    nuevaVisita: $scope.nuevaVisita
+                                }
+                            }).then(function (response) {
+                                $(".overlap_espera").fadeOut(500, "linear");
+                                $(".overlap_espera_1").fadeOut(500, "linear"); 
+                                $scope.result = response.data;
+                                callback(response.data);
+                                if (response.data.success) {
+                                    $scope.asignacion = {};
+                                }
+                                $scope.isSuccess = true;
+                            });
+                        } else {
+                            dsJqueryUtils.goTop();
                         }
                     });
-                });
-            });
-            if (finalizar!==0) {
-                bootbox.confirm("Confirma que finalizó el proceso?",
-                function (result) {
-                    if (result) {
-                        $(".overlap_espera").show();
-                        $(".overlap_espera_1").show();
-                        Upload.upload({
-                            url: root + 'visita',
-                            data: {
-                                idVisita: $scope.visita.idVisita,
-                                visita: $scope.datavisita,
-                                finalizar: finalizar,
-                                comentario: $scope.comentario,
-                                comentariointerno: $scope.comentariointerno,
-                                notificaciones: $scope.notificaciones
-                            }
-                        }).then(function (response) {
-                            $(".overlap_espera").fadeOut(500, "linear");
-                            $(".overlap_espera_1").fadeOut(500, "linear"); 
-                            $scope.result = response.data;
-                            callback(response.data);
-                            if (response.data.success) {
-                                $scope.asignacion = {};
-                            }
-                            $scope.isSuccess = true;
-                        });
-                    } else {
-                        dsJqueryUtils.goTop();
-                    }
-                });
+                }
             } else {
                 $(".overlap_espera").show();
                 $(".overlap_espera_1").show();
+                console.log($scope.estadoFinalVisita);
                 Upload.upload({
                     url: root + 'visita',
                     data: {
@@ -505,8 +515,7 @@ saul.config(["$stateProvider",
                         visita: $scope.datavisita,
                         finalizar: finalizar,
                         comentario: $scope.comentario,
-                        comentariointerno: $scope.comentariointerno,
-                        notificaciones: $scope.notificaciones
+                        comentariointerno: $scope.comentariointerno                
                     }
                 }).then(function (response) {
                     $(".overlap_espera").fadeOut(500, "linear");

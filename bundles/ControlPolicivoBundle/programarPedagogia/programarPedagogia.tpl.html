@@ -89,12 +89,12 @@
 							<option value="presencial">Presencial</option>
 							<option value="virtual">Virtual</option>
                     </select>
-                    <p class="help-block" ng-if="form.pedagogia.$touched && form.pedagogia.$invalid">Ingrese la Pedagogía.</p>
+                    <p class="help-block" ng-if="form.pedagogia.$touched && form.pedagogia.$invalid">Ingrese la modalidad.</p>
                 </div>
                 <div class="form-group required col-md-6"  ng-class="{'has-error': form.cupo.$touched && form.cupo.$invalid}" ng-if="programacion.modalidad=='virtual'">
                     <label class="control-label">Url aula virtual <a href="https://meet.google.com/" target="_blank">meet</a></label>
                     <input type="text" name="url_aula_virtual" class="form-control" ng-model="programacion.lugar" required>
-                    <p class="help-block" ng-if="form.cupo.$touched && form.cupo.$invalid">Ingrese el cupo.</p>
+                    <p class="help-block" ng-if="form.cupo.$touched && form.cupo.$invalid">Ingrese la URL.</p>
                 </div>
             </div>
 			<div class="row">
@@ -106,7 +106,7 @@
                             ng-options="responsable.id as responsable.nombre for responsable in responsables"
                             required>
                     </select>
-                    <p class="help-block" ng-if="form.pedagogia.$touched && form.pedagogia.$invalid">Ingrese la Pedagogía.</p>
+                    <p class="help-block" ng-if="form.pedagogia.$touched && form.pedagogia.$invalid">Ingrese el capacitador.</p>
                 </div>
 			</div>
             <div class="row" ng-show="edicion && programacion.estado.codigo!='pendiente'">
