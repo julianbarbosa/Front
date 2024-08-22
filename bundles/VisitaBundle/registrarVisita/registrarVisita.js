@@ -487,7 +487,8 @@ saul.config(["$stateProvider",
                                     comentariointerno: $scope.comentariointerno,
                                     notificaciones: $scope.notificaciones,
                                     estadoFinal: $scope.estadoFinalVisita,
-                                    nuevaVisita: $scope.nuevaVisita
+                                    nuevaVisita: $scope.nuevaVisita,
+                                    dirigidoA: $scope.dirigidoA
                                 }
                             }).then(function (response) {
                                 $(".overlap_espera").fadeOut(500, "linear");
@@ -515,7 +516,8 @@ saul.config(["$stateProvider",
                         visita: $scope.datavisita,
                         finalizar: finalizar,
                         comentario: $scope.comentario,
-                        comentariointerno: $scope.comentariointerno                
+                        comentariointerno: $scope.comentariointerno,
+                        dirigidoA: $scope.dirigidoA              
                     }
                 }).then(function (response) {
                     $(".overlap_espera").fadeOut(500, "linear");

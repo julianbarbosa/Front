@@ -421,6 +421,15 @@ input.ng-dirty.ng-invalid {
                         </div>
                     </div>
                     
+                    <!-- Comentario - Dirigido A -->
+                    <div class="col-md-12">                                        
+                        <label class="control-label" >Dirigir respuesta a:</label>                                 
+                        <input type="text" 
+                            class="form-control input-xlarge"
+                            ng-model="dirigidoA"
+                            title="Dirigido a">
+                    </div>
+                
                     <div  ng-if="accion=='revisar'">
                         <hr>
                         <div class="row">
@@ -447,7 +456,7 @@ input.ng-dirty.ng-invalid {
                                 <h4>Firma de Visita</h4>
                             </div>
                         </div>  
-                        
+                          
                           
                         <div class="row">
                             <div class="col-md-4">

@@ -388,9 +388,10 @@
                             </div>
                             <div class="col-md-6" >
                                 <div
+                                
                                     class="form-group {{ !formDatosSolicitante.norfeo.$valid && formDatosSolicitante.norfeo.$touched ? 'has-error' : '' }}">
                                     <label class="control-label">Numero de Radicado</label>
-                                    <input type="number" name="norfeo" class="form-control"
+                                    <input type="text" name="norfeo" pattern="\d+" class="form-control"
                                         placeholder="Numero Radicado Orfeo" ng-model="solicitud.norfeo"
                                         ng-required="norfeoRequerido" />
                                     <span class="help-block"

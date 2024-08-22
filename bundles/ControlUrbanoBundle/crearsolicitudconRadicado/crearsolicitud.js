@@ -205,22 +205,25 @@ saul
       }
 
       $scope.saveSolicitud = function (solicitud) {
-        LoadingOverlap.show($scope);
-        $scope.solicitudEnviada = angular.copy(solicitud);
-        Upload.upload({
-          url: root + "controlurbano/solicitud",
-          data: {
-            data: solicitud,
-            files: $scope.files,
-          },
-          transformResponse: function (json, headerGetter) {
-            return angular.fromJson(json);
-          },
-        }).then(function (response) {
-          LoadingOverlap.hide($scope);
-          $scope.respuesta.success = true;
-          $scope.responseSolicitud = response.data;
-        });
+        
+          LoadingOverlap.show($scope);
+          $scope.solicitudEnviada = angular.copy(solicitud);
+          Upload.upload({
+            url: root + "controlurbano/solicitud",
+            data: {
+              data: solicitud,
+              files: $scope.files,
+            },
+            transformResponse: function (json, headerGetter) {
+              return angular.fromJson(json);
+            },
+          }).then(function (response) {
+            LoadingOverlap.hide($scope);
+            $scope.respuesta.success = true;
+            $scope.responseSolicitud = response.data;
+          });
+        
+        
       };
 
       $scope.obtenerClaseSolicitud = function () {
