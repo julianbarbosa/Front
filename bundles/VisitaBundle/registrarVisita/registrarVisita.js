@@ -466,10 +466,10 @@ saul.config(["$stateProvider",
             //     });
             // });
             if (finalizar!==0) {
-                if($scope.estadoFinalVisita == undefined) {
+                if($scope.estadoFinalVisita == undefined && finalizar=='firmado' && $scope.accion=='firmar') {
                     bootbox.alert("El estado final de la visita es obligatorio.");
                 }
-                else if($scope.nuevaVisita.requiereVisita==true && $scope.nuevaVisita.fecha_visita== undefined) {
+                else if($scope.nuevaVisita.requiereVisita==true && $scope.nuevaVisita.fecha_visita== undefined && $scope.accion=='firmar') {
                     bootbox.alert("La fecha de nueva visita es obligatoria.");
                 } else {
                     bootbox.confirm("Confirma que finalizó el proceso?",
