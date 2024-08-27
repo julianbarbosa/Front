@@ -118,6 +118,11 @@ saul.directive('inputFile2', function(){
 				updateValid();
 			};
 
+			$scope.$on('clearFile', function(event, args){
+				$scope.model.file = null;
+				updateValid();
+			 });
+
 	        $scope.$on("fileSelected", function (event, args) {
                 $scope.model.$errorformato = null;
                 $scope.model.$pristine = true;
