@@ -50,15 +50,16 @@
         </div>
         <table class="table" style="margin-top:20px">
             <tr>
-                <th>Tipo de Archivo</th>
-                <th>Nombre</th>
-                <th>Acción</th>
+                <th width="30%">Tipo de Archivo</th>
+                <th width="40%">Nombre</th>
+                <th width="30%">Acción</th>
             </tr>
             <tr ng-repeat="archivo in archivosLicencia">
                 <td>{{archivo.tipoArchivo}}</td>
                 <td>{{archivo.nombreArchivo}}</td>
                 <td>
-                    <a type="button" class="btn btn-primary col-md-6" href="{{root}}licencia/ver-archivo/{{archivo.id}}" target="_blank">Ver</a>
+                    <a type="button" class="btn btn-primary" href="{{root}}licencia/ver-archivo/{{archivo.id}}" target="_blank">Ver</a>
+                    <button ng-if="permisos.eliminararchivos_licenciaurbanistica" class="btn btn-danger" style="margin-left:5px;" ng-click="eliminarArchivo(archivo.id)">Eliminar</a>
                 </td>
             </tr>
             <tr>
@@ -71,8 +72,9 @@
                 </td>
                 <td>
                     <div  class="form-group" ng-class="{ 'has-error': hasError}" ng-hide="validate==1">
-                        <input-file description="" model="file" required="true"></input-file>
+                        <input-file2 description="" model="file" required="true" ></input-file>
                         <p ng-show="hasError" class="help-block">Este campo es obligatorio.</p>
+                        
                     </div>
                 </td>
                 <td>
