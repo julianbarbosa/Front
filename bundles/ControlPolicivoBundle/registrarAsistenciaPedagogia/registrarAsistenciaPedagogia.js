@@ -24,10 +24,11 @@ saul.config(["$stateProvider",
             {type: 'checkbox', name: 'Asistió', title: 'Asistió', align: 'text-center' },
             {type:'text', name: 'id', name2: '', title: 'Num Programación', header_align: 'text-center', body_align: 'text-center', sorting: 'sorting', width: '5%'},
             {type:'text', name: 'identificacion', title: 'Identificación', header_align: 'text-center', body_align: 'text-center', sorting: 'sorting', width:'10%'},
-            {type:'text', name: 'nombre', name2: 'apellido', title: 'Nombre Infractor', header_align: 'text-center', body_align: 'text-center', sorting: 'sorting', width:'20%'},
+            {type:'text', name: 'nombre', name2: 'apellido', title: 'Nombre Infractor', header_align: 'text-center', body_align: 'text-center', sorting: 'sorting', width:'15%'},
+            {type:'text', name: 'contacto',  title: 'Contacto', header_align: 'text-center', body_align: 'text-center', sorting: 'sorting', width:'10%'},
             {type:'date', name: 'fechaComparendo', title: 'Fecha Comparendo', header_align: 'text-center', body_align: 'text-center', sorting: 'sorting'},                                    
             {type:'text', name: 'descripcion', title: 'Comportamiento Contrario', header_align: 'text-center', body_align: 'text-center', sorting: 'sorting'},                                    
-            {type:'date', name: 'createdAt', title: 'Fecha Creación', header_align: 'text-center', body_align: 'text-center', width:'10%'}
+            {type:'date', name: 'createdAt', title: 'Fecha de Inscripción', header_align: 'text-center', body_align: 'text-center', width:'10%'}
         ];
         $(".overlap_espera").show();
         $(".overlap_espera_1").show();

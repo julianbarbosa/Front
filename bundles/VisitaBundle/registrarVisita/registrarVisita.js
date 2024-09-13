@@ -39,17 +39,17 @@ saul.config(["$stateProvider",
         }
     };
 }) 
-.controller("RegistrarVisitaCtrl", ["$scope", "$http","root", "$stateParams", "Visita", "EncabezadoVisita", "TipoSolicitud", "FormularioVisita", "Visitaxdocumento","dsJqueryUtils", "Upload", "$timeout", "$state", "ComportamientoContrario", "esriLoader",
-    function ($scope, $http, root, $stateParams, Visita, EncabezadoVisita, TipoSolicitud, FormularioVisita, Visitaxdocumento, dsJqueryUtils, Upload, $timeout, $state, ComportamientoContrario, esriLoader) {
+.controller("RegistrarVisitaCtrl", ["$scope", "$http","root", "$stateParams", "Visita", "EncabezadoVisita", "TipoSolicitud", "FormularioVisita", "Visitaxdocumento","dsJqueryUtils", "Upload", "$timeout", "$state", "ComportamientoContrario", "PluginNomenclatura",
+    function ($scope, $http, root, $stateParams, Visita, EncabezadoVisita, TipoSolicitud, FormularioVisita, Visitaxdocumento, dsJqueryUtils, Upload, $timeout, $state, ComportamientoContrario, PluginNomenclatura) {
         var self = this;
         $scope.datavisita = [];
-        self.viewLoaded = false;
+        // self.viewLoaded = false;
         $scope.root = root;
-        $scope.viewLoaded = false;
+        // $scope.viewLoaded = false;
         $scope.cargarXls = false;
-        $scope.urlImagenes = "//planeacion.cali.gov.co/saul2/images/img_lineas/";
-        $scope.imageStreetView = ""+$scope.urlImagenes+"street_view.png";
-        $scope.urlGeoportal = "https://geoportal.cali.gov.co/agserver/rest/services/Lineas/lineas_auto/MapServer/0";                               
+        // $scope.urlImagenes = "//planeacion.cali.gov.co/saul2/images/img_lineas/";        
+        // $scope.imageStreetView = ""+$scope.urlImagenes+"street_view.png";
+        // $scope.urlGeoportal = "https://geoportal.cali.gov.co/agserver/rest/services/Lineas/lineas_auto/MapServer/0";                               
         $scope.visita = {};
         $scope.files = {};
         $scope.comentario = 'N/A';
@@ -393,12 +393,9 @@ saul.config(["$stateProvider",
                     const options = { timeZone: 'America/Bogota', year: 'numeric', month: 'numeric', day: 'numeric' };
                     const formattedDate = dateObject.toLocaleString('en-US', options);
                     $scope.valoresFormulario.push({codigo: input.codigo, valor: formattedDate, tipoItem: input.tipoItem});
-                } else if(input.tipoItem == 'imagen') {
-                    console.log($scope.inputFiles);
+                } else if(input.tipoItem == 'imagen') {                   
                     filesToSend[input.codigo] = $scope.inputFiles[input.codigo];
-                    $scope.valoresFormulario.push({codigo: input.codigo, valor: input.valor, tipoItem: input.tipoItem});
-                    
-
+                    $scope.valoresFormulario.push({codigo: input.codigo, valor: input.valor, tipoItem: input.tipoItem});            
                 } else {
                     $scope.valoresFormulario.push({codigo: input.codigo, valor: input.valor, tipoItem: input.tipoItem});
                 }
@@ -410,7 +407,6 @@ saul.config(["$stateProvider",
                         files: filesToSend,
                     }
                 }).then(function (response) {
-                    console.log(response);
                     if(!response.data.success || response.data.success!==true) {
                         alert("Ha ocurrido un error en response informe al desarrollador. Gracias. "+response);
                     }
@@ -535,6 +531,15 @@ saul.config(["$stateProvider",
 
         $scope.cancel = function () {
         };
+
+        $scope.obtenerModalIngresoDireccion = function (input) {              
+            PluginNomenclatura.obtenerModalIngresoDireccion(
+              $scope,
+              function (data) {
+                actualizarPorAtributo(input.codigo, data.direccion + (data.infoAdicional ? " " + data.infoAdicional : ""));     
+              }
+            );
+          };
 
     }
 ]);

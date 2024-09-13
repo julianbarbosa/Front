@@ -78,37 +78,47 @@
                     <p class="help-block" ng-if="form.cupo.$touched && form.cupo.$invalid">Ingrese el cupo.</p>
                 </div>
             </div>
-			<div class="row">
-                <div class="form-group required col-md-6"  ng-class="{'has-error': form.pedagogia.$touched && form.pedagogia.$invalid }">
+            <div class="row">
+				<div class="form-group required col-md-6"  ng-class="{'has-error': form.capacitador_pedagogia.$touched && form.capacitador_pedagogia.$invalid }">
+                    <label class="control-label">Capacitador</label>
+                    <select class="form-control"
+                            name="capacitador_pedagogia"
+                            ng-model="programacion.responsable"
+                            ng-options="responsable as responsable.nombre for responsable in responsables"
+                            ng-change="programacion.lugar=(programacion.modalidad=='presencial')?programacion.responsable.direccion:''"
+                            required>
+                    </select>
+                    <p class="help-block" ng-if="form.capacitador_pedagogia.$touched && form.capacitador_pedagogia.$invalid">Ingrese el capacitador.</p>
+                </div>
+                <div class="form-group required col-md-6"  ng-class="{'has-error': form.modalidad_pedagogia.$touched && form.modalidad_pedagogia.$invalid }">
                     <label class="control-label">Modalidad</label>
                     <select class="form-control"
-                            name="pedagogia"
+                            name="modalidad_pedagogia"
                             ng-model="programacion.modalidad"
                             required
-                            ng-change="programacion.lugar=(programacion.modalidad=='presencial')?'':programacion.lugar">
+                            ng-change="programacion.lugar=(programacion.modalidad=='presencial')?programacion.responsable.direccion:''">
 							<option value="presencial">Presencial</option>
 							<option value="virtual">Virtual</option>
                     </select>
-                    <p class="help-block" ng-if="form.pedagogia.$touched && form.pedagogia.$invalid">Ingrese la modalidad.</p>
+                    <p class="help-block" ng-if="form.modalidad_pedagogia.$touched && form.modalidad_pedagogia.$invalid">Ingrese la modalidad.</p>
                 </div>
-                <div class="form-group required col-md-6"  ng-class="{'has-error': form.cupo.$touched && form.cupo.$invalid}" ng-if="programacion.modalidad=='virtual'">
-                    <label class="control-label">Url aula virtual <a href="https://meet.google.com/" target="_blank">meet</a></label>
-                    <input type="text" name="url_aula_virtual" class="form-control" ng-model="programacion.lugar" required>
-                    <p class="help-block" ng-if="form.cupo.$touched && form.cupo.$invalid">Ingrese la URL.</p>
+                
+            </div>
+            <div class="row">
+                <div class="form-group required col-md-12"  ng-class="{'has-error': form.lugar.$touched && form.lugar.$invalid}">
+                    <label class="control-label" ng-bind-html="programacion.modalidad=='presencial'?texto_lugar_presencial:texto_lugar_virtual"></label>
+                    <input type="text" name="lugar" class="form-control" ng-model="programacion.lugar" required>
+                    <p class="help-block" ng-if="form.lugar.$touched && form.lugar.$invalid">Ingrese localización</p>
                 </div>
             </div>
-			<div class="row">
-				<div class="form-group required col-md-6"  ng-class="{'has-error': form.pedagogia.$touched && form.pedagogia.$invalid }">
-                    <label class="control-label">Capacitador</label>
-                    <select class="form-control"
-                            name="pedagogia"
-                            ng-model="programacion.responsable.id"
-                            ng-options="responsable.id as responsable.nombre for responsable in responsables"
-                            required>
-                    </select>
-                    <p class="help-block" ng-if="form.pedagogia.$touched && form.pedagogia.$invalid">Ingrese el capacitador.</p>
+
+            <div class="row">
+                <div class="form-group required col-md-12" >
+                    <label class="control-label">Observaciones (precondiciones/herramientas)</label>
+                    <input type="text" name="observaciones" class="form-control" ng-model="programacion.observaciones">                    
                 </div>
-			</div>
+            </div>
+			
             <div class="row" ng-show="edicion && programacion.estado.codigo!='pendiente'">
 				<span class="checkbox" >
 					<label class="checkbox-inline">

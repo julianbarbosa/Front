@@ -8,8 +8,8 @@ input.ng-dirty.ng-invalid {
 }
 </style>
 
-<link rel="stylesheet" href="https://js.arcgis.com/4.8/esri/css/main.css">
-    <script src="https://js.arcgis.com/4.8/"></script>
+<!-- <link rel="stylesheet" href="https://js.arcgis.com/4.8/esri/css/main.css"> -->
+    <!-- <script src="https://js.arcgis.com/4.8/"></script> -->
 <style>
     /* Esri JSAPI */
     
@@ -77,7 +77,7 @@ input.ng-dirty.ng-invalid {
                             </div>
                         </div>
                         <div class="col-lg-12" >
-                            <esri-scene-view map="vm.map"  id="viewDiv" view-options="{zoom:13, center:[-76.52,3.435]}" on-create="vm.onViewCreated" on-error="vm.onViewError" ng-hide="vm.showViewError" style="height: 70vh;"></esri-scene-view>
+                            <!-- <esri-scene-view map="vm.map"  id="viewDiv" view-options="{zoom:13, center:[-76.52,3.435]}" on-create="vm.onViewCreated" on-error="vm.onViewError" ng-hide="vm.showViewError" style="height: 70vh;"></esri-scene-view> -->
                         </div>
                         <span>Longitud: {{datavisita.longitud}}, Latitud: {{datavisita.latitud}}</span>
                     </div>
@@ -236,6 +236,17 @@ input.ng-dirty.ng-invalid {
                                 </div>
                             </div>
                             <!-- Lista -->
+
+
+                             <!-- Dirección -->
+                            <div class="col-md-6" ng-if="arrayItem.item.items[0].tipoItem === 'direccion' && arrayItem.item.items[0].soloLectura==0">
+                                <div class="col-md-12" ng-repeat="input in arrayItem.item.items">
+                                    <label class="control-label">{{arrayItem.item.items[0].parametros.label==undefined?arrayItem.item.items[0].nombre:arrayItem.item.items[0].parametros.label}}</label>
+                                    <input  placeholder="Dirección" class="form-control" type="text" ng-click="obtenerModalIngresoDireccion(input)" readonly="readonly"
+                                        ng-model="input.valor" name="direccion" minlength="6" />                                    
+                                </div>
+                            </div>
+                            <!-- Dirección -->
                             
                             <!-- select-one -->
                             <div class="col-md-6" ng-if="arrayItem.item.items[0].tipoItem =='select-one' && arrayItem.item.items[0].soloLectura==0">

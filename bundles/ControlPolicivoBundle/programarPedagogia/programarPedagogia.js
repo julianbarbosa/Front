@@ -27,9 +27,9 @@ saul.config(["$stateProvider",
         $scope.ocultarModal = true;
         $scope.isReadOnly = false;
         $scope.isSuccess = false;
-        Pedagogia.query().$promise.then(function(result) {
-            $scope.pedagogias = result.data;
-        }); 
+        $scope.texto_lugar_virtual = 'URL aula virtual (<a href="https://meet.google.com/" target="_blank">meet</a>)';
+        $scope.texto_lugar_presencial = 'Lugar de encuentro';
+        
         
         if($stateParams.id !== undefined) {
             $http.get(root + 'controlpolicivo/programacionpedagogia/'+$stateParams.id).then(function (result) {
@@ -45,10 +45,10 @@ saul.config(["$stateProvider",
 		$http.get(root + 'controlpolicivo/organismo/1').then(function (result) {
 			$scope.responsables = result.data; 
 		});
-		
-		Pedagogia.query().$promise.then(function(result) {
-            $scope.pedagogias = result.data;
-        }); 		
+
+        $http.get(root + 'controlpolicivo/pedagogia/usuario').then(function (result) {
+			$scope.pedagogias = result.data;
+		});	
 
         $scope.fechas = Fecha.query();
         $scope.oculto = true;
