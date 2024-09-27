@@ -8,48 +8,6 @@ input.ng-dirty.ng-invalid {
 }
 </style>
 
-<!-- <link rel="stylesheet" href="https://js.arcgis.com/4.8/esri/css/main.css"> -->
-    <!-- <script src="https://js.arcgis.com/4.8/"></script> -->
-<style>
-    /* Esri JSAPI */
-    
-    html, body, #viewDiv {
-        padding: 0;
-        margin: 0;
-        height: 600px;
-        width: 100%;
-    }
-
-    .esri-feature {
-        letter-spacing: 0em;
-        font-family: "Avenir Next", "Helvetica Neue", sans-serif;
-        line-height: 1.55rem;
-        font-feature-settings: "liga"1, "calt"0;
-        background: #fff;
-        padding: 1em;
-    }
-
-    .esri-popup__main-container {
-        min-height: 400px;
-    } 
-    
-    .esri-view-width-xlarge .esri-popup__main-container,
-    .esri-view-width-large .esri-popup__main-container,
-    .esri-view-width-medium .esri-popup__main-container
-    {
-        width: 500px !important;
-    }
-
-    .legend-well {
-        margin-top: 20px;
-        float: none;
-    }
-
-    .legend-well div {
-        white-space: initial;
-    }
-</style>
-
 
 <div>
     <div id="modalIngresoDireccion" class="modal fade modal-change" role="dialog" aria-hidden="true" style="display: none;"></div>
@@ -71,15 +29,33 @@ input.ng-dirty.ng-invalid {
             <div class="panel-body">
                 <form name="form" class="form-horizontal">
                     <div  class="form-group has-feedback simple">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <h4>GEOREFERENCIACIÓN DE LA VISITA</h4>
-                            </div>
-                        </div>
                         <div class="col-lg-12" >
                             <!-- <esri-scene-view map="vm.map"  id="viewDiv" view-options="{zoom:13, center:[-76.52,3.435]}" on-create="vm.onViewCreated" on-error="vm.onViewError" ng-hide="vm.showViewError" style="height: 70vh;"></esri-scene-view> -->
-                        </div>
-                        <span>Longitud: {{datavisita.longitud}}, Latitud: {{datavisita.latitud}}</span>
+                        </div>                        
+                        <span>
+                            <strong>Consecutivo</strong> {{visita.idVisita}}<br>
+                        </span>
+                        <span>
+                            <strong>Estado</strong> {{visita.estado.nombre}}<br>
+                        </span>
+                        <span>
+                            <strong>Visitador</strong> {{visita.visitador.firstName+' '+visita.visitador.lastName}}<br>
+                        </span>
+                        <span>
+                            <strong>Revisor</strong> {{visita.supervisor.firstName+' '+visita.supervisor.lastName}}<br>
+                        </span>
+                        <span>
+                            <strong>Tipo de Visita</strong> {{visita.tipoVisita.descripcion}}<br>
+                        </span>
+                        <span ng-if="visita.solicitud.radicado!==null">
+                            <strong>Radicado Solicitud</strong> {{visita.solicitud.radicado}}<br>
+                        </span>
+                        <span ng-if="visita.solicitud.radicadohijo!==null">
+                            <strong>Radicado Respuesta</strong> {{visita.solicitud.radicadohijo}}<br>
+                        </span>
+                        <span ng-if="visita.radicadoInspeccion!==null">
+                            <strong>Radicado Remisión a Inspección</strong> {{visita.radicadoInspeccion}}<br>
+                        </span>                        
                     </div>
                     <div  class="form-group has-feedback simple"  ng-repeat="campo in camposformularioVisita track by $index">
                         <div class="row">
@@ -370,7 +346,7 @@ input.ng-dirty.ng-invalid {
                     <!-- Archivos Adjuntos -->       
 
 
-                    <div class="col-md-12">
+                    <div class="col-md-12"  ng-if="visita.tipoVisita.codigo!=='control_lioep_anexo'">
                         <h4>Archivos Adjuntos</h4>
                         <table class="table table-striped">
                             <tr ng-repeat="visitaxdocumento in visitasxdocumento track by $index" ng-if="visitaxdocumento.documento.nombre=='Adjunto Visita'">
@@ -387,12 +363,38 @@ input.ng-dirty.ng-invalid {
                     </div>
                     <!-- Fin Archivos Adjuntos -->
                     
+                    <div class="col-md-12" ng-if="visita.arrayVisitasHijas.length>0">
+                        <h4>Visitas Asociadas</h4>
+                        <table class="table table-striped">
+                            <tr ng-repeat="visita in visita.arrayVisitasHijas">
+                                <td class="col-md-2">{{visita.idVisita}}</td>
+                                <td class="col-md-5">{{visita.direccionQueja}}</td>
+                                <td class="col-md-3">{{visita.estado.nombre}}</td>
+                                <td class="col-md-2"><a href="#!/visita/generar/{{visita.idVisita}}" class="btn btn-primary" target="_blank">Ver</a></td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" *ngIf="visita.tipoVisita.codigo='control_lioep'">
+                                    <button  class="btn btn-warning" ng-click="agregarNuevaVisita()">Agregar nueva visita</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    
                     <div class="row">
                         <div class="col-md-12">
                             <label class="control-label">Comentarios internos del proceso</label>                 
                             <textarea class="form-control input-xlarge" ng-model="comentariointerno" style="height:150"></textarea>
                         </div>
                     </div> 
+
+                    <div class="row" ng-if="visita.tipoVisita.codigo!=='control_lioep_anexo'">
+                        <div class="col-md-12">
+                            <label class="control-label">Respuesta a solicitante</label>                 
+                            <textarea class="form-control input-xlarge" ng-model="visita.respuestasolicitante" ng-blur="saveValueVisita('respuestasolicitante', 'respuestasolicitante')" style="height:150"></textarea>
+                        </div>
+                    </div> 
+
+
                     
                     <div class="row padding-sm text-right-sm" ng-if="accion=='generar'">
                         <button class="btn btn-primary" ng-click="setCargarXls(true)">Cargar XLS</button>
@@ -432,14 +434,7 @@ input.ng-dirty.ng-invalid {
                         </div>
                     </div>
                     
-                    <!-- Comentario - Dirigido A -->
-                    <div class="col-md-12">                                        
-                        <label class="control-label" >Dirigir respuesta a:</label>                                 
-                        <input type="text" 
-                            class="form-control input-xlarge"
-                            ng-model="dirigidoA"
-                            title="Dirigido a">
-                    </div>
+                    
                 
                     <div  ng-if="accion=='revisar'">
                         <hr>
@@ -496,7 +491,8 @@ input.ng-dirty.ng-invalid {
                             <a class="btn btn-primary" value="Ver informe" target="_blank" href="{{root}}ver_visita/{{visita.idVisita}}">Ver informe</a>
                             <input type="submit" class="btn btn-primary" ng-click="save(0)" value="Guardar" />
                             <input type="submit" class="btn btn-warning" ng-click="save('devuelto')" ng-disabled="form.$invalid" value="Devolver" />
-                            <input type="submit" class="btn btn-primary" ng-click="save('firmado')" ng-disabled="form.$invalid" value="Firmar" />
+                            <input type="submit" class="btn btn-primary" ng-click="save('firmado')" ng-disabled="form.$invalid" value="Firmar" />                            
+                            <a class="btn btn-primary" value="Ver informe" target="_blank" href="{{root}}visita/respuestasolicitud/{{visita.idVisita}}">Previsualizar respuesta</a>
                             ó
                             <a ui-sref="listar-peticion">Cancelar</a>
                         </div>

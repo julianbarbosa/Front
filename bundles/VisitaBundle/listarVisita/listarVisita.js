@@ -27,8 +27,7 @@ saul.config(["$stateProvider",
             {type:'text', name: 'direccion', title: 'Dirección', header_align: 'text-center', body_align: 'text-center', sorting: 'sorting', width:'15%'},
             {type:'link', name: 'radicado', title: 'Radicado', header_align: 'text-left', body_align: 'text-left', width: '10%', link:'http://www.cali.gov.co/aplicaciones/orweb/orweb/principal.php?id='},
             {type:'text', name: 'nombreTipoSolicitud', title: 'Tipo Solicitud', options: 
-                [
-                    
+                [    
                     {"name":"Control Preventivo", "value":"Control Preventivo"},
                     {"name":"Visita Infraestructura Telecomunicaciones", "value":"Visita Infraestructura Telecomunicaciones"},
                     {"name":"Visita Control Ornato", "value":"Visita Control Ornato"},
@@ -71,9 +70,16 @@ saul.config(["$stateProvider",
                         for(option in response.visitadores) {
                             options.push({'name': response.visitadores[option].visitador, 'value': response.visitadores[option].visitador});
                         }
-                        $scope.headers[i].options = options;
-                        
+                        $scope.headers[i].options = options;                        
                     }
+                    if ($scope.headers[i].name == 'nombreEstado') {
+                        var options = [];
+                        for(option in response.estados) {
+                            options.push({'name': response.estados[option].codigoEstado, 'value': response.estados[option].codigoEstado});
+                        }
+                        $scope.headers[i].options = options;                        
+                    }
+                    
                     i++;
                 }
             });
@@ -84,6 +90,12 @@ saul.config(["$stateProvider",
         {
             $scope.orderBy = name;
             $scope.actualizarDatos(true);
+        }
+
+        $scope.setNumPerPage = function(numPerPage) {
+            $scope.currentPage = 1;
+            $scope.numPerPage = numPerPage;
+            $scope.actualizarDatos(false);
         }
     }
 ]);

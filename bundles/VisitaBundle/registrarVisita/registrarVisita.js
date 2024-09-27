@@ -39,8 +39,8 @@ saul.config(["$stateProvider",
         }
     };
 }) 
-.controller("RegistrarVisitaCtrl", ["$scope", "$http","root", "$stateParams", "Visita", "EncabezadoVisita", "TipoSolicitud", "FormularioVisita", "Visitaxdocumento","dsJqueryUtils", "Upload", "$timeout", "$state", "ComportamientoContrario", "PluginNomenclatura",
-    function ($scope, $http, root, $stateParams, Visita, EncabezadoVisita, TipoSolicitud, FormularioVisita, Visitaxdocumento, dsJqueryUtils, Upload, $timeout, $state, ComportamientoContrario, PluginNomenclatura) {
+.controller("RegistrarVisitaCtrl", ["$scope", "$http","root", "$stateParams", "Visita", "EncabezadoVisita", "TipoSolicitud", "FormularioVisita", "Visitaxdocumento","dsJqueryUtils", "Upload", "$timeout", "$state", "LoadingOverlap", "PluginNomenclatura",
+    function ($scope, $http, root, $stateParams, Visita, EncabezadoVisita, TipoSolicitud, FormularioVisita, Visitaxdocumento, dsJqueryUtils, Upload, $timeout, $state, LoadingOverlap, PluginNomenclatura) {
         var self = this;
         $scope.datavisita = [];
         // self.viewLoaded = false;
@@ -51,7 +51,7 @@ saul.config(["$stateProvider",
         // $scope.imageStreetView = ""+$scope.urlImagenes+"street_view.png";
         // $scope.urlGeoportal = "https://geoportal.cali.gov.co/agserver/rest/services/Lineas/lineas_auto/MapServer/0";                               
         $scope.visita = {};
-        $scope.files = {};
+        $scope.files = {}; LoadingOverlap.show($scope);
         $scope.comentario = 'N/A';
         
         $scope.inputFiles = {}; 
@@ -66,166 +66,28 @@ saul.config(["$stateProvider",
         $(".overlap_espera_1").show();
         
         //Búsqueda de la visita
-        Visita.find({id: $stateParams.idVisita}).$promise.then(function (response) {
-            $scope.visita = response;
-            $scope.comentario = response.observaciones;
-            $scope.datavisita.longitud = response.longitud;
-            $scope.datavisita.latitud = response.latitud;
-            // $scope.agregarLocalizacion($scope.datavisita.longitud,$scope.datavisita.latitud);
-            if($scope.accion=='revisar' || $scope.accion=='generar'|| $scope.accion=='firmar') {
-                $scope.camposformularioVisita = FormularioVisita.query({id: $stateParams.idVisita});
-                EncabezadoVisita.query({id: $stateParams.idVisita}).$promise.then(function(response) {
-                    $scope.camposLectura = response;
-                    $(".overlap_espera").fadeOut(500, "linear");
-                    $(".overlap_espera_1").fadeOut(500, "linear");                    
-                });
-            } else {
-                alert("Error acción inválida");
-            }
-            
-            $scope.expediente = "";
-        });
-        
-        // esriLoader.require([
-        //     'esri/Map',
-        //     'esri/views/MapView',
-        //     'esri/layers/FeatureLayer',
-        //     'esri/widgets/BasemapToggle',
-        //     'esri/widgets/Search',
-        //     'esri/config',
-        //     'esri/request',
-        //     "esri/Graphic","esri/geometry/Point",
-        //     "esri/symbols/SimpleMarkerSymbol", "esri/Color", "dojo/dom", "dojo/domReady!",
-        // ],function(Map, MapView, FeatureLayer, BasemapToggle, Search, esriConfig, esriRequest,  Graphic, Point, SimpleMarkerSymbol,
-        //     Color, dom){
-
-        //     //Definición del Mapa
-        //     self.map = new Map({
-        //         basemap: 'streets',
-        //         basemap: "topo"
-        //     });
-
-        //     //Definición del MapView
-        //     view = new MapView({
-        //         container: "viewDiv",
-        //         map: self.map,
-        //         zoom: 13,
-        //         center: [-76.52,3.435],
-        //         highlightOptions: {
-        //             color: [255,241,58],
-        //             fillOpacity:0.4
-        //         },
-        //         popup: {
-        //             actionsMenuEnabled: false                    
-        //               }
-        //     });
-               
-
-        //     //Definición de BasemapToggle
-        //     var toggle = new BasemapToggle({
-        //         view: $scope.view,
-        //         nextBasemap: "hybrid"
-        //     });
-        //     view.ui.add(toggle, "bottom-right");
-            
-            
-        //     //Búsqueda por dirección y prediales
-		// 	var predios_urbanos = new FeatureLayer({
-        //         url: "https://geoportal.cali.gov.co/agserver/rest/services/Lineas/predial_idesc/FeatureServer/0",
-        //         title: "predios",
-        //         minScale: 1,
-        //         outFields: ["*"]
-        //     });
-        //     var predios_rurales = new FeatureLayer({
-        //         url: "https://geoportal.cali.gov.co/agserver/rest/services/Lineas/predial_idesc/FeatureServer/1",
-        //         title: "predios",
-        //         minScale: 1,
-        //         outFields: ["*"]
+        $scope.consultarVisita = function() {
+            Visita.find({id: $stateParams.idVisita}).$promise.then(function (response) {
+                $scope.visita = response;            
+                $scope.comentario = response.observaciones;
+                $scope.datavisita.longitud = response.longitud;
+                $scope.datavisita.latitud = response.latitud;
+                // $scope.agregarLocalizacion($scope.datavisita.longitud,$scope.datavisita.latitud);
+                if($scope.accion=='revisar' || $scope.accion=='generar'|| $scope.accion=='firmar') {
+                    $scope.camposformularioVisita = FormularioVisita.query({id: $stateParams.idVisita});
+                    EncabezadoVisita.query({id: $stateParams.idVisita}).$promise.then(function(response) {
+                        $scope.camposLectura = response;
+                        $(".overlap_espera").fadeOut(500, "linear");
+                        $(".overlap_espera_1").fadeOut(500, "linear");                    
+                    });
+                } else {
+                    alert("Error acción inválida");
+                }
                 
-        //     });
-        //     var searchWidget = new Search({
-        //         view: view,
-        //         allPlaceholder: "Todos los criterios",
-        //         sources: [
-        //             {
-        //             layer: predios_urbanos,
-        //             searchFields: ["numepred","npn"],
-        //             displayField: "numepred",
-        //             exactMatch: false,
-        //             outFields: ["*"],
-        //             name: "Número predial urbano",
-        //             zoomScale: 100000,
-        //             placeholder: "F038600080000"
-        //             },
-        //             {
-        //             layer: predios_rurales,
-        //             name: "Número predial rural",
-        //             zoomScale: 100000,
-        //             displayField: "numepred",
-        //             searchFields: ["numepred", "npn"],
-        //             exactMatch: false,
-        //             outFields: ["*"],
-        //             placeholder: "Y000700820001"
-        //             }
-        //         ]
-        //     });
-        //     view.ui.add(searchWidget, {
-        //        position: "top-left"
-        //     });
-            
-              
-        //     //when the map is clicked create a buffer around the click point of the specified distance.
-        //     view.on("click", function(evt){
-        //         $scope.datavisita.longitud = evt.mapPoint.longitude.toString();
-        //         $scope.datavisita.latitud = evt.mapPoint.latitude.toString();
-        //         view.graphics.removeAll();
-        //         $scope.agregarLocalizacion(evt.mapPoint.longitude.toString(),evt.mapPoint.latitude.toString());
-        //     });
-            
-            
-        //     $scope.agregarLocalizacion = function(longitud, latitud) {
-        //         if(longitud && latitud) {
-        //             console.log(longitud);
-        //             view.graphics.removeAll();
-        //             var pt = new Point({
-        //                 latitude: latitud,
-        //                 longitude: longitud 
-        //             });
-        //             //point for address popup information
-        //             var ptAtt = {
-        //                 Title: "Home",
-        //                 Name: "The Seifert's",
-        //                 Owner: "Christine Seifert"
-        //             };
-        //             // symbol for point 
-        //             var sym = new SimpleMarkerSymbol({
-        //                 color: [0,108,153],
-        //                 style: "circle",
-        //                 size: 12
-        //             });
-                    
-        //             var ptGraphic = new Graphic({
-        //                 geometry: pt,
-        //                 symbol: sym,
-        //                 attributes: ptAtt,
-        //                 popupTemplate:{
-        //                   title: "{Title}",
-        //                   content: [{
-        //                     type:"fields",
-        //                     fieldInfos:[{
-        //                       fieldName: "Name"
-        //                     },{
-        //                       fieldName: "Owner"
-        //                     }]
-        //                   }]
-        //               }
-        //             });
-        //             view.graphics.add(ptGraphic);    
-        //         }
-        //     }
-
-        //     // $scope.agregarLocalizacion($scope.datavisita.longitud,$scope.datavisita.latitud);
-        // });
+                $scope.expediente = "";
+            });        
+        }
+        $scope.consultarVisita();
         
         $scope.direccion ="";
 
@@ -379,6 +241,38 @@ saul.config(["$stateProvider",
             })     
         }
 
+        $scope.agregarNuevaVisita = function() {
+            var data = {};
+            data['idVisita'] = $scope.visita.idVisita;
+            data['direccionQueja'] = $scope.visita.direccionQueja;
+            bootbox.confirm("Confirma que desea agregar una nueva visita al proceso?",
+                    function (result) {
+                        LoadingOverlap.show($scope);
+                        if (result) {
+                            Upload.upload({
+                                url: root + 'visita/hija',
+                                data: data
+                            }).then(function (response) {
+                                $scope.consultarVisita();
+                                LoadingOverlap.hide($scope);
+                            });
+                        }
+                    });
+
+        }
+
+        $scope.saveValueVisita = function(inputName, inputValue) {
+            var data = {};
+            data['idVisita'] = $scope.visita.idVisita;
+            data[inputName] = $scope.visita[inputValue];
+            Upload.upload({
+                url: root + 'visita',
+                data: data
+            }).then(function (response) {
+                
+            });
+        }
+
         $scope.saveItem = function(input) {
             if(input !== undefined) {
                 $scope.valoresFormulario = [];
@@ -444,23 +338,6 @@ saul.config(["$stateProvider",
         }
         
         $scope.save = function (finalizar) {
-            // $scope.valoresFormulario = [];
-            // angular.forEach($scope.camposformularioVisita, function (campo) {
-            //     angular.forEach(campo.arrayItems, function (arrayItem) {
-            //         angular.forEach(arrayItem.item.items, function (item) {
-            //             if (item.valor !== null && item.valor !== '' && item.valor !== 'null' && item.soloLectura === 0) {
-            //                 if(item.tipoItem == 'hora') {
-            //                     const dateObject = new Date(item.valor);
-            //                     const options = { timeZone: 'America/Bogota' };
-            //                     const formattedDate = dateObject.toLocaleString('en-US', options);
-            //                     $scope.valoresFormulario.push({codigo: item.codigo, valor: formattedDate, tipoItem: item.tipoItem});
-            //                 } else {
-            //                     $scope.valoresFormulario.push({codigo: item.codigo, valor: item.valor, tipoItem: item.tipoItem});
-            //                 }
-            //             }
-            //         });
-            //     });
-            // });
             if (finalizar!==0) {
                 if($scope.estadoFinalVisita == undefined && finalizar=='firmado' && $scope.accion=='firmar') {
                     bootbox.alert("El estado final de la visita es obligatorio.");
@@ -483,8 +360,8 @@ saul.config(["$stateProvider",
                                     comentariointerno: $scope.comentariointerno,
                                     notificaciones: $scope.notificaciones,
                                     estadoFinal: $scope.estadoFinalVisita,
-                                    nuevaVisita: $scope.nuevaVisita,
-                                    dirigidoA: $scope.dirigidoA
+                                    nuevaVisita: $scope.nuevaVisita,                                    
+                                    respuestasolicitante: $scope.visita.respuestasolicitante
                                 }
                             }).then(function (response) {
                                 $(".overlap_espera").fadeOut(500, "linear");
@@ -504,7 +381,6 @@ saul.config(["$stateProvider",
             } else {
                 $(".overlap_espera").show();
                 $(".overlap_espera_1").show();
-                console.log($scope.estadoFinalVisita);
                 Upload.upload({
                     url: root + 'visita',
                     data: {
@@ -513,7 +389,7 @@ saul.config(["$stateProvider",
                         finalizar: finalizar,
                         comentario: $scope.comentario,
                         comentariointerno: $scope.comentariointerno,
-                        dirigidoA: $scope.dirigidoA              
+                        respuestasolicitante: $scope.respuestasolicitante            
                     }
                 }).then(function (response) {
                     $(".overlap_espera").fadeOut(500, "linear");

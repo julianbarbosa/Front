@@ -50,8 +50,14 @@
                     </tr>
                 </tbody>
                 <tfoot>
-                <td colspan="10" class="currency">
-                    <uib-pagination first-text="Primero" previous-text="Anterior" next-text="Siguiente" last-text="Último" ng-model="currentPage" total-items="totalItems" max-size="5" boundary-links="true" ng-click="actualizarDatos()"></uib-pagination>
+                <td colspan="5" class="currency" >
+                    <uib-pagination first-text="Primero" previous-text="Anterior" next-text="Siguiente" last-text="Último" ng-model="currentPage" total-items="totalItems" max-size="5" boundary-links="true" ng-click="actualizarDatos()" ng-if="numPerPage==10"></uib-pagination>
+                </td>
+                <td ng-if="numPerPage==10">
+                    <button class="btn btn-primary btn-sm" ng-click="setNumPerPage(1000)">Ver todo</button> 
+                </td>
+                <td ng-if="numPerPage>10">
+                    <button class="btn btn-primary btn-sm" ng-click="setNumPerPage(10)">Ver menos</button> 
                 </td>
                 </tfoot>
             </table>
