@@ -29,7 +29,7 @@ saul.config(["$stateProvider",
             {type:'text', name: 'nombreTipoSolicitud', title: 'Tipo Solicitud', options: 
                 [    
                     {"name":"Control Preventivo", "value":"Control Preventivo"},
-                    {"name":"Visita Infraestructura Telecomunicaciones", "value":"Visita Infraestructura Telecomunicaciones"},
+                    {"name":"Visita Control LIOEP", "value":"Visita Control LIOEP"},
                     {"name":"Visita Control Ornato", "value":"Visita Control Ornato"},
                     {"name":"Control Posterior", "value":"Control Posterior"}, 
                 ], header_align: 'text-center', body_align: 'text-center', sorting: 'sorting', width:'15%'},
