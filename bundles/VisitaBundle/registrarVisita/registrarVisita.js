@@ -186,7 +186,7 @@ saul.config(["$stateProvider",
                     $(".overlap_espera").hide();
                     $(".overlap_espera_1").hide();
                 }, function(MessageChannel) {
-                    alert("Ha ocurrido un error informe al desarrollador. Gracias.");
+                    alert("4Ha ocurrido un error informe al desarrollador. Gracias.");
                 });
             });
         });
@@ -302,13 +302,14 @@ saul.config(["$stateProvider",
                     }
                 }).then(function (response) {
                     if(!response.data.success || response.data.success!==true) {
-                        alert("Ha ocurrido un error en response informe al desarrollador. Gracias. "+response);
+                        console.log(response);
+                        alert("Ha ocurrido un error en response informe al desarrollador. Gracias. "+response.data.msg);
                     }
                     if(response.data.value && response.data.value!=='') {
                         actualizarPorAtributo(input.codigo, response.data.value); 
                     }
                 }, function(MessageChannel) {
-                    alert("Ha ocurrido un error informe al desarrollador. Gracias.");
+                    alert("2Ha ocurrido un error informe al desarrollador. Gracias.");
                 });
             }
         }
@@ -333,7 +334,7 @@ saul.config(["$stateProvider",
             }).then(function (response) {
                 
             }, function(MessageChannel) {
-                alert("Ha ocurrido un error informe al desarrollador. Gracias.");
+                alert("3Ha ocurrido un error informe al desarrollador. Gracias.");
             });
         }
         
@@ -413,6 +414,8 @@ saul.config(["$stateProvider",
               $scope,
               function (data) {
                 actualizarPorAtributo(input.codigo, data.direccion + (data.infoAdicional ? " " + data.infoAdicional : ""));     
+                input.valor = data.direccion + (data.infoAdicional ? " " + data.infoAdicional : "");
+                $scope.saveItem(input);
               }
             );
           };
