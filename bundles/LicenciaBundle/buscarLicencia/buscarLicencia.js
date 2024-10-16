@@ -143,7 +143,7 @@ saul.config(["$stateProvider",
         $scope.headers = [
             {type: 'action', name: 'acciones', title: 'Acciones', align: 'text-center', input: false, width: '5%',
                 values: [
-                    {icon: 'fa-pencil-square-o', title:'Ver Historial Comparendo', link: '#!/licencia/consultarlicencia/', 'action':'activarDetalle'},
+                    {icon: 'fa-pencil-square-o', title:'Ver Detalle', link: '#!/licencia/consultarlicencia/', 'action':'activarDetalle'},
                     {icon: 'fa fa-folder', title:'Gestionar Archivos', link: '#!/licencia/archivos/{{licencia.idLicencia}}', action:'gestionarArchivos'}
                 ],
                 options: [
