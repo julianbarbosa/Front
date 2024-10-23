@@ -158,7 +158,7 @@ saul.config(["$stateProvider", function(a) {
 
                 //MEGA 20241003 Definir titulo del boton Anular
                 var txtBtnAnular = "";
-                if (estado == 'PendientexAnular') {
+                if (estado == 'Pendiente por anular') {
                   txtBtnAnular = "Anular";
                 } else if (estado == 'Anulada') {
                   txtBtnAnular = "Desanular";
