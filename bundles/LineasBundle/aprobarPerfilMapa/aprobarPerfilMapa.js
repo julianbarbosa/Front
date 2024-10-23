@@ -155,6 +155,16 @@ saul.config(["$stateProvider", function(a) {
                 var claseVia=JSON.stringify(response.data[0].claseVia.texto,null,2);
                 var max=claseVia.length-1;
                 var claseVia=claseVia.substring(1,max);	
+
+                //MEGA 20241003 Definir titulo del boton Anular
+                var txtBtnAnular = "";
+                if (estado == 'PendientexAnular') {
+                  txtBtnAnular = "Anular";
+                } else if (estado == 'Anulada') {
+                  txtBtnAnular = "Desanular";
+                } else {
+                  txtBtnAnular = "Solicitar Anular";
+                }
         
                 var separador=JSON.stringify(response.data[0].dimensionSeparador,null,2);
                 
@@ -477,7 +487,9 @@ saul.config(["$stateProvider", function(a) {
                             "<tr><td colspan='2' style='text-align: left;'><div style='word-wrap: break-word; max-width:99%; width:99%; font-size:1'>"+observaciones+"</div></td></tr>"+
         
                     "</table> "+
-                    "Estado: "+ estado + "<br>" +
+                    "Estado: "+ estado + "<br>" + 
+                    "<input type='button' style='margin-right: 5px' class='btn btn-secondary' ng-click='aprobarPerfil()' onclick=\"if (confirm('Esta seguro que desea anular este perfil?')) { \
+                        $.ajax({ url: '"+$scope.root+"perfilvial/"+$scope.perfilId+"', type: 'DELETE', data: {  },  success: function (response) { alert(response);actualizarCapa(); } }); }\" value='" + txtBtnAnular + "'/>"+
                     "<input type='button' style='margin-right: 5px' class='btn btn-primary' ng-click='aprobarPerfil()' onclick=\"if (confirm('Esta seguro que desea aprobar este perfil?')) { \
                         $.ajax({ url: '"+$scope.root+"perfil/aprobarperfilporid/"+$scope.perfilId+"', type: 'POST', data: {  },  success: function (response) { alert(response);actualizarCapa(); } }); }\" value='Aprobar'/>"+
                         "<input type='button'  style='margin-right: 5px' class='btn btn-success' ng-click='aprobarPerfil()' onclick=\"if (confirm('Esta seguro que desea enviar la linea para visita?')) { \
