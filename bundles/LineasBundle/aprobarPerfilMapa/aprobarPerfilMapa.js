@@ -150,6 +150,7 @@ saul.config(["$stateProvider", function(a) {
                 esriRequest(url,{responseType: 'json'}).then(function(response) {
                 
                 var via=JSON.stringify(response.data[0].via,null,2);
+                var idestado=JSON.stringify(response.data[0].estado.idestado,null,2);
                 var estado=JSON.stringify(response.data[0].estado.nombre,null,2);
                 var calzada=JSON.stringify(response.data[0].calzada,null,2);
                 var claseVia=JSON.stringify(response.data[0].claseVia.texto,null,2);
@@ -158,12 +159,12 @@ saul.config(["$stateProvider", function(a) {
 
                 //MEGA 20241003 Definir titulo del boton Anular
                 var txtBtnAnular = "";
-                if (estado == 'Pendiente por anular') {
-                  txtBtnAnular = "Anular";
-                } else if (estado == 'Anulada') {
-                  txtBtnAnular = "Desanular";
+                if (idestado == '115') {
+                  txtBtnAnular = "Desactivar";
+                } else if (idestado == '11') {
+                  txtBtnAnular = "Activar";
                 } else {
-                  txtBtnAnular = "Solicitar Anular";
+                  txtBtnAnular = "Solicita Desactivar";
                 }
         
                 var separador=JSON.stringify(response.data[0].dimensionSeparador,null,2);
@@ -489,7 +490,7 @@ saul.config(["$stateProvider", function(a) {
                     "</table> "+
                     "Estado: "+ estado + "<br>" + 
                     "<input type='button' style='margin-right: 5px' class='btn btn-secondary' ng-click='aprobarPerfil()' onclick=\"if (confirm('Esta seguro que desea anular este perfil?')) { \
-                        $.ajax({ url: '"+$scope.root+"perfilvial/"+$scope.perfilId+"', type: 'DELETE', data: {  },  success: function (response) { alert(response);actualizarCapa(); } }); }\" value='" + txtBtnAnular + "'/>"+
+                        $.ajax({ url: '"+$scope.root+"perfilvial/"+$scope.perfilId+"', type: 'DELETE', data: {  },  success: function (response) { alert(JSON.parse(response).msg);actualizarCapa(); } }); }\" value='" + txtBtnAnular + "'/>"+
                     "<input type='button' style='margin-right: 5px' class='btn btn-primary' ng-click='aprobarPerfil()' onclick=\"if (confirm('Esta seguro que desea aprobar este perfil?')) { \
                         $.ajax({ url: '"+$scope.root+"perfil/aprobarperfilporid/"+$scope.perfilId+"', type: 'POST', data: {  },  success: function (response) { alert(response);actualizarCapa(); } }); }\" value='Aprobar'/>"+
                         "<input type='button'  style='margin-right: 5px' class='btn btn-success' ng-click='aprobarPerfil()' onclick=\"if (confirm('Esta seguro que desea enviar la linea para visita?')) { \
