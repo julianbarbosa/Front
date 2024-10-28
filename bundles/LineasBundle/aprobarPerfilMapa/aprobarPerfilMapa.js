@@ -159,12 +159,16 @@ saul.config(["$stateProvider", function(a) {
 
                 //MEGA 20241003 Definir titulo del boton Anular
                 var txtBtnAnular = "";
+                var msgBoton = "";
                 if (idestado == '115') {
                   txtBtnAnular = "Desactivar";
+                  msgBoton = "Está seguro que desea anular este perfil?";
                 } else if (idestado == '11') {
                   txtBtnAnular = "Activar";
+                  msgBoton = "Está seguro que desea desanular este perfil?";
                 } else {
                   txtBtnAnular = "Solicita Desactivar";
+                  msgBoton = "Está seguro que desea solicitar la anulación de este perfil?";
                 }
         
                 var separador=JSON.stringify(response.data[0].dimensionSeparador,null,2);
@@ -489,7 +493,7 @@ saul.config(["$stateProvider", function(a) {
         
                     "</table> "+
                     "Estado: "+ estado + "<br>" + 
-                    "<input type='button' style='margin-right: 5px' class='btn btn-secondary' ng-click='aprobarPerfil()' onclick=\"if (confirm('Esta seguro que desea anular este perfil?')) { \
+                    "<input type='button' style='margin-right: 5px' class='btn btn-secondary' ng-click='aprobarPerfil()' onclick=\"if (confirm('" + msgBoton + "')) { \
                         $.ajax({ url: '"+$scope.root+"perfilvial/"+$scope.perfilId+"', type: 'DELETE', data: {  },  success: function (response) { alert(JSON.parse(response).msg);actualizarCapa(); } }); }\" value='" + txtBtnAnular + "'/>"+
                     "<input type='button' style='margin-right: 5px' class='btn btn-primary' ng-click='aprobarPerfil()' onclick=\"if (confirm('Esta seguro que desea aprobar este perfil?')) { \
                         $.ajax({ url: '"+$scope.root+"perfil/aprobarperfilporid/"+$scope.perfilId+"', type: 'POST', data: {  },  success: function (response) { alert(response);actualizarCapa(); } }); }\" value='Aprobar'/>"+
