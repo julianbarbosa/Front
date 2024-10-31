@@ -162,13 +162,13 @@ saul.config(["$stateProvider", function(a) {
                 var msgBoton = "";
                 if (idestado == '115') {
                   txtBtnAnular = "Desactivar";
-                  msgBoton = "Está seguro que desea anular este perfil?";
+                  msgBoton = "Está seguro que desea desactivar este perfil?";
                 } else if (idestado == '11') {
-                  txtBtnAnular = "Activar";
-                  msgBoton = "Está seguro que desea desanular este perfil?";
+                  txtBtnAnular = "Reactivar";
+                  msgBoton = "Está seguro que desea reactivar este perfil?";
                 } else {
                   txtBtnAnular = "Solicita Desactivar";
-                  msgBoton = "Está seguro que desea solicitar la anulación de este perfil?";
+                  msgBoton = "Está seguro que desea solicitar la desactivación de este perfil?";
                 }
         
                 var separador=JSON.stringify(response.data[0].dimensionSeparador,null,2);
