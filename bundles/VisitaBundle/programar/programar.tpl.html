@@ -1,0 +1,98 @@
+
+<style>
+    .number-control { 
+        padding-right: 2px !important; 
+}
+input.ng-dirty.ng-invalid {
+  color: red
+}
+</style>
+
+
+<div>
+    <div id="modalIngresoDireccion" class="modal fade modal-change" role="dialog" aria-hidden="true" style="display: none;"></div>
+    <div ng-show="validator.alert.content">
+        <div class="alert alert-{{validator.alert.type}} alert-dismissable">
+            <i class="fa fa-danger"></i>
+            <button type="button" class="close" aria-hidden="true" ng-click="hideAlert()">×</button>
+            <b>{{validator.alert.title}}</b> <span ng-bind-html="validator.alert.content"></span>
+        </div>
+    </div>
+    
+    <div class="col-md-12" ng-show="!validator.alert.content">
+        <div class="panel">
+            <div class="panel-body col-md-12 col-lg-12">
+                <div class="page-header">
+                    <h1 class="col-xs-12 col-sm-10 text-center text-left-sm">Programación de Visita
+                        <strong class="subtitulo">Control a Construcciones</strong>
+                        <br>
+                        <small>
+                            <p>La visita programada tiene como objetivo llevar a cabo una inspección técnica del estado actual de los recursos con el fin de verificar su conformidad con las actividades del visitador. 
+                                Esta revisión es esencial para identificar posibles áreas de mejora, asegurar que se están cumpliendo los estándares de calidad y resolver cualquier problema.</p>
+                        </small>
+                    </h1>
+                </div>
+                <div class="page-body" ng-show="visita">
+                    <form name="form" class="form-horizontal">               
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4>Información General</h4>
+                            </div>
+                        </div>  
+                        <div class="row">
+                                                 
+                            <div class="col-md-8">                          
+                                <span>
+                                    <strong>Consecutivo</strong> {{visita.idVisita}}<br>
+                                </span>
+                                <span>
+                                    <strong>Estado</strong> {{visita.estado.nombre}}<br>
+                                </span>
+                                <span>
+                                    <strong>Visitador</strong> {{visita.visitador.firstName+' '+visita.visitador.lastName}}<br>
+                                </span>                           
+                                <span>
+                                    <strong>Tipo de Visita</strong> {{visita.tipoVisita.descripcion}}<br>
+                                </span>
+                                <span ng-if="visita.solicitud.radicado!==null">
+                                    <strong>Radicado Solicitud</strong> {{visita.solicitud.radicado}}<br>
+                                </span>
+                                <span ng-if="visita.solicitud.radicadohijo!==null">
+                                    <strong>Radicado Respuesta</strong> {{visita.solicitud.radicadohijo}}<br>
+                                </span>
+                                <span ng-if="visita.radicadoInspeccion!==null">
+                                    <strong>Radicado Remisión a Inspección</strong> {{visita.radicadoInspeccion}}<br>
+                                </span> 
+                            </div>                            
+                        </div> 
+                        <div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h4>Programación</h4>
+                                </div>
+                            </div>
+                            <div class="row">                                
+                                <div class="col-md-8">                                                              
+                                    <label class="control-label">Fecha aproximada de visita</label>  
+                                    <input type="date" date-input
+                                    class="form-control input-xlarge"                                           
+                                    ng-model="programacion.fecha"
+                                        required date-serializer>
+                                </div>
+    
+                            </div>
+                            <div class="row padding-sm text-right-sm">
+                                <input type="submit" class="btn btn-primary" ng-click="save()" ng-disabled="form.$invalid" value="Programar" />                            
+                                ó
+                                <a ui-sref="listar-peticion">Cancelar</a>
+                            </div>
+                        </div>
+                        
+                    </form>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>

@@ -36,6 +36,8 @@ saul.config(["$stateProvider",
                 $scope.programacion = result.data;
                 $scope.programacion.responsable = $scope.programacion.casaJusticia;
                 $scope.edicion = true;
+                $scope.programacion.lugar = result.data.lugar;
+                $scope.programacion.modalidad = result.data.modalidad;
                 if($scope.programacion.lugar!=='') {
                     $scope.programacion.modalidad = 'virtual';
                 }
@@ -162,13 +164,15 @@ saul.config(["$stateProvider",
             isSuccess = true;
             $('.overlap_espera').show();
             $('.overlap_espera_1').show();
-            var fechaInicial = new Date($scope.programacion.fechaCita.fecha);
-            var horaInicial = new Date($scope.programacion.horaCita.hora);
-            fechaInicial.setHours(horaInicial.getHours());
-            fechaInicial.setMinutes(horaInicial.getMinutes());
-            var fechaFinal = new Date(fechaInicial.getFullYear(), fechaInicial.getMonth(), fechaInicial.getDate(),fechaInicial.getHours(),fechaInicial.getMinutes()+($scope.programacion.duracion*1),0);
-            $scope.programacion.fechaInicialISO = fechaInicial.toISOString();
-            $scope.programacion.fechaFinalISO = fechaFinal.toISOString();
+            if($scope.programacion.fechaCita!==undefined) {
+                var fechaInicial = new Date($scope.programacion.fechaCita.fecha);
+                var horaInicial = new Date($scope.programacion.horaCita.hora);
+                fechaInicial.setHours(horaInicial.getHours());
+                fechaInicial.setMinutes(horaInicial.getMinutes());
+                var fechaFinal = new Date(fechaInicial.getFullYear(), fechaInicial.getMonth(), fechaInicial.getDate(),fechaInicial.getHours(),fechaInicial.getMinutes()+($scope.programacion.duracion*1),0);
+                $scope.programacion.fechaInicialISO = fechaInicial.toISOString();
+                $scope.programacion.fechaFinalISO = fechaFinal.toISOString();
+            }            
             ProgramacionPedagogia.save($scope.programacion).$promise.then(function (response) {
                 $scope.result = response;
                 callback($scope.result);

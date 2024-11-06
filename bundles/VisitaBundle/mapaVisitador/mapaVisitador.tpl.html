@@ -1,0 +1,51 @@
+
+<link rel="stylesheet" href="https://js.arcgis.com/4.8/esri/css/main.css">
+    <script src="https://js.arcgis.com/4.8/"></script>
+<style>
+    /* Esri JSAPI */
+    
+    html, body, #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 600px;
+        width: 100%;
+    }
+
+    .esri-feature {
+        letter-spacing: 0em;
+        font-family: "Avenir Next", "Helvetica Neue", sans-serif;
+        line-height: 1.55rem;
+        font-feature-settings: "liga"1, "calt"0;
+        background: #fff;
+        padding: 1em;
+    }
+
+    .esri-popup__main-container {
+        min-height: 400px;
+    } 
+    
+    .esri-view-width-xlarge .esri-popup__main-container,
+    .esri-view-width-large .esri-popup__main-container,
+    .esri-view-width-medium .esri-popup__main-container
+    {
+        width: 500px !important;
+    }
+
+    .legend-well {
+        margin-top: 20px;
+        float: none;
+    }
+
+    .legend-well div {
+        white-space: initial;
+    }
+</style>
+
+
+<div ng-controller="MapaVisitadorCtrl as vm">
+    <h1>Mapa de Visitas de Control Urbano</h1>
+    <esri-scene-view map="vm.map"  id="viewDiv" 
+    view-options="{zoom:13, center:[-76.52,3.435]}" on-create="vm.onViewCreated"
+    on-error="vm.onViewError"
+    ng-hide="vm.showViewError"></esri-scene-view>    
+</div>
