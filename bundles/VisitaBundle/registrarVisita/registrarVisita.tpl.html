@@ -6,6 +6,12 @@
 input.ng-dirty.ng-invalid {
   color: red
 }
+.mt-3 {
+    margin-top: 3px !important;   
+}
+.mt-5 {
+    margin-top: 5px !important;   
+}
 </style>
 
 
@@ -57,7 +63,44 @@ input.ng-dirty.ng-invalid {
                             <strong>Radicado Remisión a Inspección</strong> {{visita.radicadoInspeccion}}<br>
                         </span>                        
                     </div>
-                    <div  class="form-group has-feedback simple"  ng-repeat="campo in camposformularioVisita track by $index">
+                    <!-- <button class="btn btn-sm btn-primary" 
+                            ng-click="tipoFormulario=tipoFormulario=='dinámico'?'estático':'dinámico'">
+                            Formulario {{tipoFormulario=='dinámico'?'estático':'dinámico'}}
+                    </button> -->
+                    <div ng-show="tipoFormulario=='dinámico'">
+                        <div class="row mt-5" ng-repeat="campo in camposDinamicosVisita track by $index" >
+                            <div class="row align-items-center" ng-if="campo.tipo == 'texto'">
+                                <div class="col-md-12">                                            
+                                    <textarea class="form-control input-xlarge" ng-model="input.valor"  style="height:150"></textarea>
+                                </div>
+                            </div>
+                            <div class="row align-items-center"  ng-if="campo.tipo == 'imagen'">
+
+                                <div class="col-md-12">   
+                                    <input-file2 class="col-md-12" max="4" label="{{input.nombre}}" codigo="input.codigo" model="inputFiles[input.codigo]" callback-function="saveItem(input)"></input-file2>
+                                        <a  href="../../saul2/upload/documentos/{{input.valor}}" 
+                                            target="_blank"><img src="../../saul2/upload/documentos/{{input.valor}}"  
+                                            width="50px" ng-show="input.valor"></a>                                        
+                                        <button class="btn btn-sm btn-primary" 
+                                                ng-click="eliminarImagen(input, $indexFV)"
+                                                ng-show="input.valor">
+                                                Eliminar imagen
+                                        </button>
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="row mt-5">
+                            <button class="btn btn-sm btn-primary" 
+                                ng-click="agregarCampoFormularioDinamico('texto')">
+                                Agregar texto
+                            </button>  
+                            <button class="btn btn-sm btn-primary" 
+                                ng-click="agregarCampoFormularioDinamico('imagen')">
+                                Agregar imagen
+                            </button>  
+                        </div>       
+                    </div>
+                    <div ng-show="tipoFormulario=='estático'" class="form-group has-feedback simple"  ng-repeat="campo in camposformularioVisita track by $index">
                         <div class="row">
                             <div class="col-md-12">
                                 <h4>{{campo.nombre}}</h4>

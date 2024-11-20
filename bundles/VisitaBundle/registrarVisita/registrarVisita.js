@@ -53,6 +53,7 @@ saul.config(["$stateProvider",
         $scope.visita = {};
         $scope.files = {}; LoadingOverlap.show($scope);
         $scope.comentario = 'N/A';
+        $scope.tipoFormulario = 'estático';
         
         $scope.inputFiles = {}; 
         $scope.dataPlantillaXls;
@@ -64,6 +65,14 @@ saul.config(["$stateProvider",
         $scope.arrayEstadoFinalVisita = [];
         $(".overlap_espera").show();
         $(".overlap_espera_1").show();
+
+        $scope.camposDinamicosVisita = [
+            {"tipo":"texto"}
+        ]
+        $scope.agregarCampoFormularioDinamico = function($tipoCampo) {
+            $scope.camposDinamicosVisita.push({"tipo":$tipoCampo});
+
+        }
         
         //Búsqueda de la visita
         $scope.consultarVisita = function() {
@@ -225,19 +234,21 @@ saul.config(["$stateProvider",
         $scope.eliminarImagen = function(input) {
             bootbox.confirm("Confirma que desea elimar la imagen?",
             function (result) {
-                $scope.valoresFormulario = [];
-                $scope.valoresFormulario.push({codigo: input.codigo, valor: null, tipoItem: input.tipoItem});
-                Upload.upload({
-                    url: root + 'visita',
-                    data: {
-                        idVisita: $scope.visita.idVisita,
-                        data: $scope.valoresFormulario
-                    }
-                }).then(function (response) {
-                    actualizarPorAtributo(input.codigo, null);                
-                }, function(MessageChannel) {
-                    alert("Ha ocurrido un error informe al desarrollador. Gracias.");
-                });       
+                if(result) {
+                    $scope.valoresFormulario = [];
+                    $scope.valoresFormulario.push({codigo: input.codigo, valor: null, tipoItem: input.tipoItem});
+                    Upload.upload({
+                        url: root + 'visita',
+                        data: {
+                            idVisita: $scope.visita.idVisita,
+                            data: $scope.valoresFormulario
+                        }
+                    }).then(function (response) {
+                        actualizarPorAtributo(input.codigo, null);                
+                    }, function(MessageChannel) {
+                        alert("Ha ocurrido un error informe al desarrollador. Gracias.");
+                    });  
+                }                     
             })     
         }
 
