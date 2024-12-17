@@ -109,6 +109,16 @@ saul.config(["$stateProvider",
 			});
 			$scope.data.comentario = text;
 		}
+
+        $scope.obtenerEsMultaEspecial= function(expediente) {
+            var esMultaEspecial = false;
+            angular.forEach(expediente.comparendo.medidasCorrectivas, function (medidaCorrectiva) {			
+				if(medidaCorrectiva.idMedidaCorrectiva>=26 && medidaCorrectiva.idMedidaCorrectiva<=28) {
+                    esMultaEspecial = true;
+                }
+			});
+            return esMultaEspecial;
+        }
 		
        
         
@@ -124,6 +134,7 @@ saul.config(["$stateProvider",
                     $http.get(root+'comparendo/expediente/get/'+$scope.comparendo.id).then(function (result) {
                         console.log(result);
                         $scope.expediente = result.data;
+                        $scope.esMultaEspecial = $scope.obtenerEsMultaEspecial($scope.expediente);                      
                             $http.get(root+'controlsanciones/responsables').then(function (result) {
                                 $scope.responsables = result.data;
                                 $(".overlap_espera").fadeOut(500, "linear");
