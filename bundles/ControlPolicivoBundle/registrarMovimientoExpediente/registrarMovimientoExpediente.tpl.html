@@ -43,7 +43,7 @@
                     <div class="form-group col-md-5" ng-show="permisos.controlsanciones_ingresar_expediente && (expediente=='null' || expediente.estado.codigo=='cerrado' || expediente.estado.codigo=='devuelto')">
                         <label>Asignada a:</label>
                         <select class="form-control" ng-options="item.id as item.nombre for item in responsables"
-                            ng-model="data.asignadoa"><select>
+                            ng-model="data.asignadoa"></select>
                         <strong>Estado:</strong> {{expediente.estado.nombre}}
                     </div>
                 </div>

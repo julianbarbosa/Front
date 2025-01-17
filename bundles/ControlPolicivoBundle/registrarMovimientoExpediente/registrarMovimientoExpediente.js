@@ -112,12 +112,14 @@ saul.config(["$stateProvider",
 
         $scope.obtenerEsMultaEspecial= function(expediente) {
             var esMultaEspecial = false;
-            angular.forEach(expediente.comparendo.medidasCorrectivas, function (medidaCorrectiva) {			
-				if(medidaCorrectiva.idMedidaCorrectiva>=26 && medidaCorrectiva.idMedidaCorrectiva<=28) {
-                    esMultaEspecial = true;
-                }
-			});
-            return esMultaEspecial;
+            if(expediente && expediente.comparendo) {
+                angular.forEach(expediente.comparendo.medidasCorrectivas, function (medidaCorrectiva) {			
+                    if(medidaCorrectiva.idMedidaCorrectiva>=26 && medidaCorrectiva.idMedidaCorrectiva<=28) {
+                        esMultaEspecial = true;
+                    }
+                });
+                return esMultaEspecial;
+            }            
         }
 		
        
@@ -135,11 +137,11 @@ saul.config(["$stateProvider",
                         console.log(result);
                         $scope.expediente = result.data;
                         $scope.esMultaEspecial = $scope.obtenerEsMultaEspecial($scope.expediente);                      
-                            $http.get(root+'controlsanciones/responsables').then(function (result) {
-                                $scope.responsables = result.data;
-                                $(".overlap_espera").fadeOut(500, "linear");
-                                $(".overlap_espera_1").fadeOut(500, "linear");                
-                            });                        
+                        $http.get(root+'controlsanciones/responsables').then(function (result) {
+                            $scope.responsables = result.data;
+                            $(".overlap_espera").fadeOut(500, "linear");
+                            $(".overlap_espera_1").fadeOut(500, "linear");                
+                        });                        
                     });      
                     $http.get(root+'controlsanciones/movimientocomparendo/'+$scope.comparendo.id).then(function (result) {
                         $scope.historial = result.data;
