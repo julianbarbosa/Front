@@ -1,0 +1,182 @@
+<style>
+	/* Estilos para las pestañas */
+	.tab-container {
+		display: flex;
+		border-bottom: 2px solid #ccc;
+		margin-bottom: 10px;
+	}
+
+	.tab {
+		padding: 10px 20px;
+		cursor: pointer;
+		border: 1px solid #ccc;
+		border-bottom: none;
+		background-color: #f9f9f9;
+		margin-right: 5px;
+	}
+
+	.tab.active {
+		background-color: #b8e5ff;
+		font-weight: bold;
+	}
+
+	/* Estilos para el contenido de las pestañas */
+	.tab-contents {
+		padding: 10px;
+	}
+
+	.tab-content {
+		display: none;
+		padding: 10px;
+		border: 1px solid #ccc;
+	}
+
+	.tab-content.active {
+		display: block;
+	}
+
+	/* Estilos para los tooltips */
+	.tooltipP {
+		position: relative;
+		display: inline-block;
+		cursor: pointer;
+		color: #000000;
+		/* Color del ícono de información */
+	}
+
+	.tooltipP .tooltiptext {
+		visibility: hidden;
+		width: 200px;
+		background-color: #555;
+		color: #fff;
+		text-align: center;
+		border-radius: 5px;
+		padding: 5px;
+		position: absolute;
+		z-index: 100;
+		bottom: 125%;
+		/* Distancia desde el botón hacia arriba */
+		left: 50%;
+		transform: translateX(-50%);
+		opacity: 0;
+		transition: opacity 0.3s ease-in-out;
+	}
+
+	.tooltipP:hover .tooltiptext {
+		visibility: visible;
+		opacity: 1;
+	}
+
+	/* Estilo para los inputs inválidos */
+	.is-invalid {
+		border-color: red;
+		background-color: #f8d7da;
+	}
+
+	.is-invalid:focus {
+		border-color: #f5c6cb;
+	}
+
+	.btn[disabled] {
+		opacity: 0.6;
+		cursor: not-allowed;
+	}
+</style>
+<div class="panel-body">
+	<div class="page-header">
+		<h1 class="col-xs-12 col-sm-10 text-center text-left-sm">
+			<i class="padding-sm-hr fa fa-list-alt"></i>&nbsp;&nbsp;Parametrización
+		</h1>
+	</div>
+
+	<!-- Mostrar "Cargando..." -->
+	<div ng-if="cargando"><i class="fa fa-spinner fa-spin"></i> Cargando Registros....</div>
+
+	<!-- Pestañas -->
+	<div class="tab-container">
+		<div class="tab" ng-repeat="dominio in dominios" ng-click="setActiveTab($index)"
+			ng-class="{active: $index === activeTab}">
+			{{ dominio.nombre }}
+		</div>
+	</div>
+	<!-- Contenido de las pestañas -->
+	<div class="tab-contents">
+		<div class="tab-content" ng-repeat="dominio in dominios" ng-class="{active: $index === activeTab}"
+			ng-if="$index === activeTab">
+			<h3>{{ dominio.nombre }}</h3>
+			<form name="formulario">
+				<div ng-repeat="hijo in dominio.hijos">
+					<label>{{ hijo.nombre }}</label>
+
+					<!-- Tooltip -->
+					<button type="button" class="help-btn tooltipP">
+						?
+						<span class="tooltiptext">{{ hijo.valor.default || 'Sin valor definido' }} {{ hijo.valor.help
+							}}</span>
+					</button>
+
+					<!-- Mostrar el bloque de opciones solo si hijo.valor.default < 0 -->
+					<div ng-if="hijo.valor.default < 0">
+						<!-- Botón de radio para seleccionar 'Aplica' -->
+						<label>
+							<input type="radio" ng-model="hijo.aplica" value="true" />
+							Aplica
+						</label>
+						<label>
+							<input type="radio" ng-model="hijo.aplica" value="false" />
+							No Aplica
+						</label>
+					</div>
+					<!-- Campo de entrada con validaciones dinámicas -->
+					<input type="{{ hijo.valor.tipo === 'entero' ? 'number' : 'text' }}"
+						class="form-control input-xlarge" ng-model="hijo.valor.default" ng-min="{{ hijo.valor.min }}"
+						ng-max="{{ hijo.valor.max }}" ng-required="true" name="{{ 'input' + hijo.id }}"
+						placeholder="Ingrese {{ hijo.nombre }}"
+						ng-class="{'is-invalid': formulario['input' + hijo.id].$invalid && formulario['input' + hijo.id].$touched}"
+						required />
+
+
+					<!-- Mensajes de error -->
+					<div ng-show="formulario['input' + hijo.id].$touched">
+						<div ng-show="formulario['input' + hijo.id].$error.required">Este campo es obligatorio.</div>
+						<div ng-show="formulario['input' + hijo.id].$error.min">El valor debe ser mayor o igual a {{
+							hijo.valor.min }}.</div>
+						<div ng-show="formulario['input' + hijo.id].$error.max">El valor debe ser menor o igual a {{
+							hijo.valor.max }}.</div>
+					</div>
+					<br />
+				</div>
+
+				<!-- Botones de acción -->
+				<div class="row padding-sm text-right-sm">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+					<button type="button" class="btn btn-primary" ng-click="guardar()"
+						ng-disabled="formulario.$invalid || cargando">
+						Guardar Cambios
+					</button>
+				</div>
+
+			</form>
+		</div>
+	</div>
+</div>
+
+<!-- Modal de Mensajes -->
+<div id="modalMensaje" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="modalMensajeTitulo"></h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body" id="modalMensajeCuerpo">
+				<!-- Contenido dinámico del mensaje -->
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+			</div>
+		</div>
+	</div>
+</div>

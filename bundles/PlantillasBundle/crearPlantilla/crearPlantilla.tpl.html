@@ -1,0 +1,232 @@
+<style>
+	/* Agregar efecto de iluminación */
+	#listaSolicitudes tbody tr:hover {
+		background-color: #acd8ff;
+		/* Color de iluminación (Aliceblue) */
+	}
+</style>
+<div class="panel-body">
+	<div class="page-header">
+		<h1 class="col-xs-12 col-sm-10 text-center text-left-sm">
+			<i class="padding-sm-hr fa fa-list-alt"></i>&nbsp;&nbsp;Crear Tipo Plantilla
+		</h1>
+	</div>
+</div>
+<!-- Mostrar "Cargando..." -->
+<div ng-if="cargando"><i class="fa fa-spinner fa-spin"></i> Cargando Registros....</div>
+<div ng-if="!cargando" class="panel">
+	<div class="panel-body">
+		<div class="row col-md-8">
+			<h4>Listado de Plantillas</h4>
+			<table cellpadding="0" cellspacing="0" border="0" class="table-hover table table-bordered dataTable"
+				id="listaSolicitudes" width="100%" role="grid">
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>Nombre</th>
+						<th>Ley</th>
+						<th>Estado</th>
+						<th>Fecha de Creación</th>
+						<th>Fecha de Modificación</th>
+						<th>Acciones</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="item in listar.lista">
+						<td>{{ item.id }}</td>
+						<td>{{ item.nombre }}</td>
+						<td>{{ item.ley }}</td>
+						<td>{{ item.estado }}</td>
+						<td>{{ item.createdAt | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+						<td>{{ item.updatedAt | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+						<td>
+							<button class="btn btn-sm btn-warning" ng-click="abrirModalEditar(item.id)" title="Editar">
+								<i class="fa fa-edit"></i>
+							</button>
+							<button class="btn btn-sm btn-danger" ng-click="eliminar(item.id)" title="Eliminar">
+								<i class="fa fa-trash"></i>
+							</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<!-- Botón para abrir el modal de creación de plantillas -->
+			<div class="text-left">
+				<button class="btn btn-success" ng-click="abrirModalCrear()">Crear Tipos de Plantilla</button>
+			</div>
+			<div ng-if="!listar.lista || listar.lista.length === 0">
+				<p>No hay plantillas disponibles para mostrar.</p>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+<!-- Modal para crear nueva plantilla -->
+<div class="modal fade" id="modalCrear" tabindex="-1" role="dialog" aria-labelledby="modalCrearLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="modalCrearLabel">Crear Tipo Plantilla</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form name="plantillaForm" novalidate>
+					<!-- Campo para el nombre de la plantilla -->
+					<div class="form-group">
+						<label for="nombreplantilla">Nombre Plantilla</label>
+						<input 
+							type="text" 
+							id="nombreplantilla" 
+							class="form-control" 
+							ng-model="item.nombreplantilla"
+							placeholder="Ingrese nombre plantilla" 
+							required 
+							minlength="5" 
+							maxlength="250" 
+							name="nombreplantilla"
+						/>
+						<small ng-show="plantillaForm.nombreplantilla.$touched && plantillaForm.nombreplantilla.$error.required" class="text-danger">
+							El nombre es obligatorio.
+						</small>
+						<small ng-show="plantillaForm.nombreplantilla.$touched && plantillaForm.nombreplantilla.$error.minlength" class="text-danger">
+							El nombre debe tener al menos 5 caracteres y no debe exceder los 250 caracteres.
+						</small>
+						<small ng-show="plantillaForm.nombreplantilla.$touched && plantillaForm.nombreplantilla.$error.maxlength" class="text-danger">
+							El nombre no debe exceder los 250 caracteres.
+						</small>
+					</div>
+
+					<!-- Campo para seleccionar el dominio -->
+					<div class="form-group">
+						<label for="dominio">Dominio (Ley)</label>
+						<select 
+							id="iddominio" 
+							class="form-control" 
+							ng-model="item.iddominio" 
+							required 
+							ng-options="dominio.id as dominio.nombre for dominio in dominios" 
+							name="iddominio"
+						>
+							<option value="" disabled>Seleccione una opción</option>
+						</select>
+						<small ng-show="plantillaForm.iddominio.$touched && plantillaForm.iddominio.$error.required" class="text-danger">
+							Seleccionar un dominio es obligatorio.
+						</small>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+				<button 
+					type="button" 
+					class="btn btn-primary" 
+					ng-click="guardar()" 
+					ng-disabled="plantillaForm.$invalid"
+				>
+					Guardar
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Modal para editar plantilla-->
+<div class="modal fade" id="modalEditar" tabindex="-1" role="dialog" aria-labelledby="modalEditarLabel"
+	aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="modalEditarLabel">Editar Plantilla</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form name="editarForm" novalidate>
+					<!-- Campo para el nombre de la plantilla -->
+					<div class="form-group">
+						<label for="nombre">Nombre de la Plantilla</label>
+						<input type="text" class="form-control" id="nombre" ng-model="plantilla.nombre" required
+							minlength="5" maxlength="250">
+						<small ng-show="editarForm.nombre.$touched && editarForm.nombre.$invalid" class="text-danger">
+							El nombre es obligatorio y debe tener entre 5 y 250 caracteres.
+						</small>
+					</div>
+
+					<!-- Campo para el estado -->
+					<div class="form-group">
+						<label for="estado">Estado</label>
+						<select class="form-control" id="estado" ng-model="plantilla.estado" required>
+							<option value="Activo">Activo</option>
+							<option value="Inactivo">Inactivo</option>
+						</select>
+						<small ng-show="editarForm.estado.$touched && editarForm.estado.$invalid" class="text-danger">
+							El estado es obligatorio.
+						</small>
+					</div>
+
+					<!-- Campo para seleccionar el dominio (ley) -->
+					<div class="form-group">
+						<label for="ley">Ley (Dominio)</label>
+						<select class="form-control" id="ley" ng-model="plantilla.idDominio"
+							ng-options="dominio.id as dominio.nombre for dominio in dominios" required>
+							<option value="" disabled>Seleccione una ley</option>
+						</select>
+						<small ng-show="editarForm.ley.$touched && editarForm.ley.$invalid" class="text-danger">
+							Seleccionar una ley es obligatorio.
+						</small>
+					</div>
+
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+				<button type="button" class="btn btn-primary" ng-click="guardarEdicion()"ng-disabled="editarForm.$invalid">Guardar Cambios</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Modal para mostrar mensajes -->
+<div id="modalMensaje" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalMensajeTitulo"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalMensajeCuerpo">
+                <!-- Aquí irá el mensaje -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Confirmación -->
+<div id="modalConfirmarEliminar" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmar Eliminación</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="mensajeConfirmacionEliminar"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="btnConfirmarEliminar">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
