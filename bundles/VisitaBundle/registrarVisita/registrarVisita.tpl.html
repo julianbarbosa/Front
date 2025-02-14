@@ -63,10 +63,10 @@ input.ng-dirty.ng-invalid {
                             <strong>Radicado Remisión a Inspección</strong> {{visita.radicadoInspeccion}}<br>
                         </span>                        
                     </div>
-                    <!-- <button class="btn btn-sm btn-primary" 
+                    <button class="btn btn-sm btn-primary" 
                             ng-click="tipoFormulario=tipoFormulario=='dinámico'?'estático':'dinámico'">
                             Formulario {{tipoFormulario=='dinámico'?'estático':'dinámico'}}
-                    </button> -->
+                    </button>
                     <div ng-show="tipoFormulario=='dinámico'">
                         <div class="row mt-5" ng-repeat="campo in camposDinamicosVisita track by $index" >
                             <div class="row align-items-center" ng-if="campo.tipo == 'texto'">

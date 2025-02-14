@@ -312,5 +312,8 @@
     "ControlUrbanoReportsBundle/reporte-anual/reporte-anual.js",
     "ControlUrbanoReportsBundle/reporte-ivc/reporte-ivc.js",
     "ControlUrbanoReportsBundle/reporte-acceso/reporte-acceso.js",
-    "ControlUrbanoReportsBundle/reporte-rentas/reporte-rentas.js"
+    "ControlUrbanoReportsBundle/reporte-rentas/reporte-rentas.js",
+    "PlantillasBundle/crearPlantilla/crearPlantilla.js",
+    "PlantillasBundle/listarPlantilla/listarPlantilla.js",
+    "ParametrosOCBundle/parametrizacion/parametrizacion.js"
 ]

@@ -10,8 +10,8 @@ saul.config(["$stateProvider",
             }
         });
     }
-]).controller("ControlPolicivoConsultarComprendoCtrl", ["$scope", "root", "$stateParams", "Comparendo", "MovimientoComparendo", "LoadingOverlap", 
-    function ($scope, root, $stateParams, Comparendo, MovimientoComparendo, LoadingOverlap) {
+]).controller("ControlPolicivoConsultarComprendoCtrl", ["$scope", "$http", "root", "$stateParams", "Comparendo", "MovimientoComparendo", "LoadingOverlap", 
+    function ($scope, $http, root, $stateParams, Comparendo, MovimientoComparendo, LoadingOverlap) {
         $scope.item = {};
         $scope.item.idcomparendo = $stateParams.idcomparendo;
         $scope.root = root;
@@ -19,6 +19,7 @@ saul.config(["$stateProvider",
         $scope.isReadOnly = false;        
         $scope.isSuccess = false;
         $scope.querys = 2;
+        $scope.incremento_reincidencia = "0";
         
         LoadingOverlap.show($scope);
                 
@@ -28,6 +29,7 @@ saul.config(["$stateProvider",
         });        
         
         MovimientoComparendo.query({id:$scope.item.idcomparendo}).$promise.then(function(result) {
+            $scope.listarPlantillas($scope.item.idcomparendo);
             $scope.arrayMovimientoComparendo = result;
             $scope.querys--;
         });        
@@ -37,7 +39,18 @@ saul.config(["$stateProvider",
                 LoadingOverlap.hide($scope);
             }
         });
-              
+            
+        $scope.listarPlantillas = function (comparendoId) {
+            $http.get(root + "Plantilla/listar/por_comparendo/"+comparendoId)
+                .then(function (response) {
+                    //$scope.listar = response.data;
+                    $scope.listar = {
+                        lista: response.data.data
+                    };
+                });
+            $scope.cargando = false;    
+        };
 
+        
     }
 ]);

@@ -1,19 +1,74 @@
+<style>
+    .btn-link {
+        background-color: transparent;
+        text-decoration: underline;
+        font-weight: 600;
+    }
+</style>
 <div class="panel">
     <div class="panel-body">
         <div class="page-header">
             <h1 class="col-xs-12 col-sm-10 text-center text-left-sm"><i class="padding-sm-hr fa fa-list-alt"></i>&nbsp;&nbsp;Listado Comparendos en Primera Instancia</h1>
         </div>
         <div class="table-primary">
-            <table cellpadding="0" cellspacing="0" border="0" class="table-hover table table-bordered" id="listaSolicitudes" width="100%" role="grid" aria-describedby="solicitud_listar_tareas">
+
+            <form name="userForm">
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label class="control-label" for="numeroidentificacion">
+                            Número Identificación Infractor
+                        </label>
+                        <input type="text"
+                                id="numeroidentificacion"
+                                class="form-control input-xlarge"
+                                ng-model="busqueda.identificacion"
+                                placeholder="Ingrese la identificación"
+                                autocomplete="off"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="control-label" for="numerocomparendo">
+                            Número Comparendo / Expediente
+                        </label>
+                        <input type="text"
+                                id="numerocomparendo"
+                                class="form-control input-xlarge"
+                                ng-model="busqueda.numeroFormato"
+                                placeholder="Ingrese número de comparendo"
+                                autocomplete="off"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="control-label" for="numerocomparendo">
+                            Fecha de Comparendo 
+                        </label>
+                        <input type="date"
+                                id="fechacomparendo"
+                                class="form-control input-xlarge"
+                                ng-model="busqueda.fechaComparendo"
+                                placeholder="Ingrese fecha de comparendo"
+                                autocomplete="off"/>
+                    </div>
+                    <div class="col-md-6 " style="margin-top: 20px">
+                        <input type="button" class="btn btn-success col-xs-6" value="Buscar" ng-click="actualizarDatos()">
+                        <input type="button" class="btn btn-primary col-xs-6" value="Limpiar" ng-click="busqueda = {}">                        
+                    </div>
+                </div>
+            </form>
+            <table cellpadding="0" 
+                    cellspacing="0" 
+                    class="table-hover table table-bordered" 
+                    id="listaSolicitudes"
+                    width="100%" role="grid"
+                    aria-describedby="solicitud_listar_tareas"
+                    ng-if="data.length>0">
                 <thead>
-                    <tr>
+                    <!-- <tr>
                         <th ng-repeat="header in headers track by $index" class="ui-state-default" style="width: {{header.width}}">
                             <input type="text" ng-change="actualizarDatos()" ng-model="headers[$index].value" class="form-control input-sm" placeholder="{{header.title}}" style="width: 100%;"  ng-if="header.input !== false && !header.options" ng-model-options='{debounce: 2000}'>
                             <select ng-change="actualizarDatos()" ng-model="headers[$index].value" class="form-control input-sm" ng-options="option.value as option.name for option in header.options" ng-if="header.input !== false && header.options">
                                 <option value=""></option>
                             </select>
                         </th>
-                    </tr>
+                    </tr> -->
                     <tr role="row">
                         <th ng-repeat="header in headers" class="ui-state-default {{header.sorting}} {{header.header_align}}" style="width: {{header.width}}" ng-click="ordenarPor(headers[$index].name)">
                             {{header.title}}
@@ -52,7 +107,7 @@
 
                              <!-- Valor de Objeto Button-->
                              <span ng-if="header.type === 'button' && header.condicion!==null">
-                                <button ng-if="row[header.condicion]!==''" class="btn {{header['style']}}" ng-bind-html="header['title']" ng-click="caller(header['action'], row)" ></button>
+                                <button ng-if="row[header.condicion]!==''" class="btn-link" ng-bind-html="header['title']" ng-click="caller(header['action'], row)" ></button>
                             </span>
                         </td>
                     </tr>

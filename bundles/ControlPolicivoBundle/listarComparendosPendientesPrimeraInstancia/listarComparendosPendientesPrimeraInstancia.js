@@ -18,13 +18,11 @@ saul.config(["$stateProvider",
         $scope.rowWarning = 'estaEnviado';
         $scope.orderBy = 'idsolicitud';
         $scope.headers = [
-            {type:'text', name: 'numeroFormato', name2: '', title: 'Num Formato', header_align: 'text-center', body_align: 'text-center', sorting: 'sorting', width: '5%'},
-            {type:'text', name: 'identificacion', name2: '', title: 'Identificación', header_align: 'text-center', body_align: 'text-center', sorting: 'sorting', width: '5%'},
-            {type:'text', name: 'nombreInfractor', title: 'Nombre Infractor', header_align: 'text-center', body_align: 'text-center', sorting: 'sorting', width:'40%'},
-            {type:'text', name: 'tipoMulta', title: 'Tipo Multa', header_align: 'text-center', body_align: 'text-center', sorting: 'sorting', width:'10%'},
-            {type:'text', name: 'mcPonal', title: 'mcPonal', header_align: 'text-center', body_align: 'text-center', sorting: 'sorting', width:'15%'},
+            {type:'text', name: 'numeroFormato', name2: '', title: 'No. Comparendo / Expediente', header_align: 'text-center', body_align: 'text-center', sorting: 'sorting', width: '15%'},
+            {type:'text', name: 'identificacion', name2: '', title: 'Identificación', header_align: 'text-center', body_align: 'text-center', sorting: 'sorting', width: '15%'},
+            {type:'text', name: 'nombreInfractor', title: 'Nombre Infractor', header_align: 'text-center', body_align: 'text-center', sorting: 'sorting', width:'30%'},
             {type:'date', name: 'fechaComparendo', title: 'Fecha Comparendo', header_align: 'text-center', body_align: 'text-center', width:'20%'},
-            {type:'button', name: 'Apelar', title: 'Decidir', header_align: 'text-center', body_align: 'text-center', width:'10%', input: false, style: 'btn-danger', action: 'apelar', condicion: 'tipoMulta'}
+            {type:'button', name: 'Acción', title: 'Detalle', header_align: 'text-center', body_align: 'text-center', width:'10%', input: false, style: 'btn-danger', action: 'verDetalle', condicion: 'tipoMulta'}
         ];
 
         function callback(data) {
@@ -53,10 +51,8 @@ saul.config(["$stateProvider",
                             {'name': 'numPerPage', 'value': $scope.numPerPage},
                             {'name': 'orderBy', 'value': $scope.orderBy}
                             ];
-            for (header in $scope.headers) {
-                if (typeof $scope.headers[header].value !== 'undefined' && $scope.headers[header].value !== '') {
-                    request.push({'name': $scope.headers[header].name, 'value': $scope.headers[header].value});
-                }
+            for (item in $scope.busqueda) {
+                request.push({'name': item, 'value': $scope.busqueda[item]});
             }
             ComparendosPrimeraInstancia.get(request).$promise.then(function (response) {
                 $scope.data = response['data'];
@@ -65,7 +61,7 @@ saul.config(["$stateProvider",
                 $(".overlap_espera_1").fadeOut(500, "linear");
             });
         };
-        $scope.actualizarDatos();
+        // $scope.actualizarDatos();
 
         $scope.ordenarPor = function (name)
         {
@@ -77,8 +73,8 @@ saul.config(["$stateProvider",
             $scope.$eval(funcion).call([], item);
         };
 
-        $scope.apelar = function (item) {
-            $location.path( "/controlpolicivo/resolverprimerainstancia/"+item.id );
+        $scope.verDetalle = function (item) {
+            $location.path( "/controlpolicivo/consultarcomparendo/"+item.id );
         };
 
         $scope.objetar = function (item) {
