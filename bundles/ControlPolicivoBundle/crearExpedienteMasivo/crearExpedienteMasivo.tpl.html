@@ -1,0 +1,143 @@
+<div>
+    <div class="panel">
+        <div class="panel-body col-md-12 col-lg-12">
+            <div class="page-header">
+                <h1 class="col-xs-12 col-sm-10 text-center text-left-sm">Generación Masiva de 
+                    <strong class="subtitulo">Expedientes Ley 1801</strong>
+                    <br>
+                    <small>
+                        Permite generar documentos de expedientes sin firmar en pdf para su impresión y posterior gestión del expediente.<br>
+                        El sistema no controla la duplicidad de consecutivos antes y después de este proceso.
+                    </small>
+                </h1>
+            </div>
+        </div>
+    </div>
+    <div class="page-body ">
+        <div class="col-md-12">
+            <div class="form-group col-md-6">
+                <label class="control-label" for="numerocomparendo">
+                    Fecha de Comparendo 
+                </label>
+                <input type="date"
+                        id="fechacomparendo"
+                        class="form-control input-xlarge"
+                        ng-model="query.fechaComparendo"
+                        placeholder="Ingrese fecha de comparendo"
+                        ng-disabled="data!==null"
+                        autocomplete="off"/>
+            </div>      
+            <div class="col-md-6 " style="margin-top: 20px">
+                <input type="button" class="btn btn-success col-xs-6" value="Consultar" ng-click="consultarComparendos()" ng-if="data==null">
+                <input type="button" class="btn btn-success col-xs-6" value="Limpiar" ng-click="limpiar()" ng-if="data!==null">
+            </div>
+        </div>
+        <div class="col-md-12" ng-if="data!==null && tienePendientesPorGenerar">            
+            <div class="form-group col-md-6">
+                <label class="control-label" for="consecutivoExpediente">
+                    Consecutivo Inicial de Expedientes
+                </label>
+                <input type="number"
+                        id="consecutivoExpediente"
+                        class="form-control input-xlarge"
+                        ng-model="query.consecutivoExpediente"
+                        placeholder="Ingrese consecutivo inicial del expediente"
+                        autocomplete="off"/>
+            </div>
+            <div class="form-group col-md-6">
+                <label class="control-label" for="consecutivoAuto">
+                    Consecutivo Inicial de Auto
+                </label>
+                <input type="number"
+                        id="consecutivoAuto"
+                        class="form-control input-xlarge"
+                        ng-model="query.consecutivoAuto"
+                        placeholder="Ingrese consecutivo inicial del Auto"
+                        autocomplete="off"/>
+            </div>
+           
+        </div>
+
+        <div class="col-md-12" ng-if="data.length>0">         
+            <table cellpadding="0" 
+                    cellspacing="0" 
+                    class="table-primary table-hover table table-bordered" 
+                    id="listaSolicitudes"
+                    width="100%" role="grid"
+                    aria-describedby="solicitud_listar_tareas"
+                    ng-if="data.length>0">
+                <thead>         
+                    <tr role="row">
+                        <th class="ui-state-default" style="width: 15%">
+                            No. expediente
+                        </th>
+                        <th class="ui-state-default" style="width: 15%">
+                            Identificación infractor
+                        </th>
+                        <th class="ui-state-default" style="width: 35%">
+                            Nombre infractor
+                        </th>
+                        <th class="ui-state-default" style="width: 10%">
+                            Reincidencia
+                        </th>
+                        <th class="ui-state-default" style="width: 15%">
+                            Fecha de Comparendo
+                        </th>
+                        <th class="ui-state-default" style="width: 15%">
+                            Expediente Generado
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr  class="odd" style="font-weight: bold;" ng-repeat="item in data track by $index">                        
+                        <td>
+                            {{item.numeroFormato}}
+                        </td>
+                        <td>
+                            {{item.identificacion}}
+                        </td>
+                        <td>
+                            {{item.nombreInfractor}}
+                        </td>
+                        
+                        <td ng-if="item.estado == 'No generado'">
+                            <select class="form-control" ng-model="data[$index].reincidencia" required>
+                                <option value=0 selected>0%</option>
+                                <option value=50>50%</option>
+                                <option value=75>75%</option>
+                            </select>
+                        </td>
+                        <td ng-if="item.estado !== 'No generado'">
+                            {{item.reincidencia}}
+                        </td>
+                        <td>
+                            {{item.fechaComparendo.timestamp * 1000| date:'yyyy-MM-dd HH:mm:ss'}}
+                        </td>
+                        <td ng-if="item.estado!=='Finalizado'">
+                            {{item.estado}}
+                        </td>
+                        <td ng-if="item.estado=='Finalizado'">
+                            <a href="{{root}}controlpolicivo/primerainstancia/descargarexpediente/{{item.expedienteId}}" target="_blank">Descargar</a>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                <td colspan="10" class="currency">
+                    <uib-pagination ng-model="currentPage" total-items="totalItems" max-size="5" boundary-links="true" ng-click="actualizarDatos()"></uib-pagination>
+                </td>
+                </tfoot>
+            </table>
+            <div class="col-md-6 " style="margin-top: 20px">
+                <input type="button" class="btn btn-success col-xs-6" value="Generar" ng-click="generarExpedientesMasivos()" ng-disabled="!(query.consecutivoExpediente>0 && !query.consecutivoAuto>=0)" ng-if="tienePendientesPorGenerar">
+                <a href="{{root}}controlpolicivo/primerainstancia/descargarexpedientezip/{{query.fechaComparendo}}" target="_blank" class="btn btn-warning col-xs-6" ng-click="generarExpedientesMasivos()" ng-if="!tienePendientesPorGenerar">Descargar Zip</a>
+            </div>
+        </div>
+
+        <div class="col-md-12" ng-if="data.length < 0">
+            <div class="note note-info">
+                No se encontraron expedientes con esta fecha
+            </div>            
+        </div>      
+
+    </div>
+</div>
