@@ -110,16 +110,8 @@ saul.config(["$stateProvider",
 			$scope.data.comentario = text;
 		}
 
-        $scope.obtenerEsMultaEspecial= function(expediente) {
-            var esMultaEspecial = false;
-            if(expediente && expediente.comparendo) {
-                angular.forEach(expediente.comparendo.medidasCorrectivas, function (medidaCorrectiva) {			
-                    if(medidaCorrectiva.idMedidaCorrectiva>=26 && medidaCorrectiva.idMedidaCorrectiva<=28) {
-                        esMultaEspecial = true;
-                    }
-                });
-                return esMultaEspecial;
-            }            
+        $scope.obtenerEsMultaEspecial= function(expediente) {           
+            return $scope.comparendo.expediente.substr(0,8)=='76-001-1' ? true : false;
         }
 		
        
