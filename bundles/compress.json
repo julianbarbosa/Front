@@ -228,6 +228,10 @@
     "ControlPolicivoBundle/generadorDeReportes/controller.js",
     "ControlPolicivoBundle/generadorDeProcesos/controller.js",
     "ControlPolicivoBundle/generadorDeReportesFiltro/controller.js",
+    "ControlPolicivoBundle/parametrizacionInspector/parametrizacion.js",
+    "ControlPolicivoBundle/listarOrganismos/organismos.js",
+    "ControlPolicivoBundle/crearOrganismo/crearOrganismo.js",
+    "ControlPolicivoBundle/crearTipoOrganismo/crearTipoOrganismo.js",
 	"ControlPolicivoBundle/model.js",
 	"InformesBundle/diarioPorTipoSolicitud/diarioPorTipoSolicitud.js",
 	"NomenclaturaBundle/solicitarAsignacion/solicitarAsignacion.js",
@@ -315,6 +319,5 @@
     "ControlUrbanoReportsBundle/reporte-acceso/reporte-acceso.js",
     "ControlUrbanoReportsBundle/reporte-rentas/reporte-rentas.js",
     "PlantillasBundle/crearPlantilla/crearPlantilla.js",
-    "PlantillasBundle/listarPlantilla/listarPlantilla.js",
-    "ParametrosOCBundle/parametrizacion/parametrizacion.js"
+    "PlantillasBundle/listarPlantilla/listarPlantilla.js"
 ]

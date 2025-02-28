@@ -46,7 +46,7 @@ saul.config(["$stateProvider",
                 $scope.actualizacion = {};
             }, function(error){
 				fnMostrarCortina(false, function(error){
-					alert('Ha ocurrido un error. '+error.msg);
+					bootbox.alert(error.msg);
 					setEntity({});
 				}, error);
 			});

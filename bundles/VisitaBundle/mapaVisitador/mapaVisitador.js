@@ -38,9 +38,40 @@ saul.config(["$stateProvider", function(a) {
                 basemap: "streets"
             });
 
+            // const mapImageLayer = new MapImageLayer({
+            //     url: "https://geoportal.cali.gov.co/agserver/rest/services/CATASTRO/CATASTRO/MapServer"
+            // });
+
             const mapImageLayer = new MapImageLayer({
-                url: "https://geoportal.cali.gov.co/agserver/rest/services/CATASTRO/CATASTRO/MapServer"
+                url: "https://geoportal.cali.gov.co/agserver/rest/services/CATASTRO/CATASTRO/MapServer",
+                visible: true,
+                sublayers: [
+                    {
+                        id: 0,
+                        title: "Anexos",
+                        visible: false
+                    },
+                    {
+                        id: 1,
+                        title: "Construcciones",
+                        visible: false
+                    },
+                    {
+                        id: 2,
+                        title: "Terreno",
+                        popupTemplate: popupCatastro,
+                        visible: true
+                    }
+                ]
             });
+            map.add(mapImageLayer);
+
+
+            const popupCatastro = {
+                title: "Información de Catastro",
+                content: "<b>NPN_TERRENO:</b> {NPN_TERRENO}<br><b>Matricula Inmobiliaria:</b> {NUM_MATRINMO}"
+            };
+            
             const popupSolicitud = {
             title: "Solicitudes",
             content:

@@ -411,3 +411,16 @@ a#izquierda {
     cursor: pointer;
 }
 .text-warning-1{color: #f39066;}
+
+.btn-link {
+    background-color: transparent;
+    text-decoration: underline;
+    font-weight: 600;
+}
+.mt-0 {
+    margin-top: 0px !important;
+}
+
+.pt-0 {
+    padding-top: 0px !important;
+}

@@ -53,9 +53,8 @@
                     </div>
                 </div>
             </form>
-            <table cellpadding="0" 
-                    cellspacing="0" 
-                    class="table-hover table table-bordered" 
+            <table cellpadding="0"
+                    class="table table-primary table-hover  table-bordered" 
                     id="listaSolicitudes"
                     width="100%" role="grid"
                     aria-describedby="solicitud_listar_tareas"
@@ -94,6 +93,7 @@
                             <span ng-if="header.type === 'text'">
                                 {{row[header.name]}} {{row[header.name2]}}
                             </span>
+
 
                             <!-- Valor de Link-->
                             <span ng-if="header.type === 'link'">

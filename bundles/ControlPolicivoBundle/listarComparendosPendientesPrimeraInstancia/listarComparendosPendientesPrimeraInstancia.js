@@ -18,6 +18,7 @@ saul.config(["$stateProvider",
         $scope.rowWarning = 'estaEnviado';
         $scope.orderBy = 'idsolicitud';
         $scope.headers = [
+            // {type:'check', name: 'numeroFormato', name2: '', title: 'No. Comparendo / Expediente', header_align: 'text-center', body_align: 'text-center', sorting: 'sorting', width: '5%'},
             {type:'text', name: 'numeroFormato', name2: '', title: 'No. Comparendo / Expediente', header_align: 'text-center', body_align: 'text-center', sorting: 'sorting', width: '15%'},
             {type:'text', name: 'identificacion', name2: '', title: 'Identificación', header_align: 'text-center', body_align: 'text-center', sorting: 'sorting', width: '15%'},
             {type:'text', name: 'nombreInfractor', title: 'Nombre Infractor', header_align: 'text-center', body_align: 'text-center', sorting: 'sorting', width:'30%'},

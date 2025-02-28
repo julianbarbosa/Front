@@ -24,11 +24,11 @@ saul.config(["$stateProvider",
             }
         };
     })
-    .controller("listarPlantillaCtrl", ["$scope", "$http", "root",
-        function ($scope, $http, root) {
+    .controller("listarPlantillaCtrl", ["$scope", "$http", "root","LoadingOverlap",
+        function ($scope, $http, root,LoadingOverlap) {
             $scope.root = root;
             $scope.archivo = {}; // Inicializamos el modelo para cargar el archivo
-            $scope.cargando = true;
+
 
             // Función para listar plantillas
             $scope.listarPlantillas = function () {
@@ -44,13 +44,13 @@ saul.config(["$stateProvider",
                     })
                     .finally(function () {
                         // Finalizar el estado de carga, tanto en éxito como en error
-                        $scope.cargando = false;
+                        LoadingOverlap.hide();
                     });
             };
 
             // Función para listar plantillas Cargando
             $scope.listarPlantillasCargando = function () {
-                $scope.cargando = true; // Iniciar el estado de carga
+                LoadingOverlap.show(); // Iniciar el estado de carga
                 $http.get(root + "Plantilla/listarActivas")
                     .then(function (response) {
                         //$scope.listar = response.data;
@@ -63,7 +63,7 @@ saul.config(["$stateProvider",
                     })
                     .finally(function () {
                         // Finalizar el estado de carga, tanto en éxito como en error
-                        $scope.cargando = false;
+                        LoadingOverlap.hide();
                     });
             };
             // Función para abrir el modal y asociar el ID de la plantilla
@@ -219,7 +219,7 @@ saul.config(["$stateProvider",
 
             // Inicialización
             $scope.init = function () {
-                $scope.cargando = true;
+                LoadingOverlap.show();
                 $scope.listarPlantillasCargando();
             };
 

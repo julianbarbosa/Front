@@ -142,7 +142,6 @@ saul.config(["$stateProvider",
         $scope.consultarInspecciones = function () {
             $http.get(root+'controlpolicivo/inspector/getall',{}).then(function (result) {                                            
                 $scope.inspecciones = result.data.data;
-                console.log($scope.inspectores);
             });
         };
         $scope.consultarInspecciones();

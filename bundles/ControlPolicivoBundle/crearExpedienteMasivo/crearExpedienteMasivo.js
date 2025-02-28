@@ -10,8 +10,8 @@ saul.config(["$stateProvider",
             }
         });
     }
-]).controller("ControlPolicivoCrearExpedienteMasivoCtrl", ["$scope", "$http", "root", "$stateParams", "Comparendo", "ComparendosPrimeraInstancia", "LoadingOverlap", 
-    function ($scope, $http, root, $stateParams, Comparendo, ComparendosPrimeraInstancia, LoadingOverlap) {
+]).controller("ControlPolicivoCrearExpedienteMasivoCtrl", ["$scope", "$http", "root", "$stateParams", "$filter", "ComparendosPrimeraInstancia", "LoadingOverlap", 
+    function ($scope, $http, root, $stateParams, $filter, ComparendosPrimeraInstancia, LoadingOverlap) {
         
         $scope.root = root;
         $scope.data = null;
@@ -37,17 +37,26 @@ saul.config(["$stateProvider",
             $scope.query = {};
         }
 
+        $scope.obtenerComparendosSeleccionados = function(data) {
+            return $filter('filter')(data, {'seleccionado': true});
+        }
+          
         $scope.generarExpedientesMasivos = function() {
             if($scope.query.consecutivoExpediente > 0 && $scope.query.consecutivoAuto>=0) {                
-                if($scope.tienePendientesPorGenerar) {
-                    LoadingOverlap.show();
-                    const request =  {"query": $scope.query, "data": $scope.data};
-                    const consecutivoExpedienteHasta = $scope.query.consecutivoExpediente+ $scope.data.length -1;           
-                    $http.post(root+'controlpolicivo/primerainstancia/expedientesmasivos',request).then(function(res){                
-                        bootbox.alert(res.data.msg);
-                        $scope.consultarComparendos();
-                    });
+                if($scope.tienePendientesPorGenerar) { 
+                    const dataFilter = $scope.obtenerComparendosSeleccionados($scope.data);
+                    const request =  {"query": $scope.query, "data": dataFilter };
+                    if(dataFilter.length>0) {
+                        LoadingOverlap.show();
+                        $http.post(root+'controlpolicivo/primerainstancia/expedientesmasivos',request).then(function(res){                
+                            bootbox.alert(res.data.msg);
+                            $scope.consultarComparendos();
+                        });
+                    } else {
+                        bootbox.alert("Debe seleccionar al menos un comparendo.");    
+                    }
                 } else {
+                    
                     bootbox.alert("No tiene expedientes por generar.");
                 }
             }

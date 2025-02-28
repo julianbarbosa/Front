@@ -68,6 +68,9 @@
                     ng-if="data.length>0">
                 <thead>         
                     <tr role="row">
+                        <th class="ui-state-default" style="width: 5%">
+                            Sel
+                        </th>
                         <th class="ui-state-default" style="width: 15%">
                             No. expediente
                         </th>
@@ -90,6 +93,9 @@
                 </thead>
                 <tbody>
                     <tr  class="odd" style="font-weight: bold;" ng-repeat="item in data track by $index">                        
+                        <td>
+                            <input ng-if="item.estado=='No generado'" type="checkbox" ng-model="data[$index].seleccionado" value="true">
+                        </td>
                         <td>
                             {{item.numeroFormato}}
                         </td>

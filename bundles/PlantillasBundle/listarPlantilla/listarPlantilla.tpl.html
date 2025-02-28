@@ -1,8 +1,15 @@
 <style>
-	/* Agregar efecto de iluminación */
-	#listaSolicitudes tbody tr:hover {
-		background-color: #cbfff8;
-		/* Color de iluminación (Aliceblue) */
+	.btn-link {
+        background-color: transparent;
+        text-decoration: underline;
+        font-weight: 600;
+    }
+	.mt-0 {
+		margin-top: 0px !important;
+	}
+
+	.pt-0 {
+		padding-top: 0px !important;
 	}
 
 	.modal-md {
@@ -26,50 +33,59 @@
 		/* Centrar horizontalmente */
 	}
 </style>
-<div class="panel-body">
-	<div class="page-header">
-		<h1 class="col-xs-12 col-sm-10 text-center text-left-sm">
-			<i class="padding-sm-hr fa fa-list-alt"></i>&nbsp;&nbsp;Cargar archivos Plantillas
-		</h1>
-	</div>
-	<!-- Mostrar "Cargando..." -->
-	<div ng-if="cargando"><i class="fa fa-spinner fa-spin"></i> Cargando Registros....</div>
-	<!-- {{listar.lista}}-->
-	<div ng-if="!cargando" class="panel">
-		<div class="panel-body">
-			<div class="row col-md-8">
-				<h4>Listado de Tipos de Plantillas</h4>
-				<table cellpadding="0" cellspacing="0" border="0" class="table-hover table table-bordered dataTable"
-				id="listaSolicitudes" width="100%" role="grid">			<thead>
-						<tr>
-							<th>ID</th>
-							<th>Nombre</th>
-							<th>Ley</th>
-							<th>Estado</th>
-							<th>Acciones</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr ng-repeat="item in listar.lista">
-							<td>{{ item.id }}</td>
-							<td>{{ item.nombre }}</td>
-							<td>{{ item.ley }}</td>
-							<td>{{ item.estado }}</td>
-							<td>
-								<button class="btn btn-sm btn-primary" class="btn btn-primary"
-									ng-click="abrirModalCargarArchivo(item.id)" title="Cargar Archivo">
-									<i class="fa fa-upload"></i>
-								</button>
-								<button class="btn btn-sm btn-warning" ng-if="item.archivos > 0"
-									ng-click="verArchivos(item.id)" title="Visualizar Archivo">
-									<i class="fa fa-eye"></i>
-								</button>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-				<div ng-if="!listar.lista || listar.lista.length === 0">
-					<p>No hay plantillas disponibles para mostrar.</p>
+<div class="col-sm-12 col-md-10 col-lg-8">
+    <div class="panel">
+        <div class="panel-body">
+            <div class="page-header">
+                <h1 class="col-xs-12 col-sm-10 text-center text-left-sm">Cargar
+                    <strong class="subtitulo">archivo a plantilla</strong>
+                    <br>
+                    <small>
+                        Permite adjuntar un archivo word a una plantilla
+                    </small>
+                </h1>
+            </div>
+			<div class="page-body">
+				<div>
+					<div class="panel-body pt-0">
+						<div class="row">
+							<h4>Listado de <strong class="subtitulo">Tipos de Plantillas</strong></h4>
+							<table class="table table-primary table-hover table-bordered" 
+							id="listaSolicitudes" width="100%" role="grid">			
+								<thead>
+									<tr>
+										<th>ID</th>
+										<th>Nombre</th>
+										<th>Ley</th>
+										<th>Estado</th>
+										<th>Archivo</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat="item in listar.lista">
+										<td>{{ item.id }}</td>
+										<td>{{ item.nombre }}</td>
+										<td>{{ item.ley }}</td>
+										<td>{{ item.estado }}</td>
+										<td>
+											
+											<button class="btn-link"
+												ng-click="abrirModalCargarArchivo(item.id)" title="Cargar Archivo">
+												Cargar
+											</button>
+											<button class="btn-link" ng-if="item.archivos > 0"
+												ng-click="verArchivos(item.id)" title="Visualizar Archivo">
+												Ver
+											</button>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+							<div ng-if="!listar.lista || listar.lista.length === 0">
+								<p>No hay plantillas disponibles para mostrar.</p>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -86,7 +102,7 @@
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
-				<div class="form-group">
+				<div class="form-group modal-body">
 					<label for="archivo">Seleccionar Archivo</label>
 
 					<input type="file" id="archivo" class="form-control"
@@ -106,7 +122,7 @@
 
 	<!-- Modal para visualizar archivos -->
 	<div class="modal fade" id="modalVerArchivos" tabindex="-1" role="dialog" aria-labelledby="modalVerArchivosLabel">
-		<div class="modal-dialog-own-lg" role="document">
+		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title" id="modalVerArchivosLabel">Archivos de la Plantilla</h5>
@@ -116,15 +132,12 @@
 				</div>
 				<div class="modal-body">
 					<!-- Mostrar la lista de archivos -->
-					<table class="table table-bordered">
+					<table class="table table-primary table-hover table-bordered" >
 						<thead>
 							<tr>
 								<th>#</th>
 								<th>Nombre del Archivo</th>
-								<th>Tipo</th>
 								<th>Fecha Creación</th>
-								<th>Usuario Elimina</th>
-								<th>Fecha Eliminacón</th>
 								<th>Acciones</th>
 							</tr>
 						</thead>
@@ -132,24 +145,18 @@
 							<tr ng-repeat="archivo in archivos">
 								<td>{{ $index + 1 }}</td>
 								<td>{{ archivo.nombreArchivo }}</td>
-								<td>{{ archivo.tipoArchivo }}</td>
 								<td>{{ archivo.fechaCreacion | date:'dd/MM/yyyy HH:mm:ss' }}</td>
-								<td>{{ archivo.usuarioElimina }}</td>
-								<td>
-									<div ng-if="archivo.usuarioElimina">
-										{{ archivo.fechaEliminacion | date:'dd/MM/yyyy HH:mm:ss' }}
-									</div>
-								</td>
+								
 								<td>
 									<!-- Botón para ver el archivo -->
-									<a class="btn btn-info btn-sm"
+									<a class="btn-link"
 										href="{{root}}Plantilla/descargar-archivo/{{ +archivo.id }}" target="_blank">
 										Descargar
 									</a>
 									<!-- Botón para eliminar el archivo -->
-									<button class="btn btn-sm btn-danger" ng-click="eliminarArchivo(archivo.id)"
+									<button class="btn-link" ng-click="eliminarArchivo(archivo.id)"
 										title="Eliminar" ng-if="!archivo.usuarioElimina">
-										<i class="fa fa-trash"></i>
+										Eliminar
 									</button>
 								</td>
 							</tr>
@@ -203,3 +210,5 @@
 			</div>
 		</div>
 	</div>
+
+	
