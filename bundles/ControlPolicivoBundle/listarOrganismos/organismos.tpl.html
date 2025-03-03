@@ -1,0 +1,98 @@
+<div class="col-sm-12 col-md-10 col-lg-8">
+    <div class="panel">
+        <div class="panel-body">
+            <div class="page-header">
+                <h1 class="col-xs-12 col-sm-10 text-center text-left-sm">Gestión de 
+                    <strong class="subtitulo">Organismos</strong>
+                    <br>
+                    <small>
+                        Permite visualizar, crear y editar un organismo
+                    </small>
+                </h1>
+            </div>
+            <div class="panel-body">
+      
+                <!-- Botón Crear Tipo de Organismo (ubicado en la parte inferior derecha) -->
+                <div class="row padding-sm text-right-sm">
+                    <!-- Llamada a la pantalla de formulario crear organismos -->
+                    <a ui-sref="controlpolicivo-crear-organismo" class="btn btn-primary">Crear Organismo</a>
+                </div>
+    
+                <!-- Hacer que la tabla sea desplazable -->
+                <table class="table table-primary table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>
+                                <input type="text" class="form-control" ng-model="searchText" placeholder="Buscar por nombre de organismo" />
+                            </th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre del organismo</th>
+                            <th>Tipo de organismo</th>
+                            <th>Responsable</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Filtro personalizado para búsqueda flexible -->
+                        <tr ng-repeat="organismo in organismos | filter: searchText | startFrom:(currentPage-1)*numPerPage | limitTo: numPerPage">
+                            <td>{{organismo.id}}</td>
+                            <td>{{organismo.nombre}}</td>
+                            <td>{{organismo.tipoOrganismo.nombre}}</td>
+                            <td>{{organismo.responsable.firstName}} {{organismo.responsable.lastName}}</td>
+                            <td>{{organismo.estado.nombre}}</td>
+                            <td>
+                                <button class="btn-link" ng-if="!esCreacionRegistro && organismo.id" ng-click="editarOrganismo(organismo.id)">
+                                    Editar
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+    
+                <!-- Controles de paginación -->
+                <div class="text-center">
+                    <uib-pagination
+                        total-items="totalItems"
+                        ng-model="currentPage"
+                        items-per-page="numPerPage"
+                        max-size="maxSize"
+                        class="pagination-sm"
+                        boundary-links="true"
+                        rotate="false"
+                        previous-text="&laquo;"
+                        next-text="&raquo;"
+                        first-text="&lt;&lt;"
+                        last-text="&gt;&gt;"
+                        >
+                        <!-- pageChanged -->
+                    </uib-pagination>
+                </div>
+            </div>
+    </div>
+</div>
+
+
+
+
+</div>
+<style>
+    .link-button {
+        text-decoration: underline; 
+    }
+    .link-button-no-underline {
+        text-decoration: none;
+        color: white;
+    }
+    .btn-link {
+        background-color: transparent;
+        text-decoration: underline;
+        font-weight: 600;
+    }
+</style>

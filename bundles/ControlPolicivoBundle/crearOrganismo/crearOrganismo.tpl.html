@@ -1,0 +1,185 @@
+<div class="col-sm-12 col-md-10 col-lg-8">
+    <div class="panel">
+        <div class="panel-body">
+            <div class="page-header">
+                <h1 class="col-xs-12 col-sm-10 text-center text-left-sm">Crear
+                    <strong class="subtitulo">Organismo</strong>
+                    <br>
+                    <small>
+                        Descripción del proceso
+                        
+                    </small>
+                </h1>
+            </div>
+            <div class="page-body">
+                <form name="formDatosOrganismo" class="form-horizontal" ng-submit="crearOrganismo(organismo)"
+                    novalidate>
+                    <div class="note note-warning">
+                        <strong>Nota:</strong> Los campos marcados con un <span class="text-danger">*</span> son
+                        obligatorios.
+                    </div>
+                    <!-- Nombre del Organismo -->
+                    <div class="form-group"
+                        ng-class="{'error_borde': formDatosOrganismo.nombreOrganismo.$invalid && formDatosOrganismo.nombreOrganismo.$touched}">
+                        <label for="nombreOrganismo" class="col-sm-4 control-label">Nombre del Organismo: <span
+                                class="required-asterisk">*</span></label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="nombreOrganismo" name="nombreOrganismo"
+                                ng-model="organismo.nombre" required placeholder="Digite el nombre de organismo">
+                        </div>
+                        <span
+                            ng-show="formDatosOrganismo.nombreOrganismo.$touched && formDatosOrganismo.nombreOrganismo.$invalid"
+                            class="jquery-validate-error help-block">
+                            Este campo es obligatorio.
+                        </span>
+                    </div>
+
+                    <!-- Dirección -->
+                    <div class="form-group"
+                        ng-class="{'error_borde': formDatosOrganismo.direccionOrganismo.$invalid && formDatosOrganismo.direccionOrganismo.$touched}">
+                        <label for="direccionOrganismo" class="col-sm-4 control-label">Dirección: <span
+                                class="required-asterisk">*</span></label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="direccionOrganismo" name="direccionOrganismo"
+                                ng-model="organismo.direccion" required placeholder="Digite la direccion">
+                        </div>
+                        <span
+                            ng-show="formDatosOrganismo.direccionOrganismo.$touched && formDatosOrganismo.direccionOrganismo.$invalid"
+                            class="jquery-validate-error help-block">
+                            Este campo es obligatorio.
+                        </span>
+                    </div>
+
+
+                    <!-- Teléfono -->
+                    <div class="form-group"
+                        ng-class="{'error_borde': formDatosOrganismo.telefonoOrganismo.$invalid && formDatosOrganismo.telefonoOrganismo.$touched}">
+                        <label for="telefonoOrganismo" class="col-sm-4 control-label">Teléfono: <span
+                                class="required-asterisk">*</span></label>
+                        <div class="col-sm-6">
+                            <input type="tel" class="form-control" id="telefonoOrganismo" name="telefonoOrganismo"
+                                ng-model="organismo.telefono" placeholder="Digite el telefono">
+                        </div>
+                    </div>
+
+                    <!-- Tipos de organismos -->
+                    <div class="form-group"
+                        ng-class="{'error_borde': formDatosOrganismo.tipoOrganismo.$invalid && formDatosOrganismo.tipoOrganismo.$touched}">
+                        <label for="tipoOrganismo" class="col-sm-4 control-label">Tipos organismos <span
+                                class="required-asterisk">*</span></label>
+                        <div class="col-sm-6">
+                            <select class="form-control" id="tipoOrganismo" name="tipoOrganismo"
+                                ng-model="organismo.tipoOrganismo.id"
+                                ng-options="tipo.id as tipo.nombre for tipo in tiposOrganismo" required>
+                                <option value="">Seleccione tipo organismo</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- RESPONSABLE -->
+                    <div class="form-group"
+                        ng-class="{'error_borde': formDatosOrganismo.responsableOrganismo.$invalid && formDatosOrganismo.responsableOrganismo.$touched}">
+                        <label for="responsableOrganismo" class="col-sm-4 control-label">Responsable: <span
+                                class="required-asterisk">*</span></label>
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="responsableOrganismo"
+                                    name="responsableOrganismo" ng-model="organismo.responsable.username"
+                                    placeholder="Buscar responsable por correo">
+                                <!-- Ícono de lupa al lado derecho del input -->
+                                <span class="input-group-addon cursor-pointer" ng-click="buscarResponsable(true)">
+                                    <i class="fa fa-search"></i> <!-- Ícono de lupa -->
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-if="responsable.id">
+                        <label for="responsableOrganismo" class="col-sm-4 control-label">Nombre: <span
+                            class="required-asterisk">*</span></label>
+                        <div class="col-sm-6">
+                            {{responsable.firstName}} {{responsable.lastName}}
+                        </div>
+                    </div>
+                  
+                    <input type="hidden" class="form-control" id="responsableOrganismo" name="responsableOrganismo"
+                        ng-model="organismo.responsableid">
+
+
+
+                    <!-- Comuna -->
+                    <div class="form-group"
+                        ng-class="{'error_borde': formDatosOrganismo.comuna.$invalid && formDatosOrganismo.comuna.$touched}">
+                        <label for="comuna" class="col-sm-4 control-label">Comuna:</label>
+                        <div class="col-sm-6">
+                            <select class="form-control" id="comuna" name="comuna" ng-model="organismo.comunaId"
+                                ng-options="comuna.idcomuna as comuna.codigo for comuna in comunas" required>
+                                <option value="">Seleccione comuna</option>
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <!-- Radicador Orfeo -->
+                    <div class="form-group"
+                        ng-class="{'error_borde': formDatosOrganismo.idRadicadorOrfeo.$invalid && formDatosOrganismo.idRadicadorOrfeo.$touched}">
+                        <label for="idRadicadorOrfeo" class="col-sm-4 control-label">Radicador Orfeo: <span
+                                class="required-asterisk">*</span></label>
+                        <div class="col-sm-6">
+                            <input type="number" class="form-control" id="idRadicadorOrfeo" name="idRadicadorOrfeo"
+                                ng-model="organismo.idRadicadorOrfeo">
+                        </div>
+                    </div>
+
+                    <!-- Código de Dependencia -->
+                    <div class="form-group"
+                        ng-class="{'error_borde': formDatosOrganismo.dependenciaOrfeo.$invalid && formDatosOrganismo.dependenciaOrfeo.$touched}">
+                        <label for="dependenciaOrfeo" class="col-sm-4 control-label">Código dependencia ORFEO: <span
+                                class="required-asterisk">*</span></label>
+                        <div class="col-sm-6">
+                            <input type="number" class="form-control" id="dependenciaOrfeo" name="dependenciaOrfeo"
+                                ng-model="organismo.dependenciaOrfeo">
+                        </div>
+                    </div>
+                    <!-- Organismo padre -->
+                    <div class="form-group"
+                        ng-class="{'error_borde': formDatosOrganismo.organismoPadre.$invalid && formDatosOrganismo.organismoPadre.$touched}">
+                        <label for="organismoPadre" class="col-sm-4 control-label">Organismo padre: <span
+                                class="required-asterisk">*</span></label>
+                        <div class="col-sm-6">
+                            <!-- Campo de búsqueda para filtrar el select -->
+                            <input type="text" class="form-control" ng-model="buscarOrganismo"
+                                placeholder="Buscar organismo padre" />
+                            <select class="form-control" id="organismoPadre" name="organismoPadre"
+                                ng-model="organismo.organismoPadre.id"
+                                ng-options="organismo.id as organismo.nombre for organismo in organismos | filter:buscarOrganismo"
+                                required>
+                                <option value="">Seleccione organismo padre</option>
+                            </select>
+
+                        </div>
+
+                    </div>
+                    <!-- Select para elegir estado de acuerdo si es creación o edición -->
+                    <div class="form-group"
+                        ng-class="{'error_borde': formDatosOrganismo.organismoPadre.$invalid && formDatosOrganismo.organismoPadre.$touched}"
+                        ng-show="!esCreacionRegistro">
+                        <label for="estado" class="col-sm-4 control-label">Estado: <span
+                                class="required-asterisk">*</span></label>
+                        <div class="col-sm-6">
+                            <select class="form-control" id="estado" name="organismoEstado" ng-model="organismo.estado"
+                                ng-options="estado.codigo as estado.nombre for estado in estados" required>
+                                <option value="">Seleccione estado</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Botones de acción (guardar, cancelar, editar) -->
+                    <div class="row padding-sm text-right-sm">
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <button type="reset" class="btn btn-warning">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
