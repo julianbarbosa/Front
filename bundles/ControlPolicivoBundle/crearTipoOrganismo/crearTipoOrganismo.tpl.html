@@ -13,6 +13,14 @@
             <div class="form-group">
               <label for="nombreOrganismo" class="col-sm-3 control-label">Nombre:</label>
               <div class="col-sm-6">
+                  <input type="text" class="form-control" id="nombreOrganismo" 
+                         ng-model="organismoEdit.nombre" 
+                         placeholder="Ingrese el nombre del tipo de organismo" 
+                         maxlength="150" required>
+              </div>
+          </div>
+          
+              <div class="col-sm-6">
                 <!-- MODAL PARA EDICIÓN -->
                 <input type="text" class="form-control" id="nombreOrganismo" ng-model="organismoEdit.nombre" placeholder="Ingrese el nombre del tipo de organismo" required>
               </div>

@@ -49,23 +49,36 @@ $scope.prepararOrganismo = function(organismo) {
   $('#tipoOrganismoModal').modal('show'); 
 };
 
-// Función para guardar un nuevo organismo o editar uno existente
-$scope.guardarOrganismo = function() {
-  // Validar si el nombre del organismo ya existe
-  if ($scope.validarNombreExistente($scope.organismoEdit.nombre)) {
-    alert("El nombre del tipo de organismo ya existe. Por favor ingrese uno diferente.");
-    return;  // Detener el proceso si el nombre ya existe
-  }
+  // Función para guardar un nuevo organismo o editar uno existente
+  $scope.guardarOrganismo = function() {
+    // Validar que el nombre no exceda los 150 caracteres
+    if ($scope.organismoEdit.nombre && $scope.organismoEdit.nombre.length > 150) {
+        bootbox.alert({
+            message: "El nombre del organismo no puede exceder los 150 caracteres.",
+            size: 'small',
+        });
+        return;  // Detener el proceso si el nombre es demasiado largo
+    }
 
-  // Verificar si el organismo tiene id, indicando que estamos editando
-  if ($scope.organismoEdit && $scope.organismoEdit.id) {
-    // Editar el organismo existente
-    $scope.editarOrganismoEnServidor($scope.organismoEdit);
-  } else {
-    // Crear un nuevo organismo
-    $scope.crearOrganismo($scope.organismoEdit);
-  }
+    // Validar si el nombre del organismo ya existe
+    if ($scope.validarNombreExistente($scope.organismoEdit.nombre)) {
+        bootbox.alert({
+            message: "El nombre del tipo de organismo ya existe. Por favor ingrese uno diferente.",
+            size: 'small',
+        });
+        return;  // Detener el proceso si el nombre ya existe
+    }
+
+    // Verificar si el organismo tiene id, indicando que estamos editando
+    if ($scope.organismoEdit && $scope.organismoEdit.id) {
+        // Editar el organismo existente
+        $scope.editarOrganismoEnServidor($scope.organismoEdit);
+    } else {
+        // Crear un nuevo organismo
+        $scope.crearOrganismo($scope.organismoEdit);
+    }
 };
+
 // Función para crear un nuevo organismo
 $scope.crearOrganismo = function(organismo) {
 
@@ -88,7 +101,7 @@ $scope.crearOrganismo = function(organismo) {
       // Cerrar automáticamente el modal de éxito después de 2 seg.
       setTimeout(function() {
         $('#tipoOrganismoExitoModal').modal('hide'); // Cerrar el modal de éxito
-      }, 2000); //2 seg
+      }, 2000);
     }, function(error) {
       alert('Error al guardar el nuevo organismo');
     });
