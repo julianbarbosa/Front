@@ -1,74 +1,69 @@
-
-
-  <!-- Modal para crear o editar tipo de organismo -->
-  <div id="tipoOrganismoModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
+<!-- Modal para crear o editar tipo de organismo -->
+<div id="tipoOrganismoModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">{{organismoEdit.id ? 'Editar' : 'Crear'}} Tipo de Organismo</h4>
-        </div>
-        <div class="modal-body">
-          <form class="form-horizontal" ng-submit="guardarOrganismo()">
-            <div class="form-group">
-              <label for="nombreOrganismo" class="col-sm-3 control-label">Nombre:</label>
-              <div class="col-sm-6">
-                  <input type="text" class="form-control" id="nombreOrganismo" 
-                         ng-model="organismoEdit.nombre" 
-                         placeholder="Ingrese el nombre del tipo de organismo" 
-                         maxlength="150" required>
-              </div>
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">{{organismoEdit.id ? 'Editar' : 'Crear'}} Tipo de Organismo</h4>
           </div>
-          
-              <div class="col-sm-6">
-                <!-- MODAL PARA EDICIÓN -->
-                <input type="text" class="form-control" id="nombreOrganismo" ng-model="organismoEdit.nombre" placeholder="Ingrese el nombre del tipo de organismo" required>
-              </div>
-            </div>
-              <!-- Campo Estado -->
-            <div class="form-group">
-              <label for="estado" class="col-sm-3 control-label">Estado:</label>
-              <div class="col-sm-6">
-                <select id="estado" class="form-control" ng-model="organismoEdit.estado" required>
-                  <option value="Activo">Activo</option>
-                  <option value="Inactivo">Inactivo</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-group text-center">
-              <div class="col-sm-offset-3 col-sm-6">
-                <!-- Botón de Cancelar -->
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                <!-- Botón de Guardar que cambia entre Crear y Editar -->
-                <button type="submit" class="btn btn-primary">{{organismoEdit.id ? 'Guardar cambios' : 'Guardar'}}</button>
-              </div>
-            </div>
-          </form>
-        </div>
+          <div class="modal-body">
+              <form class="form-horizontal" ng-submit="guardarOrganismo()">
+                  <!-- Campo Nombre -->
+                  <div class="form-group">
+                      <label for="nombreOrganismo" class="col-sm-3 control-label">Nombre:</label>
+                      <div class="col-sm-6">
+                          <input type="text" class="form-control" id="nombreOrganismo" 
+                                 ng-model="organismoEdit.nombre" 
+                                 placeholder="Ingrese el nombre del tipo de organismo" 
+                                 maxlength="150" required>
+                      </div>
+                  </div>
+
+                  <!-- Campo Estado -->
+                  <div class="form-group">
+                      <label for="estado" class="col-sm-3 control-label">Estado:</label>
+                      <div class="col-sm-6">
+                          <select id="estado" class="form-control" ng-model="organismoEdit.estado" required>
+                              <option value="Activo">Activo</option>
+                              <option value="Inactivo">Inactivo</option>
+                          </select>
+                      </div>
+                  </div>
+
+                  <!-- Botones de acción -->
+                  <div class="form-group text-center">
+                      <div class="col-sm-offset-3 col-sm-6">
+                          <!-- Botón de Cancelar -->
+                          <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                          <!-- Botón de Guardar que cambia entre Crear y Editar -->
+                          <button type="submit" class="btn btn-primary">{{organismoEdit.id ? 'Guardar cambios' : 'Guardar'}}</button>
+                      </div>
+                  </div>
+              </form>
+          </div>
       </div>
-    </div>
   </div>
-
-  <!-- Modal de satisfatorio -->
-  <div id="tipoOrganismoExitoModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header bg-success text-white"> <!-- CREADOo -->
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">¡Éxito!</h4>
-        </div>
-        <div class="modal-body">
-          <p>El tipo de organismo ha sido creado con éxito.</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-success" data-dismiss="modal">Cerrar</button> <!-- cerrar -->
-        </div>
-      </div>
-    </div>
-  </div>
-
-
 </div>
+
+<!-- Modal de satisfacción -->
+<div id="tipoOrganismoExitoModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header bg-success text-white">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">¡Éxito!</h4>
+          </div>
+          <div class="modal-body">
+              <p>El tipo de organismo ha sido creado con éxito.</p>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-success" data-dismiss="modal">Cerrar</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+<!-- Contenido principal -->
 <div class="col-sm-12 col-md-10 col-lg-8">
   <div class="panel">
       <div class="panel-body">
@@ -82,33 +77,32 @@
               </h1>
           </div>
           <div class="page-body">
-            <!-- Tabla de tipos de organismos -->
-            <table class="table table-primary table-hover table-bordered">
-              <thead>
-                <tr>
-                  <th>Nombre</th>
-                  <th>Estado</th>
-                  <th>Acciones</th>
-                  
-                </tr>
-              </thead>
-              <tbody>
-                <tr ng-repeat="organismo in organismos">
-                  <td>{{organismo.nombre}}</td>
-                  <td>{{organismo.estado}}</td>
-      
-                  <td>
-                    <!-- Botón Editar, abre modal de edición -->
-                    <button class="btn-link" ng-click="prepararOrganismo(organismo)">Editar</button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+              <!-- Tabla de tipos de organismos -->
+              <table class="table table-primary table-hover table-bordered">
+                  <thead>
+                      <tr>
+                          <th>Nombre</th>
+                          <th>Estado</th>
+                          <th>Acciones</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr ng-repeat="organismo in organismos">
+                          <td>{{organismo.nombre}}</td>
+                          <td>{{organismo.estado}}</td>
+                          <td>
+                              <!-- Botón Editar, abre modal de edición -->
+                              <button class="btn-link" ng-click="prepararOrganismo(organismo)">Editar</button>
+                          </td>
+                      </tr>
+                  </tbody>
+              </table>
           </div>
-      
+
           <!-- Botón Crear Tipo de Organismo (ubicado en la parte inferior derecha) -->
           <div class="fixed-bottom-right text-right">
-            <button class="btn btn-primary" ng-click="prepararOrganismo()">Crear Tipo de Organismo</button>
+              <button class="btn btn-primary" ng-click="prepararOrganismo()">Crear Tipo de Organismo</button>
           </div>
+      </div>
   </div>
 </div>
