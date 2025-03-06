@@ -1,10 +1,7 @@
-<div class="panel panel-success">
-    <div class="panel-heading ">
-        <span class="panel-title">Datos Comparendo</span>
-        <div class="panel-heading-controls">
-        </div>
-    </div>
-    <dl class="dl-horizontal">            
+
+    <dl class="dl-horizontal">       
+        <dt>idHechos</dt>
+        <dd>{{comparendo.idHechos}}  </dd>     
         <dt>Comparendo No.</dt>
         <dd>{{comparendo.numeroFormato}}  </dd>
         <dt>Expediente</dt>
@@ -32,7 +29,5 @@
         <dt>Medidas Correctivas</dt>
         <dd><span ng-repeat="medidaCorrectiva in comparendo.medidasCorrectivas">{{medidaCorrectiva.medidaCorrectiva.nombre}}<br></span></dd>
         <dt>Fecha Creación en SAUL</dt>
-        <dd>{{comparendo.createdAt.timestamp * 1000| date:'yyyy-MM-dd HH:mm:ss'}}</dd>
-        
+        <dd>{{comparendo.createdAt.timestamp * 1000| date:'yyyy-MM-dd HH:mm:ss'}}</dd>        
     </dl>
-</div>

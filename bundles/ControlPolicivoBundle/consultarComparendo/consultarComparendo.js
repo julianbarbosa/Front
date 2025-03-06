@@ -19,17 +19,18 @@ saul.config(["$stateProvider",
         $scope.isReadOnly = false;        
         $scope.isSuccess = false;
         $scope.querys = 2;
+        $scope.query = {};
         $scope.incremento_reincidencia = "0";
         
         LoadingOverlap.show($scope);
                 
         Comparendo.query({id:$scope.item.idcomparendo}).$promise.then(function(result) {
             $scope.comparendo = result.data;
+            $scope.expediente = result.expediente;
             $scope.querys--;
         });        
         
         MovimientoComparendo.query({id:$scope.item.idcomparendo}).$promise.then(function(result) {
-            $scope.listarPlantillas($scope.item.idcomparendo);
             $scope.arrayMovimientoComparendo = result;
             $scope.querys--;
         });        
@@ -40,17 +41,19 @@ saul.config(["$stateProvider",
             }
         });
             
-        $scope.listarPlantillas = function (comparendoId) {
-            $http.get(root + "Plantilla/listar/por_comparendo/"+comparendoId)
-                .then(function (response) {
-                    //$scope.listar = response.data;
-                    $scope.listar = {
-                        lista: response.data.data
-                    };
-                });
-            $scope.cargando = false;    
-        };
 
-        
+        $scope.generarExpedientesMasivos = function() {
+            if($scope.query.consecutivoExpediente > 0 && $scope.query.consecutivoAuto>=0) {                                
+                const comparendo = {"id": $scope.item.idcomparendo, "reincidencia": $scope.item.reincidencia };
+                const request =  {"query": $scope.query, "data": [comparendo]};                
+                LoadingOverlap.show();
+                $http.post(root+'controlpolicivo/primerainstancia/expedientesmasivos',request).then(function(res){                
+                    LoadingOverlap.hide();
+                    $scope.expediente = res.data.expediente;                   
+                });                
+            }  else {
+                bootbox.alert("Ingrese los consecutivos para generar expedientes masivos.");
+            }          
+        }       
     }
 ]);

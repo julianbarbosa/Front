@@ -10,8 +10,8 @@ saul.config(["$stateProvider",
             },
         });
     }
-]).controller("crearTipoPlantillaCtrl", ["$scope", "$http", "root",
-    function ($scope, $http, root) {
+]).controller("crearTipoPlantillaCtrl", ["$scope", "$http", "root", "LoadingOverlap",
+    function ($scope, $http, root, LoadingOverlap) {
 
         $scope.item = {};
         $scope.listar = { lista: [] };
@@ -34,7 +34,7 @@ saul.config(["$stateProvider",
             }, function (error) {
                 console.error("Error al cargar las plantillas:", error);
             });
-            $scope.cargando = false;
+            LoadingOverlap.hide();
         }
 
         // Validar formulario
@@ -98,13 +98,13 @@ saul.config(["$stateProvider",
                 })
                 .finally(function () {
                     // Finalizar el estado de carga, tanto en éxito como en error
-                    $scope.cargando = false;
+                    LoadingOverlap.hide();
                 });
         };
 
         // Función para listar plantillas
         $scope.listarPlantillasCargando = function () {
-            $scope.cargando = true; // Iniciar el estado de carga
+            LoadingOverlap.show(); // Iniciar el estado de carga
 
             $http.get(root + "Plantilla/listar")
                 .then(function (response) {
@@ -119,7 +119,7 @@ saul.config(["$stateProvider",
                 })
                 .finally(function () {
                     // Finalizar el estado de carga, tanto en éxito como en error
-                    $scope.cargando = false;
+                    LoadingOverlap.hide();
                 });
         };
 
@@ -129,7 +129,7 @@ saul.config(["$stateProvider",
 
         // Función para listar dominios
         $scope.listarDominios = function () {
-            $http.get(root + "dominio/ley-codigo-policia")
+            $http.get(root + "dominio/ley_codigo_policia")
                 .then(function (response) {
                     $scope.dominios = response.data; // Asigna los dominios a la lista
                 })
@@ -145,19 +145,22 @@ saul.config(["$stateProvider",
         // Función para guardar la plantilla
         $scope.guardar = function () {
             if ($scope.validForm() === true) {
+                LoadingOverlap.show();
                 $http.post(root + "Plantilla/crear", $scope.item)
                     .then(function (result) {
+                        LoadingOverlap.hide();
                         // Manejar respuesta exitosa
                         if (result.data.success) {
                             $scope.mostrarModalMensaje('Éxito', 'Plantilla creada exitosamente');
                             $scope.listarPlantillas(); // Actualiza el listado
-                            $scope.item = {}; // Limpiar el formulario
+                            $scope.limpiar(); // Limpiar el formulario
                             $('#modalCrear').modal('hide'); // Oculta el modal de creación
                         } else {
                             $scope.mostrarModalMensaje('Error', result.data.message);
                         }
                     })
                     .catch(function (error) {
+                        LoadingOverlap.hide();
                         // Manejar errores
                         console.error(error);
                         $scope.mostrarModalMensaje('Error del Servidor', error.data.error || 'Error desconocido');
@@ -197,10 +200,10 @@ saul.config(["$stateProvider",
                         // Asocia el valor de la ley con idDominio
                         $scope.plantilla.idDominio = $scope.plantilla.ley;
                     } else {
-                        alert(response.data.message);
+                        bootbox.alert(response.data.message);
                     }
                 }, function (error) {
-                    alert("Error al cargar la plantilla: " + error.statusText);
+                    bootbox.alert("Error al cargar la plantilla: " + error.statusText);
                 });
         };
 
@@ -240,7 +243,7 @@ saul.config(["$stateProvider",
 
         // Inicialización
         $scope.init = function () {
-            $scope.cargando = true;
+            LoadingOverlap.show();
             $scope.listarPlantillasCargando();
             $scope.listarDominios();
         };

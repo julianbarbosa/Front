@@ -125,8 +125,7 @@ saul.config(["$stateProvider",
             Comparendo.get({'idInterno':idInterno, 'numeroFormato':numeroFormato}).$promise.then(function (response) {                
                 if(response.success==true) {                    
                     $scope.comparendo = response.data;                        
-                    $http.get(root+'comparendo/expediente/get/'+$scope.comparendo.id).then(function (result) {
-                        console.log(result);
+                    $http.get(root+'comparendo/expediente/get/'+$scope.comparendo.id).then(function (result) {                        
                         $scope.expediente = result.data;
                         $scope.esMultaEspecial = $scope.obtenerEsMultaEspecial($scope.expediente);                      
                         $http.get(root+'controlsanciones/responsables').then(function (result) {

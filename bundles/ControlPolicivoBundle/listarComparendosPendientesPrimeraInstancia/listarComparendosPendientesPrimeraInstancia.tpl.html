@@ -105,6 +105,10 @@
                                 {{row[header.name].timestamp * 1000| date:'yyyy-MM-dd HH:mm:ss'}}
                             </span>
 
+                            <span ng-if="row['estadoExpediente']=='Finalizado' && header.name=='estadoExpediente'">
+                                <a href="{{root}}controlpolicivo/primerainstancia/descargarexpediente/{{row['expedienteId']}}" target="_blank">Descargar</a>
+                            </span>
+
                              <!-- Valor de Objeto Button-->
                              <span ng-if="header.type === 'button' && header.condicion!==null">
                                 <button ng-if="row[header.condicion]!==''" class="btn-link" ng-bind-html="header['title']" ng-click="caller(header['action'], row)" ></button>

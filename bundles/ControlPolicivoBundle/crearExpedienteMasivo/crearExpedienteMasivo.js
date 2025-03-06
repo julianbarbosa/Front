@@ -16,6 +16,8 @@ saul.config(["$stateProvider",
         $scope.root = root;
         $scope.data = null;
         $scope.tienePendientesPorGenerar = false;
+        $scope.tieneGenerados = false;
+
         
         $scope.consultarComparendos = function () {
             LoadingOverlap.show();
@@ -24,14 +26,37 @@ saul.config(["$stateProvider",
                 $scope.totalItems = $scope.data.length;
                 LoadingOverlap.hide();
                 $scope.tienePendientesPorGenerar = false;
+                if($scope.totalItems==0) {
+                    bootbox.alert("No se encontraron comparendos para esta fecha en su inspección.");
+                }
                 $scope.data.forEach(function(item) {
                     if(item.estado == 'No generado'){
                         $scope.tienePendientesPorGenerar = true;
+                    }
+                    if(item.estado == 'Finalizado'){
+                        $scope.tieneGenerados = true;
                     }
                 });
             });
         };
 
+        $scope.seleccionarTodos = function() {
+            $scope.data.forEach(function(item, index) {
+                $scope.data[index].seleccionado = true;
+            });
+        }
+
+        $scope.desseleccionarTodos = function() {
+            $scope.data.forEach(function(item, index) {
+                $scope.data[index].seleccionado = false;
+            });
+        }
+
+        $scope.consultarFechaMaximaExpedientes = function() {
+            $http.get(root+'controlpolicivo/fechamaximaexpediente').then(function(res) {
+                $scope.consultarFechaMaximaExpedientes = res.data.fecha;
+            });
+        }
         $scope.limpiar = function() {
             $scope.data = null;
             $scope.query = {};
@@ -59,9 +84,15 @@ saul.config(["$stateProvider",
                     
                     bootbox.alert("No tiene expedientes por generar.");
                 }
-            }
-            
-            
+            }  else {
+                bootbox.alert("Ingrese los consecutivos para generar expedientes masivos.");
+            }          
         }
+
+        $scope.init = function() {
+            $scope.consultarFechaMaximaExpedientes();
+        }
+        $scope.init();
+        
     }
 ]);

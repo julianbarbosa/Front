@@ -1,3 +1,36 @@
+<style>
+    /* Estilos para los tooltips */
+	.tooltipP {
+		position: relative;
+		display: inline-block;
+		cursor: pointer;
+		color: #000000;
+		/* Color del ícono de información */
+	}
+
+	.tooltipP .tooltiptext {
+		visibility: hidden;
+		width: 200px;
+		background-color: #555;
+		color: #fff;
+		text-align: center;
+		border-radius: 5px;
+		padding: 5px;
+		position: absolute;
+		z-index: 100;
+		bottom: 125%;
+		/* Distancia desde el botón hacia arriba */
+		left: 50%;
+		transform: translateX(-50%);
+		opacity: 0;
+		transition: opacity 0.3s ease-in-out;
+	}
+
+	.tooltipP:hover .tooltiptext {
+		visibility: visible;
+		opacity: 1;
+	}
+</style>
 <div>
     <div class="panel">
         <div class="panel-body col-md-12 col-lg-12">
@@ -25,6 +58,7 @@
                         ng-model="query.fechaComparendo"
                         placeholder="Ingrese fecha de comparendo"
                         ng-disabled="data!==null"
+                        max="{{consultarFechaMaximaExpedientes * 1000| date:'yyyy-MM-dd'}}"
                         autocomplete="off"/>
             </div>      
             <div class="col-md-6 " style="margin-top: 20px">
@@ -129,13 +163,16 @@
                 </tbody>
                 <tfoot>
                 <td colspan="10" class="currency">
-                    <uib-pagination ng-model="currentPage" total-items="totalItems" max-size="5" boundary-links="true" ng-click="actualizarDatos()"></uib-pagination>
+                    <uib-pagination ng-model="currentPage"  first-text="Primero" previous-text="Anterior" next-text="Siguiente" last-text="Último" total-items="totalItems" max-size="5" boundary-links="true" ng-click="actualizarDatos()"></uib-pagination>
+                    <br><button class="btn-link" ng-click="seleccionarTodos()">Seleccionar todos</button>   <button class="btn-link" ng-click="desseleccionarTodos()">Deseleccionar todos</button>
                 </td>
                 </tfoot>
+                
             </table>
-            <div class="col-md-6 " style="margin-top: 20px">
-                <input type="button" class="btn btn-success col-xs-6" value="Generar" ng-click="generarExpedientesMasivos()" ng-disabled="!(query.consecutivoExpediente>0 && !query.consecutivoAuto>=0)" ng-if="tienePendientesPorGenerar">
-                <a href="{{root}}controlpolicivo/primerainstancia/descargarexpedientezip/{{query.fechaComparendo}}" target="_blank" class="btn btn-warning col-xs-6" ng-click="generarExpedientesMasivos()" ng-if="!tienePendientesPorGenerar">Descargar Zip</a>
+            <div class="row padding-sm text-right-sm">
+                <button class="btn btn-success" value="Generar" ng-click="generarExpedientesMasivos()" tooltip="Ingrese los cosecutivos para generar"  ng-if="tienePendientesPorGenerar">Generar
+                </button>             
+                <a href="{{root}}controlpolicivo/primerainstancia/descargarexpedientezip/{{query.fechaComparendo}}" target="_blank" class="btn btn-primary" ng-if="tieneGenerados">Descargar Zip</a>
             </div>
         </div>
 

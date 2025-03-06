@@ -1,106 +1,119 @@
-<div>
-    <div class="col-sm-12 col-md-10 col-lg-8">
-        <div ng-if="validator.alert.content">
-            <div class="alert {{validator.alert.type}} alert-dismissable">
-                <i class="fa fa-danger"></i>
-                <button type="button" class="close" aria-hidden="true" ng-click="hideAlert()">×</button>
-                <b>{{validator.alert.title}}</b> <span ng-bind-html="validator.alert.content"></span>
-                <br><strong><a ui-sref="controlpolicivo-verdocumentosaudiencia({'idcomparendo':230})">{{validator.alert.linkText}}</a></strong>
+<div class="col-sm-12 col-md-10 col-lg-8">
+    <div class="panel">
+        <div class="panel-body">
+            <div class="page-header">
+                <h1 class="col-xs-12 col-sm-10 text-center text-left-sm">Orden de Comparendo
+                    <strong class="subtitulo"> {{comparendo.expediente}}</strong>
+                    <br>
+                    <small>
+                        {{comparendo.infractor.identificacion}} - {{comparendo.infractor.nombre}} {{comparendo.infractor.apellido}}
+                    </small>
+                </h1>
+            </div>
+            <div class="page-body">
+                <div ng-include="'../bundles/ControlPolicivoBundle/comun/comparendo.tpl.html'" ng-init="idcomparendo=idcomparendo"></div>    
             </div>
         </div>
-        <div ng-include="'../bundles/ControlPolicivoBundle/comun/comparendo.tpl.html'" ng-init="idcomparendo=idcomparendo"></div>    
-        
-        <div class="panel panel-success" ng-repeat="medida in comparendo.medidasCorrectivas" >  
-            <div class="panel-heading ">
-                <span class="panel-title">{{medida.medidaCorrectiva.nombre}}</span>
-                <div class="panel-heading-controls">                    
-                </div>
+    </div>
+    <div class="panel" ng-repeat="medida in comparendo.medidasCorrectivas" >
+        <div class="panel-body">               
+            <div class="page-header">
+                <h5>Medida correctiva: <strong class="subtitulo">{{medida.medidaCorrectiva.nombre}}</strong></h5> 
             </div> 
-            <div ng-if="medida.medidaCorrectiva.esEconomica==1">                
-                <strong>Nombre Medida:</strong> {{medida.medidaCorrectiva.nombre}}<br>
-                Competencia de {{medida.medidaCorrectiva.actores}}<br>
-                <span ng-if="medida.medidaCorrectiva.esEconomica==true">
-                    Valor: {{medida.medidaCorrectiva.cantidadSmdlv}} SMLV<br>
-                </span>
-                <span ng-if="medida.medidaCorrectiva.conmutablePorPedagogia">
-                    Es conmutable por pedagogía o participación en programa comunitario dentro de los primeros cinco (5) días habiles a la fecha de los hechos del comparendo.<br>
-                </span>´
-
-                <a href="">Descargar recibo</a><br>
-
-                Si ya tiene un pago registrado en SAUL puede <a href="">Descargar medida correctiva de multa en RNMC</a>
-
-                <div class="panel-body">
-                    <div class="row col-md-8">
-                        <h4>Generación de expediente</h4>
-                        <div class="required col-md-6">
-                            <label class="control-label" >Porcentaje Incremento por reincidencia</label>
-                            <select class="form-control" ng-model="incremento_reincidencia" required>
-                                <option value="0" selected>0%</option>
-                                <option value="50">50%</option>
-                                <option value="75">75%</option>
-                            </select>
+            <div class="page-body">
+                <div ng-if="medida.medidaCorrectiva.esEconomica==1"> 
+                    <dl class="dl-horizontal">            
+                        <dt>Nombre Medida</dt>
+                        <dd>{{medida.medidaCorrectiva.nombre}}</dd>
+                        <dt>Competencia de</dt>
+                        <dd>{{medida.medidaCorrectiva.actores}}</dd>
+                        <dt>Valor</dt>
+                        <dd>{{medida.medidaCorrectiva.cantidadSmdlv}} SMLV</dd>
+                        <dt>Conmutación</dt>                       
+                        <dd ng-if="medida.medidaCorrectiva.conmutablePorPedagogia==1">
+                            Es conmutable por pedagogía o participación en programa comunitario dentro de los primeros cinco (5) días habiles a la fecha de los hechos del comparendo.<br>
+                        </dd>
+                        <dd ng-if="medida.medidaCorrectiva.conmutablePorPedagogia==0">
+                            <strong>No</strong> es conmutable por pedagogía o participación en programa comunitario.<br>
+                        </dd>
+                    </dl>               
+                 
+                    
+                    <div class="panel-body">
+                        <div class="row" ng-if="expediente == null">
+                            <h5><strong class="subtitulo">Generación de expediente</strong></h5>
+                            <div class="col-md-12">            
+                                <div class="form-group col-md-4">
+                                    <label class="control-label" for="consecutivoExpediente">
+                                        Consecutivo Inicial de Expedientes
+                                    </label>
+                                    <input type="number"
+                                            id="consecutivoExpediente"
+                                            class="form-control input-xlarge"
+                                            ng-model="query.consecutivoExpediente"
+                                            placeholder="Ingrese consecutivo inicial del expediente"
+                                            autocomplete="off"/>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="control-label" for="consecutivoAuto">
+                                        Consecutivo Inicial de Auto
+                                    </label>
+                                    <input type="number"
+                                            id="consecutivoAuto"
+                                            class="form-control input-xlarge"
+                                            ng-model="query.consecutivoAuto"
+                                            placeholder="Ingrese consecutivo inicial del Auto"
+                                            autocomplete="off"/>
+                                </div>
+                                <div class="required col-md-4">
+                                    <label class="control-label" >Porcentaje reincidencia</label>
+                                    <select class="form-control" ng-model="item.reincidencia" required>
+                                        <option value="0" selected>0%</option>
+                                        <option value="50">50%</option>
+                                        <option value="75">75%</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row padding-sm text-right-sm">
+                                <button class="btn btn-success" value="Generar" ng-click="generarExpedientesMasivos()" tooltip="Ingrese los cosecutivos para generar" >Generar
+                                </button>                                                 
+                            </div>                               
                         </div>
-                        <div class="col-md-12">
-                            <table cellpadding="0" cellspacing="0" class="table-hover table table-bordered dataTable"
-                            id="listaSolicitudes" width="100%" role="grid">
-                                <thead>
-                                    <tr>
-                                        <th>Documento</th>
-                                        <th>Consecutivo Exp</th>
-                                        <th>Consecutivo Auto</th>
-                                        <th>Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr ng-repeat="plantilla in listar.lista track by $index">
-                                        <td>{{ plantilla.nombre }}</td>
-                                        <td><input type="text" ng-model="consecutivo[$index]"></td>
-                                        <td><input type="text" ng-model="consecutivo_auto[$index]"></td>
-                                        <td>
-                                            <a target="_blank" href="{{root}}controlpolicivo/primerainstancia/plantilla/{{plantilla.id}}/{{item.idcomparendo}}/{{consecutivo[$index]}}/{{consecutivo_auto[$index]}}/{{incremento_reincidencia}}" class="btn-link" title="Descargar Archivo en formato PDF">
-                                                Descargar PDF 
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        
-                        <div ng-if="!listar.lista || listar.lista.length === 0">
-                            <p>No hay plantillas disponibles.</p>
+                        <div class="row" ng-if="expediente !== null">
+                            El expediente se encuentra en estado <strong>{{expediente.estado.nombre}}</strong><br>
+                            <div ng-if="expediente.estado.nombre=='Finalizado'">
+                                <a class="btn btn-primary" href="{{root}}controlpolicivo/primerainstancia/descargarexpediente/{{expediente.id}}" target="_blank">Descargar</a>
+                            </div>                        
                         </div>
                     </div>
+                    
                 </div>
-                
+                <div ng-if="medida.medidaCorrectiva.esEconomica==0">
+                    <strong>Nombre Medida:</strong> {{medida.medidaCorrectiva.nombre}}<br>
+                    Actores: {{medida.medidaCorrectiva.actores}}<br>
+                    El curso pedagógico o actividad pedagogíca se ofrece por la Alcaldía.
+                    <a href="">recalcular pedagogía y reenviar Conmutacion Pedagogia En RNMC </a>
+                    <ul>
+                        <li><a href="">Inscribirse a pedagogía</a></li>
+                        <li><a href="">Descargar certificado de inscripción</a></li>
+                        <li><a href="">Descargar certificado de asistencia </a></li>
+                    </ul>
+                </div>
+                <div ng-if="medida.medidaCorrectiva.esEconomica==null">
+                    <strong>Nombre Medida:</strong> {{medida.medidaCorrectiva.nombre}}<br>
+                    Actores: {{medida.medidaCorrectiva.actores}}<br>                
+                </div>
             </div>
-            <div ng-if="medida.medidaCorrectiva.esEconomica==0">
-                <strong>Nombre Medida:</strong> {{medida.medidaCorrectiva.nombre}}<br>
-                Actores: {{medida.medidaCorrectiva.actores}}<br>
-                El curso pedagógico o actividad pedagogíca se ofrece por la Alcaldía.
-                <a href="">recalcular pedagogía y reenviar Conmutacion Pedagogia En RNMC </a>
-                <ul>
-                    <li><a href="">Inscribirse a pedagogía</a></li>
-                    <li><a href="">Descargar certificado de inscripción</a></li>
-                    <li><a href="">Descargar certificado de asistencia </a></li>
-                </ul>
-            </div>
-            <div ng-if="medida.medidaCorrectiva.esEconomica==null">
-                <strong>Nombre Medida:</strong> {{medida.medidaCorrectiva.nombre}}<br>
-                Actores: {{medida.medidaCorrectiva.actores}}<br>
-                
-            </div>
-            
         </div>
-        <div class="panel panel-success">
-            <div class="panel-heading ">
-                <span class="panel-title">Historico</span>
-                <div class="panel-heading-controls">                    
-                </div>
-            </div>
-            
-            <div class="panel-body">               
-                <table class="table">
+    </div>
+
+    <div class="panel">
+        <div class="panel-body">               
+            <div class="page-header">
+                <h5><strong class="subtitulo">Historico</strong></h5> 
+            </div> 
+            <div class="page-body">
+                <table class="table table-primary table-hover table-bordered">
                     <thead>
                         <th>
                             id
@@ -139,3 +152,5 @@
         </div>
     </div>
 </div>
+
+

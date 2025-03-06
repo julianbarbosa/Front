@@ -58,7 +58,7 @@
 										<th>Nombre</th>
 										<th>Ley</th>
 										<th>Estado</th>
-										<th>Archivo</th>
+										<th width="25%">Archivo</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -142,7 +142,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr ng-repeat="archivo in archivos">
+							<tr ng-repeat="archivo in archivos | startFrom: 5">
 								<td>{{ $index + 1 }}</td>
 								<td>{{ archivo.nombreArchivo }}</td>
 								<td>{{ archivo.fechaCreacion | date:'dd/MM/yyyy HH:mm:ss' }}</td>
@@ -154,13 +154,14 @@
 										Descargar
 									</a>
 									<!-- Botón para eliminar el archivo -->
-									<button class="btn-link" ng-click="eliminarArchivo(archivo.id)"
-										title="Eliminar" ng-if="!archivo.usuarioElimina">
-										Eliminar
+									<button class="btn-link" ng-click="eliminarArchivo(archivo.id)" ng-if="archivo.estado=='Activo'"
+										title="Inactivar" ng-if="!archivo.usuarioElimina">
+										Inactivar
 									</button>
 								</td>
 							</tr>
 						</tbody>
+						<button class="btn btn-primary" ng-click="limit=archivos.length">Ver todos los archivos</button>
 					</table>
 				</div>
 				<div class="modal-footer">

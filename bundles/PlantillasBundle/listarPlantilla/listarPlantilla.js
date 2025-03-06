@@ -32,8 +32,10 @@ saul.config(["$stateProvider",
 
             // Función para listar plantillas
             $scope.listarPlantillas = function () {
+                LoadingOverlap.show();
                 $http.get(root + "Plantilla/listarActivas")
                     .then(function (response) {
+                        LoadingOverlap.hide();
                         //$scope.listar = response.data;
                         $scope.listar = {
                             lista: response.data.data
@@ -128,8 +130,9 @@ saul.config(["$stateProvider",
                 var formData = new FormData();
                 formData.append('archivo', $scope.archivo.archivo);
                 formData.append('idPlantilla', $scope.archivo.idPlantilla);
-
+                // document.getElementById('archivo').value(null);
                 // Enviar el archivo al backend
+                LoadingOverlap.show();
                 $http({
                     method: 'POST',
                     url: root + 'Plantilla/cargar-archivo',
@@ -139,11 +142,13 @@ saul.config(["$stateProvider",
                     },
                     transformRequest: angular.identity
                 }).then(function (response) {
+                    LoadingOverlap.hide();
                     $scope.mostrarModalMensaje("Éxito", "Archivo cargado exitosamente.");
                     $('#modalCargarArchivo').modal('hide'); // Cerrar el modal de carga
                     $scope.archivo = {}; // Limpiar el modelo
                     $scope.listarPlantillas(); // Actualizar la lista de plantillas
                 }).catch(function (error) {
+                    LoadingOverlap.hide();
                     $scope.mostrarModalMensaje("Error", "Error al cargar el archivo. Por favor, inténtelo nuevamente.");
                     console.error(error);
                 });
@@ -180,8 +185,10 @@ saul.config(["$stateProvider",
                     $('#modalConfirmarEliminarArchivo').modal('hide');
 
                     // Realizar la solicitud para eliminar el archivo
+                    LoadingOverlap.show();
                     $http.post(root + 'Plantilla/eliminar-archivo/' + idArchivo)
                         .then(function (response) {
+                            LoadingOverlap.hide();
                             $scope.mostrarModalMensaje("Éxito", "Archivo eliminado correctamente.");
                             // Eliminar el archivo de la lista local
                             $scope.archivos = $scope.archivos.filter(function (archivo) {
@@ -192,6 +199,7 @@ saul.config(["$stateProvider",
                             $('#modalVerArchivos').modal('hide'); // Cerrar el modal de archivos
                         })
                         .catch(function (error) {
+                            LoadingOverlap.hide();
                             console.error("Error al eliminar el archivo:", error);
                             $scope.mostrarModalMensaje("Error", "No se pudo eliminar el archivo.");
                         });
